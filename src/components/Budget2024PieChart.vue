@@ -1,12 +1,11 @@
-<!-- src/components/FederalBudgetPieChart.vue -->
 <template>
   <div class="pie-chart-container">
     <canvas
-      ref="federalBudgetPieChartRef"
+      ref="budget2024PieChartRef"
       width="800"
       height="800"
       role="img"
-      aria-label="Federal Budget Allocation Pie Chart"
+      aria-label="Budget 2024 Allocation Pie Chart"
     />
     <div
       v-if="!hasData"
@@ -21,9 +20,9 @@
 import Chart from 'chart.js/auto';
 
 export default {
-  name: 'FederalBudgetPieChart',
+  name: 'Budget2024PieChart',
   props: {
-    federalBudgetData: {
+    budget2024Data: {
       type: Array,
       required: true,
       default: () => [],
@@ -43,11 +42,11 @@ export default {
   },
   computed: {
     hasData() {
-      return this.federalBudgetData.length > 0;
+      return this.budget2024Data.length > 0;
     },
   },
   watch: {
-    federalBudgetData: {
+    budget2024Data: {
       handler: 'updateChart',
       deep: true,
     },
@@ -84,13 +83,13 @@ export default {
       return baseColors.slice(0, count);
     },
     renderChart() {
-      const ctx = this.$refs.federalBudgetPieChartRef.getContext('2d');
+      const ctx = this.$refs.budget2024PieChartRef.getContext('2d');
       if (!ctx) {
-        console.error(`Canvas context not found for ${this.$refs.federalBudgetPieChartRef}`);
+        console.error(`Canvas context not found for ${this.$refs.budget2024PieChartRef}`);
         return;
       }
-      const labels = this.federalBudgetData.map((item) => item.category);
-      const data = this.federalBudgetData.map((item) => item.amount);
+      const labels = this.budget2024Data.map((item) => item.category);
+      const data = this.budget2024Data.map((item) => item.amount);
       const backgroundColors = this.generateColors(labels.length);
       const sanitizedData = data.map(value => (isNaN(value) || !isFinite(value) ? 0 : value));
       if (labels.length !== sanitizedData.length || sanitizedData.length !== backgroundColors.length) {
@@ -103,7 +102,7 @@ export default {
           labels: labels,
           datasets: [
             {
-              label: 'Federal Budget Allocation',
+              label: 'Budget 2024 Allocation',
               data: sanitizedData,
               backgroundColor: backgroundColors,
               borderColor: '#ffffff',
@@ -120,10 +119,10 @@ export default {
               labels: {
                 color: '#333',
                 font: {
-                  size: 10,
+                  size: 14,
                 },
                 boxWidth: 14,
-                padding: 15,
+                padding: 20,
                 usePointStyle: true,
                 generateLabels: function (chart) {
                   const data = chart.data;
@@ -169,7 +168,7 @@ export default {
             },
             title: {
               display: true,
-              text: 'Federal Budget Allocation',
+              text: 'Budget 2024 Allocation',
               font: {
                 size: 25,
               },
@@ -189,8 +188,8 @@ export default {
     },
     updateChart() {
       if (this.chart) {
-        const newLabels = this.federalBudgetData.map((item) => item.category);
-        const newData = this.federalBudgetData.map((item) => item.amount);
+        const newLabels = this.budget2024Data.map((item) => item.category);
+        const newData = this.budget2024Data.map((item) => item.amount);
         const newBackgroundColors = this.generateColors(newLabels.length);
         const sanitizedNewData = newData.map(value => (isNaN(value) || !isFinite(value) ? 0 : value));
         if (newLabels.length !== sanitizedNewData.length || sanitizedNewData.length !== newBackgroundColors.length) {
@@ -209,7 +208,7 @@ export default {
 
 <style scoped>
 .pie-chart-container {
-  max-width: 500px;
+  max-width: 650px;
   margin: 30px auto;
   position: relative;
   height: 600px;
