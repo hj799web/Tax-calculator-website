@@ -360,7 +360,7 @@
           <div
             class="pie-chart-item"
             role="img"
-            aria-label="Federal budget allocation chart"
+            aria-label="2022-2023 Federal budget allocation chart"
           >
             <canvas ref="federalBudgetPieChartRef"></canvas>
           </div>
@@ -369,7 +369,7 @@
           <div
             class="pie-chart-item"
             role="img"
-            aria-label="Budget 2024 allocation chart"
+            aria-label="Federal Budget 2024 allocation chart"
           >
             <canvas ref="budget2024PieChartRef"></canvas>
           </div>
@@ -1299,9 +1299,12 @@ export default defineComponent({
                 const total = dataset.data.reduce((a, b) => a + b, 0);
                 return data.labels.map((label, i) => {
                   const val = dataset.data[i];
-                  const perc = total ? ((val / total) * 100).toFixed(1) : '0.0';
+                  const perc = total ? ((val / total) * 100).toFixed(2) : '0.00';
                   return {
-                    text: `${label}: $${val.toLocaleString('en-CA')} (${perc}%)`,
+                    text: `${label}: $${val.toLocaleString('en-CA', {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2
+                    })} (${perc}%)`,
                     fillStyle: dataset.backgroundColor[i],
                     hidden: false,
                     index: i,
@@ -1321,7 +1324,12 @@ export default defineComponent({
                 const ds = ctx.dataset.data;
                 const total = ds.reduce((a, b) => a + b, 0);
                 const perc = total ? ((val / total) * 100).toFixed(2) : '0.00';
-                return `${ctx.label}: $${val.toLocaleString('en-CA')} (${perc}%)`;
+                const formattedVal = val.toLocaleString('en-CA', {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2
+            });
+
+            return `${ctx.label}: $${formattedVal} (${perc}%)`;
               },
             },
           },
@@ -1713,6 +1721,14 @@ body {
   text-align: center;
   margin-top: 50px;
 }
+
+.allocation-description {
+  display: block;  
+  text-align: center;
+  margin: 0 auto 20px; 
+  width: 100%; 
+}
+
 
 .export-button {
   margin-top: 20px;

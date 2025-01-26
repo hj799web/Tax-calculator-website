@@ -6,7 +6,7 @@
       width="800"
       height="800"
       role="img"
-      aria-label="Federal Budget Allocation Pie Chart"
+      aria-label="2022-2023 Federal budget allocation chart"
     />
     <div
       v-if="!hasData"
@@ -21,7 +21,7 @@
 import Chart from 'chart.js/auto';
 
 export default {
-  name: 'FederalBudgetPieChart',
+  name: '2022-2023 Federal budget allocation chart',
   props: {
     federalBudgetData: {
       type: Array,
@@ -169,7 +169,7 @@ export default {
             },
             title: {
               display: true,
-              text: 'Federal Budget Allocation',
+              text: '2022-2023 Federal budget allocation chart',
               font: {
                 size: 25,
               },

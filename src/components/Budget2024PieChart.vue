@@ -5,7 +5,7 @@
       width="800"
       height="800"
       role="img"
-      aria-label="Budget 2024 Allocation Pie Chart"
+      aria-label="Federal Budget 2024 Allocation Pie Chart"
     />
     <div
       v-if="!hasData"
@@ -20,7 +20,7 @@
 import Chart from 'chart.js/auto';
 
 export default {
-  name: 'Budget2024PieChart',
+  name: 'Federal Budget 2024 Allocation Pie Chart',
   props: {
     budget2024Data: {
       type: Array,
@@ -158,17 +158,17 @@ export default {
                   const label = data.labels[tooltipItem.index] || '';
                   const value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
                   const total = data.datasets[tooltipItem.datasetIndex].data.reduce((acc, curr) => acc + curr, 0);
-                  const percentage = ((value / total) * 100).toFixed(2);
+                  const percentage = ((value / total) * 100).toFixed();
                   return `${label}: $${value.toLocaleString('en-CA', {
                     minimumFractionDigits: 0,
-                    maximumFractionDigits: 2,
+                    maximumFractionDigits: 1,
                   })} (${percentage}%)`;
                 },
               },
             },
             title: {
               display: true,
-              text: 'Budget 2024 Allocation',
+              text: 'Federal Budget 2024 Allocation Pie Chart',
               font: {
                 size: 25,
               },
