@@ -2,7 +2,9 @@
   <div class="main-container">
     <!-- Header Section -->
     <header>
-      <h1 class="main-title">Canada Income Tax Calculator</h1>
+      <h1 class="main-title">
+        Canada Income Tax Calculator
+      </h1>
       <p class="subtitle">
         Enter your details to approximate your 2024 taxes. Note: This is still a
         simplified model!
@@ -11,7 +13,9 @@
 
     <!-- Salary Rate Selector Section -->
     <section class="salary-selector-section">
-      <h3 class="section-title">Salary Rate Selector</h3>
+      <h3 class="section-title">
+        Salary Rate Selector
+      </h3>
       <div class="salary-selector-wrapper">
         <div class="salary-selector">
           <div
@@ -37,7 +41,9 @@
       <div class="calculator-wrapper">
         <!-- Calculator Container -->
         <div class="calculator-container">
-          <h2 class="title">Estimate Your Taxes</h2>
+          <h2 class="title">
+            Estimate Your Taxes
+          </h2>
           <p class="description">
             Calculate your federal and provincial taxes to estimate your net
             income.
@@ -51,7 +57,11 @@
               class="select-region"
               aria-label="Select Province or Territory"
             >
-              <option disabled value="" style="font-style: italic;">
+              <option
+                disabled
+                value=""
+                style="font-style: italic;"
+              >
                 Select Your Province or Territory
               </option>
               <option
@@ -75,10 +85,15 @@
           </div>
 
           <!-- Additional Income Sources -->
-          <h3 class="section-title">Additional Income Sources</h3>
+          <h3 class="section-title">
+            Additional Income Sources
+          </h3>
           <div class="input-group additional-income">
             <div class="input-subgroup">
-              <label class="input-label" for="selfEmploymentIncome">
+              <label
+                class="input-label"
+                for="selfEmploymentIncome"
+              >
                 Self-Employment Income
               </label>
               <input
@@ -93,7 +108,10 @@
               >
             </div>
             <div class="input-subgroup">
-              <label class="input-label" for="capitalGainsBeforeJune25">
+              <label
+                class="input-label"
+                for="capitalGainsBeforeJune25"
+              >
                 Capital Gains Before June 25, 2024
               </label>
               <input
@@ -108,7 +126,10 @@
               >
             </div>
             <div class="input-subgroup">
-              <label class="input-label" for="capitalGainsAfterJune25">
+              <label
+                class="input-label"
+                for="capitalGainsAfterJune25"
+              >
                 Capital Gains On/After June 25, 2024
               </label>
               <input
@@ -123,7 +144,10 @@
               >
             </div>
             <div class="input-subgroup">
-              <label class="input-label" for="eligibleDividends">
+              <label
+                class="input-label"
+                for="eligibleDividends"
+              >
                 Eligible Dividends
               </label>
               <input
@@ -138,7 +162,10 @@
               >
             </div>
             <div class="input-subgroup">
-              <label class="input-label" for="ineligibleDividends">
+              <label
+                class="input-label"
+                for="ineligibleDividends"
+              >
                 Ineligible Dividends
               </label>
               <input
@@ -153,7 +180,10 @@
               >
             </div>
             <div class="input-subgroup">
-              <label class="input-label" for="otherIncome">
+              <label
+                class="input-label"
+                for="otherIncome"
+              >
                 Other Income
               </label>
               <input
@@ -170,10 +200,15 @@
           </div>
 
           <!-- Deductions and Credits -->
-          <h3 class="section-title">Deductions and Credits</h3>
+          <h3 class="section-title">
+            Deductions and Credits
+          </h3>
           <div class="input-group deductions-credits">
             <div class="input-subgroup">
-              <label class="input-label" for="rrspDeduction">
+              <label
+                class="input-label"
+                for="rrspDeduction"
+              >
                 RRSP Deduction
               </label>
               <input
@@ -190,7 +225,10 @@
 
             <!-- Marital Status -->
             <div class="input-subgroup">
-              <label class="input-label" for="maritalStatus">
+              <label
+                class="input-label"
+                for="maritalStatus"
+              >
                 Marital Status
               </label>
               <select
@@ -199,7 +237,11 @@
                 class="input-field"
                 aria-label="Select Marital Status"
               >
-                <option disabled value="" style="font-style: italic;">
+                <option
+                  disabled
+                  value=""
+                  style="font-style: italic;"
+                >
                   Select Marital Status
                 </option>
                 <option>Single</option>
@@ -212,7 +254,10 @@
 
             <!-- Number of Dependents -->
             <div class="input-subgroup">
-              <label class="input-label" for="numberOfDependents">
+              <label
+                class="input-label"
+                for="numberOfDependents"
+              >
                 Number of Dependents
               </label>
               <input
@@ -229,7 +274,10 @@
 
             <!-- Number of Children Under 18 -->
             <div class="input-subgroup">
-              <label class="input-label" for="numberOfChildrenUnder18">
+              <label
+                class="input-label"
+                for="numberOfChildrenUnder18"
+              >
                 Number of Children Under 18
               </label>
               <input
@@ -246,7 +294,10 @@
 
             <!-- Dependents with Disabilities -->
             <div class="input-subgroup">
-              <label class="input-label" for="numberOfDependentsWithDisabilities">
+              <label
+                class="input-label"
+                for="numberOfDependentsWithDisabilities"
+              >
                 Dependents with Disabilities
               </label>
               <input
@@ -266,7 +317,10 @@
 
         <!-- Results Box -->
         <div class="result-box">
-          <h2 v-if="canCalculate" class="result-title">
+          <h2
+            v-if="canCalculate"
+            class="result-title"
+          >
             Your Tax Breakdown
           </h2>
           <div v-if="canCalculate">
@@ -326,10 +380,17 @@
               role="img"
               aria-label="Tax breakdown pie chart"
             >
-              <canvas ref="taxPieChartRef" width="400" height="400"></canvas>
+              <canvas
+                ref="taxPieChartRef"
+                width="400"
+                height="400"
+              />
             </div>
           </div>
-          <div v-else class="placeholder-text">
+          <div
+            v-else
+            class="placeholder-text"
+          >
             <p>
               Please enter your income and select your province or territory to see
               the tax breakdown.
@@ -354,7 +415,9 @@
 
       <!-- Charts Section -->
       <section class="charts-section">
-        <h2 class="section-title">Budget Visualizations</h2>
+        <h2 class="section-title">
+          Budget Visualizations
+        </h2>
         <div class="budget-pie-charts-wrapper">
           <!-- Federal Budget Pie Chart -->
           <div
@@ -362,7 +425,7 @@
             role="img"
             aria-label="2022-2023 Federal budget allocation chart"
           >
-            <canvas ref="federalBudgetPieChartRef"></canvas>
+            <canvas ref="federalBudgetPieChartRef" />
           </div>
 
           <!-- Budget 2024 Pie Chart -->
@@ -371,7 +434,7 @@
             role="img"
             aria-label="Federal Budget 2024 allocation chart"
           >
-            <canvas ref="budget2024PieChartRef"></canvas>
+            <canvas ref="budget2024PieChartRef" />
           </div>
         </div>
       </section>
@@ -379,13 +442,18 @@
 
     <!-- Combined Total Federal Tax Allocated Section -->
     <section class="allocation-table-section total-federal-tax-allocated">
-      <h2 class="section-title">Total Federal Tax Allocated</h2>
+      <h2 class="section-title">
+        Total Federal Tax Allocated
+      </h2>
       <div class="allocation-total">
         <span>Total Federal Tax Allocated:</span>
         <span>{{ formatCurrency(netFederalTaxPerPeriod) }}</span>
       </div>
       <!-- Keep the sort button for THIS table only -->
-      <button class="sort-button" @click="toggleSortAmount">
+      <button
+        class="sort-button"
+        @click="toggleSortAmount"
+      >
         Sort by Amount ({{ sortOrder.toUpperCase() }})
       </button>
       <table class="allocation-table">
@@ -411,7 +479,9 @@
 
     <!-- Budget Categories Section -->
     <section class="budget-categories-section">
-      <h2 class="section-title">Budget Categories</h2>
+      <h2 class="section-title">
+        Budget Categories
+      </h2>
 
       <!-- Allocation Filters -->
       <div class="allocation-filters">

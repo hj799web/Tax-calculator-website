@@ -52,6 +52,7 @@
     <div>
       <label
         for="exampleInput"
+        
         class="input-label"
       >
         Example Input:

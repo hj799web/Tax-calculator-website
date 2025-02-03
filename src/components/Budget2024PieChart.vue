@@ -20,7 +20,7 @@
 import Chart from 'chart.js/auto';
 
 export default {
-  name: 'Federal Budget 2024 Allocation Pie Chart',
+  name: 'FederalBudget2024AllocationPie Chart',
   props: {
     budget2024Data: {
       type: Array,

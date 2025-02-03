@@ -21,7 +21,7 @@
 import Chart from 'chart.js/auto';
 
 export default {
-  name: '2022-2023 Federal budget allocation chart',
+  name: '2022-2023Federalbudgetallocation chart',
   props: {
     federalBudgetData: {
       type: Array,
