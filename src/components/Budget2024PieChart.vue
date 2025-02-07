@@ -1,14 +1,17 @@
 <template>
   <div class="pie-chart-container">
-    <canvas
-      ref="budget2024PieChartRef"
-      width="800"
-      height="800"
-      role="img"
-      aria-label="Federal Budget 2024 Allocation Pie Chart"
-    />
+    <div v-if="canCalculate">
+      <div class="pie-chart-inner-container">
+        <Pie
+          :data="chartData"
+          :options="chartOptions"
+          :plugins="[htmlLegendPlugin]"
+        />
+      </div>
+      <div id="budget2024legend" />
+    </div>
     <div
-      v-if="!hasData"
+      v-else
       class="no-data"
     >
       <p>No budget data available to display.</p>
@@ -16,203 +19,126 @@
   </div>
 </template>
 
-<script>
-import Chart from 'chart.js/auto';
+<script setup>
+import { computed } from 'vue'
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js/auto'
+import { Pie } from 'vue-chartjs';
+import { storeToRefs } from 'pinia'
+import { useCalculatorStore } from '../stores/calculator.js'
+import { generateColors } from '../utils.js'
+import { baseBudget2024Data } from '../constants.js'
+import { htmlLegendPlugin } from '../htmlLegendPlugin.js'
 
-export default {
-  name: 'FederalBudget2024AllocationPie Chart',
-  props: {
-    budget2024Data: {
-      type: Array,
-      required: true,
-      default: () => [],
-      validator: (data) =>
-        data.every(
-          (item) =>
-            Object.prototype.hasOwnProperty.call(item, 'category') &&
-            Object.prototype.hasOwnProperty.call(item, 'amount') &&
-            typeof item.amount === 'number'
-        ),
-    },
-  },
-  data() {
-    return {
-      chart: null,
-    };
-  },
-  computed: {
-    hasData() {
-      return this.budget2024Data.length > 0;
-    },
-  },
-  watch: {
-    budget2024Data: {
-      handler: 'updateChart',
-      deep: true,
-    },
-  },
-  mounted() {
-    if (this.hasData) {
-      this.renderChart();
-    }
-  },
-  beforeUnmount() {
-    if (this.chart) {
-      this.chart.destroy();
-    }
-  },
-  methods: {
-    generateColors(count) {
-      const baseColors = [
-        '#FF6384',
-        '#36A2EB',
-        '#FFCE56',
-        '#4BC0C0',
-        '#9966FF',
-        '#FF9F40',
-        '#FF6384',
-        '#36A2EB',
-        '#FFCE56',
-        '#4BC0C0',
-        '#9966FF',
-        '#FF9F40',
-      ];
-      while (baseColors.length < count) {
-        baseColors.push(...baseColors);
+ChartJS.register(ArcElement, Tooltip, Legend)
+
+const {
+  netFederalTaxPerPeriod,
+  canCalculate
+} = storeToRefs(useCalculatorStore())
+
+const budget2024DataComputed = computed(() => {
+      const total = baseBudget2024Data.reduce((acc, cat) => acc + cat.amount, 0);
+      if (total === 0) {
+        return baseBudget2024Data.map((c) => ({
+          category: c.category,
+          amount: 0,
+        }));
       }
-      return baseColors.slice(0, count);
-    },
-    renderChart() {
-      const ctx = this.$refs.budget2024PieChartRef.getContext('2d');
-      if (!ctx) {
-        console.error(`Canvas context not found for ${this.$refs.budget2024PieChartRef}`);
-        return;
-      }
-      const labels = this.budget2024Data.map((item) => item.category);
-      const data = this.budget2024Data.map((item) => item.amount);
-      const backgroundColors = this.generateColors(labels.length);
-      const sanitizedData = data.map(value => (isNaN(value) || !isFinite(value) ? 0 : value));
-      if (labels.length !== sanitizedData.length || sanitizedData.length !== backgroundColors.length) {
-        console.error('Labels, data, and backgroundColors must be of the same length.');
-        return;
-      }
-      this.chart = new Chart(ctx, {
-        type: 'pie',
-        data: {
-          labels: labels,
-          datasets: [
-            {
-              label: 'Budget 2024 Allocation',
-              data: sanitizedData,
-              backgroundColor: backgroundColors,
-              borderColor: '#ffffff',
-              borderWidth: 1,
-            },
-          ],
+      return baseBudget2024Data.map((c) => ({
+        category: c.category,
+        amount: (c.amount / total) * netFederalTaxPerPeriod.value,
+      }));
+    });
+
+const chartData = computed(() => ({
+      labels: budget2024DataComputed.value.map((x) => x.category),
+      datasets: [
+        {
+          label: 'Budget 2024 Allocation',
+          data: budget2024DataComputed.value.map((x) => x.amount),
+          backgroundColor: generateColors(budget2024DataComputed.value.length),
+          borderWidth: 1,
         },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              position: 'bottom',
-              labels: {
-                color: '#333',
-                font: {
-                  size: 14,
-                },
-                boxWidth: 14,
-                padding: 20,
-                usePointStyle: true,
-                generateLabels: function (chart) {
-                  const data = chart.data;
-                  if (data.datasets.length) {
-                    return data.labels.map(function (label, i) {
-                      const dataset = data.datasets[0];
-                      const currentValue = dataset.data[i];
-                      const total = dataset.data.reduce(function (acc, curr) {
-                        return acc + curr;
-                      }, 0);
-                      const percentage = total > 0 ? ((currentValue / total) * 100).toFixed(2) : '0.00';
-                      const meta = chart.getDatasetMeta(0);
-                      const dataPoint = meta.data[i];
-                      const hidden = dataPoint ? dataPoint.hidden : false;
-                      return {
-                        text: `${label}: ${percentage}%`,
-                        fillStyle: dataset.backgroundColor[i],
-                        hidden: hidden,
-                        index: i,
-                      };
-                    });
-                  }
-                  return [];
-                },
-              },
-            },
-            tooltip: {
-              enabled: true,
-              mode: 'index',
-              intersect: false,
-              callbacks: {
-                label: function (tooltipItem, data) {
-                  const label = data.labels[tooltipItem.index] || '';
-                  const value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
-                  const total = data.datasets[tooltipItem.datasetIndex].data.reduce((acc, curr) => acc + curr, 0);
-                  const percentage = ((value / total) * 100).toFixed();
-                  return `${label}: $${value.toLocaleString('en-CA', {
-                    minimumFractionDigits: 0,
-                    maximumFractionDigits: 1,
-                  })} (${percentage}%)`;
-                },
-              },
-            },
-            title: {
-              display: true,
-              text: 'Federal Budget 2024 Allocation Pie Chart',
-              font: {
-                size: 25,
-              },
-              color: '#333',
-              padding: {
-                top: 20,
-                bottom: 20,
+      ],
+    }));
+
+const chartOptions = computed(() => {
+      return {
+        responsive: true,
+        plugins: {
+          htmlLegend: {
+            containerID: 'budget2024legend'
+          },
+          legend: {
+            display: false,
+            fullSize: false,
+            position: 'bottom',
+            labels: {
+              generateLabels: (chart) => {
+                const data = chart.data;
+                if (!data || !data.datasets.length) return [];
+                const dataset = data.datasets[0];
+                const total = dataset.data.reduce((a, b) => a + b, 0);
+                return data.labels.map((label, i) => {
+                  const val = dataset.data[i];
+                  const perc = total ? ((val / total) * 100).toFixed(2) : '0.00';
+                  return {
+                    text: `${label}: $${val.toLocaleString('en-CA', {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2
+                    })} (${perc}%)`,
+                    fillStyle: dataset.backgroundColor[i],
+                    hidden: false,
+                    index: i,
+                  };
+                });
               },
             },
           },
-          animation: {
-            animateScale: true,
-            animateRotate: true,
+          title: {
+            display: true,
+            text: 'Budget 2024 Allocation',
+          },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => {
+                const val = ctx.parsed;
+                const ds = ctx.dataset.data;
+                const total = ds.reduce((a, b) => a + b, 0);
+                const perc = total ? ((val / total) * 100).toFixed(2) : '0.00';
+                const formattedVal = val.toLocaleString('en-CA', {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2
+            });
+
+            return `${ctx.label}: $${formattedVal} (${perc}%)`;
+              },
+            },
           },
         },
-      });
-    },
-    updateChart() {
-      if (this.chart) {
-        const newLabels = this.budget2024Data.map((item) => item.category);
-        const newData = this.budget2024Data.map((item) => item.amount);
-        const newBackgroundColors = this.generateColors(newLabels.length);
-        const sanitizedNewData = newData.map(value => (isNaN(value) || !isFinite(value) ? 0 : value));
-        if (newLabels.length !== sanitizedNewData.length || sanitizedNewData.length !== newBackgroundColors.length) {
-          console.error('Labels, data, and backgroundColors must be of the same length.');
-          return;
-        }
-        this.chart.data.labels = newLabels;
-        this.chart.data.datasets[0].data = sanitizedNewData;
-        this.chart.data.datasets[0].backgroundColor = newBackgroundColors;
-        this.chart.update();
-      }
-    },
-  },
-};
+      };
+    })
+
 </script>
 
 <style scoped>
 .pie-chart-container {
-  max-width: 650px;
+  max-width: 500px;
   margin: 30px auto;
   position: relative;
-  height: 600px;
-  width: 600px;
+  width: 500px;
+}
+
+.pie-chart-inner-container {
+  height: 400px;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+#budget2024legend {
+  max-width: 500px;
+  font-size: 14px;
 }
 
 .no-data {
