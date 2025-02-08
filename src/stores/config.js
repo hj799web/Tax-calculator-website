@@ -8,18 +8,28 @@ export const useConfigStore = defineStore('config', () => {
   const sortOrder = ref(localStorage.getItem('sortOrder') || 'desc');
   const selectedAllocationCategories = ref([]);
 
+  const visibleDescriptions = ref([])
+
   function toggleDescription(categoryId) {
-    const cat = budgetCategories.value.find((c) => c.id === categoryId);
+    const cat = budgetCategories.find((c) => c.id === categoryId);
     if (cat) {
-      cat.showDescription = !cat.showDescription;
+      const idIndex = visibleDescriptions.value.indexOf(cat.id)
+      if (idIndex === -1) {
+        visibleDescriptions.value.push(cat.id)
+      } else {
+        visibleDescriptions.value.splice(idIndex, 1)
+      }
     }
   }
 
   function toggleAll() {
+    visibleDescriptions.value = []
+    if (!allExpanded.value) {
+      budgetCategories.forEach((cat) => {
+        visibleDescriptions.value.push(cat.id)
+      });
+    }
     allExpanded.value = !allExpanded.value;
-    budgetCategories.value.forEach((cat) => {
-      cat.showDescription = allExpanded.value;
-    });
   }
 
   function toggleSortAmount() {
@@ -33,6 +43,7 @@ export const useConfigStore = defineStore('config', () => {
     selectedAllocationCategories,
     toggleDescription,
     toggleAll,
-    toggleSortAmount
+    toggleSortAmount,
+    visibleDescriptions
   }
 })

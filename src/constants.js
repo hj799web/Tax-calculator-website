@@ -160,64 +160,55 @@ export const budgetCategories = [
     id: 1,
     name: 'Healthcare',
     amount: 50000000000,
-    description: 'Funds the Canada Health Transfer, etc.',
-    showDescription: false,
+    description: 'Funds the Canada Health Transfer, etc.'
   },
   {
     id: 2,
     name: 'Support for Seniors',
     amount: 63000000000,
-    description: 'Old Age Security, GIS, etc.',
-    showDescription: false,
+    description: 'Old Age Security, GIS, etc.'
   },
   {
     id: 3,
     name: 'Children and Families',
     amount: 28000000000,
-    description: 'Canada Child Benefit, child/family programs.',
-    showDescription: false,
+    description: 'Canada Child Benefit, child/family programs.'
   },
   {
     id: 4,
     name: 'Indigenous Services and Reconciliation',
     amount: 26000000000,
-    description: 'Services, reconciliation efforts, etc.',
-    showDescription: false,
+    description: 'Services, reconciliation efforts, etc.'
   },
   {
     id: 5,
     name: 'Employment Insurance and Other Benefits',
     amount: 30000000000,
-    description: 'EI, job retraining, etc.',
-    showDescription: false,
+    description: 'EI, job retraining, etc.'
   },
   {
     id: 6,
     name: 'Defense and Public Safety',
     amount: 35000000000,
-    description: 'Canadian Armed Forces, border security.',
-    showDescription: false,
+    description: 'Canadian Armed Forces, border security.'
   },
   {
     id: 7,
     name: 'Debt Servicing',
     amount: 44000000000,
-    description: 'Interest on Canada’s national debt.',
-    showDescription: false,
+    description: 'Interest on Canada’s national debt.'
   },
   {
     id: 8,
     name: 'Public Debt Charges',
     amount: 34900000000,
-    description: 'Additional public debt interest.',
-    showDescription: false,
+    description: 'Additional public debt interest.'
   },
   {
     id: 9,
     name: 'Loans, Investments, and Advances',
     amount: 100000000000,
     description: 'Student loans, global loans, etc.',
-    showDescription: false,
     subsections: [
       {
         id: '9.1',
@@ -240,7 +231,6 @@ export const budgetCategories = [
     amount: 100000000000,
     description:
       'Day-to-day operations, salaries, infrastructure, etc.',
-    showDescription: false,
     subsections: [
       {
         id: '10.1',

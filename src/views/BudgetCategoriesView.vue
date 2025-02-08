@@ -55,7 +55,7 @@
         </button>
         <transition name="fade">
           <div
-            v-if="category.showDescription"
+            v-if="visibleDescriptions.includes(category.id)"
             class="category-description"
           >
             <p>{{ category.description }}</p>
@@ -97,6 +97,12 @@ const configStore = useConfigStore()
 
 const {
   selectedAllocationCategories,
-  allExpanded
+  allExpanded,
+  visibleDescriptions
 } = storeToRefs(configStore)
+
+const {
+  toggleAll,
+  toggleDescription
+} = configStore
 </script>

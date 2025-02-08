@@ -49,7 +49,6 @@
           aria-label="Employment Income"
           autocomplete="on"
         >
-        {{ canCalculate }}
         <div
           v-if="v$.income.$invalid"
           class="input-error"
@@ -350,7 +349,7 @@ import { useCalculator } from '../composables/calculator.js'
 const calculatorStore = useCalculatorStore();
 const { selectedSalaryRate } = storeToRefs(useSalaryStore())
 
-const { v$, canCalculate } = useCalculator()
+const { v$ } = useCalculator()
 
 const {
   selectedRegion,

@@ -99,6 +99,10 @@ const {
 const configStore = useConfigStore()
 
 const {
+  toggleSortAmount
+} = configStore
+
+const {
   sortOrder
 } = storeToRefs(configStore)
 
