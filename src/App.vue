@@ -262,13 +262,7 @@ body {
   height: 100% !important;
 }*/
 
-.federal-budget-section .pie-chart-item,
-.budget-pie-charts-wrapper {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-}
+
 
 /*.pie-chart-item {
   flex: 0 0 auto;

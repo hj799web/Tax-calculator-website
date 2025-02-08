@@ -24,53 +24,65 @@ export const useCalculator = () => {
     numberOfDependentsWithDisabilities
   } = storeToRefs(calculatorStore);
 
+  const checkCorrectType = (value) => {
+    console.log(typeof value)
+    return value === undefined || typeof value === 'number'
+  }
+
   const rules = computed(() => ({
     income: {
       numeric,
-      minValue: minValue(0)
+      checkCorrectType,
+      minValue: minValue(0),
     },
     selfEmploymentIncome: {
       numeric,
+      checkCorrectType,
       minValue: minValue(0)
     },
     capitalGainsBeforeJune25: {
       numeric,
+      checkCorrectType,
       minValue: minValue(0)
     },
     capitalGainsAfterJune25: {
       numeric,
+      checkCorrectType,
       minValue: minValue(0)
     },
     eligibleDividends: {
       numeric,
+      checkCorrectType,
       minValue: minValue(0)
     },
     ineligibleDividends: {
       numeric,
+      checkCorrectType,
       minValue: minValue(0)
     },
     otherIncome: {
       numeric,
+      checkCorrectType,
       minValue: minValue(0)
     },
     rrspDeduction: {
       numeric,
-      minValue: minValue(0)
-    },
-    maritalStatus: {
-      numeric,
+      checkCorrectType,
       minValue: minValue(0)
     },
     numberOfDependents: {
       numeric,
+      checkCorrectType,
       minValue: minValue(0)
     },
     numberOfChildrenUnder18: {
       numeric,
+      checkCorrectType,
       minValue: minValue(0)
     },
     numberOfDependentsWithDisabilities: {
       numeric,
+      checkCorrectType,
       minValue: minValue(0)
     }
   }))

@@ -90,7 +90,7 @@ const {
   eiPremiumPerPeriod,
   eiTaxPercentage,
   totalTaxPerPeriod,
-  netIncomeAfterCreditsPerPeriod,
+  netIncomeAfterCreditsPerPeriod
 } = storeToRefs(useCalculatorStore())
 
 const {

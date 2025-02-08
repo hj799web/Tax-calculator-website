@@ -1,5 +1,8 @@
 const getOrCreateLegendList = (chart, id) => {
   const legendContainer = document.getElementById(id);
+  if (!legendContainer) {
+    return
+  }
   let listContainer = legendContainer.querySelector('ul');
 
     if (!listContainer) {

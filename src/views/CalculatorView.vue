@@ -43,6 +43,7 @@
         <input
           id="employmentIncome"
           v-model="v$.income.$model"
+          type="number"
           class="input-field"
           :class="{ 'input-error-field': v$.income.$invalid }"
           :placeholder="'Enter your ' + selectedSalaryRate.toLowerCase() + ' employment income'"
@@ -73,6 +74,7 @@
         <input
           id="selfEmploymentIncome"
           v-model="v$.selfEmploymentIncome.$model"
+          type="number"
           class="input-field"
           :class="{ 'input-error-field': v$.selfEmploymentIncome.$invalid }"
           placeholder="Enter your self-employment income"
@@ -96,6 +98,7 @@
         <input
           id="capitalGainsBeforeJune25"
           v-model="v$.capitalGainsBeforeJune25.$model"
+          type="number"
           class="input-field"
           :class="{ 'input-error-field': v$.capitalGainsBeforeJune25.$invalid }"
           placeholder="Enter your capital gains before June 25, 2024"
@@ -119,6 +122,7 @@
         <input
           id="capitalGainsAfterJune25"
           v-model="v$.capitalGainsAfterJune25.$model"
+          type="number"
           class="input-field"
           :class="{ 'input-error-field': v$.capitalGainsAfterJune25.$invalid }"
           placeholder="Enter your capital gains on/after June 25, 2024"
@@ -142,6 +146,7 @@
         <input
           id="eligibleDividends"
           v-model="v$.eligibleDividends.$model"
+          type="number"
           class="input-field"
           :class="{ 'input-error-field': v$.eligibleDividends.$invalid }"
           placeholder="Enter your eligible dividends"
@@ -165,6 +170,7 @@
         <input
           id="ineligibleDividends"
           v-model="v$.ineligibleDividends.$model"
+          type="number"
           class="input-field"
           :class="{ 'input-error-field': v$.ineligibleDividends.$invalid }"
           placeholder="Enter your ineligible dividends"
@@ -188,6 +194,7 @@
         <input
           id="otherIncome"
           v-model="v$.otherIncome.$model"
+          type="number"
           class="input-field"
           :class="{ 'input-error-field': v$.otherIncome.$invalid }"
           placeholder="Enter your other income"
@@ -218,6 +225,7 @@
         <input
           id="rrspDeduction"
           v-model="v$.rrspDeduction.$model"
+          type="number"
           class="input-field"
           :class="{ 'input-error-field': v$.rrspDeduction.$invalid }"
           placeholder="Enter your RRSP deduction"
@@ -272,6 +280,7 @@
         <input
           id="numberOfDependents"
           v-model="v$.numberOfDependents.$model"
+          type="number"
           class="input-field"
           :class="{ 'input-error-field': v$.numberOfDependents.$invalid }"
           placeholder="Enter number of dependents"
@@ -297,6 +306,7 @@
         <input
           id="numberOfChildrenUnder18"
           v-model="v$.numberOfChildrenUnder18.$model"
+          type="number"
           class="input-field"
           :class="{ 'input-error-field': v$.numberOfChildrenUnder18.$invalid }"
           placeholder="Enter number of children under 18"
@@ -322,6 +332,7 @@
         <input
           id="numberOfDependentsWithDisabilities"
           v-model="v$.numberOfDependentsWithDisabilities.$model"
+          type="number"
           class="input-field"
           :class="{ 'input-error-field': v$.numberOfDependentsWithDisabilities.$invalid }"
           placeholder="Enter number of dependents with disabilities"
@@ -353,7 +364,7 @@ const { v$ } = useCalculator()
 
 const {
   selectedRegion,
-  maritalStatus,
+  maritalStatus
 } = storeToRefs(calculatorStore);
 
 </script>
