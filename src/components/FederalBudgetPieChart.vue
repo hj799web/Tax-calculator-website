@@ -27,13 +27,17 @@ import { storeToRefs } from 'pinia'
 import { useCalculatorStore } from '../stores/calculator.js'
 import { generateColors } from '../utils.js'
 import { htmlLegendPlugin } from '../htmlLegendPlugin.js'
+import { useCalculator } from '../composables/calculator.js'
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 
 const {
-  federalBudgetData,
-  canCalculate
+  federalBudgetData
 } = storeToRefs(useCalculatorStore())
+
+const {
+  canCalculate
+} = useCalculator()
 
 const chartData = computed(() => ({
       labels: federalBudgetData.value.map((x) => x.category),

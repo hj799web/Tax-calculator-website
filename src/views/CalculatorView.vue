@@ -33,15 +33,30 @@
       </select>
 
       <!-- Employment Income Input -->
-      <input
-        v-model.number="income"
-        class="input-field"
-        :placeholder="'Enter your ' + selectedSalaryRate.toLowerCase() + ' employment income'"
-        type="number"
-        min="0"
-        aria-label="Employment Income"
-        autocomplete="on"
-      >
+      <div class="input-subgroup">
+        <label
+          class="input-label"
+          for="employmentIncome"
+        >
+          Employment Income
+        </label>
+        <input
+          id="employmentIncome"
+          v-model="v$.income.$model"
+          class="input-field"
+          :class="{ 'input-error-field': v$.income.$invalid }"
+          :placeholder="'Enter your ' + selectedSalaryRate.toLowerCase() + ' employment income'"
+          aria-label="Employment Income"
+          autocomplete="on"
+        >
+        {{ canCalculate }}
+        <div
+          v-if="v$.income.$invalid"
+          class="input-error"
+        >
+          Value must be a number greater than 0
+        </div>
+      </div>
     </div>
 
     <!-- Additional Income Sources -->
@@ -58,14 +73,19 @@
         </label>
         <input
           id="selfEmploymentIncome"
-          v-model.number="selfEmploymentIncome"
+          v-model="v$.selfEmploymentIncome.$model"
           class="input-field"
+          :class="{ 'input-error-field': v$.selfEmploymentIncome.$invalid }"
           placeholder="Enter your self-employment income"
-          type="number"
-          min="0"
           aria-label="Self-Employment Income"
           autocomplete="on"
         >
+        <div
+          v-if="v$.selfEmploymentIncome.$invalid"
+          class="input-error"
+        >
+          Value must be a number greater than 0
+        </div>
       </div>
       <div class="input-subgroup">
         <label
@@ -76,14 +96,19 @@
         </label>
         <input
           id="capitalGainsBeforeJune25"
-          v-model.number="capitalGainsBeforeJune25"
+          v-model="v$.capitalGainsBeforeJune25.$model"
           class="input-field"
+          :class="{ 'input-error-field': v$.capitalGainsBeforeJune25.$invalid }"
           placeholder="Enter your capital gains before June 25, 2024"
-          type="number"
-          min="0"
           aria-label="Capital Gains Before June 25, 2024"
           autocomplete="on"
         >
+        <div
+          v-if="v$.capitalGainsBeforeJune25.$invalid"
+          class="input-error"
+        >
+          Value must be a number greater than 0
+        </div>
       </div>
       <div class="input-subgroup">
         <label
@@ -94,14 +119,19 @@
         </label>
         <input
           id="capitalGainsAfterJune25"
-          v-model.number="capitalGainsAfterJune25"
+          v-model="v$.capitalGainsAfterJune25.$model"
           class="input-field"
+          :class="{ 'input-error-field': v$.capitalGainsAfterJune25.$invalid }"
           placeholder="Enter your capital gains on/after June 25, 2024"
-          type="number"
-          min="0"
           aria-label="Capital Gains On/After June 25, 2024"
           autocomplete="on"
         >
+        <div
+          v-if="v$.capitalGainsAfterJune25.$invalid"
+          class="input-error"
+        >
+          Value must be a number greater than 0
+        </div>
       </div>
       <div class="input-subgroup">
         <label
@@ -112,14 +142,19 @@
         </label>
         <input
           id="eligibleDividends"
-          v-model.number="eligibleDividends"
+          v-model="v$.eligibleDividends.$model"
           class="input-field"
+          :class="{ 'input-error-field': v$.eligibleDividends.$invalid }"
           placeholder="Enter your eligible dividends"
-          type="number"
-          min="0"
           aria-label="Eligible Dividends"
           autocomplete="on"
         >
+        <div
+          v-if="v$.eligibleDividends.$invalid"
+          class="input-error"
+        >
+          Value must be a number greater than 0
+        </div>
       </div>
       <div class="input-subgroup">
         <label
@@ -130,14 +165,19 @@
         </label>
         <input
           id="ineligibleDividends"
-          v-model.number="ineligibleDividends"
+          v-model="v$.ineligibleDividends.$model"
           class="input-field"
+          :class="{ 'input-error-field': v$.ineligibleDividends.$invalid }"
           placeholder="Enter your ineligible dividends"
-          type="number"
-          min="0"
           aria-label="Ineligible Dividends"
           autocomplete="on"
         >
+        <div
+          v-if="v$.ineligibleDividends.$invalid"
+          class="input-error"
+        >
+          Value must be a number greater than 0
+        </div>
       </div>
       <div class="input-subgroup">
         <label
@@ -148,14 +188,19 @@
         </label>
         <input
           id="otherIncome"
-          v-model.number="otherIncome"
+          v-model="v$.otherIncome.$model"
           class="input-field"
+          :class="{ 'input-error-field': v$.otherIncome.$invalid }"
           placeholder="Enter your other income"
-          type="number"
-          min="0"
           aria-label="Other Income"
           autocomplete="on"
         >
+        <div
+          v-if="v$.otherIncome.$invalid"
+          class="input-error"
+        >
+          Value must be a number greater than 0
+        </div>
       </div>
     </div>
 
@@ -173,14 +218,19 @@
         </label>
         <input
           id="rrspDeduction"
-          v-model.number="rrspDeduction"
+          v-model="v$.rrspDeduction.$model"
           class="input-field"
+          :class="{ 'input-error-field': v$.rrspDeduction.$invalid }"
           placeholder="Enter your RRSP deduction"
-          type="number"
-          min="0"
           aria-label="RRSP Deduction"
           autocomplete="on"
         >
+        <div
+          v-if="v$.rrspDeduction.$invalid"
+          class="input-error"
+        >
+          Value must be a number greater than 0
+        </div>
       </div>
 
       <!-- Marital Status -->
@@ -222,14 +272,19 @@
         </label>
         <input
           id="numberOfDependents"
-          v-model.number="numberOfDependents"
+          v-model="v$.numberOfDependents.$model"
           class="input-field"
+          :class="{ 'input-error-field': v$.numberOfDependents.$invalid }"
           placeholder="Enter number of dependents"
-          type="number"
-          min="0"
           aria-label="Number of Dependents"
           autocomplete="on"
         >
+        <div
+          v-if="v$.numberOfDependents.$invalid"
+          class="input-error"
+        >
+          Value must be a number greater than 0
+        </div>
       </div>
 
       <!-- Number of Children Under 18 -->
@@ -242,14 +297,19 @@
         </label>
         <input
           id="numberOfChildrenUnder18"
-          v-model.number="numberOfChildrenUnder18"
+          v-model="v$.numberOfChildrenUnder18.$model"
           class="input-field"
+          :class="{ 'input-error-field': v$.numberOfChildrenUnder18.$invalid }"
           placeholder="Enter number of children under 18"
-          type="number"
-          min="0"
           aria-label="Number of Children Under 18"
           autocomplete="on"
         >
+        <div
+          v-if="v$.numberOfChildrenUnder18.$invalid"
+          class="input-error"
+        >
+          Value must be a number greater than 0
+        </div>
       </div>
 
       <!-- Dependents with Disabilities -->
@@ -262,14 +322,19 @@
         </label>
         <input
           id="numberOfDependentsWithDisabilities"
-          v-model.number="numberOfDependentsWithDisabilities"
+          v-model="v$.numberOfDependentsWithDisabilities.$model"
           class="input-field"
+          :class="{ 'input-error-field': v$.numberOfDependentsWithDisabilities.$invalid }"
           placeholder="Enter number of dependents with disabilities"
-          type="number"
-          min="0"
           aria-label="Dependents with Disabilities"
           autocomplete="on"
         >
+        <div
+          v-if="v$.numberOfDependentsWithDisabilities.$invalid"
+          class="input-error"
+        >
+          Value must be a number greater than 0
+        </div>
       </div>
     </div>
   </div>
@@ -280,23 +345,26 @@ import { useCalculatorStore } from '../stores/calculator.js'
 import { useSalaryStore } from '../stores/salary.js'
 import { regions } from '../constants.js'
 import { storeToRefs } from 'pinia';
+import { useCalculator } from '../composables/calculator.js'
 
 const calculatorStore = useCalculatorStore();
 const { selectedSalaryRate } = storeToRefs(useSalaryStore())
 
+const { v$, canCalculate } = useCalculator()
+
 const {
   selectedRegion,
-  income,
-  selfEmploymentIncome,
-  capitalGainsBeforeJune25,
-  capitalGainsAfterJune25,
-  eligibleDividends,
-  ineligibleDividends,
-  otherIncome,
-  rrspDeduction,
   maritalStatus,
-  numberOfDependents,
-  numberOfChildrenUnder18,
-  numberOfDependentsWithDisabilities
 } = storeToRefs(calculatorStore);
+
 </script>
+
+<style lang="css" scoped>
+.input-error {
+  color: red;
+}
+
+.input-error-field {
+  background-color: #ffa4a4;
+}
+</style>

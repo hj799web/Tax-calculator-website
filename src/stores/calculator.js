@@ -265,19 +265,6 @@ export const useCalculatorStore = defineStore('calculator', () => {
     );
   });
 
-  const canCalculate = computed(() => {
-    return !!selectedRegion.value &&
-      (
-        (income.value && income.value > 0) ||
-        (selfEmploymentIncome.value && selfEmploymentIncome.value > 0) ||
-        (capitalGainsBeforeJune25.value && capitalGainsBeforeJune25.value > 0) ||
-        (capitalGainsAfterJune25.value && capitalGainsAfterJune25.value > 0) ||
-        (eligibleDividends.value && eligibleDividends.value > 0) ||
-        (ineligibleDividends.value && ineligibleDividends.value > 0) ||
-        (otherIncome.value && otherIncome.value > 0)
-      );
-  });
-
   return {
     selectedRegion,
     income,
@@ -296,7 +283,6 @@ export const useCalculatorStore = defineStore('calculator', () => {
     totalCapitalGains,
     grossedUpEligibleDividends,
     grossedUpIneligibleDividends,
-    canCalculate,
     netFederalTaxPerPeriod,
     federalTaxPercentage,
     netProvincialTaxPerPeriod,

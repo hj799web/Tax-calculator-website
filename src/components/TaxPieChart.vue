@@ -21,17 +21,21 @@ import { Pie } from 'vue-chartjs';
 import { storeToRefs } from 'pinia'
 import { useCalculatorStore } from '../stores/calculator.js'
 import { htmlLegendPlugin } from '../htmlLegendPlugin.js'
+import { useCalculator } from '../composables/calculator.js'
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 
 const {
-  canCalculate,
   netFederalTaxPerPeriod,
   netProvincialTaxPerPeriod,
   pensionPlanContributionPerPeriod,
   eiPremiumPerPeriod,
   netIncomeAfterCreditsPerPeriod
 } = storeToRefs(useCalculatorStore())
+
+const {
+  canCalculate
+} = useCalculator()
 
 const chartData = computed(() => {
       if (!canCalculate.value) {

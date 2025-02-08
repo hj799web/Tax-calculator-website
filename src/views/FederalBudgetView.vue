@@ -110,4 +110,13 @@ const {
 .no-federal-taxes {
   text-align: center;
 }
+
+
+.federal-budget-section .pie-chart-item,
+.budget-pie-charts-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: start;
+}
 </style>

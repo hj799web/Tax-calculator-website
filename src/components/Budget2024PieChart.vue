@@ -28,13 +28,17 @@ import { useCalculatorStore } from '../stores/calculator.js'
 import { generateColors } from '../utils.js'
 import { baseBudget2024Data } from '../constants.js'
 import { htmlLegendPlugin } from '../htmlLegendPlugin.js'
+import { useCalculator } from '../composables/calculator.js'
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 
 const {
-  netFederalTaxPerPeriod,
-  canCalculate
+  netFederalTaxPerPeriod
 } = storeToRefs(useCalculatorStore())
+
+const {
+  canCalculate
+} = useCalculator()
 
 const budget2024DataComputed = computed(() => {
       const total = baseBudget2024Data.reduce((acc, cat) => acc + cat.amount, 0);

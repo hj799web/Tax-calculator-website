@@ -76,12 +76,12 @@
 import { formatCurrency } from '../utils.js'
 import { storeToRefs } from 'pinia'
 import { useCalculatorStore } from '../stores/calculator.js'
+import { useCalculator } from '../composables/calculator.js'
 import TaxPieChart from '../components/TaxPieChart.vue'
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
 const {
-  canCalculate,
   netFederalTaxPerPeriod,
   federalTaxPercentage,
   netProvincialTaxPerPeriod,
@@ -94,6 +94,10 @@ const {
   netIncomeAfterCreditsPerPeriod,
   sortedBudgetCategories
 } = storeToRefs(useCalculatorStore())
+
+const {
+  canCalculate
+} = useCalculator()
 
 async function exportToPDF() {
       try {
