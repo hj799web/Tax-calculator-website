@@ -390,80 +390,124 @@ const {
 } = storeToRefs(calculatorStore);
 
 const setIncome = ($event) => {
-  if ($event.target.validity.valid && $event.target.value.length === 0) {
-      income.value = undefined
+  if ($event.target.validity.valid) {
+    if ($event.target.value.length === 0) {
+        income.value = undefined
+    } else {
+      income.value = parseFloat($event.target.value)
+    }
   } else {
-    income.value = parseFloat($event.target.value)
+    income.value = $event.target.value
   }
 }
 const setSelfEmploymentIncome = ($event) => {
-  if ($event.target.validity.valid && $event.target.value.length === 0) {
-      selfEmploymentIncome.value = undefined
+  if ($event.target.validity.valid) {
+    if ($event.target.value.length === 0) {
+        selfEmploymentIncome.value = undefined
+    } else {
+      selfEmploymentIncome.value = parseFloat($event.target.value)
+    }
   } else {
-    selfEmploymentIncome.value = parseFloat($event.target.value)
+    selfEmploymentIncome.value = $event.target.value
   }
 }
 const setCapitalGainsBeforeJune25 = ($event) => {
-  if ($event.target.validity.valid && $event.target.value.length === 0) {
-      capitalGainsBeforeJune25.value = undefined
+  if ($event.target.validity.valid) {
+    if ($event.target.value.length === 0) {
+        capitalGainsBeforeJune25.value = undefined
+    } else {
+      capitalGainsBeforeJune25.value = parseFloat($event.target.value)
+    }
   } else {
-    capitalGainsBeforeJune25.value = parseFloat($event.target.value)
+    capitalGainsBeforeJune25.value = $event.target.value
   }
 }
 const setCapitalGainsAfterJune25 = ($event) => {
-  if ($event.target.validity.valid && $event.target.value.length === 0) {
-      capitalGainsAfterJune25.value = undefined
+  if ($event.target.validity.valid) {
+    if ($event.target.value.length === 0) {
+        capitalGainsAfterJune25.value = undefined
+    } else {
+      capitalGainsAfterJune25.value = parseFloat($event.target.value)
+    }
   } else {
-    capitalGainsAfterJune25.value = parseFloat($event.target.value)
+    capitalGainsAfterJune25.value = $event.target.value
   }
 }
 const setEligibleDividends = ($event) => {
-  if ($event.target.validity.valid && $event.target.value.length === 0) {
-      eligibleDividends.value = undefined
+  if ($event.target.validity.valid) {
+    if ($event.target.value.length === 0) {
+        eligibleDividends.value = undefined
+    } else {
+      eligibleDividends.value = parseFloat($event.target.value)
+    }
   } else {
-    eligibleDividends.value = parseFloat($event.target.value)
+    eligibleDividends.value = $event.target.value
   }
 }
 const setIneligibleDividends = ($event) => {
-  if ($event.target.validity.valid && $event.target.value.length === 0) {
-      ineligibleDividends.value = undefined
+  if ($event.target.validity.valid) {
+    if ($event.target.value.length === 0) {
+        ineligibleDividends.value = undefined
+    } else {
+      ineligibleDividends.value = parseFloat($event.target.value)
+    }
   } else {
-    ineligibleDividends.value = parseFloat($event.target.value)
+    ineligibleDividends.value = $event.target.value
   }
 }
 const setOtherIncome = ($event) => {
-  if ($event.target.validity.valid && $event.target.value.length === 0) {
-      otherIncome.value = undefined
+  if ($event.target.validity.valid) {
+    if ($event.target.value.length === 0) {
+        otherIncome.value = undefined
+    } else {
+      otherIncome.value = parseFloat($event.target.value)
+    }
   } else {
-    otherIncome.value = parseFloat($event.target.value)
+    otherIncome.value = $event.target.value
   }
 }
 const setRrspDeduction = ($event) => {
-  if ($event.target.validity.valid && $event.target.value.length === 0) {
-      rrspDeduction.value = undefined
+  if ($event.target.validity.valid) {
+    if ($event.target.value.length === 0) {
+        rrspDeduction.value = undefined
+    } else {
+      rrspDeduction.value = parseFloat($event.target.value)
+    }
   } else {
-    rrspDeduction.value = parseFloat($event.target.value)
+    rrspDeduction.value = $event.target.value
   }
 }
 const setNumberOfDependents = ($event) => {
-  if ($event.target.validity.valid && $event.target.value.length === 0) {
-      numberOfDependents.value = undefined
+  if ($event.target.validity.valid) {
+    if ($event.target.value.length === 0) {
+        numberOfDependents.value = undefined
+    } else {
+      numberOfDependents.value = parseFloat($event.target.value)
+    }
   } else {
-    numberOfDependents.value = parseFloat($event.target.value)
+    numberOfDependents.value = $event.target.value
   }
 }
 const setNumberOfChildrenUnder18 = ($event) => {
-  if ($event.target.validity.valid && $event.target.value.length === 0) {
-      numberOfChildrenUnder18.value = undefined
+  if ($event.target.validity.valid) {
+    if ($event.target.value.length === 0) {
+        numberOfChildrenUnder18.value = undefined
+    } else {
+      numberOfChildrenUnder18.value = parseFloat($event.target.value)
+    }
   } else {
-    numberOfChildrenUnder18.value = parseFloat($event.target.value)
+    numberOfChildrenUnder18.value = $event.target.value
   }
 }
 const setNumberOfDependentsWithDisabilities = ($event) => {
-  if ($event.target.validity.valid && $event.target.value.length === 0) {
-      numberOfDependentsWithDisabilities.value = undefined
+  if ($event.target.validity.valid) {
+    if ($event.target.value.length === 0) {
+        numberOfDependentsWithDisabilities.value = undefined
+    } else {
+      numberOfDependentsWithDisabilities.value = parseFloat($event.target.value)
+    }
   } else {
-    numberOfDependentsWithDisabilities.value = parseFloat($event.target.value)
+    numberOfDependentsWithDisabilities.value = $event.target.value
   }
 }
 </script>
