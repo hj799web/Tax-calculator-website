@@ -25,7 +25,6 @@ export const useCalculator = () => {
   } = storeToRefs(calculatorStore);
 
   const checkCorrectType = (value) => {
-    console.log(typeof value)
     return value === undefined || typeof value === 'number'
   }
 
