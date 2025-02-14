@@ -5,8 +5,7 @@
       Federal Budget Allocation
     </h2>
     <p class="allocation-description">
-      See how your federal taxes are allocated across different sectors and
-      programs.
+      The <strong>2022–2023 Canada’s Federal Budget Allocation Chart</strong> offers a detailed yet simplified breakdown of how the Canadian federal government spent its money during the 2022–2023 fiscal year—data sourced from the Public Accounts of Canada financial report. In contrast, the <strong>Budget 2024 Pie Chart</strong> represents the proposed spending allocations presented by the Canadian federal government for 2024.
     </p>
 
     <!-- Charts Section -->

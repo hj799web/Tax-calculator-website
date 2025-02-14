@@ -32,6 +32,9 @@
     <BudgetCategoriesView />
     <!-- End of budget-categories-section -->
 
+    <!-- FAQ Section -->
+    <FAQSection />
+
     <!-- Footer -->
     <footer>
       <p>Note: This calculator is a simplified estimate. Actual tax amounts may vary.</p>
@@ -46,6 +49,8 @@ import CalculatorView from './views/CalculatorView.vue'
 import ResultView from './views/ResultView.vue'
 import FederalBudgetView from './views/FederalBudgetView.vue'
 import BudgetCategoriesView from './views/BudgetCategoriesView.vue'
+import FAQSection from './components/FAQSection.vue'
+
 
 </script>
 
