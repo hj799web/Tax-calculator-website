@@ -13,32 +13,36 @@
       <h2 class="section-title">
         Budget Visualizations
       </h2>
-      <div
-        v-if="netFederalTaxPerPeriod > 0"
-        class="budget-pie-charts-wrapper"
-      >
-        <!-- Federal Budget Pie Chart -->
-        <div
-          class="pie-chart-item"
-          role="img"
-          aria-label="2022-2023 Federal budget allocation chart"
-        >
-          <FederalBudgetPieChart />
+      <div v-if="netFederalTaxPerPeriod > 0" class="charts-wrapper">
+        <!-- Wrapper for Federal Budget Pie Chart and its legend -->
+        <div class="pie-chart-wrapper">
+          <div
+            class="pie-chart-container"
+            role="img"
+            aria-label="2022-2023 Federal budget allocation chart"
+          >
+            <div class="pie-chart-inner-container">
+              <FederalBudgetPieChart />
+            </div>
+          </div>
+          <div id="federallegend" class="legend-container"></div>
         </div>
 
-        <!-- Budget 2024 Pie Chart -->
-        <div
-          class="pie-chart-item"
-          role="img"
-          aria-label="Federal Budget 2024 allocation chart"
-        >
-          <Budget2024PieChart />
+        <!-- Wrapper for Budget 2024 Pie Chart and its legend -->
+        <div class="pie-chart-wrapper">
+          <div
+            class="pie-chart-container"
+            role="img"
+            aria-label="Federal Budget 2024 allocation chart"
+          >
+            <div class="pie-chart-inner-container">
+              <Budget2024PieChart />
+            </div>
+          </div>
+          <div id="budget2024legend" class="legend-container"></div>
         </div>
       </div>
-      <div
-        v-else
-        class="no-federal-taxes"
-      >
+      <div v-else class="no-federal-taxes">
         No federal taxes to visualize
       </div>
     </section>
@@ -46,41 +50,39 @@
 
   <!-- Combined Total Federal Tax Allocated Section -->
   <section class="allocation-table-section total-federal-tax-allocated">
-    <h2 class="section-title">
-      Total Federal Tax Allocated
-    </h2>
-    <div class="allocation-total">
-      <span>Total Federal Tax Allocated:</span>
-      <span>{{ formatCurrency(netFederalTaxPerPeriod) }}</span>
+    <!-- Isolation wrapper to prevent overlapping -->
+    <div class="allocation-insulated">
+      <h2 class="section-title">
+        Total Federal Tax Allocated
+      </h2>
+      <div class="allocation-total">
+        <span>Total Federal Tax Allocated:</span>
+        <span>{{ formatCurrency(netFederalTaxPerPeriod) }}</span>
+      </div>
+      <!-- Sort button at a normal size -->
+      <button class="sort-button" @click="toggleSortAmount">
+        Sort by Amount ({{ sortOrder.toUpperCase() }})
+      </button>
+      <table class="allocation-table">
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Amount</th>
+            <th>Percentage</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="category in sortedBudgetCategories" :key="category.id">
+            <td>{{ category.name }}</td>
+            <td>{{ formatCurrency(category.allocatedAmount) }}</td>
+            <td>{{ category.percentage.toFixed(2) }}%</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <!-- Keep the sort button for THIS table only -->
-    <button
-      class="sort-button"
-      @click="toggleSortAmount"
-    >
-      Sort by Amount ({{ sortOrder.toUpperCase() }})
-    </button>
-    <table class="allocation-table">
-      <thead>
-        <tr>
-          <th>Category</th>
-          <th>Amount</th>
-          <th>Percentage</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="category in sortedBudgetCategories"
-          :key="category.id"
-        >
-          <td>{{ category.name }}</td>
-          <td>{{ formatCurrency(category.allocatedAmount) }}</td>
-          <td>{{ category.percentage.toFixed(2) }}%</td>
-        </tr>
-      </tbody>
-    </table>
   </section>
 </template>
+
 
 <script setup lang="js">
 import { formatCurrency } from '../utils.js'
@@ -109,17 +111,137 @@ const {
 
 </script>
 
-<style lang="css" scoped>
-.no-federal-taxes {
-  text-align: center;
+<style scoped>
+/* ===== Pie Chart & Legend Section ===== */
+/* Wrapper for a single pie chart and its legend */
+.pie-chart-wrapper {
+  width: 100%;
+  max-width: 250px;       /* Maximum width on larger screens */
+  margin: 20px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 50px;              /* Space between the chart and the legend */
 }
 
+/* Container for the pie chart */
+.pie-chart-container {
+  width: 100%;
+  height: 250px;          /* Fixed height for the chart area */
+  position: relative;
+  background: #f9f9f9;    /* Optional: For visual debugging */
+}
 
-.federal-budget-section .pie-chart-item,
-.budget-pie-charts-wrapper {
+/* Inner container to center the chart */
+.pie-chart-inner-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Legend container */
+#federallegend {
+  width: 100%;
+  max-width: 500px;       /* Matches the container's max-width */
+  font-size: 10px;        /* Smaller font size */
+  text-align: center;
+  margin: 5px auto 100px; /* Increased bottom margin for extra space */
+  display: block;
+  overflow: visible;
+  padding: 5px;
+}
+
+/* Wrapper for multiple pie charts */
+.charts-wrapper {
   display: flex;
   flex-wrap: wrap;
+  gap: 50px;              /* Increased gap between charts */
   justify-content: center;
-  align-items: start;
+}
+
+/* Responsive adjustments for pie charts */
+@media (max-width: 768px) {
+  .pie-chart-wrapper {
+    max-width: 200px;
+  }
+  .pie-chart-container {
+    height: 200px;
+  }
+  #federallegend {
+    max-width: 400px;
+    margin: 5px auto 70px;
+  }
+}
+
+@media (max-width: 480px) {
+  .pie-chart-wrapper {
+    max-width: 180px;
+  }
+  .pie-chart-container {
+    height: 180px;
+  }
+  #federallegend {
+    max-width: 180px;
+    margin: 5px auto 50px;
+  }
+}
+
+/* ===== Allocation Table Section ===== */
+.allocation-table-section.total-federal-tax-allocated {
+  padding: 20px;
+  margin: 350px auto 20px;  /* Significantly increased top margin for extra space */
+  background-color: #fff;   /* Solid background for isolation */
+  border: 1px solid #ccc;   /* Border to visually separate the section */
+  overflow: auto;           /* Prevents content from spilling out */
+  position: relative;
+  z-index: 1;
+}
+
+.allocation-table-section.total-federal-tax-allocated h2.section-title {
+  margin-bottom: 15px;
+}
+
+.allocation-total {
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+.sort-button {
+  padding: 10px 20px;
+  background-color: #153bb8;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-block;  /* Only as wide as its content */
+  margin-bottom: 15px;
+}
+
+.allocation-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.allocation-table th,
+.allocation-table td {
+  padding: 8px;
+  border: 1px solid #ccc;
+  text-align: left;
+}
+
+/* Responsive adjustments for the allocation section */
+@media (max-width: 600px) {
+  .allocation-table-section.total-federal-tax-allocated {
+    padding: 15px;
+    margin: 150px 0 20px; /* Reduced top margin slightly on small screens */
+  }
+  .sort-button {
+    padding: 8px 16px;
+  }
 }
 </style>
+
+
+
+

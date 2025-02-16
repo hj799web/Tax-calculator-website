@@ -111,46 +111,69 @@ const chartOptions = computed(() => {
 </script>
 
 <style scoped>
+/* Container for individual pie charts */
 .pie-chart-container {
-  max-width: 500px;
-  margin: 30px auto;
+  width: 100%;
+  max-width: 250px;  /* Reduced maximum size on larger screens */
+  margin: 20px auto;
   position: relative;
-  width: 500px;
+  /* Removed aspect-ratio to allow the height to be determined by content */
 }
 
+/* Inner container to center the chart */
 .pie-chart-inner-container {
-  height: 400px;
+  width: 100%;
+  height: 250px;  /* Fixed height for the chart area */
   display: flex;
   justify-content: center;
-  margin-bottom: 20px;
+  align-items: center;
+  margin-bottom: 10px;  /* Reduced margin */
 }
 
+/* Legend container - adjusted to match container width */
 #federallegend {
-  max-width: 500px;
-  font-size: 14px;
+  width: 100%;
+  max-width: 550px;    /* Adjusted to match the container */
+  font-size: 10px;     /* Smaller font size */
+  text-align: center;
+  margin: 5px auto;
+  display: block;
 }
 
+/* No data overlay */
 .no-data {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   color: #7f8c8d;
-  font-size: 18px;
+  font-size: 16px;     /* Reduced font size */
   text-align: center;
 }
 
+/* Wrapper for multiple pie charts to avoid overlap */
+.charts-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;  /* Increased gap to avoid overlapping */
+  justify-content: center;
+}
+
+/* Responsive adjustments for smaller screens */
 @media (max-width: 768px) {
   .pie-chart-container {
-    height: 600px;
-    width: 600px;
+    max-width: 220px;
   }
 }
 
-@media (max-width: 680px) {
+@media (max-width: 480px) {
   .pie-chart-container {
-    height: 600px;
-    width: 600px;
+    max-width: 180px;
+  }
+  .charts-wrapper {
+    flex-direction: column;
+    align-items: center;
   }
 }
 </style>
+

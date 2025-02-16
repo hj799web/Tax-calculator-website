@@ -28,9 +28,13 @@
     <!-- Federal Budget Breakdown Section -->
     <FederalBudgetView />
 
+
+
     <!-- Budget Categories Section -->
     <BudgetCategoriesView />
     <!-- End of budget-categories-section -->
+
+
 
     <!-- FAQ Section -->
     <FAQSection />
