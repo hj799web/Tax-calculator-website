@@ -77,8 +77,13 @@ const { sortOrder } = storeToRefs(configStore)
 .charts-wrapper {
   display: flex;
   flex-wrap: wrap;
-  gap: 50px;              /* Ample gap between charts */
+  gap: 50px;
   justify-content: center;
+  align-items: center;
+  margin-left: auto; /* Add this line */
+  margin-right: auto; /* Add this line */
+  max-width: 800px;
+  width: 100%;
 }
 
 /* ===== Federal Budget Section Styles ===== */
@@ -151,8 +156,3 @@ const { sortOrder } = storeToRefs(configStore)
   }
 }
 </style>
-
-
-
-
-

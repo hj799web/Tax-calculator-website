@@ -119,13 +119,13 @@ const chartOptions = computed(() => ({
   flex-direction: column;
   gap: 50px;
   width: 100%;
-  max-width: 250px;
-  margin: 20px auto;
+  max-width: 400px;
+  margin: 0 auto;
 }
 
 /* Modified to center content with flexbox */
 .pie-chart-container {
-  width: 100%;
+  width: 400px;
   height: 250px;
   background: #f9f9f9;
   position: relative;
@@ -135,8 +135,8 @@ const chartOptions = computed(() => ({
 }
 
 .pie-chart-inner-container {
-  width: 100%;
-  height: 100%;
+  width: 250px;
+  height: 225px;
   display: flex;
   justify-content: center;
   align-items: center;

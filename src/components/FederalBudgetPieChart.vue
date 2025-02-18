@@ -92,23 +92,23 @@ const chartOptions = computed(() => ({
   max-width: 250px;
   margin: 20px auto;
   position: relative;
-  display: flex;             /* Added for centering */
-  justify-content: center;   /* Centers horizontally */
-  align-items: center;       /* Centers vertically */
-}
-
-.pie-chart-inner-container {
-  width: 100%;
-  height: 250px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
+.pie-chart-inner-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+}
+
 .legend-container {
   width: 100%;
   max-width: 250px;
-  font-size: 10px; /* Legend text size set to 10px */
+  font-size: 10px;
   text-align: center;
   margin: 5px auto;
   display: block;

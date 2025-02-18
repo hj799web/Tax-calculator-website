@@ -2,10 +2,13 @@
   "name": "my-new-project",
   "version": "0.1.0",
   "private": true,
+
   "scripts": {
+  "serve": "vue-cli-service serve",
   "build": "vue-cli-service build",
   "deploy": "gh-pages -d dist"
 },
+
 
   "dependencies": {
     "@vuelidate/core": "^2.0.3",
