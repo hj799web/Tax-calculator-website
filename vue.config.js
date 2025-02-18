@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
   publicPath: process.env.NODE_ENV === 'production'
-    ? '/Tax-calculator-website/' // Change this to match your GitHub repo name
+    ? '/' // Change this to match your GitHub repo name
     : '/',
   devServer: {
     port: 3000,  // Force it to always use port 3000
