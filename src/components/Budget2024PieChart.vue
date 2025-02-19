@@ -135,7 +135,7 @@ const chartOptions = computed(() => ({
 }
 
 .pie-chart-inner-container {
-  width: 250px;
+  width: 400px;
   height: 225px;
   display: flex;
   justify-content: center;

@@ -2,14 +2,15 @@ const path = require('path');
 
 module.exports = {
   publicPath: process.env.NODE_ENV === 'production'
-    ? '/' // Change this to match your GitHub repo name
+    ? '/Tax-calculator-website/'  // Ensure this matches your repo name exactly (case-sensitive)
     : '/',
+  outputDir: 'docs', // <-- Build output goes to the "docs" folder in your main branch
   devServer: {
-    port: 3000,  // Force it to always use port 3000
-    host: '0.0.0.0',  // Allows access from Codespaces
-    allowedHosts: 'all', // Ensures the Codespaces URL works
+    port: 3000,
+    host: '0.0.0.0',
+    allowedHosts: 'all',
     client: {
-      webSocketURL: 'wss://sturdy-giggle-v6qj67gwgjqwf6qxv-3000.app.github.dev/ws',  // Fixes WebSocket issues
+      webSocketURL: 'wss://sturdy-giggle-v6qj67gwgjqwf6qxv-3000.app.github.dev/ws',
     },
   },
   configureWebpack: {
@@ -21,6 +22,7 @@ module.exports = {
     },
   },
 };
+
 
 
 
