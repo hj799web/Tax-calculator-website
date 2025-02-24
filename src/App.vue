@@ -5,6 +5,7 @@
       <h1 class="main-title">
         Canada Income Tax Calculator
       </h1>
+      <a href="#" class="welcome-link">Welcome Page</a>
       <p class="subtitle">
         Enter your details to approximate your 2024 taxes. Note: This is still a
         simplified model!
@@ -31,13 +32,17 @@
 
 
     <!-- Budget Categories Section -->
-    <BudgetCategoriesView />
+    <section class="budget-categories-section">
+      <BudgetCategoriesView />
+    </section>
     <!-- End of budget-categories-section -->
 
 
 
     <!-- FAQ Section -->
-    <FAQSection />
+    <section class="faq-section">
+      <FAQSection />
+    </section>
 
     <!-- Footer -->
     <footer>
@@ -77,9 +82,30 @@ body {
 .main-title {
   font-size: 36px;
   color: #34495e;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
   font-weight: 600;
   text-align: center;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.main-title:hover {
+  transform: scale(1.02);
+}
+
+.welcome-link {
+  display: block;
+  text-align: center;
+  color: #27ae60;
+  text-decoration: none;
+  margin-bottom: 10px;
+  font-size: 18px;
+  transition: color 0.3s;
+}
+
+.welcome-link:hover {
+  color: #219a52;
+  text-decoration: underline;
 }
 
 .subtitle {
@@ -91,11 +117,17 @@ body {
 
 .section-title {
   color: #34495e;
-  font-size: 20px;
-  margin-top: 30px;
-  margin-bottom: 10px;
+  font-size: 24px;
+  margin-top: 40px;
+  margin-bottom: 20px;
   font-weight: 600;
   text-align: center;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.section-title:hover {
+  transform: scale(1.02);
 }
 
 .salary-selector-wrapper {
@@ -122,19 +154,24 @@ body {
   border-radius: 30px;
   cursor: pointer;
   white-space: nowrap;
-  transition: background-color 0.3s, color 0.3s;
-  font-weight: 500;
+  transition: all 0.3s ease;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.salary-option:hover {
+  background-color: #27ae60;
+  color: #ffffff;
+  transform: translateY(-2px) rotateX(5deg);
+  box-shadow: 0 5px 15px rgba(39, 174, 96, 0.4);
 }
 
 .salary-option.active {
   background-color: #27ae60;
   color: #ffffff;
   font-weight: 600;
-}
-
-.salary-option:hover {
-  background-color: #27ae60;
-  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(39, 174, 96, 0.4);
 }
 
 .input-field::placeholder {
@@ -164,6 +201,15 @@ body {
     0 6px 6px rgba(0, 0, 0, 0.23);
   flex: 1;
   min-width: 300px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.calculator-container:hover,
+.result-box:hover {
+  transform: translateY(-5px);
+  box-shadow:
+    0 15px 30px rgba(0, 0, 0, 0.25),
+    0 10px 10px rgba(0, 0, 0, 0.22);
 }
 
 .title {
@@ -184,6 +230,16 @@ body {
   flex-direction: column;
   gap: 15px;
   margin-bottom: 25px;
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 10px;
+  margin: 15px 0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.input-group:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
 }
 
 .select-region,
@@ -193,6 +249,15 @@ body {
   border: 1px solid #bdc3c7;
   border-radius: 6px;
   font-size: 16px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.select-region:focus,
+.input-field:focus {
+  border-color: #27ae60;
+  box-shadow: 0 5px 15px rgba(39, 174, 96, 0.2);
+  transform: translateY(-2px);
 }
 
 .input-label {
@@ -264,6 +329,12 @@ body {
   height: 400px;
   width: 100%;
   margin: 40px 0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tax-pie-chart-container:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 /*.tax-pie-chart-container canvas {
@@ -288,25 +359,7 @@ body {
   height: 100% !important;
 }*/
 
-@media (max-width: 992px) {
-  .pie-chart-item {
-    min-width: 400px;
-    max-width: 400px;
-    height: 400px;
-    width: 400px;
-  }
-}
-
-@media (max-width: 768px) {
-  .pie-chart-item {
-    min-width: 300px;
-    max-width: 300px;
-    height: 300px;
-    width: 300px;
-  }
-}
-
-.allocation-total {
+/*.allocation-total {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -318,7 +371,7 @@ body {
   padding: 15px 20px;
   border-radius: 8px;
   box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
-}
+}*/
 
 .allocation-filters {
   display: flex;
@@ -451,14 +504,84 @@ body {
 }
 
 footer {
-  font-style: italic;
-  font-size: 14px;
-  color: #7f8c8d;
-  margin-top: 20px;
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-top: 60px;
   text-align: center;
-  padding: 10px;
-  border-top: 1px solid #bdc3c7;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+footer:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+footer p {
+  color: #7f8c8d;
+  margin: 10px 0;
+  transition: transform 0.3s ease;
+}
+
+footer p:hover {
+  transform: translateX(5px);
+  color: #34495e;
+}
+
+.calculator-section {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin: 40px 0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.calculator-section:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.budget-categories-section {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin: 40px 0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.budget-categories-section:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.faq-section {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin: 40px 0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.faq-section:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.faq-item {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 10px;
+  margin: 15px 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.faq-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
 }
 </style>
-
-

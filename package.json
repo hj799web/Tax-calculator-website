@@ -2,14 +2,11 @@
   "name": "my-new-project",
   "version": "0.1.0",
   "private": true,
-
   "scripts": {
-  "serve": "vue-cli-service serve",
-  "build": "vue-cli-service build",
-  "deploy": "gh-pages -d dist"
-},
-
-
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "deploy": "gh-pages -d dist"
+  },
   "dependencies": {
     "@vuelidate/core": "^2.0.3",
     "@vuelidate/validators": "^2.0.4",
@@ -30,7 +27,8 @@
     "vue-chartjs": "^5.3.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.16",
+    "@babel/compat-data": "^7.26.8",
+    "@babel/core": "^7.26.9",
     "@babel/eslint-parser": "^7.12.16",
     "@babel/plugin-transform-class-properties": "^7.25.9",
     "@babel/plugin-transform-nullish-coalescing-operator": "^7.25.9",
@@ -41,6 +39,7 @@
     "@vue/cli-service": "~5.0.0",
     "@vue/compiler-sfc": "^3.3.0",
     "@vue/eslint-config-prettier": "^8.0.0",
+    "babel-loader": "^9.2.1",
     "eslint": "^8.0.0",
     "eslint-plugin-vue": "^9.0.0",
     "gh-pages": "^6.3.0"

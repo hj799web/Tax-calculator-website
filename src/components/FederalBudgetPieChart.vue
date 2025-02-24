@@ -67,7 +67,7 @@ const chartOptions = computed(() => ({
     },
     title: {
       display: true,
-      text: 'Federal Budget Allocation',
+      text: '2022–2023 Canada Federal Budget Allocation Chart',
     },
     tooltip: {
       callbacks: {
@@ -89,16 +89,23 @@ const chartOptions = computed(() => ({
 <style scoped>
 .pie-chart-container {
   width: 100%;
-  max-width: 250px;
+  max-width: 500px;
   margin: 20px auto;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pie-chart-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
 .pie-chart-inner-container {
-  width: 100%;
+  width: 400px;
+  height: 400px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -107,11 +114,19 @@ const chartOptions = computed(() => ({
 
 .legend-container {
   width: 100%;
-  max-width: 250px;
-  font-size: 10px;
-  text-align: center;
-  margin: 5px auto;
-  display: block;
+  max-width: 400px;
+  font-size: 12px;
+  text-align: left;
+  margin: 10px auto;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease;
+}
+
+.legend-container:hover {
+  transform: scale(1.02);
 }
 
 .no-data {
@@ -119,5 +134,8 @@ const chartOptions = computed(() => ({
   color: #7f8c8d;
   font-size: 16px;
   text-align: center;
+  background: #f8f9fa;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 </style>

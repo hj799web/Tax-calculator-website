@@ -112,31 +112,48 @@ const chartOptions = computed(() => ({
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.budget2024-pie-chart:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
 .chart-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 50px;
+  gap: 20px;
   width: 100%;
-  max-width: 400px;
   margin: 0 auto;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Modified to center content with flexbox */
+.chart-wrapper:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
 .pie-chart-container {
   width: 400px;
-  height: 250px;
-  background: #f9f9f9;
+  height: 400px;
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 0 auto;
 }
 
 .pie-chart-inner-container {
-  width: 400px;
-  height: 225px;
+  width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -144,12 +161,19 @@ const chartOptions = computed(() => ({
 
 .legend-container {
   width: 100%;
-  max-width: 250px;
-  font-size: 10px; /* Legend text size set to 10px */
-  text-align: center;
-  margin: 5px auto 100px;
-  padding: 5px;
-  display: block;
+  max-width: 400px;
+  font-size: 12px;
+  text-align: left;
+  margin: 10px auto;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease;
+}
+
+.legend-container:hover {
+  transform: scale(1.02);
 }
 
 .no-data {
@@ -157,6 +181,8 @@ const chartOptions = computed(() => ({
   color: #7f8c8d;
   font-size: 16px;
   text-align: center;
+  background: #f8f9fa;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
-
 </style>
