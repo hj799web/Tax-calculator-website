@@ -5,7 +5,7 @@
       <h1 class="main-title">
         Canada Income Tax Calculator
       </h1>
-      <a href="#" class="welcome-link">Welcome Page</a>
+      <a href="https://hj799web.github.io/fiscal-insights-welcome-pg/" class="welcome-link">Welcome Page</a>
       <p class="subtitle">
         Enter your details to approximate your 2024 taxes. Note: This is still a
         simplified model!
