@@ -5,6 +5,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "build:gh-pages": "cross-env DEPLOY_ENV=GH_PAGES vue-cli-service build",
+    "deploy:gh-pages": "cross-env DEPLOY_ENV=GH_PAGES npm run build:gh-pages && gh-pages -d docs",
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
@@ -13,6 +15,7 @@
     "chart.js": "^4.4.7",
     "chartjs-plugin-datalabels": "^2.2.0",
     "core-js": "^3.8.3",
+    "cross-env": "^7.0.3",
     "glob": "^11.0.0",
     "graphql-ws": "^5.16.0",
     "gsap": "^3.12.5",
