@@ -7,8 +7,7 @@
       </h1>
       <a href="https://hj799web.github.io/fiscal-insights-welcome-pg/" class="welcome-link">Welcome Page</a>
       <p class="subtitle">
-        Enter your details to approximate your 2024 taxes. Note: This is still a
-        simplified model!
+        Enter your details to approximate your 2024 taxes.
       </p>
     </header>
 
