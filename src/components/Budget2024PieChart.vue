@@ -77,6 +77,7 @@ const chartData = computed(() => ({
 // Chart options (pass the legend ref to the plugin)
 const chartOptions = computed(() => ({
   responsive: true,
+  maintainAspectRatio: true,
   plugins: {
     htmlLegend: {
       container: legendRef, // use the Vue ref
@@ -87,8 +88,15 @@ const chartOptions = computed(() => ({
     title: {
       display: true,
       text: 'Budget 2024 Allocation',
+      font: {
+        size: 14
+      }
     },
     tooltip: {
+      enabled: true,
+      position: 'nearest',
+      external: null, // Allow tooltip to render outside the canvas
+      usePointStyle: true,
       callbacks: {
         label: (ctx) => {
           const val = ctx.parsed
@@ -113,37 +121,40 @@ const chartOptions = computed(() => ({
   flex-direction: column;
   align-items: center;
   width: 100%;
-  max-width: 500px;
+  max-width: 358px;
   margin: 0 auto;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  z-index: 1;
 }
 
 .budget2024-pie-chart:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .chart-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 10px;
   width: 100%;
   margin: 0 auto;
-  padding: 20px;
+  padding: 10px;
   background: #ffffff;
   border-radius: 15px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
 }
 
 .chart-wrapper:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .pie-chart-container {
-  width: 400px;
-  height: 400px;
+  width: 286px;
+  height: 286px;
   position: relative;
   display: flex;
   justify-content: center;
@@ -157,32 +168,63 @@ const chartOptions = computed(() => ({
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
 
 .legend-container {
   width: 100%;
-  max-width: 400px;
-  font-size: 12px;
+  max-width: 286px;
+  font-size: 10px;
   text-align: left;
-  margin: 10px auto;
-  padding: 15px;
+  margin: 5px auto;
+  padding: 10px;
   background: #f8f9fa;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   transition: transform 0.3s ease;
+  overflow-y: auto;
+  max-height: 200px;
 }
 
 .legend-container:hover {
-  transform: scale(1.02);
+  transform: scale(1.01);
 }
 
 .no-data {
-  padding: 20px;
+  padding: 15px;
   color: #7f8c8d;
-  font-size: 16px;
+  font-size: 14px;
   text-align: center;
   background: #f8f9fa;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+:deep(.chartjs-tooltip) {
+  z-index: 10;
+  pointer-events: none;
+  position: absolute;
+}
+
+@media (max-width: 600px) {
+  .budget2024-pie-chart {
+    max-width: 315px;
+  }
+  
+  .chart-wrapper {
+    padding: 8px;
+    gap: 8px;
+  }
+  
+  .pie-chart-container {
+    width: 257px;
+    height: 257px;
+  }
+  
+  .legend-container {
+    max-width: 257px;
+    font-size: 9px;
+    padding: 8px;
+  }
 }
 </style>

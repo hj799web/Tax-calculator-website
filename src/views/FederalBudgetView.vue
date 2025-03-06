@@ -5,7 +5,7 @@
       Federal Budget Allocation
     </h2>
     <p class="allocation-description">
-      The <strong>2022–2023 Canada’s Federal Budget Allocation Chart</strong> offers a detailed yet simplified breakdown of how the Canadian federal government spent its money during the 2022–2023 fiscal year—data sourced from the Public Accounts of Canada financial report. In contrast, the <strong>Budget 2024 Pie Chart</strong> represents the proposed spending allocations presented by the Canadian federal government for 2024.
+      The <strong>2022–2023 Canada's Federal Budget Allocation Chart</strong> offers a detailed yet simplified breakdown of how the Canadian federal government spent its money during the 2022–2023 fiscal year—data sourced from the Public Accounts of Canada financial report. In contrast, the <strong>Budget 2024 Pie Chart</strong> represents the proposed spending allocations presented by the Canadian federal government for 2024.
     </p>
 
     <!-- Charts Section -->
@@ -77,13 +77,15 @@ const { sortOrder } = storeToRefs(configStore)
 .charts-wrapper {
   display: flex;
   flex-wrap: wrap;
-  gap: 50px;
+  gap: 25px; /* Increased from 20px for better spacing */
   justify-content: center;
-  align-items: center;
-  margin-left: auto; /* Add this line */
-  margin-right: auto; /* Add this line */
-  max-width: 800px;
+  align-items: flex-start; /* Align items at the top */
+  margin: 0 auto;
   width: 100%;
+  max-width: 770px; /* Increased from 700px to accommodate larger charts */
+  overflow: visible !important; /* Ensure content and tooltips are visible */
+  position: relative; /* For tooltip positioning */
+  z-index: 2; /* Ensure tooltips appear above other elements */
 }
 
 /* ===== Federal Budget Section Styles ===== */
@@ -92,21 +94,25 @@ const { sortOrder } = storeToRefs(configStore)
   margin: 20px auto;
   justify-content: center;
   align-items: center;
+  position: relative; /* For tooltip positioning */
 }
 
 .allocation-description {
   margin-bottom: 20px;
+  padding: 0 10px;
+  text-align: center;
 }
 
 /* ===== Allocation Table Section Styles ===== */
 .allocation-table-section.total-federal-tax-allocated {
   padding: 20px;
-  margin: 10px auto 20px;  /* Significantly increased top margin for extra space */
+  margin: 30px auto 20px; /* Increased top margin to provide space for tooltips */
   background-color: #fff;
   border: 1px solid #ccc;
   overflow: auto;
   position: relative;
   z-index: 1;
+  max-width: 900px;
 }
 
 .allocation-insulated {
@@ -145,14 +151,51 @@ const { sortOrder } = storeToRefs(configStore)
   text-align: left;
 }
 
-/* Responsive adjustments for allocation section */
+.charts-section {
+  margin-bottom: 40px; /* Increased from 30px to provide more space for tooltips */
+  position: relative; /* For tooltip positioning */
+}
+
+.no-federal-taxes {
+  text-align: center;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  color: #7f8c8d;
+}
+
+/* Ensure tooltips are visible */
+:deep(.chartjs-tooltip) {
+  z-index: 100;
+  pointer-events: none;
+  position: absolute;
+}
+
+/* Responsive adjustments */
 @media (max-width: 600px) {
+  .charts-wrapper {
+    flex-direction: column;
+    gap: 20px; /* Increased from 15px for better spacing */
+  }
+  
   .allocation-table-section.total-federal-tax-allocated {
     padding: 15px;
-    margin: 300px 0 20px; /* Adjusted top margin on small screens */
+    margin: 30px auto 20px; /* Increased top margin */
+    overflow-x: auto; /* Allow horizontal scrolling for table */
   }
+  
+  .allocation-table {
+    font-size: 12px; /* Smaller font for mobile */
+  }
+  
   .sort-button {
     padding: 8px 16px;
+    font-size: 12px;
+  }
+  
+  .allocation-description {
+    font-size: 14px;
+    padding: 0 5px;
   }
 }
 </style>

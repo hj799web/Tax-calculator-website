@@ -58,6 +58,7 @@ const chartData = computed(() => ({
 // Chart options (pass the legend ref to the plugin)
 const chartOptions = computed(() => ({
   responsive: true,
+  maintainAspectRatio: true,
   plugins: {
     htmlLegend: {
       container: legendRef, // use the Vue ref here
@@ -68,8 +69,15 @@ const chartOptions = computed(() => ({
     title: {
       display: true,
       text: '2022–2023 Canada Federal Budget Allocation Chart',
+      font: {
+        size: 14
+      }
     },
     tooltip: {
+      enabled: true,
+      position: 'nearest',
+      external: null, // Allow tooltip to render outside the canvas
+      usePointStyle: true,
       callbacks: {
         label: ({ label, parsed: value, dataset: { data } }) => {
           const total = data.reduce((a, b) => a + b, 0)
@@ -89,53 +97,84 @@ const chartOptions = computed(() => ({
 <style scoped>
 .pie-chart-container {
   width: 100%;
-  max-width: 500px;
-  margin: 20px auto;
-  padding: 20px;
+  max-width: 358px; /* Increased by 10% from 325px */
+  margin: 10px auto;
+  padding: 10px;
   background: #ffffff;
   border-radius: 15px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative; /* Added for tooltip positioning context */
+  z-index: 1; /* Ensure proper stacking */
 }
 
 .pie-chart-container:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 .pie-chart-inner-container {
-  width: 400px;
-  height: 400px;
+  width: 286px; /* Increased by 10% from 260px */
+  height: 286px; /* Increased by 10% from 260px */
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 0 auto;
+  position: relative; /* Added for tooltip positioning */
 }
 
 .legend-container {
   width: 100%;
-  max-width: 400px;
-  font-size: 12px;
+  max-width: 286px; /* Increased by 10% from 260px */
+  font-size: 10px;
   text-align: left;
-  margin: 10px auto;
-  padding: 15px;
+  margin: 5px auto;
+  padding: 10px;
   background: #f8f9fa;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   transition: transform 0.3s ease;
+  overflow-y: auto; /* Allow vertical scrolling if needed */
+  max-height: 200px; /* Limit height and enable scrolling if needed */
 }
 
 .legend-container:hover {
-  transform: scale(1.02);
+  transform: scale(1.01);
 }
 
 .no-data {
-  padding: 20px;
+  padding: 15px;
   color: #7f8c8d;
-  font-size: 16px;
+  font-size: 14px;
   text-align: center;
   background: #f8f9fa;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Ensure tooltips are not constrained */
+:deep(.chartjs-tooltip) {
+  z-index: 10;
+  pointer-events: none;
+  position: absolute;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+  .pie-chart-container {
+    max-width: 315px; /* Increased by 10% from 286px */
+    padding: 8px;
+  }
+  
+  .pie-chart-inner-container {
+    width: 257px; /* Increased by 10% from 234px */
+    height: 257px; /* Increased by 10% from 234px */
+  }
+  
+  .legend-container {
+    max-width: 257px; /* Increased by 10% from 234px */
+    font-size: 9px;
+    padding: 8px;
+  }
 }
 </style>

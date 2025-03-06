@@ -4,6 +4,34 @@
       <h2 class="section-title">Taxpayer FAQs</h2>
       
       <div class="faq-item">
+        <h3 class="faq-question">How does the tax breakdown work?</h3>
+        <p class="faq-answer">
+          Our calculator uses the latest 2024 tax rates and brackets to estimate your income tax. We break down federal and provincial taxes, showing exactly how much you'll pay at each level. The calculator also shows you how your tax dollars are allocated across different government spending categories, giving you a clear picture of where your money goes.
+        </p>
+      </div>
+      
+      <div class="faq-item">
+        <h3 class="faq-question">Is this calculator accurate?</h3>
+        <p class="faq-answer">
+          Our calculator provides a reliable estimate based on the latest available tax rates and government spending data. While it accounts for standard deductions and credits, your actual tax situation may vary depending on specific circumstances like additional deductions, investments, or business income. For personalized tax advice, we recommend consulting with a tax professional.
+        </p>
+      </div>
+      
+      <div class="faq-item">
+        <h3 class="faq-question">What sources are used for tax calculations?</h3>
+        <p class="faq-answer">
+          We use official data from the Canada Revenue Agency (CRA) and Department of Finance Canada. Our tax brackets and rates are updated to reflect the 2024 tax year, and our government spending breakdown is based on the most recent federal budget reports. We regularly review and update our calculator to ensure accuracy as new information becomes available.
+        </p>
+      </div>
+      
+      <div class="faq-item">
+        <h3 class="faq-question">How much tax do I pay in Canada?</h3>
+        <p class="faq-answer">
+          The amount of tax you pay in Canada depends on your income level, province of residence, and eligible deductions. Canada uses a progressive tax system where higher income levels are taxed at higher rates. Our calculator helps you estimate both federal and provincial taxes based on your specific situation, giving you a clear picture of your total tax obligation for 2024.
+        </p>
+      </div>
+      
+      <div class="faq-item">
         <h3 class="faq-question">What was the overall picture of the 2022–2023 Canadian Federal Budget?</h3>
         <p class="faq-answer">
           During the 2022–2023 fiscal year, the government focused on stabilizing public finances after the COVID-19 pandemic. Total revenues reached approximately $379 billion—boosted by personal and corporate income taxes and GST—while spending on essential services led to a deficit of around $35.3 billion and a national debt of about $1.173 trillion.
@@ -33,6 +61,13 @@
       </div>
       
       <div class="faq-item">
+        <h3 class="faq-question">How does the Canadian government spend my taxes?</h3>
+        <p class="faq-answer">
+          Your tax dollars fund a wide range of government services and programs. Major spending categories include healthcare transfers to provinces, social programs like Old Age Security and the Canada Child Benefit, national defense, infrastructure projects, and debt servicing. Our calculator provides a visual breakdown of how your specific tax contribution is distributed across these categories, helping you understand exactly where your money goes.
+        </p>
+      </div>
+      
+      <div class="faq-item">
         <h3 class="faq-question">How do these budgets affect my community?</h3>
         <p class="faq-answer">
           Federal budgets impact local communities by funding improvements in infrastructure, healthcare, housing, and public services. Investments in job creation, local economic development, and regional infrastructure projects directly benefit your community by improving the quality of local services and overall economic stability.
@@ -42,7 +77,7 @@
       <div class="faq-item">
         <h3 class="faq-question">How can I stay informed about federal spending and fiscal policies?</h3>
         <p class="faq-answer">
-          You can stay updated by following official government publications such as the Public Accounts of Canada, visiting the Department of Finance website, and monitoring reputable news sources that cover fiscal policies and budget updates. Public consultations and local Member of Parliament (MP) sessions are also good channels for getting involved.
+          You can stay updated by following official government publications such as the <a href="https://www.tpsgc-pwgsc.gc.ca/recgen/cpc-pac/index-eng.html" target="_blank" rel="noopener noreferrer">Public Accounts of Canada</a>, visiting the Department of Finance website, and monitoring reputable news sources that cover fiscal policies and budget updates. The Public Accounts provide detailed information on government revenues, expenditures, assets, and liabilities. Public consultations and local Member of Parliament (MP) sessions are also good channels for getting involved.
         </p>
       </div>
       
@@ -89,5 +124,3 @@
     white-space: pre-line; /* Preserve line breaks */
   }
   </style>
-  
-  
