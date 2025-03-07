@@ -102,6 +102,12 @@
         </footer>
       </div>
     </main>
+    
+    <!-- Beta Testing Button - Visible on all pages -->
+    <a href="https://forms.gle/Yofdxnr1iLZ5fRJ8A" target="_blank" rel="noopener noreferrer" class="beta-button">
+      <span>🔍 Help Us Improve</span>
+      <span class="beta-subtext">Join Beta Testing</span>
+    </a>
   </div>
 </template>
 
@@ -809,5 +815,57 @@ footer p:hover {
   color: #ffffff;
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(39, 174, 96, 0.4);
+}
+
+.beta-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #27ae60, #2ecc71);
+  color: #ffffff;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+  text-decoration: none;
+  box-shadow: 0 4px 10px rgba(39, 174, 96, 0.3);
+  transition: all 0.3s ease;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  animation: pulse 2s infinite;
+}
+
+.beta-subtext {
+  font-size: 12px;
+  opacity: 0.9;
+  margin-top: 3px;
+  font-weight: normal;
+}
+
+.beta-button:hover {
+  background: linear-gradient(135deg, #219a52, #27ae60);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(39, 174, 96, 0.5);
+  animation: none;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 4px 10px rgba(39, 174, 96, 0.3);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 6px 15px rgba(39, 174, 96, 0.5);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 4px 10px rgba(39, 174, 96, 0.3);
+  }
 }
 </style>
