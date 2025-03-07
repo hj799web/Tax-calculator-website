@@ -1,98 +1,107 @@
 <template>
-  <div class="main-container">
-    <!-- Header Section -->
-    <header>
-      <h1 class="main-title">
-        Canada Tax Calculator
-      </h1>
-      <a href="https://hj799web.github.io/fiscal-insights-welcome-pg/" class="welcome-link">Welcome Page</a>
-      <p class="subtitle">
-        Get an accurate breakdown of your taxes and see where your money goes with our free calculator.
-      </p>
-    </header>
+  <div id="app">
+    <!-- Router View - This is where route components will be rendered -->
+    <router-view v-if="$route.path !== '/'"></router-view>
 
-    <!-- Salary Rate Selector Section -->
-    <SalaryRateSelector />
-    <section class="calculator-section">
-      <div class="calculator-wrapper">
-        <!-- Calculator and Results Section -->
-        <CalculatorView />
-        <!-- End of calculator-section -->
+    <!-- Main Content (only shown on home route) -->
+    <main v-if="$route.path === '/'">
+      <div class="main-container">
+        <!-- Header Section -->
+        <header>
+          <h1 class="main-title">
+            Canada Tax Calculator
+          </h1>
+          <a href="https://hj799web.github.io/fiscal-insights-welcome-pg/" class="welcome-link">Welcome Page</a>
+          <p class="subtitle">
+            Get an accurate breakdown of your taxes and see where your money goes with our free calculator.
+          </p>
+        </header>
 
-        <ResultView />
-        <!-- End of calculator-container -->
-      </div>
-    <!-- End of calculator-wrapper -->
-    </section>
+        <!-- Salary Rate Selector Section -->
+        <SalaryRateSelector />
+        <section class="calculator-section">
+          <div class="calculator-wrapper">
+            <!-- Calculator and Results Section -->
+            <CalculatorView />
+            <!-- End of calculator-section -->
 
-    <!-- Federal Budget Breakdown Section -->
-    <section id="how-it-works">
-      <h2 class="section-title">How Does the Calculator Work?</h2>
-      <p class="section-description">
-        Our calculator uses the latest 2024 tax rates and brackets to provide you with an accurate estimate of your income tax. 
-        We break down both federal and provincial taxes, showing exactly how much you'll pay at each level.
-      </p>
-      <FederalBudgetView />
-    </section>
-
-    <!-- Budget Categories Section -->
-    <section class="budget-categories-section">
-      <h2 class="section-title">Understanding Your Tax Breakdown</h2>
-      <p class="section-description">
-        See how your tax dollars are allocated across different government spending categories. This visualization helps you 
-        understand exactly where your money goes and how it contributes to various public services.
-      </p>
-      <BudgetCategoriesView />
-    </section>
-    <!-- End of budget-categories-section -->
-
-    <!-- FAQ Section -->
-    <section class="faq-section">
-      <FAQSection />
-    </section>
-
-    <!-- Resources Section -->
-    <section class="resources-section">
-      <h2 class="section-title">Additional Tax Resources</h2>
-      <div class="resources-links">
-        <a href="https://www.canada.ca/en/revenue-agency.html" target="_blank" rel="noopener noreferrer" class="resource-link">Canada Revenue Agency</a>
-        <a href="https://www.canada.ca/en/department-finance.html" target="_blank" rel="noopener noreferrer" class="resource-link">Department of Finance Canada</a>
-        <a href="https://www.budget.canada.ca/2024/home-accueil-en.html" target="_blank" rel="noopener noreferrer" class="resource-link">Budget 2024</a>
-        <a href="https://www.tpsgc-pwgsc.gc.ca/recgen/cpc-pac/index-eng.html" target="_blank" rel="noopener noreferrer" class="resource-link">Public Accounts of Canada</a>
-      </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="site-footer">
-      <div class="footer-content">
-        <div class="footer-section">
-          <h3>About Us</h3>
-          <p>Fiscal Insights provides free tax calculators and financial tools to help Canadians understand their taxes and government spending.</p>
-        </div>
-        <div class="footer-section">
-          <h3>Connect With Us</h3>
-          <div class="social-links">
-            <a href="mailto:fiscal-insights@outlook.com" class="social-link">
-              <img src="https://cdn-icons-png.flaticon.com/512/561/561127.png" alt="Email" class="social-icon" />
-              <span>fiscal-insights@outlook.com</span>
-            </a>
-            <a href="https://www.instagram.com/fiscal_insights1/" target="_blank" rel="noopener noreferrer" class="social-link">
-              <img src="https://cdn-icons-png.flaticon.com/512/87/87390.png" alt="Instagram" class="social-icon" />
-              <span>@fiscal_insights1</span>
-            </a>
+            <ResultView />
+            <!-- End of calculator-container -->
           </div>
-        </div>
-        <div class="footer-section">
-          <h3>Disclaimer</h3>
-          <p>This calculator is a simplified estimate. Actual tax amounts may vary.</p>
-          <p>Based on 2024 approximate tax rules and brackets.</p>
-          <p>Last updated: March 2024</p>
-        </div>
+        <!-- End of calculator-wrapper -->
+        </section>
+
+        <!-- Federal Budget Breakdown Section -->
+        <section id="how-it-works">
+          <h2 class="section-title">How Does the Calculator Work?</h2>
+          <p class="section-description">
+            Our calculator uses the latest 2024 tax rates and brackets to provide you with an accurate estimate of your income tax. 
+            We break down both federal and provincial taxes, showing exactly how much you'll pay at each level.
+          </p>
+          <FederalBudgetView />
+        </section>
+
+        <!-- Budget Categories Section -->
+        <section class="budget-categories-section">
+          <h2 class="section-title">Understanding Your Tax Breakdown</h2>
+          <p class="section-description">
+            See how your tax dollars are allocated across different government spending categories. This visualization helps you 
+            understand exactly where your money goes and how it contributes to various public services.
+          </p>
+          <BudgetCategoriesView />
+        </section>
+        <!-- End of budget-categories-section -->
+
+        <!-- FAQ Section -->
+        <section class="faq-section">
+          <FAQSection />
+        </section>
+
+        <!-- Resources Section -->
+        <section class="resources-section">
+          <h2 class="section-title">Additional Tax Resources</h2>
+          <div class="resources-links">
+            <router-link to="/how-it-works" class="resource-link">How It Works</router-link>
+            <a href="https://www.canada.ca/en/revenue-agency.html" target="_blank" rel="noopener noreferrer" class="resource-link">Canada Revenue Agency</a>
+            <a href="https://www.canada.ca/en/department-finance.html" target="_blank" rel="noopener noreferrer" class="resource-link">Department of Finance Canada</a>
+            <a href="https://www.budget.canada.ca/2024/home-accueil-en.html" target="_blank" rel="noopener noreferrer" class="resource-link">Budget 2024</a>
+            <a href="https://www.tpsgc-pwgsc.gc.ca/recgen/cpc-pac/index-eng.html" target="_blank" rel="noopener noreferrer" class="resource-link">Public Accounts of Canada</a>
+          </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="site-footer">
+          <div class="footer-content">
+            <div class="footer-section">
+              <h3>About Us</h3>
+              <p>Fiscal Insights provides free tax calculators and financial tools to help Canadians understand their taxes and government spending.</p>
+            </div>
+            <div class="footer-section">
+              <h3>Connect With Us</h3>
+              <div class="social-links">
+                <a href="mailto:fiscal-insights@outlook.com" class="social-link">
+                  <img src="https://cdn-icons-png.flaticon.com/512/561/561127.png" alt="Email" class="social-icon" />
+                  <span>fiscal-insights@outlook.com</span>
+                </a>
+                <a href="https://www.instagram.com/fiscal_insights1/" target="_blank" rel="noopener noreferrer" class="social-link">
+                  <img src="https://cdn-icons-png.flaticon.com/512/87/87390.png" alt="Instagram" class="social-icon" />
+                  <span>@fiscal_insights1</span>
+                </a>
+              </div>
+            </div>
+            <div class="footer-section">
+              <h3>Disclaimer</h3>
+              <p>This calculator is a simplified estimate. Actual tax amounts may vary.</p>
+              <p>Based on 2024 approximate tax rules and brackets.</p>
+              <p>Last updated: March 2024</p>
+            </div>
+          </div>
+          <div class="footer-bottom">
+            <p>&copy; 2024 Fiscal Insights. All rights reserved.</p>
+          </div>
+        </footer>
       </div>
-      <div class="footer-bottom">
-        <p>&copy; 2024 Fiscal Insights. All rights reserved.</p>
-      </div>
-    </footer>
+    </main>
   </div>
 </template>
 
@@ -106,6 +115,15 @@ import FAQSection from './components/FAQSection.vue'
 </script>
 
 <style>
+/* Base styles */
+#app {
+  font-family: 'Poppins', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #2c3e50;
+}
+
+/* Import fonts */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
 body {
