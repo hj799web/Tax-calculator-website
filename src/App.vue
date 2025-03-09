@@ -11,7 +11,7 @@
           <h1 class="main-title">
             Canada Tax Calculator
           </h1>
-          <a href="https://hj799web.github.io/fiscal-insights-welcome-pg/" class="welcome-link">Welcome Page</a>
+          <a href="./welcome.html" class="welcome-link">Welcome Page</a>
           <p class="subtitle">
             Get an accurate breakdown of your taxes and see where your money goes with our free calculator.
           </p>
@@ -31,30 +31,48 @@
         <!-- End of calculator-wrapper -->
         </section>
 
-        <!-- Federal Budget Breakdown Section -->
+        <!-- Understanding Your Tax Breakdown Section -->
         <section id="how-it-works">
-          <h2 class="section-title">How Does the Calculator Work?</h2>
-          <p class="section-description">
-            Our calculator uses the latest 2024 tax rates and brackets to provide you with an accurate estimate of your income tax. 
-            We break down both federal and provincial taxes, showing exactly how much you'll pay at each level.
-          </p>
-          <FederalBudgetView />
-        </section>
-
-        <!-- Budget Categories Section -->
-        <section class="budget-categories-section">
           <h2 class="section-title">Understanding Your Tax Breakdown</h2>
           <p class="section-description">
             See how your tax dollars are allocated across different government spending categories. This visualization helps you 
             understand exactly where your money goes and how it contributes to various public services.
           </p>
-          <BudgetCategoriesView />
+          <FederalBudgetView />
+        </section>
+
+        <!-- Budget Categories Section - Now Collapsible -->
+        <section class="budget-categories-section">
+          <div class="section-header">
+            <h2 class="section-title">Budget Categories</h2>
+            <button @click="toggleBudgetCategories" class="toggle-section-button">
+              {{ showBudgetCategories ? 'Hide' : 'Show' }}
+            </button>
+          </div>
+          <transition name="fade">
+            <div v-if="showBudgetCategories">
+              <p class="section-description">
+                These budget categories are for the 2022–2023 fiscal year. Data is sourced from the Public Accounts of Canada offering a view of how federal funds are allocated across key sectors such as healthcare, defense, infrastructure, and more.
+              </p>
+              <BudgetCategoriesView />
+            </div>
+          </transition>
         </section>
         <!-- End of budget-categories-section -->
 
-        <!-- FAQ Section -->
+        <!-- FAQ Section - Now Collapsible -->
         <section class="faq-section">
-          <FAQSection />
+          <div class="section-header">
+            <h2 class="section-title">Taxpayer FAQs</h2>
+            <button @click="toggleFAQs" class="toggle-section-button">
+              {{ showFAQs ? 'Hide' : 'Show' }}
+            </button>
+          </div>
+          <transition name="fade">
+            <div v-if="showFAQs">
+              <FAQSection />
+            </div>
+          </transition>
         </section>
 
         <!-- Resources Section -->
@@ -106,7 +124,7 @@
     <!-- Beta Testing Button - Visible on all pages -->
     <a href="https://forms.gle/Yofdxnr1iLZ5fRJ8A" target="_blank" rel="noopener noreferrer" class="beta-button">
       <span>🔍 Help Us Improve</span>
-      <span class="beta-subtext">Join Beta Testing</span>
+      <span class="beta-subtext">Take a Quick Survey!</span>
     </a>
   </div>
 </template>
@@ -118,6 +136,19 @@ import ResultView from './views/ResultView.vue'
 import FederalBudgetView from './views/FederalBudgetView.vue'
 import BudgetCategoriesView from './views/BudgetCategoriesView.vue'
 import FAQSection from './components/FAQSection.vue'
+
+import { ref } from 'vue'
+
+let showBudgetCategories = ref(true)
+let showFAQs = ref(true)
+
+function toggleBudgetCategories() {
+  showBudgetCategories.value = !showBudgetCategories.value
+}
+
+function toggleFAQs() {
+  showFAQs.value = !showFAQs.value
+}
 </script>
 
 <style>
@@ -576,6 +607,47 @@ body {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+/* Collapsible section styling */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.toggle-section-button {
+  background-color: #27ae60;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.toggle-section-button:hover {
+  background-color: #219a52;
+  transform: translateY(-2px);
+}
+
+.toggle-section-button:active {
+  transform: translateY(0);
+}
+
+/* Animation for collapsible sections */
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s, max-height 0.5s;
+  max-height: 1000px;
+  overflow: hidden;
+}
+
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+  max-height: 0;
 }
 
 /* Footer Styles */
