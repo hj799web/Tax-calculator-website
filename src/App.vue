@@ -14,7 +14,11 @@
           <h1 class="main-title">
             Canada Tax Calculator
           </h1>
-          <a href="./welcome.html" class="welcome-link">Welcome Page</a>
+          <nav class="main-navigation">
+            <a href="welcome.html" class="nav-link">Home</a>
+            <router-link to="/how-it-works" class="nav-link">How It Works</router-link>
+            <a href="https://www.canada.ca/en/revenue-agency.html" target="_blank" rel="noopener noreferrer" class="nav-link">CRA</a>
+          </nav>
           <p class="subtitle">
             Get an accurate breakdown of your taxes and see where your money goes with our free calculator.
           </p>
@@ -81,6 +85,9 @@
         <!-- Resources Section -->
         <section class="resources-section">
           <h2 class="section-title">Additional Tax Resources</h2>
+          <p class="resources-description">
+            Access these trusted resources to learn more about Canadian taxes, government spending, and financial planning.
+          </p>
           <div class="resources-links">
             <router-link to="/how-it-works" class="resource-link">How It Works</router-link>
             <a href="https://www.canada.ca/en/revenue-agency.html" target="_blank" rel="noopener noreferrer" class="resource-link">Canada Revenue Agency</a>
@@ -959,6 +966,109 @@ footer p:hover {
   100% {
     transform: scale(1);
     box-shadow: 0 4px 10px rgba(39, 174, 96, 0.3);
+  }
+}
+
+.main-navigation {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin: 15px 0;
+}
+
+.nav-link {
+  color: #3498db;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+  background-color: #3498db;
+  color: white;
+}
+
+.resources-description {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #555;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .main-title {
+    font-size: 1.8rem;
+  }
+  
+  .subtitle {
+    font-size: 0.9rem;
+  }
+  
+  .main-navigation {
+    flex-wrap: wrap;
+  }
+  
+  .nav-link {
+    font-size: 0.9rem;
+    padding: 4px 8px;
+  }
+  
+  .calculator-section, .faq-section, .budget-categories-section, .resources-section {
+    padding: 15px;
+  }
+  
+  .section-title {
+    font-size: 1.4rem;
+  }
+  
+  .section-description {
+    font-size: 0.9rem;
+  }
+  
+  .resources-description {
+    font-size: 0.9rem;
+  }
+  
+  .resource-link {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+  }
+  
+  .site-logo {
+    max-width: 140px;
+  }
+  
+  .footer-section h3 {
+    font-size: 1.1rem;
+  }
+  
+  .footer-section p, .footer-bottom p {
+    font-size: 0.85rem;
+  }
+  
+  .social-link {
+    font-size: 0.85rem;
+  }
+  
+  .social-icon {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .beta-button {
+    padding: 10px 20px;
+    font-size: 14px;
+    bottom: 15px;
+    right: 15px;
+  }
+  
+  .beta-subtext {
+    font-size: 10px;
   }
 }
 </style>
