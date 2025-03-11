@@ -8,6 +8,9 @@
       <div class="main-container">
         <!-- Header Section -->
         <header>
+          <div class="logo-container">
+            <img :src="logoUrl" alt="Fiscal Insights Logo" class="site-logo">
+          </div>
           <h1 class="main-title">
             Canada Tax Calculator
           </h1>
@@ -138,9 +141,11 @@ import BudgetCategoriesView from './views/BudgetCategoriesView.vue'
 import FAQSection from './components/FAQSection.vue'
 
 import { ref } from 'vue'
+import logoImage from '@/assets/fiscal-insights-logo.jpg'
 
 let showBudgetCategories = ref(true)
 let showFAQs = ref(true)
+const logoUrl = logoImage
 
 function toggleBudgetCategories() {
   showBudgetCategories.value = !showBudgetCategories.value
@@ -176,6 +181,21 @@ body {
   padding: 0 20px;
 }
 
+.logo-container {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.site-logo {
+  max-width: 180px;
+  height: auto;
+  transition: transform 0.3s ease;
+}
+
+.site-logo:hover {
+  transform: scale(1.05);
+}
+
 .main-title {
   font-size: 36px;
   color: #34495e;
@@ -208,8 +228,9 @@ body {
 .subtitle {
   font-size: 18px;
   color: #7f8c8d;
-  margin-bottom: 20px;
   text-align: center;
+  max-width: 800px;
+  margin: 0 auto 30px;
 }
 
 .section-title {
