@@ -150,8 +150,8 @@ import FAQSection from './components/FAQSection.vue'
 import { ref } from 'vue'
 import logoImage from '@/assets/fiscal-insights-logo.jpg'
 
-let showBudgetCategories = ref(true)
-let showFAQs = ref(true)
+let showBudgetCategories = ref(false)
+let showFAQs = ref(false)
 const logoUrl = logoImage
 
 function toggleBudgetCategories() {
