@@ -4,8 +4,14 @@
     <h2 class="section-title">
       Federal Budget Allocation
     </h2>
-    <p class="allocation-description">
-      The <strong>2022–2023 Canada's Federal Budget Allocation Chart</strong> offers a detailed yet simplified breakdown of how the Canadian federal government spent its money during the 2022–2023 fiscal year—data sourced from the Public Accounts of Canada financial report. In contrast, the <strong>Budget 2024 Pie Chart</strong> represents the proposed spending allocations presented by the Canadian federal government for 2024.
+    <p class="allocation-description" v-if="yearStore.budgetYear === '2024'">
+      The <strong>Budget 2024 Allocation Chart</strong> represents the proposed spending allocations presented by the Canadian federal government for the 2024 fiscal year.
+    </p>
+    <p class="allocation-description" v-else>
+      The <strong>2022–2023 Canada's Federal Budget Allocation Chart</strong> offers a detailed yet simplified breakdown of how the Canadian federal government spent its money during the 2022–2023 fiscal year—data sourced from the Public Accounts of Canada financial report.
+    </p>
+    <p v-if="yearStore.budgetYear === '2024'" class="budget-explanation">
+      The <strong>2024 Canada Federal Budget Allocation Chart</strong> shows the comprehensive breakdown of major allocations in the 2024 federal budget. In contrast, the <strong>Budget 2024 Pie Chart</strong> represents the proposed spending allocations presented by the Canadian federal government for 2024.
     </p>
 
     <!-- Charts Section -->
@@ -14,9 +20,10 @@
         Budget Visualizations
       </h2>
       <div v-if="netFederalTaxPerPeriod > 0" class="charts-wrapper">
-        <!-- Render the self-contained interactive pie chart components -->
-        <FederalBudgetPieChart />
-        <Budget2024PieChart />
+        <!-- Render the appropriate chart based on selected year -->
+        <FederalBudgetPieChart v-if="yearStore.budgetYear === '2022-2023'" />
+        <FederalBudget2024PieChart v-if="yearStore.budgetYear === '2024'" />
+        <Budget2024PieChart v-if="yearStore.budgetYear === '2024'" />
       </div>
       <div v-else class="no-federal-taxes">
         No federal taxes to visualize
@@ -62,12 +69,15 @@
 import { formatCurrency } from '../utils.js'
 import { useCalculatorStore } from '../stores/calculator.js'
 import { useConfigStore } from '../stores/config.js'
+import { useYearStore } from '../stores/year.js'
 import { storeToRefs } from 'pinia'
 import FederalBudgetPieChart from '../components/FederalBudgetPieChart.vue'
 import Budget2024PieChart from '../components/Budget2024PieChart.vue'
+import FederalBudget2024PieChart from '../components/FederalBudget2024PieChart.vue'
 
 const { netFederalTaxPerPeriod, sortedBudgetCategories } = storeToRefs(useCalculatorStore())
 const configStore = useConfigStore()
+const yearStore = useYearStore()
 const { toggleSortAmount } = configStore
 const { sortOrder } = storeToRefs(configStore)
 </script>
@@ -98,6 +108,12 @@ const { sortOrder } = storeToRefs(configStore)
 }
 
 .allocation-description {
+  margin-bottom: 20px;
+  padding: 0 10px;
+  text-align: center;
+}
+
+.budget-explanation {
   margin-bottom: 20px;
   padding: 0 10px;
   text-align: center;
@@ -194,6 +210,11 @@ const { sortOrder } = storeToRefs(configStore)
   }
   
   .allocation-description {
+    font-size: 14px;
+    padding: 0 5px;
+  }
+  
+  .budget-explanation {
     font-size: 14px;
     padding: 0 5px;
   }

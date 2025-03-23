@@ -1,5 +1,5 @@
 <template>
-  <div class="pie-chart-container">
+  <div class="federal-budget-2024-pie-chart">
     <div v-if="canCalculate">
       <div class="pie-chart-inner-container">
         <Pie
@@ -25,8 +25,8 @@ import { storeToRefs } from 'pinia'
 import { useCalculatorStore } from '../stores/calculator.js'
 import { generateColors } from '../utils.js'
 import { htmlLegendPlugin } from '../htmlLegendPlugin.js'
+import { federalBudget2024Data } from '../constants.js'
 import { useCalculator } from '../composables/calculator.js'
-import { useYearStore } from '../stores/year.js'
 
 // Register Chart.js components
 ChartJS.register(ArcElement, Tooltip, Legend)
@@ -35,23 +35,39 @@ ChartJS.register(ArcElement, Tooltip, Legend)
 const legendRef = ref(null)
 
 // Extract data and flags
-const { federalBudgetData } = storeToRefs(useCalculatorStore())
+const { netFederalTaxPerPeriod } = storeToRefs(useCalculatorStore())
 const { canCalculate } = useCalculator()
-const yearStore = useYearStore()
+
+// Compute 2024 federal budget data
+const federalBudget2024DataComputed = computed(() => {
+  const totalBudget = federalBudget2024Data.reduce((sum, cat) => sum + cat.amount, 0)
+  
+  if (netFederalTaxPerPeriod.value === 0) {
+    return federalBudget2024Data.map((cat) => ({
+      category: cat.category,
+      amount: 0,
+    }))
+  }
+  
+  return federalBudget2024Data.map((cat) => ({
+    category: cat.category,
+    amount: (netFederalTaxPerPeriod.value * cat.amount) / totalBudget,
+  }))
+})
 
 // Debug: log chart data on mount
 onMounted(() => {
-  console.log('FederalBudgetPieChart chartData:', chartData.value)
+  console.log('FederalBudget2024PieChart chartData:', chartData.value)
 })
 
 // Prepare chart data
 const chartData = computed(() => ({
-  labels: federalBudgetData.value.map(x => x.category),
+  labels: federalBudget2024DataComputed.value.map(x => x.category),
   datasets: [
     {
-      label: 'Federal Budget Allocation',
-      data: federalBudgetData.value.map(x => x.amount),
-      backgroundColor: generateColors(federalBudgetData.value.length),
+      label: '2024 Federal Budget Allocation',
+      data: federalBudget2024DataComputed.value.map(x => x.amount),
+      backgroundColor: generateColors(federalBudget2024DataComputed.value.length),
       borderWidth: 1,
     },
   ],
@@ -70,7 +86,7 @@ const chartOptions = computed(() => ({
     },
     title: {
       display: true,
-      text: `${yearStore.selectedTaxYear} Canada Federal Budget Allocation Chart`,
+      text: '2024 Canada Federal Budget Allocation Chart',
       font: {
         size: 14
       }
@@ -81,14 +97,16 @@ const chartOptions = computed(() => ({
       external: null, // Allow tooltip to render outside the canvas
       usePointStyle: true,
       callbacks: {
-        label: ({ label, parsed: value, dataset: { data } }) => {
-          const total = data.reduce((a, b) => a + b, 0)
-          const percentage = total ? ((value / total) * 100).toFixed(2) : '0.00'
-          const formattedValue = value.toLocaleString('en-CA', {
+        label: (ctx) => {
+          const val = ctx.parsed
+          const ds = ctx.dataset.data
+          const total = ds.reduce((a, b) => a + b, 0)
+          const perc = total ? ((val / total) * 100).toFixed(2) : '0.00'
+          const formattedVal = val.toLocaleString('en-CA', {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
           })
-          return `${label}: $${formattedValue} (${percentage}%)`
+          return `${ctx.label}: $${formattedVal} (${perc}%)`
         },
       },
     },
@@ -97,37 +115,37 @@ const chartOptions = computed(() => ({
 </script>
 
 <style scoped>
-.pie-chart-container {
+.federal-budget-2024-pie-chart {
   width: 100%;
-  max-width: 412px; /* Increased by 15% from 358px */
+  max-width: 412px;
   margin: 10px auto;
   padding: 10px;
   background: #ffffff;
   border-radius: 15px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  position: relative; /* Added for tooltip positioning context */
-  z-index: 1; /* Ensure proper stacking */
+  position: relative;
+  z-index: 1;
 }
 
-.pie-chart-container:hover {
+.federal-budget-2024-pie-chart:hover {
   transform: translateY(-3px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 .pie-chart-inner-container {
-  width: 329px; /* Increased by 15% from 286px */
-  height: 329px; /* Increased by 15% from 286px */
+  width: 329px;
+  height: 329px;
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 0 auto;
-  position: relative; /* Added for tooltip positioning */
+  position: relative;
 }
 
 .legend-container {
   width: 100%;
-  max-width: 329px; /* Increased by 15% from 286px */
+  max-width: 329px;
   font-size: 10px;
   text-align: left;
   margin: 5px auto;
@@ -136,8 +154,8 @@ const chartOptions = computed(() => ({
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   transition: transform 0.3s ease;
-  overflow-y: auto; /* Allow vertical scrolling if needed */
-  max-height: 200px; /* Limit height and enable scrolling if needed */
+  overflow-y: auto;
+  max-height: 200px;
 }
 
 .legend-container:hover {
@@ -163,18 +181,18 @@ const chartOptions = computed(() => ({
 
 /* Mobile responsiveness */
 @media (max-width: 600px) {
-  .pie-chart-container {
-    max-width: 362px; /* Increased by 15% from 315px */
+  .federal-budget-2024-pie-chart {
+    max-width: 362px;
     padding: 8px;
   }
   
   .pie-chart-inner-container {
-    width: 296px; /* Increased by 15% from 257px */
-    height: 296px; /* Increased by 15% from 257px */
+    width: 296px;
+    height: 296px;
   }
   
   .legend-container {
-    max-width: 296px; /* Increased by 15% from 257px */
+    max-width: 296px;
     font-size: 9px;
     padding: 8px;
   }

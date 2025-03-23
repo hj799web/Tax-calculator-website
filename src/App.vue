@@ -24,6 +24,28 @@
           </p>
         </header>
 
+        <!-- Year Selector Section -->
+        <section class="year-selector-section">
+          <div class="year-selector-container">
+            <h3 class="year-selector-title">Select Tax Year</h3>
+            <div class="year-selector">
+              <button 
+                v-for="year in yearStore.taxYears" 
+                :key="year.id"
+                @click="yearStore.setSelectedTaxYear(year.id)"
+                :class="['year-button', { active: yearStore.selectedTaxYear === year.id }]"
+              >
+                {{ year.label }}
+              </button>
+            </div>
+            <p class="year-selector-note">
+              {{ yearStore.selectedTaxYear === '2024' ? 
+                'Using 2024 tax rates and budget projections' : 
+                `Using ${yearStore.selectedTaxYear} tax rates with 2022-2023 budget data` }}
+            </p>
+          </div>
+        </section>
+
         <!-- Salary Rate Selector Section -->
         <SalaryRateSelector />
         <section class="calculator-section">
@@ -149,10 +171,13 @@ import FAQSection from './components/FAQSection.vue'
 
 import { ref } from 'vue'
 import logoImage from '@/assets/fiscal-insights-logo.jpg'
+import { useYearStore } from './stores/year.js'
+import '@/assets/year-selector.css'
 
 let showBudgetCategories = ref(false)
 let showFAQs = ref(false)
 const logoUrl = logoImage
+const yearStore = useYearStore()
 
 function toggleBudgetCategories() {
   showBudgetCategories.value = !showBudgetCategories.value

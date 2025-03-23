@@ -6,7 +6,7 @@
       <div class="faq-item">
         <h3 class="faq-question">How does the tax breakdown work?</h3>
         <p class="faq-answer">
-          Our calculator uses the latest 2024 tax rates and brackets to estimate your income tax. We break down federal and provincial taxes, showing exactly how much you'll pay at each level. The calculator also shows you how your tax dollars are allocated across different government spending categories, giving you a clear picture of where your money goes.
+          Our calculator uses the latest {{ selectedYear }} tax rates and brackets to estimate your income tax. We break down federal and provincial taxes, showing exactly how much you'll pay at each level. The calculator also shows you how your tax dollars are allocated across different government spending categories, giving you a clear picture of where your money goes.
         </p>
       </div>
       
@@ -20,32 +20,60 @@
       <div class="faq-item">
         <h3 class="faq-question">What sources are used for tax calculations?</h3>
         <p class="faq-answer">
-          We use official data from the Canada Revenue Agency (CRA) and Department of Finance Canada. Our tax brackets and rates are updated to reflect the 2024 tax year, and our government spending breakdown is based on the most recent federal budget reports. We regularly review and update our calculator to ensure accuracy as new information becomes available.
+          We use official data from the Canada Revenue Agency (CRA) and Department of Finance Canada. Our tax brackets and rates are updated to reflect the {{ selectedYear }} tax year, and our government spending breakdown is based on the most recent federal budget reports. We regularly review and update our calculator to ensure accuracy as new information becomes available.
         </p>
       </div>
       
       <div class="faq-item">
         <h3 class="faq-question">How much tax do I pay in Canada?</h3>
         <p class="faq-answer">
-          The amount of tax you pay in Canada depends on your income level, province of residence, and eligible deductions. Canada uses a progressive tax system where higher income levels are taxed at higher rates. Our calculator helps you estimate both federal and provincial taxes based on your specific situation, giving you a clear picture of your total tax obligation for 2024.
+          The amount of tax you pay in Canada depends on your income level, province of residence, and eligible deductions. Canada uses a progressive tax system where higher income levels are taxed at higher rates. Our calculator helps you estimate both federal and provincial taxes based on your specific situation, giving you a clear picture of your total tax obligation for {{ selectedYear }}.
         </p>
       </div>
       
-      <div class="faq-item">
+      <!-- Year-specific budget overview FAQs -->
+      <div v-if="budgetYear === '2024'" class="faq-item">
+        <h3 class="faq-question">What was the overall picture of the 2024 Canadian Federal Budget?</h3>
+        <p class="faq-answer">
+          In the 2024 fiscal year, the Canadian federal government projected total revenues of approximately $498 billion and total expenditures of about $538 billion, resulting in a projected deficit of $40 billion.
+          <br><br>
+        </p>
+      </div>
+      
+      <div v-if="budgetYear === '2022-2023'" class="faq-item">
         <h3 class="faq-question">What was the overall picture of the 2022–2023 Canadian Federal Budget?</h3>
         <p class="faq-answer">
-          During the 2022–2023 fiscal year, the government focused on stabilizing public finances after the COVID-19 pandemic. Total revenues reached approximately $379 billion—boosted by personal and corporate income taxes and GST—while spending on essential services led to a deficit of around $35.3 billion and a national debt of about $1.173 trillion.
+          During the 2022–2023 fiscal year, the Canadian federal government reported total revenues of approximately $482.8 billion and total expenditures of about $574.9 billion, resulting in a deficit of $92.1 billion. This represented a significant improvement from the previous year's deficit of $113.8 billion, reflecting Canada's ongoing economic recovery.
         </p>
       </div>
       
-      <div class="faq-item">
+      <!-- Year-specific revenue source FAQs -->
+      <div v-if="budgetYear === '2024'" class="faq-item">
         <h3 class="faq-question">Where did the money come from?</h3>
         <p class="faq-answer">
           The federal revenue primarily came from several sources:
-          <br /><strong>Personal Income Taxes:</strong> About $217 billion.
-          <br /><strong>Corporate Income Taxes:</strong> Approximately $68 billion, especially from sectors like natural resources and energy.
-          <br /><strong>GST:</strong> Around $43.5 billion collected on most goods and services.
-          <br /><strong>Other Sources:</strong> Including customs duties, non‑tax revenues, and profits from government enterprises.
+          <br><br>
+          <strong>Personal Income Taxes:</strong> Approximately $230 billion.
+          <br><br>
+          <strong>Corporate Income Taxes:</strong> Around $70 billion.
+          <br><br>
+          <strong>Goods and Services Tax (GST):</strong> About $50 billion collected on most goods and services.
+          <br><br>
+          <strong>Other Sources:</strong> Including Employment Insurance premiums, foreign exchange reserves, pollution pricing, and revenues from other programs and Crown corporations, comprising about 17% of total budgetary revenues.
+        </p>
+      </div>
+      
+      <!-- Year-specific expenditure FAQs -->
+      <div v-if="budgetYear === '2024'" class="faq-item">
+        <h3 class="faq-question">Where did the money go?</h3>
+        <p class="faq-answer">
+          The federal expenditures were allocated across various sectors:
+          <br><br>
+          <strong>Transfers to Persons:</strong> Including support for the elderly, families with children, and workers, accounting for approximately 25% of total budgetary expenses.
+          <br><br>
+          <strong>Operating Expenses:</strong> Covering expenditures of departments, agencies, and Crown corporations, representing about 23% of total budgetary expenses.
+          <br><br>
+          <strong>Health Transfers:</strong> Constituting around 10% of total budgetary expenses.
         </p>
       </div>
       
@@ -85,8 +113,22 @@
   </template>
   
   <script>
+  import { useYearStore } from '@/stores/year';
+  import { computed } from 'vue';
+  
   export default {
-    name: 'FAQSection'
+    name: 'FAQSection',
+    setup() {
+      const yearStore = useYearStore();
+      
+      const selectedYear = computed(() => yearStore.selectedTaxYear);
+      const budgetYear = computed(() => yearStore.budgetYear);
+      
+      return {
+        selectedYear,
+        budgetYear
+      };
+    }
   }
   </script>
   

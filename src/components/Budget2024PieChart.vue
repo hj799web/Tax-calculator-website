@@ -30,6 +30,7 @@ import { generateColors } from '../utils.js'
 import { htmlLegendPlugin } from '../htmlLegendPlugin.js'
 import { baseBudget2024Data } from '../constants.js'
 import { useCalculator } from '../composables/calculator.js'
+import { useYearStore } from '../stores/year.js'
 
 // Register Chart.js components
 ChartJS.register(ArcElement, Tooltip, Legend)
@@ -40,6 +41,7 @@ const legendRef = ref(null)
 // Extract reactive state and flags
 const { netFederalTaxPerPeriod } = storeToRefs(useCalculatorStore())
 const { canCalculate } = useCalculator()
+const yearStore = useYearStore()
 
 // Compute Budget 2024 data based on base data and net federal tax
 const budget2024DataComputed = computed(() => {
@@ -87,7 +89,7 @@ const chartOptions = computed(() => ({
     },
     title: {
       display: true,
-      text: 'Budget 2024 Allocation',
+      text: `${yearStore.selectedTaxYear} Budget Allocation`,
       font: {
         size: 14
       }
@@ -121,7 +123,7 @@ const chartOptions = computed(() => ({
   flex-direction: column;
   align-items: center;
   width: 100%;
-  max-width: 358px;
+  max-width: 412px;
   margin: 0 auto;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   position: relative;
@@ -153,8 +155,8 @@ const chartOptions = computed(() => ({
 }
 
 .pie-chart-container {
-  width: 286px;
-  height: 286px;
+  width: 329px;
+  height: 329px;
   position: relative;
   display: flex;
   justify-content: center;
@@ -173,7 +175,7 @@ const chartOptions = computed(() => ({
 
 .legend-container {
   width: 100%;
-  max-width: 286px;
+  max-width: 329px;
   font-size: 10px;
   text-align: left;
   margin: 5px auto;

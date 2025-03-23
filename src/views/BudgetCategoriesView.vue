@@ -5,14 +5,14 @@
     </h2>
 <!-- Introduction Text -->
 <p class="intro-text">
-      These budget categories are for the 2022–2023 fiscal year. Data is sourced from the Public Accounts of Canada offering a view of how federal funds are allocated across key sectors such as healthcare, defense, infrastructure, and more.
+      {{ introText }}
     </p>
     <!-- Category Selection Dropdown -->
     <div class="category-select">
       <select v-model.number="selectedCategory">
         <option :value="0">All Categories</option>
         <option
-          v-for="cat in budgetCategories"
+          v-for="cat in currentBudgetCategories"
           :key="cat.id"
           :value="cat.id"
         >
@@ -79,11 +79,15 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { formatBudget } from '../utils.js'
+import { useYearStore } from '../stores/year.js'
 
-// Define your constant data as a local reactive variable
-const budgetCategories = ref([
+// Get the year store
+const yearStore = useYearStore()
+
+// Define your budget data for 2022-2023
+const budgetCategories20222023 = ref([
   {
     id: 1,
     name: 'Healthcare',
@@ -346,23 +350,248 @@ const budgetCategories = ref([
   }
 ])
 
+// Define your budget data for 2024
+const budgetCategories2024 = ref([
+  {
+    id: 1,
+    name: 'Healthcare (Canada Health Transfer)',
+    amount: 50400000000, // $50.4 billion
+    description:
+      "The federal government supports provincial and territorial healthcare systems through the Canada Health Transfer (CHT). This funding assists in delivering universal healthcare, including hospitals, healthcare professionals, and public health initiatives. Healthcare expenditures represent approximately 10% of total federal spending.",
+    showDescription: false,
+  },
+  {
+    id: 2,
+    name: 'Support for Seniors',
+    amount: 76000000000, // $76.0 billion
+    description:
+      "This allocation funds programs like Old Age Security (OAS) and the Guaranteed Income Supplement (GIS), providing basic income support to seniors. Driven by Canada's aging population, these programs account for around 14% of total federal spending.",
+    showDescription: false,
+  },
+  {
+    id: 3,
+    name: 'Children and Families',
+    amount: 26300000000, // $26.3 billion
+    description:
+      "The Canada Child Benefit (CCB) offers income support to low- and middle-income families to assist with child-rearing costs. This initiative plays a crucial role in reducing child poverty and constitutes about 6% of federal spending.",
+    showDescription: false,
+  },
+  {
+    id: 4,
+    name: 'Indigenous Services and Reconciliation',
+    amount: 35500000000, // $35.5 billion
+    description:
+      "This funding supports Indigenous communities through initiatives in healthcare, education, infrastructure, and reconciliation efforts, including land claim settlements. Indigenous services represent around 7% of the total federal budget.",
+    showDescription: false,
+  },
+  {
+    id: 5,
+    name: 'Employment Insurance and Other Benefits',
+    amount: 23100000000, // $23.1 billion
+    description:
+      "Funding for Employment Insurance (EI) provides income support to temporarily unemployed workers, new parents, and seasonal employees. This category also includes retraining and skill development programs, making up around 5% of federal spending.",
+    showDescription: false,
+  },
+  {
+    id: 6,
+    name: 'Defense and Public Safety',
+    amount: 32600000000, // $32.6 billion
+    description:
+      "Expenditures cover the Canadian Armed Forces, military procurement (e.g., ships, aircraft), and public safety programs like border security and cybersecurity. This reflects Canada's defense commitments and represents about 6% of the total budget.",
+    showDescription: false,
+  },
+  {
+    id: 7,
+    name: 'Debt Servicing (Public Debt Charges)',
+    amount: 47300000000, // $47.3 billion
+    description:
+      "Payments for interest on Canada's national debt, which totaled $1.173 trillion by the end of the fiscal year. Rising interest rates have increased debt servicing costs, accounting for around 9% of total spending.",
+    showDescription: false,
+  },
+  {
+    id: 8,
+    name: 'Loans, Investments, and Advances',
+    amount: 10000000000, // $10 billion
+    description:
+      "This category encompasses various financial assistance programs to support different sectors of the economy.",
+    showDescription: false,
+    subsections: [
+      {
+        id: '8.1',
+        name: 'Student Loans',
+        amount: 24000000000, // Total portfolio
+        description:
+          "The Canada Student Financial Assistance Program provides loans to enhance access to post-secondary education. While the total loan portfolio exceeds $24 billion, annual allocations reflect the government's commitment to supporting students."
+      },
+      {
+        id: '8.2',
+        name: 'Agriculture Loans',
+        amount: 162000000,
+        description:
+          "Programs like AgriRecovery offer loans to farmers affected by unforeseen events, stabilizing the agricultural sector."
+      },
+      {
+        id: '8.3',
+        name: 'International Development and Loans',
+        amount: 53000000000, // Total portfolio
+        description:
+          "Canada contributes to global development through loans and grants to international organizations and developing countries, including commitments to the Asian Infrastructure Investment Bank (AIIB), European Bank for Reconstruction and Development (EBRD), and the World Bank."
+      },
+      {
+        id: '8.4',
+        name: 'Business and Innovation Loans',
+        amount: 600000000,
+        description:
+          "Financial backing is provided to innovation and infrastructure projects, supporting technological advancements and economic growth."
+      },
+      {
+        id: '8.5',
+        name: 'Defense Sector Loans and Investments',
+        amount: 1450000000,
+        description:
+          "In the 2022–2023 fiscal year, the Department of National Defence had $1.57 billion in lapsed funding, with $1.45 billion (92%) available for future defense spending. These funds support the procurement of military equipment and technology, maintaining and enhancing Canada's defense capabilities."
+      },
+      {
+        id: '8.6',
+        name: 'Economic Development Loans',
+        amount: 491600000,
+        description:
+          "These loans support various economic development projects across Canada, including regional development programs and small business loans. For instance, the Canada Economic Development for Quebec Regions (CED) invested $491.6 million in 1,325 grant and contribution projects, potentially generating total investments of $5.8 billion."
+      }
+    ]
+  },
+  {
+    id: 9,
+    name: 'Other Government Operations',
+    amount: 140000000000, // $140 billion
+    description:
+      "This category encompasses operational spending necessary for the federal government's day-to-day functions.",
+    showDescription: false,
+    subsections: [
+      {
+        id: '9.1',
+        name: 'Transportation Infrastructure',
+        amount: 15000000000,
+        description:
+          "Investments in national transportation infrastructure, including roadways, bridges, ports, and rail systems, ensure efficient mobility for goods and people."
+      },
+      {
+        id: '9.2',
+        name: 'Environmental Programs',
+        amount: 8000000000,
+        description:
+          "Funds dedicated to climate change initiatives, conservation efforts, and environmental protection, aligning with international commitments."
+      },
+      {
+        id: '9.3',
+        name: 'Public Safety and Emergency Preparedness',
+        amount: 9000000000,
+        description:
+          "Funding for national security agencies ensures Canada's ability to respond to emergencies and public safety threats."
+      },
+      {
+        id: '9.4',
+        name: 'Government Buildings and Properties',
+        amount: 7000000000,
+        description:
+          "Maintenance and construction of government buildings support essential services and public sector functions."
+      },
+      {
+        id: '9.5',
+        name: 'Research and Innovation',
+        amount: 10000000000,
+        description:
+          "Investments in research and development across various sectors contribute to scientific and technological advances."
+      },
+      {
+        id: '9.6',
+        name: 'Digital Government and IT Infrastructure',
+        amount: 5000000000,
+        description:
+          "Investments modernize federal digital services and IT infrastructure, enhancing cybersecurity and public services."
+      },
+      {
+        id: '9.7',
+        name: 'Federal Employee Salaries and Benefits',
+        amount: 35000000000,
+        description:
+          "Funds the salaries, pensions, and benefits of federal employees, ensuring smooth government operations."
+      },
+      {
+        id: '9.8',
+        name: 'Legal and Justice System',
+        amount: 5000000000,
+        description:
+          "Supports the functioning of the national legal and justice system, ensuring access to justice for all Canadians."
+      },
+      {
+        id: '9.9',
+        name: 'Indigenous Services Operational Expenses',
+        amount: 4000000000,
+        description:
+          "Covers operational costs for Indigenous Services Canada, overseeing programs for Indigenous communities."
+      },
+      {
+        id: '9.10',
+        name: 'Cultural and Heritage Programs',
+        amount: 2000000000,
+        description:
+          "Funding for national cultural institutions supports Canada's arts, culture, and heritage preservation efforts."
+      },
+      {
+        id: '9.11',
+        name: 'Scientific Research and Development (R&D)',
+        amount: 5000000000,
+        description:
+          "Funding for scientific research, including agriculture, biotechnology, healthcare, and environmental sustainability, supports innovation and knowledge advancement."
+      },
+      {
+        id: '9.12',
+        name: 'Diplomatic and International Representation',
+        amount: 5000000000,
+        description:
+          "Covers operational costs of Global Affairs Canada, including embassies, consulates, and diplomatic missions, supporting Canada's global diplomatic presence and international relations."
+      }
+    ]
+  }
+])
+
 // Reactive state for selected category (0 means "All Categories")
 const selectedCategory = ref(0)
 
-// Computed property to filter budget categories based on the selected category
-const filteredBudgetCategories = computed(() => {
-  if (selectedCategory.value === 0) {
-    return budgetCategories.value
-  }
-  return budgetCategories.value.filter(category => category.id === selectedCategory.value)
+// Computed property to get the current budget categories based on the selected year
+const currentBudgetCategories = computed(() => {
+  return yearStore.budgetYear === '2024' ? budgetCategories2024.value : budgetCategories20222023.value
 })
 
-// Local state for "Expand All" functionality
-const allExpanded = ref(false)
+// Computed property for the intro text based on the selected year
+const introText = computed(() => {
+  return yearStore.budgetYear === '2024'
+    ? "These budget categories are for the 2024 fiscal year. Data is sourced from the Federal Budget 2024 offering a view of how federal funds are allocated across key sectors such as healthcare, defense, infrastructure, and more."
+    : "These budget categories are for the 2022–2023 fiscal year. Data is sourced from the Public Accounts of Canada offering a view of how federal funds are allocated across key sectors such as healthcare, defense, infrastructure, and more."
+})
+
+// Computed property to filter categories based on selection
+const filteredBudgetCategories = computed(() => {
+  if (selectedCategory.value === 0) {
+    return currentBudgetCategories.value
+  }
+  return currentBudgetCategories.value.filter(cat => cat.id === selectedCategory.value)
+})
+
+// Computed property to check if all categories are expanded
+const allExpanded = computed(() => {
+  return currentBudgetCategories.value.every(cat => cat.showDescription)
+})
+
+// Watch for changes in the selected year and reset the selected category
+watch(() => yearStore.selectedTaxYear, () => {
+  selectedCategory.value = 0
+})
 
 // Toggle a single category's details
 function toggleDescription(id) {
-  const category = budgetCategories.value.find(cat => cat.id === id)
+  const category = currentBudgetCategories.value.find(cat => cat.id === id)
   if (category) {
     category.showDescription = !category.showDescription
   }
@@ -370,9 +599,9 @@ function toggleDescription(id) {
 
 // Toggle all categories' details
 function toggleAll() {
-  allExpanded.value = !allExpanded.value
-  budgetCategories.value.forEach(cat => {
-    cat.showDescription = allExpanded.value
+  const newState = !allExpanded.value
+  currentBudgetCategories.value.forEach(cat => {
+    cat.showDescription = newState
   })
 }
 </script>
