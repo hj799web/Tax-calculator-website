@@ -36,10 +36,10 @@ export const allocationCategories = [
     value: 'Employment Insurance and Other Benefits',
   },
   { label: 'Defense and Public Safety', value: 'Defense and Public Safety' },
-  { label: 'Debt Servicing', value: 'Debt Servicing' },
-  { label: 'Public Debt Charges', value: 'Public Debt Charges' },
+  { label: 'Debt Servicing & Public Debt Charges', value: 'Debt Servicing & Public Debt Charges' },
+  { label: 'Other Government Operations', value: 'Other Government Operations' },
+  { label: 'International Financial Commitments', value: 'International Financial Commitments' },
   { label: 'Loans, Investments, and Advances', value: 'Loans, Investments, and Advances' },
-  { label: 'Government Operations', value: 'Government Operations' },
 ]
 
 export const federalTaxBrackets = [
@@ -159,93 +159,63 @@ export const budgetCategories = [
   {
     id: 1,
     name: 'Healthcare',
-    amount: 50000000000,
-    description: 'Funds the Canada Health Transfer, etc.'
+    amount: 50000000000, // $50 billion, approximately $96 per $1,000
+    description: 'The Canada Health Transfer (CHT) amounted to $50 billion, representing about 9.6% of total federal spending of $521.4 billion.'
   },
   {
     id: 2,
     name: 'Support for Seniors',
-    amount: 63000000000,
-    description: 'Old Age Security, GIS, etc.'
+    amount: 63000000000, // $63 billion, approximately $121 per $1,000
+    description: 'Spending on Old Age Security (OAS) and the Guaranteed Income Supplement (GIS) totaled $63 billion, or about 12.1% of total expenditures.'
   },
   {
     id: 3,
     name: 'Children and Families',
-    amount: 28000000000,
-    description: 'Canada Child Benefit, child/family programs.'
+    amount: 28000000000, // $28 billion, approximately $54 per $1,000
+    description: 'The Canada Child Benefit (CCB) and related programs received $28 billion, accounting for 5.4% of the budget.'
   },
   {
     id: 4,
     name: 'Indigenous Services and Reconciliation',
-    amount: 26000000000,
-    description: 'Services, reconciliation efforts, etc.'
+    amount: 26000000000, // $26 billion, approximately $50 per $1,000
+    description: 'Allocations for Indigenous services and reconciliation efforts were $26 billion, or 5.0% of total spending.'
   },
   {
     id: 5,
     name: 'Employment Insurance and Other Benefits',
-    amount: 30000000000,
-    description: 'EI, job retraining, etc.'
+    amount: 30000000000, // $30 billion, approximately $58 per $1,000
+    description: 'Employment Insurance (EI) and related benefits amounted to $30 billion, representing 5.7% of expenditures.'
   },
   {
     id: 6,
     name: 'Defense and Public Safety',
-    amount: 35000000000,
-    description: 'Canadian Armed Forces, border security.'
+    amount: 35000000000, // $35 billion, approximately $67 per $1,000
+    description: 'Defense and public safety spending totaled $35 billion, or 6.7% of the budget.'
   },
   {
     id: 7,
-    name: 'Debt Servicing',
-    amount: 44000000000,
-    description: 'Interest on Canada’s national debt.'
+    name: 'Debt Servicing & Public Debt Charges',
+    amount: 47300000000, // $47.3 billion, approximately $91 per $1,000
+    description: 'Debt servicing costs were $47.3 billion, accounting for 9.1% of total expenditures.'
   },
   {
     id: 8,
-    name: 'Public Debt Charges',
-    amount: 34900000000,
-    description: 'Additional public debt interest.'
+    name: 'Other Government Operations',
+    amount: 242000000000, // $242 billion, approximately $434 per $1,000
+    description: 'This broad category, encompassing various operational expenses, totaled $242 billion, or 46.4% of the budget.'
   },
   {
     id: 9,
-    name: 'Loans, Investments, and Advances',
-    amount: 100000000000,
-    description: 'Student loans, global loans, etc.',
-    subsections: [
-      {
-        id: '9.1',
-        name: 'Student Loans',
-        amount: 24000000000,
-        description:
-          'Financial assistance for post-secondary students.',
-      },
-      {
-        id: '9.2',
-        name: 'International Development Loans',
-        amount: 53000000000,
-        description: 'World Bank, AIIB, IDA commitments.',
-      },
-    ],
+    name: 'International Financial Commitments',
+    amount: 5000000000, // $5 billion, approximately $10 per $1,000
+    description: 'International commitments amounted to $5 billion, representing 1.0% of expenditures.'
   },
   {
     id: 10,
-    name: 'Government Operations',
-    amount: 100000000000,
-    description:
-      'Day-to-day operations, salaries, infrastructure, etc.',
-    subsections: [
-      {
-        id: '10.1',
-        name: 'Transportation Infrastructure',
-        amount: 15000000000,
-        description: 'Roads, bridges, ports, etc.',
-      },
-      {
-        id: '10.2',
-        name: 'Environmental Programs',
-        amount: 8000000000,
-        description: 'Clean energy, climate initiatives, etc.',
-      },
-    ],
-  },
+    name: 'Loans, Investments, and Advances',
+    amount: 10000000000, // $10 billion, approximately $19 per $1,000
+    description: 'Annual allocations for loans and investments were $10 billion, or 1.9% of the budget.',
+  }
 ]
 
 export const baseBudget2024Data = [
