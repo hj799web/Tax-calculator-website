@@ -561,13 +561,13 @@ const selectedCategory = ref(0)
 
 // Computed property to get the current budget categories based on the selected year
 const currentBudgetCategories = computed(() => {
-  return yearStore.budgetYear === '2024' ? budgetCategories2024.value : budgetCategories20222023.value
+  return yearStore.budgetYear === '2023-2024' ? budgetCategories2024.value : budgetCategories20222023.value
 })
 
 // Computed property for the intro text based on the selected year
 const introText = computed(() => {
-  return yearStore.budgetYear === '2024'
-    ? "These budget categories are for the 2024 fiscal year. Data is sourced from the Federal Budget 2024 offering a view of how federal funds are allocated across key sectors such as healthcare, defense, infrastructure, and more."
+  return yearStore.budgetYear === '2023-2024'
+    ? "These budget categories are for the 2023-2024 fiscal year. Data is sourced from the Federal Budget 2023-2024 offering a view of how federal funds are allocated across key sectors such as healthcare, defense, infrastructure, and more."
     : "These budget categories are for the 2022–2023 fiscal year. Data is sourced from the Public Accounts of Canada offering a view of how federal funds are allocated across key sectors such as healthcare, defense, infrastructure, and more."
 })
 

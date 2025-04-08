@@ -1,0 +1,24 @@
+    updateSpendingFactor(categoryId, factor) {
+      let found = false;
+      // Update in main categories
+      Object.values(this.spendingCategories).forEach((cat) => {
+        if (cat.id === categoryId && !cat.isGroup) {
+          cat.adjustmentFactor = factor;
+          found = true;
+        }
+      });
+      // Update in group children if not found
+      if (!found) {
+        Object.values(this.spendingCategories)
+          .filter((cat) => cat.isGroup && cat.children)
+          .forEach((group) => {
+            const child = Object.values(group.children).find(
+              (c) => c.id === categoryId
+            );
+            if (child) {
+              child.adjustmentFactor = factor;
+            }
+          });
+      }
+      this.lastUpdate = Date.now();
+    },

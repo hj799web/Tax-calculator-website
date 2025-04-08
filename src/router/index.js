@@ -12,6 +12,11 @@ const routes = [
     path: '/how-it-works',
     name: 'how-it-works',
     component: HowItWorksView
+  },
+  {
+    path: '/simulator',
+    name: 'finance-minister-simulator',
+    component: () => import('../views/FinanceMinisterSimulator.vue')
   }
 ]
 

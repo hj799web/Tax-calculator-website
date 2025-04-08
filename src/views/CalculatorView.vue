@@ -8,6 +8,13 @@
       Calculate your federal and provincial taxes to estimate your net
       income.
     </p>
+    
+    <!-- Budget Simulator Button -->
+    <div class="simulator-button-container text-center mb-6">
+      <router-link to="/simulator" class="simulator-button bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-200 inline-flex items-center">
+        <span class="mr-2">🏛️</span> Try the Budget Simulator
+      </router-link>
+    </div>
 
     <!-- Inputs -->
     <div class="input-group">
