@@ -1,26 +1,37 @@
 <template>
   <div class="goal-tracker bg-white rounded-lg shadow-md p-4">
     <div class="flex items-center justify-between mb-4">
-      <h3 class="text-lg font-semibold text-gray-800">Budget Goals</h3>
+      <h3 class="text-lg font-semibold text-gray-800">
+        Budget Goals
+      </h3>
       <div class="flex items-center">
         <input 
-          type="checkbox" 
           id="enable-goals" 
-          v-model="localGoals.enabled"
+          v-model="localGoals.enabled" 
+          type="checkbox"
           class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
           @change="updateGoals"
         >
-        <label for="enable-goals" class="ml-2 block text-sm text-gray-700">
+        <label
+          for="enable-goals"
+          class="ml-2 block text-sm text-gray-700"
+        >
           Enable Budget Goals
         </label>
       </div>
     </div>
     
-    <div v-if="localGoals.enabled" class="space-y-4">
+    <div
+      v-if="localGoals.enabled"
+      class="space-y-4"
+    >
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <!-- Target Revenue Input -->
         <div class="space-y-1">
-          <label for="target-revenue" class="block text-sm font-medium text-gray-700">
+          <label
+            for="target-revenue"
+            class="block text-sm font-medium text-gray-700"
+          >
             Target Revenue ($B)
           </label>
           <div class="mt-1 relative rounded-md shadow-sm">
@@ -28,15 +39,15 @@
               <span class="text-gray-500 sm:text-sm">$</span>
             </div>
             <input 
-              type="number" 
               id="target-revenue" 
-              v-model.number="localGoals.targetRevenue"
+              v-model.number="localGoals.targetRevenue" 
+              type="number"
               class="focus:ring-blue-500 focus:border-blue-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md"
               placeholder="0.0"
               min="0"
               step="0.1"
-              @change="updateGoals"
               :disabled="autoBalanceEnabled"
+              @change="updateGoals"
             >
             <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
               <span class="text-gray-500 sm:text-sm">B</span>
@@ -46,22 +57,25 @@
         
         <!-- Target Deficit/Surplus Input -->
         <div class="space-y-1">
-          <label for="target-deficit" class="block text-sm font-medium text-gray-700">
-            Target {{ localGoals.targetDeficit && localGoals.targetDeficit >= 0 ? 'Deficit' : 'Surplus' }} ($B)
+          <label
+            for="target-deficit"
+            class="block text-sm font-medium text-gray-700"
+          >
+            Target {{ localGoals.targetDeficit !== null && localGoals.targetDeficit >= 0 ? 'Deficit' : 'Surplus' }} ($B)
           </label>
           <div class="mt-1 relative rounded-md shadow-sm">
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <span class="text-gray-500 sm:text-sm">$</span>
             </div>
             <input 
-              type="number" 
               id="target-deficit" 
-              v-model.number="localGoals.targetDeficit"
+              v-model.number="localGoals.targetDeficit" 
+              type="number"
               class="focus:ring-blue-500 focus:border-blue-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md"
               placeholder="0.0"
               step="0.1"
-              @change="updateGoals"
               :disabled="autoBalanceEnabled"
+              @change="updateGoals"
             >
             <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
               <span class="text-gray-500 sm:text-sm">B</span>
@@ -76,32 +90,47 @@
       <!-- Auto-balance option -->
       <div class="mt-4 flex items-center">
         <input 
-          type="checkbox" 
           id="auto-balance" 
-          v-model="autoBalanceEnabled"
+          v-model="autoBalanceEnabled" 
+          type="checkbox"
           class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
           @change="handleAutoBalanceChange"
         >
-        <label for="auto-balance" class="ml-2 block text-sm text-gray-700">
+        <label
+          for="auto-balance"
+          class="ml-2 block text-sm text-gray-700"
+        >
           Auto-balance budget to match goal
         </label>
       </div>
+
       
       <!-- Auto-balance message -->
-      <div v-if="autoBalanceEnabled && autoBalanceMessage" class="mt-2 p-2 bg-blue-50 text-blue-700 rounded-md text-sm">
+      <div
+        v-if="autoBalanceEnabled && autoBalanceMessage"
+        class="mt-2 p-2 bg-blue-50 text-blue-700 rounded-md text-sm"
+      >
         {{ autoBalanceMessage }}
       </div>
       
       <!-- Feedback Section -->
       <div class="mt-4 border-t border-gray-200 pt-4">
-        <h4 class="text-sm font-medium text-gray-700 mb-3">Goal Status:</h4>
+        <h4 class="text-sm font-medium text-gray-700 mb-3">
+          Goal Status:
+        </h4>
         
         <!-- Revenue Goal Status -->
-        <div v-if="localGoals.targetRevenue !== null" class="mb-3">
+        <div
+          v-if="localGoals.targetRevenue !== null"
+          class="mb-3"
+        >
           <div class="flex items-center mb-1">
             <span class="text-sm font-medium text-gray-600 mr-2">Revenue Goal:</span>
             <span class="text-xl mr-1">{{ revenueStatusIcon }}</span>
-            <span :class="revenueStatusClass" class="text-sm font-medium">
+            <span
+              :class="revenueStatusClass"
+              class="text-sm font-medium"
+            >
               {{ revenueStatusText }}
             </span>
           </div>
@@ -109,36 +138,50 @@
             {{ revenueGapMessage }}
           </div>
           <div class="mt-2 w-full bg-gray-200 rounded-full h-2">
-            <div class="h-2 rounded-full" 
-              :style="{ width: `${Math.min(100, (currentRevenue / localGoals.targetRevenue) * 100)}%`, backgroundColor: revenueStatusColor }"
-            ></div>
+            <div
+              class="h-2 rounded-full" 
+              :style="{ width: `${Math.min(100, (props.currentRevenue / localGoals.targetRevenue) * 100)}%`, backgroundColor: revenueStatusColor }"
+            />
           </div>
         </div>
         
         <!-- Deficit Goal Status -->
-        <div v-if="localGoals.targetDeficit !== null" class="mb-3">
+        <div
+          v-if="localGoals.targetDeficit !== null"
+          class="mb-3"
+        >
           <div class="flex items-center mb-1">
             <span class="text-sm font-medium text-gray-600 mr-2">
               {{ localGoals.targetDeficit >= 0 ? 'Deficit' : 'Surplus' }} Goal:
             </span>
             <span class="text-xl mr-1">{{ deficitStatusIcon }}</span>
-            <span :class="deficitStatusClass" class="text-sm font-medium">
+            <span
+              :class="deficitStatusClass"
+              class="text-sm font-medium"
+            >
               {{ deficitStatusText }}
             </span>
           </div>
           <div class="text-xs text-gray-600">
             {{ deficitGapMessage }}
           </div>
-          <div v-if="localGoals.targetDeficit !== 0" class="mt-2 w-full bg-gray-200 rounded-full h-2">
-            <div class="h-2 rounded-full" 
-              :style="{ width: `${Math.min(100, Math.abs((currentDeficit / localGoals.targetDeficit) * 100))}%`, backgroundColor: deficitStatusColor }"
-            ></div>
+          <div
+            v-if="localGoals.targetDeficit !== 0"
+            class="mt-2 w-full bg-gray-200 rounded-full h-2"
+          >
+            <div
+              class="h-2 rounded-full" 
+              :style="{ width: `${Math.min(100, Math.abs((currentDeficit / (Math.abs(localGoals.targetDeficit) || 1)) * 100))}%`, backgroundColor: deficitStatusColor }"
+            />
           </div>
         </div>
       </div>
     </div>
     
-    <div v-else class="text-center text-gray-500 italic py-2">
+    <div
+      v-else
+      class="text-center text-gray-500 italic py-2"
+    >
       Enable budget goals to track your progress
     </div>
   </div>
@@ -147,6 +190,7 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
+import { useBudgetSimulatorStore } from '../stores/budgetSimulator';
 
 // Props
 const props = defineProps({
@@ -186,6 +230,8 @@ const localGoals = ref({
 const autoBalanceEnabled = ref(false);
 const autoBalanceMessage = ref('');
 
+const budgetStore = useBudgetSimulatorStore();
+
 // Computed properties
 const currentDeficit = computed(() => {
   return props.currentSpending - props.currentRevenue;
@@ -200,8 +246,8 @@ const revenuePercentOfGoal = computed(() => {
 const revenueStatusIcon = computed(() => {
   if (revenuePercentOfGoal.value >= 95 && revenuePercentOfGoal.value <= 105) {
     return '✅';
-  } else if (revenuePercentOfGoal.value >= 90 && revenuePercentOfGoal.value < 95 || 
-             revenuePercentOfGoal.value > 105 && revenuePercentOfGoal.value <= 110) {
+  } else if ((revenuePercentOfGoal.value >= 90 && revenuePercentOfGoal.value < 95) || 
+             (revenuePercentOfGoal.value > 105 && revenuePercentOfGoal.value <= 110)) {
     return '⚠️';
   } else {
     return '❌';
@@ -211,8 +257,8 @@ const revenueStatusIcon = computed(() => {
 const revenueStatusClass = computed(() => {
   if (revenuePercentOfGoal.value >= 95 && revenuePercentOfGoal.value <= 105) {
     return 'text-green-600';
-  } else if (revenuePercentOfGoal.value >= 90 && revenuePercentOfGoal.value < 95 || 
-             revenuePercentOfGoal.value > 105 && revenuePercentOfGoal.value <= 110) {
+  } else if ((revenuePercentOfGoal.value >= 90 && revenuePercentOfGoal.value < 95) || 
+             (revenuePercentOfGoal.value > 105 && revenuePercentOfGoal.value <= 110)) {
     return 'text-yellow-600';
   } else {
     return 'text-red-600';
@@ -222,8 +268,8 @@ const revenueStatusClass = computed(() => {
 const revenueStatusColor = computed(() => {
   if (revenuePercentOfGoal.value >= 95 && revenuePercentOfGoal.value <= 105) {
     return '#10B981'; // green-500
-  } else if (revenuePercentOfGoal.value >= 90 && revenuePercentOfGoal.value < 95 || 
-             revenuePercentOfGoal.value > 105 && revenuePercentOfGoal.value <= 110) {
+  } else if ((revenuePercentOfGoal.value >= 90 && revenuePercentOfGoal.value < 95) || 
+             (revenuePercentOfGoal.value > 105 && revenuePercentOfGoal.value <= 110)) {
     return '#F59E0B'; // amber-500
   } else {
     return '#EF4444'; // red-500
@@ -257,17 +303,15 @@ const revenueGapMessage = computed(() => {
 
 // Deficit/Surplus goal status
 const deficitPercentOfGoal = computed(() => {
-  if (!localGoals.value.targetDeficit) return 100;
-  
-  // For deficit/surplus, we need to compare the current deficit to the target
+  if (!localGoals.value.targetDeficit || localGoals.value.targetDeficit === 0) return 100;
+  // Compare current deficit with absolute target (prevent division by zero)
   const currentDeficitValue = props.currentSpending - props.currentRevenue;
-  return (currentDeficitValue / localGoals.value.targetDeficit) * 100;
+  return (currentDeficitValue / Math.abs(localGoals.value.targetDeficit)) * 100;
 });
 
 const deficitStatusIcon = computed(() => {
   if (!localGoals.value.targetDeficit) return '';
   
-  // Check if signs match (both positive or both negative)
   const currentDeficitValue = props.currentSpending - props.currentRevenue;
   const signsMatch = Math.sign(currentDeficitValue) === Math.sign(localGoals.value.targetDeficit) ||
                     localGoals.value.targetDeficit === 0;
@@ -288,7 +332,6 @@ const deficitStatusIcon = computed(() => {
 const deficitStatusClass = computed(() => {
   if (!localGoals.value.targetDeficit) return '';
   
-  // Check if signs match (both positive or both negative)
   const currentDeficitValue = props.currentSpending - props.currentRevenue;
   const signsMatch = Math.sign(currentDeficitValue) === Math.sign(localGoals.value.targetDeficit) ||
                     localGoals.value.targetDeficit === 0;
@@ -309,7 +352,6 @@ const deficitStatusClass = computed(() => {
 const deficitStatusColor = computed(() => {
   if (!localGoals.value.targetDeficit) return '#CBD5E0'; // gray-400
   
-  // Check if signs match (both positive or both negative)
   const currentDeficitValue = props.currentSpending - props.currentRevenue;
   const signsMatch = Math.sign(currentDeficitValue) === Math.sign(localGoals.value.targetDeficit) ||
                     localGoals.value.targetDeficit === 0;
@@ -330,7 +372,6 @@ const deficitStatusColor = computed(() => {
 const deficitStatusText = computed(() => {
   if (!localGoals.value.targetDeficit) return '';
   
-  // Check if signs match (both positive or both negative)
   const currentDeficitValue = props.currentSpending - props.currentRevenue;
   const signsMatch = Math.sign(currentDeficitValue) === Math.sign(localGoals.value.targetDeficit) ||
                     localGoals.value.targetDeficit === 0;
@@ -377,14 +418,12 @@ const deficitGapMessage = computed(() => {
 function updateGoals() {
   emit('update:goals', { ...localGoals.value });
   
-  // Update URL params if goals are enabled
   if (localGoals.value.enabled) {
     updateUrlParams();
   } else {
     clearUrlParams();
   }
   
-  // Emit goal status for parent components
   emit('goalStatusChanged', {
     revenue: {
       status: revenueStatusClass.value,
@@ -401,25 +440,37 @@ function updateGoals() {
   });
 }
 
-// Auto-balance methods
 function handleAutoBalanceChange() {
+  // Simple implementation that just emits the event and updates the message
   emit('autoBalanceToggled', autoBalanceEnabled.value);
   
+  // Set the message based on the current state
   if (autoBalanceEnabled.value) {
     if (localGoals.value.targetDeficit !== null) {
-      autoBalanceMessage.value = localGoals.value.targetDeficit >= 0
-        ? `Auto-balancing revenue to reach your $${localGoals.value.targetDeficit.toFixed(1)}B deficit goal...`
-        : `Auto-balancing revenue to reach your $${Math.abs(localGoals.value.targetDeficit).toFixed(1)}B surplus goal...`;
+      const isDeficit = localGoals.value.targetDeficit >= 0;
+      const amount = isDeficit ? 
+        localGoals.value.targetDeficit.toFixed(1) : 
+        Math.abs(localGoals.value.targetDeficit).toFixed(1);
+      
+      autoBalanceMessage.value = isDeficit ?
+        `Auto-balancing revenue to reach your $${amount}B deficit goal...` :
+        `Auto-balancing revenue to reach your $${amount}B surplus goal...`;
+        
+      // Directly update the store
+      budgetStore.budgetGoals.targetDeficit = localGoals.value.targetDeficit;
+      budgetStore.budgetGoals.enabled = true;
+      budgetStore.toggleAutoBalance(true);
     } else {
       autoBalanceMessage.value = 'Please set a deficit/surplus goal to auto-balance the budget.';
       autoBalanceEnabled.value = false;
     }
   } else {
     autoBalanceMessage.value = '';
+    budgetStore.toggleAutoBalance(false);
   }
 }
 
-// URL parameter methods
+
 function updateUrlParams() {
   if (!localGoals.value.enabled) return;
   
@@ -466,14 +517,13 @@ function loadFromUrlParams() {
   }
 }
 
-// Watch for changes in props
+// Watchers
 watch(() => props.initialGoals, (newGoals) => {
   if (newGoals) {
     localGoals.value = { ...newGoals };
   }
 }, { deep: true });
 
-// Watch for changes in route query params
 watch(() => route.query, (newQuery) => {
   if (newQuery.revenueGoal !== undefined || newQuery.deficitGoal !== undefined) {
     loadFromUrlParams();
@@ -492,7 +542,6 @@ input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-
 input[type="number"] {
   -moz-appearance: textfield;
   appearance: textfield;

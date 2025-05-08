@@ -120,7 +120,8 @@ const expandedGroups = ref({
   taxExpenditures: true
 });
 const spendingFactors = ref({});
-const autoBalanceActive = ref(false);
+// Use computed property to access store's autoBalanceActive state
+const autoBalanceActive = computed(() => budgetStore.autoBalanceActive);
 
 // Computed property for fiscal year display
 // eslint-disable-next-line no-unused-vars
@@ -211,10 +212,11 @@ function updateGroupSpendingFactor(groupId, value) {
   }
 }
 
-function toggleAutoBalance() {
-  if (autoBalanceActive.value) {
-    budgetStore.autoBalanceBudget();
-  }
+function toggleAutoBalance(isActive) {
+  // Update the store's state directly
+  budgetStore.toggleAutoBalance(isActive);
+  
+  console.log('Auto-balance mode:', isActive ? 'enabled' : 'disabled');
 }
 
 function resetBudget() {

@@ -1,8 +1,15 @@
 <template>
   <div class="budget2024-pie-chart">
-    <div v-if="canCalculate" class="chart-wrapper">
+    <div
+      v-if="canCalculate"
+      class="chart-wrapper"
+    >
       <!-- Chart Container -->
-      <div class="pie-chart-container" role="img" aria-label="Budget 2024 Allocation Chart">
+      <div
+        class="pie-chart-container"
+        role="img"
+        aria-label="Budget 2024 Allocation Chart"
+      >
         <div class="pie-chart-inner-container">
           <Pie
             :data="chartData"
@@ -12,9 +19,15 @@
         </div>
       </div>
       <!-- Legend container using a Vue ref -->
-      <div class="legend-container" ref="legendRef"></div>
+      <div
+        ref="legendRef"
+        class="legend-container"
+      />
     </div>
-    <div v-else class="no-data">
+    <div
+      v-else
+      class="no-data"
+    >
       <p>No budget data available to display.</p>
     </div>
   </div>

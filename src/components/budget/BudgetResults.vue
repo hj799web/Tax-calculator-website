@@ -6,25 +6,46 @@
     </h2>
     
     <!-- Deficit Warning Banner -->
-    <div v-if="deficitWarningLevel !== 'none'" 
-         class="deficit-warning-banner" 
-         :class="deficitWarningClass"
-         aria-live="polite">
+    <div
+      v-if="deficitWarningLevel !== 'none'" 
+      class="deficit-warning-banner" 
+      :class="deficitWarningClass"
+      aria-live="polite"
+    >
       <div class="warning-content">
-        <span class="warning-icon" v-if="deficitWarningLevel === 'mild'">🟡</span>
-        <span class="warning-icon" v-if="deficitWarningLevel === 'high'">🟠</span>
-        <span class="warning-icon" v-if="deficitWarningLevel === 'critical'">🔴</span>
+        <span
+          v-if="deficitWarningLevel === 'mild'"
+          class="warning-icon"
+        >🟡</span>
+        <span
+          v-if="deficitWarningLevel === 'high'"
+          class="warning-icon"
+        >🟠</span>
+        <span
+          v-if="deficitWarningLevel === 'critical'"
+          class="warning-icon"
+        >🔴</span>
         <span class="warning-message">{{ deficitWarningMessage }}</span>
-        <button @click="dismissWarning" class="dismiss-button" aria-label="Dismiss warning">
+        <button
+          class="dismiss-button"
+          aria-label="Dismiss warning"
+          @click="dismissWarning"
+        >
           <span class="material-icons">close</span>
         </button>
       </div>
-      <div class="warning-info-button" @click="showDeficitInfo = !showDeficitInfo">
+      <div
+        class="warning-info-button"
+        @click="showDeficitInfo = !showDeficitInfo"
+      >
         <span class="material-icons">info</span>
       </div>
       
       <!-- Deficit Info Popover -->
-      <div v-if="showDeficitInfo" class="deficit-info-popover">
+      <div
+        v-if="showDeficitInfo"
+        class="deficit-info-popover"
+      >
         <h3>Understanding Budget Deficits</h3>
         <p>Persistent budget deficits can lead to:</p>
         <ul>
@@ -34,9 +55,11 @@
           <li>Reduced fiscal flexibility during economic downturns</li>
         </ul>
         <p>
-          <a href="https://www.pbo-dpb.ca/en/research--recherche/research-publications--publications-de-recherche/fiscal-sustainability-report-2023--rapport-sur-la-viabilite-financiere-de-2023" 
-             target="_blank" 
-             rel="noopener noreferrer">
+          <a
+            href="https://www.pbo-dpb.ca/en/research--recherche/research-publications--publications-de-recherche/fiscal-sustainability-report-2023--rapport-sur-la-viabilite-financiere-de-2023" 
+            target="_blank" 
+            rel="noopener noreferrer"
+          >
             Learn more about public debt from the PBO
           </a>
         </p>
@@ -47,22 +70,30 @@
       <!-- Mobile Tab Navigation -->
       <div class="mobile-tabs">
         <button 
-          @click="activeTab = 'revenue'" 
-          :class="{ 'active-tab': activeTab === 'revenue' }"
-          class="tab-button">
+          :class="{ 'active-tab': activeTab === 'revenue' }" 
+          class="tab-button"
+          @click="activeTab = 'revenue'"
+        >
           Revenue
         </button>
         <button 
-          @click="activeTab = 'spending'" 
-          :class="{ 'active-tab': activeTab === 'spending' }"
-          class="tab-button">
+          :class="{ 'active-tab': activeTab === 'spending' }" 
+          class="tab-button"
+          @click="activeTab = 'spending'"
+        >
           Spending
         </button>
       </div>
       
-      <div class="budget-results" :class="{ 'mobile-view': isMobileView }">
+      <div
+        class="budget-results"
+        :class="{ 'mobile-view': isMobileView }"
+      >
         <!-- Revenue Tab Content -->
-        <div v-show="activeTab === 'revenue' || !isMobileView" class="tab-content">
+        <div
+          v-show="activeTab === 'revenue' || !isMobileView"
+          class="tab-content"
+        >
           <!-- Revenue -->
           <div class="result-item">
             <span class="result-label">
@@ -75,14 +106,21 @@
           </div>
           
           <div class="toggle-details">
-            <button @click="downloadChart('revenue')" class="download-button" title="Download as Image">
+            <button
+              class="download-button"
+              title="Download as Image"
+              @click="downloadChart('revenue')"
+            >
               <span class="material-icons">download</span>
             </button>
           </div>
         </div>
         
         <!-- Spending Tab Content -->
-        <div v-show="activeTab === 'spending' || !isMobileView" class="tab-content">
+        <div
+          v-show="activeTab === 'spending' || !isMobileView"
+          class="tab-content"
+        >
           <!-- Spending -->
           <div class="result-item">
             <span class="result-label">
@@ -100,22 +138,26 @@
           <!-- Surplus/Deficit -->
           <div class="result-item">
             <span class="result-label">
-              <span class="material-icons mr-1 text-xs"
-                    :class="{
-                      'text-green-500': surplusValue > 0,
-                      'text-red-500': surplusValue < 0,
-                      'text-gray-500': surplusValue === 0
-                    }">
+              <span
+                class="material-icons mr-1 text-xs"
+                :class="{
+                  'text-green-500': surplusValue > 0,
+                  'text-red-500': surplusValue < 0,
+                  'text-gray-500': surplusValue === 0
+                }"
+              >
                 {{ surplusValue > 0 ? 'trending_up' : surplusValue < 0 ? 'trending_down' : 'remove' }}
               </span>
               Surplus/Deficit:
             </span>
-            <span class="font-medium text-sm tooltip-container"
-                  :class="{
-                    'text-green-600': surplusValue > 0,
-                    'text-red-600': surplusValue < 0,
-                    'text-gray-600': surplusValue === 0
-                  }">
+            <span
+              class="font-medium text-sm tooltip-container"
+              :class="{
+                'text-green-600': surplusValue > 0,
+                'text-red-600': surplusValue < 0,
+                'text-gray-600': surplusValue === 0
+              }"
+            >
               {{ surplusValue > 0 ? 'Surplus: +' : surplusValue < 0 ? 'Deficit: ' : '' }}
               {{ formatCurrency(Math.abs(surplusValue)) }}
               <div class="tooltip-text">
@@ -125,7 +167,11 @@
           </div>
           
           <div class="toggle-details">
-            <button @click="downloadChart('spending')" class="download-button" title="Download as Image">
+            <button
+              class="download-button"
+              title="Download as Image"
+              @click="downloadChart('spending')"
+            >
               <span class="material-icons">download</span>
             </button>
           </div>
@@ -135,15 +181,33 @@
       <!-- Actions -->
       <div class="mt-4">
         <div class="flex justify-between items-center">
-          <h3 class="text-sm font-semibold text-gray-800">Actions</h3>
+          <h3 class="text-sm font-semibold text-gray-800">
+            Actions
+          </h3>
+          <button
+            class="share-budget-button"
+            @click="$emit('share-budget')"
+            aria-label="Share your budget on social media"
+            style="display: flex; align-items: center; gap: 4px; background: #4263eb; color: #fff; border: none; border-radius: 4px; padding: 6px 14px; font-weight: 500; cursor: pointer; transition: background 0.2s;"
+          >
+            <span class="material-icons" style="font-size: 18px;">share</span>
+            Share Budget
+          </button>
         </div>
         <div class="action-buttons mt-2">
-          <button class="action-button reset-button" @click="$emit('reset-budget')">
+          <button
+            class="action-button reset-button"
+            @click="$emit('reset-budget')"
+          >
             Reset Budget
           </button>
           <div class="auto-balance-container">
             <label class="auto-balance-label">
-              <input type="checkbox" :checked="autoBalanceActive" @change="$emit('toggle-auto-balance', $event.target.checked)">
+              <input
+                type="checkbox"
+                :checked="autoBalanceActive"
+                @change="$emit('toggle-auto-balance', $event.target.checked)"
+              >
               <span class="auto-balance-text">Auto-Balance Budget</span>
             </label>
             <div class="auto-balance-info">
@@ -153,19 +217,74 @@
               </div>
             </div>
           </div>
-          <button class="action-button save-button" @click="$emit('save-budget')">
+          <button
+            class="action-button save-button"
+            @click="$emit('save-budget')"
+          >
             Save Budget
           </button>
+          
+          <!-- Achievement Badges Section -->
+          <div class="achievement-badges mt-4 pt-3 border-t border-gray-200">
+            <div 
+              class="section-header flex items-center justify-between cursor-pointer" 
+              @click="showBadges = !showBadges"
+            >
+              <h3 class="text-sm font-medium text-gray-700 mb-2 flex items-center">
+                <span class="material-icons mr-2 text-amber-500 text-sm">emoji_events</span>
+                Budget Achievements
+              </h3>
+              <span class="material-icons text-gray-500 text-sm">
+                {{ showBadges ? 'expand_less' : 'expand_more' }}
+              </span>
+            </div>
+            
+            <transition name="slide-fade">
+              <div
+                v-if="showBadges"
+                class="badge-container bg-gray-50 rounded-md p-3 shadow-sm"
+              >
+                <div
+                  v-if="earnedBadges.length > 0"
+                  class="flex flex-wrap justify-center gap-3"
+                >
+                  <AchievementBadge 
+                    v-for="badge in earnedBadges" 
+                    :key="badge.title + '-' + badge.tier" 
+                    :badge="badge" 
+                    size="medium"
+                    :show-tooltip="true"
+                  />
+                </div>
+                <div
+                  v-else
+                  class="text-center py-3"
+                >
+                  <p class="text-sm text-gray-500">
+                    Make budget adjustments to earn achievement badges!
+                  </p>
+                </div>
+              </div>
+            </transition>
+          </div>
         </div>
       </div>
     </div>
+    <!-- Export Budget PDF Panel -->
+    <ExportPanel />
   </section>
 </template>
 
 <script setup>
 import { ref, watch, onMounted, computed } from 'vue';
+import { onUnmounted } from 'vue';
+import ExportPanel from './ExportPanel.vue';
 import { useBudgetSimulatorStore } from '../../stores/budgetSimulator.js';
+import AchievementBadge from '../AchievementBadge.vue';
 import html2canvas from 'html2canvas';
+
+// State for collapsible sections
+const showBadges = ref(true);
 
 const budgetStore = useBudgetSimulatorStore();
 
@@ -198,6 +317,15 @@ const surplusValue = computed(() => {
   // eslint-disable-next-line no-unused-vars
   const ___ = budgetStore.lastUpdate;
   return budgetStore.surplus;
+});
+
+// Get earned badges from the store with reactive dependency on lastBadgeUpdate
+const earnedBadges = computed(() => {
+  // eslint-disable-next-line no-unused-vars
+  const _ = budgetStore.lastBadgeUpdate;
+  // eslint-disable-next-line no-unused-vars
+  const __ = budgetStore.lastUpdate;
+  return budgetStore.earnedBadges || [];
 });
 
 
@@ -235,6 +363,10 @@ onMounted(() => {
   
   // Initial check for mobile view
   handleResize();
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize);
 });
 
 // Computed properties for deficit warning
@@ -379,6 +511,15 @@ function formatCurrency(value) {
   }
 }
 
+.slide-fade-enter-active, .slide-fade-leave-active {
+  transition: all 0.3s ease;
+}
+.slide-fade-enter-from, .slide-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+
 /* Tooltip Styles */
 .tooltip-container {
   position: relative;
@@ -394,7 +535,7 @@ function formatCurrency(value) {
   border-radius: 6px;
   padding: 5px;
   position: absolute;
-  z-index: 1;
+  z-index: 10;
   bottom: 125%;
   left: 50%;
   margin-left: -60px;
@@ -536,5 +677,66 @@ function formatCurrency(value) {
 
 .deficit-info-popover a:hover {
   text-decoration: underline;
+}
+
+/* Auto-balance tooltip styles */
+.auto-balance-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.auto-balance-info {
+  position: relative;
+  margin-left: 8px;
+}
+
+.info-icon {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  line-height: 18px;
+  text-align: center;
+  border-radius: 50%;
+  background-color: #e2e8f0;
+  color: #4a5568;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.info-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 220px;
+  background-color: #2d3748;
+  color: white;
+  text-align: center;
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: 20;
+  margin-bottom: 8px;
+  pointer-events: none;
+}
+
+.info-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #2d3748 transparent transparent transparent;
+}
+
+.auto-balance-info:hover .info-tooltip {
+  visibility: visible;
+  opacity: 1;
 }
 </style>

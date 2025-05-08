@@ -8,44 +8,58 @@
       <div class="space-y-4">
         <!-- Revenue Summary -->
         <div class="revenue-summary">
-          <h3 class="text-sm font-medium text-gray-700 mb-2">Revenue Summary</h3>
+          <h3 class="text-sm font-medium text-gray-700 mb-2">
+            Revenue Summary
+          </h3>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
             <!-- Target Revenue -->
             <div class="flex items-center justify-between p-2 bg-gray-50 rounded-md">
               <span class="text-xs text-gray-600">Target Revenue:</span>
               <div class="flex items-center">
-                <div v-if="!editingTarget" class="flex items-center">
+                <div
+                  v-if="!editingTarget"
+                  class="flex items-center"
+                >
                   <span class="text-xs font-medium mr-1">${{ targetRevenueDisplay }}B</span>
                   <button 
-                    @click="startEditingTarget" 
+                    v-if="budgetStore.budgetGoals.enabled" 
                     class="text-blue-500 hover:text-blue-700"
-                    v-if="budgetStore.budgetGoals.enabled"
+                    @click="startEditingTarget"
                   >
                     <span class="material-icons text-xs">edit</span>
                   </button>
                 </div>
-                <div v-else class="flex items-center">
+                <div
+                  v-else
+                  class="flex items-center"
+                >
                   <div class="relative rounded-md shadow-sm">
                     <div class="absolute inset-y-0 left-0 pl-2 flex items-center pointer-events-none">
                       <span class="text-gray-500 text-xs">$</span>
                     </div>
                     <input 
-                      type="number" 
+                      ref="targetInput" 
                       v-model.number="editableTargetRevenue"
+                      type="number"
                       class="focus:ring-blue-500 focus:border-blue-500 block w-20 pl-5 pr-8 text-xs border-gray-300 rounded-md"
                       step="0.1"
                       @keyup.enter="saveTargetRevenue"
-                      ref="targetInput"
                     >
                     <div class="absolute inset-y-0 right-0 pr-2 flex items-center pointer-events-none">
                       <span class="text-gray-500 text-xs">B</span>
                     </div>
                   </div>
                   <div class="flex ml-1">
-                    <button @click="saveTargetRevenue" class="text-green-500 hover:text-green-700 mr-1">
+                    <button
+                      class="text-green-500 hover:text-green-700 mr-1"
+                      @click="saveTargetRevenue"
+                    >
                       <span class="material-icons text-xs">check</span>
                     </button>
-                    <button @click="cancelEditingTarget" class="text-red-500 hover:text-red-700">
+                    <button
+                      class="text-red-500 hover:text-red-700"
+                      @click="cancelEditingTarget"
+                    >
                       <span class="material-icons text-xs">close</span>
                     </button>
                   </div>
@@ -71,7 +85,9 @@
           
           <!-- Revenue Sources Breakdown -->
           <div class="mt-3">
-            <div class="text-xs text-gray-600 mb-1">Top Revenue Sources:</div>
+            <div class="text-xs text-gray-600 mb-1">
+              Top Revenue Sources:
+            </div>
             <div class="space-y-1">
               <div 
                 v-for="source in topRevenueSources" 
@@ -82,7 +98,7 @@
                   <div 
                     class="w-2 h-2 rounded-full mr-1" 
                     :style="{ backgroundColor: source.color }"
-                  ></div>
+                  />
                   <span>{{ source.name }}</span>
                 </div>
                 <span>${{ (source.rate * source.base).toFixed(1) }}B</span>
@@ -96,7 +112,9 @@
         
         <!-- Spending Summary -->
         <div class="spending-summary mt-3 pt-3 border-t border-gray-200">
-          <h3 class="text-sm font-medium text-gray-700 mb-2">Spending Summary</h3>
+          <h3 class="text-sm font-medium text-gray-700 mb-2">
+            Spending Summary
+          </h3>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div class="flex items-center justify-between p-2 bg-gray-50 rounded-md">
               <span class="text-xs text-gray-600">Total Spending:</span>
@@ -107,38 +125,50 @@
             <div class="flex items-center justify-between p-2 bg-gray-50 rounded-md">
               <span class="text-xs text-gray-600">Target {{ budgetStore.budgetGoals.targetDeficit >= 0 ? 'Deficit' : 'Surplus' }}:</span>
               <div class="flex items-center">
-                <div v-if="!editingDeficit" class="flex items-center">
+                <div
+                  v-if="!editingDeficit"
+                  class="flex items-center"
+                >
                   <span class="text-xs font-medium mr-1">{{ targetDeficitDisplay }}</span>
                   <button 
-                    @click="startEditingDeficit" 
+                    v-if="budgetStore.budgetGoals.enabled" 
                     class="text-blue-500 hover:text-blue-700"
-                    v-if="budgetStore.budgetGoals.enabled"
+                    @click="startEditingDeficit"
                   >
                     <span class="material-icons text-xs">edit</span>
                   </button>
                 </div>
-                <div v-else class="flex items-center">
+                <div
+                  v-else
+                  class="flex items-center"
+                >
                   <div class="relative rounded-md shadow-sm">
                     <div class="absolute inset-y-0 left-0 pl-2 flex items-center pointer-events-none">
                       <span class="text-gray-500 text-xs">$</span>
                     </div>
                     <input 
-                      type="number" 
+                      ref="deficitInput" 
                       v-model.number="editableTargetDeficit"
+                      type="number"
                       class="focus:ring-blue-500 focus:border-blue-500 block w-20 pl-5 pr-8 text-xs border-gray-300 rounded-md"
                       step="0.1"
                       @keyup.enter="saveTargetDeficit"
-                      ref="deficitInput"
                     >
                     <div class="absolute inset-y-0 right-0 pr-2 flex items-center pointer-events-none">
                       <span class="text-gray-500 text-xs">B</span>
                     </div>
                   </div>
                   <div class="flex ml-1">
-                    <button @click="saveTargetDeficit" class="text-green-500 hover:text-green-700 mr-1">
+                    <button
+                      class="text-green-500 hover:text-green-700 mr-1"
+                      @click="saveTargetDeficit"
+                    >
                       <span class="material-icons text-xs">check</span>
                     </button>
-                    <button @click="cancelEditingDeficit" class="text-red-500 hover:text-red-700">
+                    <button
+                      class="text-red-500 hover:text-red-700"
+                      @click="cancelEditingDeficit"
+                    >
                       <span class="material-icons text-xs">close</span>
                     </button>
                   </div>
@@ -162,8 +192,10 @@
               </span>
             </div>
             
-            <div v-if="budgetStore.budgetGoals.enabled && budgetStore.budgetGoals.targetDeficit !== null" 
-              class="flex items-center justify-between p-2 bg-gray-50 rounded-md">
+            <div
+              v-if="budgetStore.budgetGoals.enabled && budgetStore.budgetGoals.targetDeficit !== null" 
+              class="flex items-center justify-between p-2 bg-gray-50 rounded-md"
+            >
               <span class="text-xs text-gray-600">Goal Status:</span>
               <div class="flex items-center">
                 <span
@@ -192,6 +224,36 @@
         </div>
         
         <!-- Export Options -->
+        <!-- Achievement Badges Section -->
+        <div class="achievement-badges mt-3 pt-3 border-t border-gray-200">
+          <h3 class="text-sm font-medium text-gray-700 mb-2 flex items-center">
+            <span class="material-icons mr-2 text-amber-500 text-sm">emoji_events</span>
+            Budget Achievements
+          </h3>
+          <div class="flex flex-wrap justify-center gap-3 my-3">
+            <div
+              v-if="earnedBadges.length > 0"
+              class="flex flex-wrap justify-center gap-3"
+            >
+              <AchievementBadge 
+                v-for="badge in earnedBadges" 
+                :key="badge.title" 
+                :badge="badge" 
+                size="medium"
+                :show-tooltip="true"
+              />
+            </div>
+            <div
+              v-else
+              class="text-center py-3 px-4 bg-gray-50 rounded-md w-full"
+            >
+              <p class="text-sm text-gray-500">
+                Make budget adjustments to earn achievement badges!
+              </p>
+            </div>
+          </div>
+        </div>
+        
         <div class="mt-3 pt-3 border-t border-gray-200">
           <button 
             class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded transition duration-150 ease-in-out"
@@ -202,11 +264,15 @@
       </div>
     </div>
   </div>
+  <!-- Export Budget PDF Panel -->
+  <ExportPanel />
 </template>
 
 <script setup>
 import { ref, computed, nextTick } from 'vue';
 import { useBudgetSimulatorStore } from '../stores/budgetSimulator.js';
+import ExportPanel from './budget/ExportPanel.vue';
+import AchievementBadge from './AchievementBadge.vue';
 
 // Initialize the budget simulator store
 const budgetStore = useBudgetSimulatorStore();
@@ -235,6 +301,9 @@ const targetDeficitDisplay = computed(() => {
   }
   return 'Not set';
 });
+
+// Get earned badges from the store
+const earnedBadges = computed(() => budgetStore.earnedBadges);
 
 const percentOfGoal = computed(() => {
   if (!budgetStore.budgetGoals.targetRevenue) return 0;

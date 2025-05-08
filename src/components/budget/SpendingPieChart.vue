@@ -1,13 +1,25 @@
 <template>
-  <div class="spending-pie-chart" :class="{ 'dark-mode': darkMode }">
-    <h3 class="chart-title">Federal Spending Breakdown</h3>
+  <div
+    class="spending-pie-chart"
+    :class="{ 'dark-mode': darkMode }"
+  >
+    <h3 class="chart-title">
+      Federal Spending Breakdown
+    </h3>
     
-    <div v-if="totalSpending === 0" class="no-data-message">
+    <div
+      v-if="totalSpending === 0 || !hasValidData"
+      class="no-data-message"
+    >
       Adjust spending sliders to view the breakdown.
     </div>
     
-    <div v-else class="chart-container">
+    <div
+      v-else
+      class="chart-container"
+    >
       <Pie 
+        v-if="chartMounted"
         :data="chartData" 
         :options="chartOptions"
         :height="height"
@@ -18,7 +30,7 @@
 </template>
 
 <script setup>
-import { computed, watch, onMounted, onUnmounted } from 'vue';
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
 import { Pie } from 'vue-chartjs';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, Title } from 'chart.js';
 import { useBudgetSimulatorStore } from '@/stores/budgetSimulator';
@@ -47,6 +59,16 @@ const budgetStore = useBudgetSimulatorStore();
 
 // Computed properties
 const totalSpending = computed(() => budgetStore.totalSpending);
+
+// Chart mounting state
+const chartMounted = ref(false);
+
+// Check if data is valid for chart rendering
+const hasValidData = computed(() => {
+  return Array.isArray(categories.value) && 
+         categories.value.length > 0 && 
+         categories.value.every(cat => cat && typeof cat.amount === 'number');
+});
 
 // Get categories including main categories and group totals for Other Categories and Government Operations
 const categories = computed(() => {
@@ -92,9 +114,16 @@ const categories = computed(() => {
 
 // Chart data
 const chartData = computed(() => {
-  const labels = categories.value.map(cat => cat.name);
-  const data = categories.value.map(cat => cat.amount);
-  const backgroundColor = categories.value.map(cat => cat.color);
+  // Ensure categories is an array and has items
+  const safeCategories = Array.isArray(categories.value) ? categories.value : [];
+  
+  // Safely extract data with null checks
+  const labels = safeCategories.map(cat => cat?.name || 'Unknown');
+  const data = safeCategories.map(cat => {
+    const amount = cat?.amount;
+    return (typeof amount === 'number' && !isNaN(amount)) ? amount : 0;
+  });
+  const backgroundColor = safeCategories.map(cat => cat?.color || '#CBD5E0');
   
   return {
     labels,
@@ -135,10 +164,20 @@ const chartOptions = computed(() => {
       tooltip: {
         callbacks: {
           label: (context) => {
-            const value = context.raw;
-            const total = context.chart.getDatasetMeta(0).total;
-            const percentage = Math.round((value / total) * 100);
-            return `${context.label}: $${value.toFixed(1)}B (${percentage}%)`;
+            // Safe handling of null/undefined values
+            if (!context || context.raw === undefined || context.raw === null) {
+              return 'No data available';
+            }
+            
+            const value = Number(context.raw);
+            if (isNaN(value)) {
+              return `${context.label || 'Unknown'}: Invalid data`;
+            }
+            
+            const total = context.chart?.getDatasetMeta?.(0)?.total || 0;
+            const percentage = total > 0 ? Math.round((value / total) * 100) : 0;
+            
+            return `${context.label || 'Unknown'}: $${value.toFixed(1)}B (${percentage}%)`;
           }
         },
         backgroundColor: props.darkMode ? '#4A5568' : '#FFFFFF',
@@ -182,11 +221,21 @@ watch(() => props.darkMode, () => {
 onMounted(() => {
   window.addEventListener('resize', updateLegendPosition);
   updateLegendPosition(); // Initial setup
+  
+  // Safely mount the chart after a short delay to ensure DOM is ready
+  setTimeout(() => {
+    chartMounted.value = true;
+    console.log('Chart mounted');
+  }, 50);
 });
 
-// Clean up event listener
+// Clean up event listener and chart resources
 onUnmounted(() => {
   window.removeEventListener('resize', updateLegendPosition);
+  
+  // Ensure chart is unmounted before component is destroyed
+  chartMounted.value = false;
+  console.log('Chart unmounted');
 });
 </script>
 

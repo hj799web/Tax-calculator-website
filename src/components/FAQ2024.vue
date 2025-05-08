@@ -1,5 +1,8 @@
 <template>
-  <div id="faq-2024" class="section">
+  <div
+    id="faq-2024"
+    class="section"
+  >
     <h2>FAQ - 2024 Budget</h2>
     
     <h3>What was the overall picture of the 2024 Canadian Federal Budget?</h3>

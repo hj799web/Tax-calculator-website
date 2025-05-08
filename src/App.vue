@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <!-- Router View - This is where route components will be rendered -->
-    <router-view v-if="$route.path !== '/'"></router-view>
+    <router-view v-if="$route.path !== '/'" />
 
     <!-- Main Content (only shown on home route) -->
     <main v-if="$route.path === '/'">
@@ -9,16 +9,38 @@
         <!-- Header Section -->
         <header>
           <div class="logo-container">
-            <img :src="logoUrl" alt="Fiscal Insights Logo" class="site-logo">
+            <img
+              :src="logoUrl"
+              alt="Fiscal Insights Logo"
+              class="site-logo"
+            >
           </div>
           <h1 class="main-title">
             Canada Tax Calculator
           </h1>
           <nav class="main-navigation">
-            <a href="welcome.html" class="nav-link">Home</a>
-            <router-link to="/how-it-works" class="nav-link">How It Works</router-link>
-            <router-link to="/simulator" class="nav-link simulator-link">Try the Budget Simulator</router-link>
-            <a href="https://www.canada.ca/en/revenue-agency.html" target="_blank" rel="noopener noreferrer" class="nav-link">CRA</a>
+            <a
+              href="welcome.html"
+              class="nav-link"
+            >Home</a>
+            <router-link
+              to="/how-it-works"
+              class="nav-link"
+            >
+              How It Works
+            </router-link>
+            <router-link
+              to="/simulator"
+              class="nav-link simulator-link"
+            >
+              Try the Budget Simulator
+            </router-link>
+            <a
+              href="https://www.canada.ca/en/revenue-agency.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="nav-link"
+            >CRA</a>
           </nav>
           <p class="subtitle">
             Get an accurate breakdown of your taxes and see where your money goes with our free calculator.
@@ -28,13 +50,15 @@
         <!-- Year Selector Section -->
         <section class="year-selector-section">
           <div class="year-selector-container">
-            <h3 class="year-selector-title">Select Tax Year</h3>
+            <h3 class="year-selector-title">
+              Select Tax Year
+            </h3>
             <div class="year-selector">
               <button 
                 v-for="year in yearStore.taxYears" 
                 :key="year.id"
-                @click="yearStore.setSelectedTaxYear(year.id)"
                 :class="['year-button', { active: yearStore.selectedTaxYear === year.id }]"
+                @click="yearStore.setSelectedTaxYear(year.id)"
               >
                 {{ year.label }}
               </button>
@@ -63,7 +87,9 @@
 
         <!-- Understanding Your Tax Breakdown Section -->
         <section id="how-it-works">
-          <h2 class="section-title">Understanding Your Tax Breakdown</h2>
+          <h2 class="section-title">
+            Understanding Your Tax Breakdown
+          </h2>
           <p class="section-description">
             See how your tax dollars are allocated across different government spending categories. This visualization helps you 
             understand exactly where your money goes and how it contributes to various public services.
@@ -74,8 +100,13 @@
         <!-- Budget Categories Section - Now Collapsible -->
         <section class="budget-categories-section">
           <div class="section-header">
-            <h2 class="section-title">Budget Categories</h2>
-            <button @click="toggleBudgetCategories" class="toggle-section-button">
+            <h2 class="section-title">
+              Budget Categories
+            </h2>
+            <button
+              class="toggle-section-button"
+              @click="toggleBudgetCategories"
+            >
               {{ showBudgetCategories ? 'Hide' : 'Show' }}
             </button>
           </div>
@@ -93,8 +124,13 @@
         <!-- FAQ Section - Now Collapsible -->
         <section class="faq-section">
           <div class="section-header">
-            <h2 class="section-title">Taxpayer FAQs</h2>
-            <button @click="toggleFAQs" class="toggle-section-button">
+            <h2 class="section-title">
+              Taxpayer FAQs
+            </h2>
+            <button
+              class="toggle-section-button"
+              @click="toggleFAQs"
+            >
               {{ showFAQs ? 'Hide' : 'Show' }}
             </button>
           </div>
@@ -107,16 +143,43 @@
 
         <!-- Resources Section -->
         <section class="resources-section">
-          <h2 class="section-title">Additional Tax Resources</h2>
+          <h2 class="section-title">
+            Additional Tax Resources
+          </h2>
           <p class="resources-description">
             Access these trusted resources to learn more about Canadian taxes, government spending, and financial planning.
           </p>
           <div class="resources-links">
-            <router-link to="/how-it-works" class="resource-link">How It Works</router-link>
-            <a href="https://www.canada.ca/en/revenue-agency.html" target="_blank" rel="noopener noreferrer" class="resource-link">Canada Revenue Agency</a>
-            <a href="https://www.canada.ca/en/department-finance.html" target="_blank" rel="noopener noreferrer" class="resource-link">Department of Finance Canada</a>
-            <a href="https://www.budget.canada.ca/2024/home-accueil-en.html" target="_blank" rel="noopener noreferrer" class="resource-link">Budget 2024</a>
-            <a href="https://www.tpsgc-pwgsc.gc.ca/recgen/cpc-pac/index-eng.html" target="_blank" rel="noopener noreferrer" class="resource-link">Public Accounts of Canada</a>
+            <router-link
+              to="/how-it-works"
+              class="resource-link"
+            >
+              How It Works
+            </router-link>
+            <a
+              href="https://www.canada.ca/en/revenue-agency.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="resource-link"
+            >Canada Revenue Agency</a>
+            <a
+              href="https://www.canada.ca/en/department-finance.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="resource-link"
+            >Department of Finance Canada</a>
+            <a
+              href="https://www.budget.canada.ca/2024/home-accueil-en.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="resource-link"
+            >Budget 2024</a>
+            <a
+              href="https://www.tpsgc-pwgsc.gc.ca/recgen/cpc-pac/index-eng.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="resource-link"
+            >Public Accounts of Canada</a>
           </div>
         </section>
 
@@ -130,12 +193,28 @@
             <div class="footer-section">
               <h3>Connect With Us</h3>
               <div class="social-links">
-                <a href="mailto:fiscal-insights@outlook.com" class="social-link">
-                  <img src="https://cdn-icons-png.flaticon.com/512/561/561127.png" alt="Email" class="social-icon" />
+                <a
+                  href="mailto:fiscal-insights@outlook.com"
+                  class="social-link"
+                >
+                  <img
+                    src="https://cdn-icons-png.flaticon.com/512/561/561127.png"
+                    alt="Email"
+                    class="social-icon"
+                  >
                   <span>fiscal-insights@outlook.com</span>
                 </a>
-                <a href="https://www.instagram.com/fiscal_insights1/" target="_blank" rel="noopener noreferrer" class="social-link">
-                  <img src="https://cdn-icons-png.flaticon.com/512/87/87390.png" alt="Instagram" class="social-icon" />
+                <a
+                  href="https://www.instagram.com/fiscal_insights1/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="social-link"
+                >
+                  <img
+                    src="https://cdn-icons-png.flaticon.com/512/87/87390.png"
+                    alt="Instagram"
+                    class="social-icon"
+                  >
                   <span>@fiscal_insights1</span>
                 </a>
               </div>
@@ -155,7 +234,12 @@
     </main>
     
     <!-- Beta Testing Button - Visible on all pages -->
-    <a href="https://forms.gle/Yofdxnr1iLZ5fRJ8A" target="_blank" rel="noopener noreferrer" class="beta-button">
+    <a
+      href="https://forms.gle/Yofdxnr1iLZ5fRJ8A"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="beta-button"
+    >
       <span>🔍 Help Us Improve</span>
       <span class="beta-subtext">Take a Quick Survey!</span>
     </a>

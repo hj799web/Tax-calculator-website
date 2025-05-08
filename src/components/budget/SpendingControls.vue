@@ -1,11 +1,20 @@
 <template>
-  <section class="simulator-card spending-card w-full" style="min-height: 1440px; display: flex; flex-direction: column;">
+  <section
+    class="simulator-card spending-card w-full"
+    style="min-height: 1440px; display: flex; flex-direction: column;"
+  >
     <h2 class="card-title">
       <span class="material-icons icon">payments</span>
       Spending Controls
     </h2>
-    <div class="card-content w-full" style="flex-grow: 1;">
-      <div class="w-full overflow-y-auto pr-2" style="height: 100%;">
+    <div
+      class="card-content w-full"
+      style="flex-grow: 1;"
+    >
+      <div
+        class="w-full overflow-y-auto pr-2"
+        style="height: 100%;"
+      >
         <!-- Main Categories Group -->
         <CategoryGroup
           title="Main Categories"
@@ -18,7 +27,11 @@
             <p>Adjust spending for major federal budget categories. Increasing percentages raises spending, while decreasing them reduces spending.</p>
           </div>
           <div class="main-categories-grid">
-            <div v-for="category in mainCategoriesList" :key="category.id" class="main-category-item">
+            <div
+              v-for="category in mainCategoriesList"
+              :key="category.id"
+              class="main-category-item"
+            >
               <div class="main-category-header">
                 <h4>{{ category.name }}</h4>
                 <div class="main-category-base">
@@ -38,22 +51,27 @@
                     :model-value="validSpendingFactors[category.id]"
                     :disabled="autoBalanceActive"
                     :base-amount="category.baseAmount"
-                    @update:model-value="updateCategoryAdjustment(category.id, $event)"
                     class="main-category-percentage-input"
+                    @update:model-value="updateCategoryAdjustment(category.id, $event)"
                   />
                   <button 
                     class="reset-button" 
-                    @click="updateCategoryAdjustment(category.id, 100)"
                     title="Reset to baseline"
+                    @click="updateCategoryAdjustment(category.id, 100)"
                   >
                     Reset
                   </button>
                 </div>
                 <div class="main-category-impact">
-                  <div class="impact-label">Current:</div>
-                  <div class="impact-value" :class="validSpendingFactors[category.id] > 100 ? 'text-green-600' : validSpendingFactors[category.id] < 100 ? 'text-red-600' : 'text-gray-600'">
+                  <div class="impact-label">
+                    Current:
+                  </div>
+                  <div
+                    class="impact-value"
+                    :class="validSpendingFactors[category.id] > 100 ? 'text-green-600' : validSpendingFactors[category.id] < 100 ? 'text-red-600' : 'text-gray-600'"
+                  >
                     ${{ formatAmount(category.baseAmount * validSpendingFactors[category.id] / 100) }}B
-                    ({{ validSpendingFactors[category.id] > 100 ? '+' : ''}}{{ (validSpendingFactors[category.id] - 100).toFixed(0) }}%)
+                    ({{ validSpendingFactors[category.id] > 100 ? '+' : '' }}{{ (validSpendingFactors[category.id] - 100).toFixed(0) }}%)
                   </div>
                 </div>
               </div>
@@ -69,12 +87,19 @@
           group-id="otherCategories"
           @toggle="toggleGroup"
         >
-          <div v-if="expandedGroups.otherCategories" class="w-full">
+          <div
+            v-if="expandedGroups.otherCategories"
+            class="w-full"
+          >
             <div class="other-categories-info">
               <p>Adjust spending for additional federal budget categories. These categories represent specialized programs and investments.</p>
             </div>
             <div class="other-categories-grid">
-              <div v-for="group in otherCategoriesGroups.filter(g => g.id !== 'governmentOperations' && g.id !== 'loansInvestments')" :key="group.id" class="other-category-item">
+              <div
+                v-for="group in otherCategoriesGroups.filter(g => g.id !== 'governmentOperations' && g.id !== 'loansInvestments')"
+                :key="group.id"
+                class="other-category-item"
+              >
                 <div class="other-category-header">
                   <h4>{{ group.name }}</h4>
                   <div class="other-category-base">
@@ -94,22 +119,27 @@
                       :model-value="validSpendingFactors[group.id]"
                       :disabled="autoBalanceActive"
                       :base-amount="group.baseAmount"
-                      @update:model-value="updateCategoryAdjustment(group.id, $event)"
                       class="other-category-percentage-input"
+                      @update:model-value="updateCategoryAdjustment(group.id, $event)"
                     />
                     <button 
                       class="reset-button" 
-                      @click="updateCategoryAdjustment(group.id, 100)"
                       title="Reset to baseline"
+                      @click="updateCategoryAdjustment(group.id, 100)"
                     >
                       Reset
                     </button>
                   </div>
                   <div class="other-category-impact">
-                    <div class="impact-label">Current:</div>
-                    <div class="impact-value" :class="validSpendingFactors[group.id] > 100 ? 'text-green-600' : validSpendingFactors[group.id] < 100 ? 'text-red-600' : 'text-gray-600'">
+                    <div class="impact-label">
+                      Current:
+                    </div>
+                    <div
+                      class="impact-value"
+                      :class="validSpendingFactors[group.id] > 100 ? 'text-green-600' : validSpendingFactors[group.id] < 100 ? 'text-red-600' : 'text-gray-600'"
+                    >
                       ${{ formatAmount(group.baseAmount * validSpendingFactors[group.id] / 100) }}B
-                      ({{ validSpendingFactors[group.id] > 100 ? '+' : ''}}{{ (validSpendingFactors[group.id] - 100).toFixed(0) }}%)
+                      ({{ validSpendingFactors[group.id] > 100 ? '+' : '' }}{{ (validSpendingFactors[group.id] - 100).toFixed(0) }}%)
                     </div>
                   </div>
                 </div>
@@ -118,13 +148,21 @@
             
             <!-- Subcategories in a separate grid below -->
             <div class="mt-4 w-full">
-              <h4 class="text-sm font-medium text-gray-700 mb-2">Subcategories</h4>
+              <h4 class="text-sm font-medium text-gray-700 mb-2">
+                Subcategories
+              </h4>
               <div class="grid grid-cols-1 gap-4 w-full">
                 <!-- Display Loans, Investments & Advances subcategories -->
                 <div class="w-full mb-4">
-                  <div class="text-sm font-medium text-gray-700 mb-3 border-b border-gray-200 pb-1">Loans, Investments & Advances Subcategories</div>
+                  <div class="text-sm font-medium text-gray-700 mb-3 border-b border-gray-200 pb-1">
+                    Loans, Investments & Advances Subcategories
+                  </div>
                   <div class="subcategories-grid">
-                    <div v-for="child in getGroupChildren('loansInvestments')" :key="child.id" class="subcategory-item">
+                    <div
+                      v-for="child in getGroupChildren('loansInvestments')"
+                      :key="child.id"
+                      class="subcategory-item"
+                    >
                       <div class="subcategory-header">
                         <h4>{{ child.name }}</h4>
                         <div class="subcategory-base">
@@ -144,22 +182,27 @@
                             :model-value="validSpendingFactors[child.id]"
                             :disabled="autoBalanceActive"
                             :base-amount="child.baseAmount"
-                            @update:model-value="updateCategoryAdjustment(child.id, $event)"
                             class="subcategory-percentage-input"
+                            @update:model-value="updateCategoryAdjustment(child.id, $event)"
                           />
                           <button 
                             class="reset-button" 
-                            @click="updateCategoryAdjustment(child.id, 100)"
                             title="Reset to baseline"
+                            @click="updateCategoryAdjustment(child.id, 100)"
                           >
                             Reset
                           </button>
                         </div>
                         <div class="subcategory-impact">
-                          <div class="impact-label">Current:</div>
-                          <div class="impact-value" :class="validSpendingFactors[child.id] > 100 ? 'text-green-600' : validSpendingFactors[child.id] < 100 ? 'text-red-600' : 'text-gray-600'">
+                          <div class="impact-label">
+                            Current:
+                          </div>
+                          <div
+                            class="impact-value"
+                            :class="validSpendingFactors[child.id] > 100 ? 'text-green-600' : validSpendingFactors[child.id] < 100 ? 'text-red-600' : 'text-gray-600'"
+                          >
                             ${{ formatAmount(child.baseAmount * validSpendingFactors[child.id] / 100) }}B
-                            ({{ validSpendingFactors[child.id] > 100 ? '+' : ''}}{{ (validSpendingFactors[child.id] - 100).toFixed(0) }}%)
+                            ({{ validSpendingFactors[child.id] > 100 ? '+' : '' }}{{ (validSpendingFactors[child.id] - 100).toFixed(0) }}%)
                           </div>
                         </div>
                       </div>
@@ -173,7 +216,10 @@
             
             <!-- Reset button for Other Categories -->
             <div class="mt-2 flex justify-end">
-              <button class="action-button reset-button" @click="resetOtherCategories">
+              <button
+                class="action-button reset-button"
+                @click="resetOtherCategories"
+              >
                 Reset Other Categories
               </button>
             </div>
@@ -188,15 +234,24 @@
           group-id="governmentOperations"
           @toggle="toggleGroup"
         >
-          <div v-if="expandedGroups.governmentOperations" class="w-full">
+          <div
+            v-if="expandedGroups.governmentOperations"
+            class="w-full"
+          >
             <div class="gov-ops-info mb-3">
               <p>Government operations include administrative functions, transfers, and other essential government services.</p>
             </div>
             
             <div class="gov-ops-grid">
-              <div v-for="child in sortedGovOpsChildren" :key="child.id" class="gov-ops-item">
+              <div
+                v-for="child in sortedGovOpsChildren"
+                :key="child.id"
+                class="gov-ops-item"
+              >
                 <div class="gov-ops-header">
-                  <h4 :title="child.name">{{ child.name }}</h4>
+                  <h4 :title="child.name">
+                    {{ child.name }}
+                  </h4>
                   <div class="gov-ops-base">
                     Base: ${{ formatAmount(child.baseAmount) }}B
                     <CategoryInfo
@@ -208,7 +263,10 @@
                   </div>
                 </div>
                 <div class="gov-ops-content">
-                  <div class="gov-ops-description" v-if="child.description">
+                  <div
+                    v-if="child.description"
+                    class="gov-ops-description"
+                  >
                     {{ child.description }}
                   </div>
                   <div class="gov-ops-controls">
@@ -217,22 +275,30 @@
                       :model-value="validSpendingFactors[child.id]"
                       :disabled="autoBalanceActive"
                       :base-amount="child.baseAmount"
-                      @update:model-value="updateCategoryAdjustment(child.id, $event)"
                       class="gov-ops-percentage-input"
+                      @update:model-value="updateCategoryAdjustment(child.id, $event)"
                     />
                     <button 
                       class="reset-button gov-ops-reset" 
-                      @click="updateCategoryAdjustment(child.id, 100)"
                       title="Reset to baseline"
+                      @click="updateCategoryAdjustment(child.id, 100)"
                     >
-                      <span class="material-icons" style="font-size: 14px;">restart_alt</span>
+                      <span
+                        class="material-icons"
+                        style="font-size: 14px;"
+                      >restart_alt</span>
                     </button>
                   </div>
                   <div class="gov-ops-impact">
-                    <div class="impact-label">Current:</div>
-                    <div class="impact-value" :class="validSpendingFactors[child.id] > 100 ? 'text-green-600' : validSpendingFactors[child.id] < 100 ? 'text-red-600' : 'text-gray-600'">
+                    <div class="impact-label">
+                      Current:
+                    </div>
+                    <div
+                      class="impact-value"
+                      :class="validSpendingFactors[child.id] > 100 ? 'text-green-600' : validSpendingFactors[child.id] < 100 ? 'text-red-600' : 'text-gray-600'"
+                    >
                       ${{ formatAmount(child.baseAmount * validSpendingFactors[child.id] / 100) }}B
-                      ({{ validSpendingFactors[child.id] > 100 ? '+' : ''}}{{ (validSpendingFactors[child.id] - 100).toFixed(0) }}%)
+                      ({{ validSpendingFactors[child.id] > 100 ? '+' : '' }}{{ (validSpendingFactors[child.id] - 100).toFixed(0) }}%)
                     </div>
                   </div>
                 </div>
@@ -241,7 +307,10 @@
             
             <!-- Reset button for Government Operations -->
             <div class="mt-4 flex justify-end">
-              <button class="action-button reset-button" @click="resetGovernmentOperations">
+              <button
+                class="action-button reset-button"
+                @click="resetGovernmentOperations"
+              >
                 Reset Government Ops
               </button>
             </div>
@@ -260,7 +329,11 @@
             <p>Adjust tax credits and deductions to see their impact on federal revenue. Reducing credits increases revenue, while expanding them decreases revenue.</p>
           </div>
           <div class="tax-expenditures-grid">
-            <div v-for="expenditure in taxExpendituresArray" :key="expenditure.id" class="tax-expenditure-item">
+            <div
+              v-for="expenditure in taxExpendituresArray"
+              :key="expenditure.id"
+              class="tax-expenditure-item"
+            >
               <div class="tax-expenditure-header">
                 <h4>{{ expenditure.name }}</h4>
                 <div class="tax-expenditure-base">
@@ -287,15 +360,20 @@
                   />
                   <button 
                     class="reset-button" 
-                    @click="resetTaxExpenditure(expenditure.id)"
                     title="Reset to baseline"
+                    @click="resetTaxExpenditure(expenditure.id)"
                   >
                     Reset
                   </button>
                 </div>
                 <div class="tax-expenditure-impact">
-                  <div class="impact-label">Revenue Impact:</div>
-                  <div class="impact-value" :class="getImpactClass(expenditure)">
+                  <div class="impact-label">
+                    Revenue Impact:
+                  </div>
+                  <div
+                    class="impact-value"
+                    :class="getImpactClass(expenditure)"
+                  >
                     {{ getImpactPrefix(expenditure) }}${{ formatAmount(calculateImpact(expenditure)) }}B
                   </div>
                 </div>
@@ -305,7 +383,12 @@
           <div class="tax-expenditures-summary">
             <div class="summary-header">
               <h4>Total Impact on Revenue</h4>
-              <button class="reset-all-button" @click="resetAllTaxExpenditures">Reset All</button>
+              <button
+                class="reset-all-button"
+                @click="resetAllTaxExpenditures"
+              >
+                Reset All
+              </button>
             </div>
             <div class="stacked-bar">
               <div 
@@ -318,7 +401,7 @@
                   marginLeft: getImpactPercentage(expenditure) < 0 ? 'auto' : '0'
                 }"
                 :title="`${expenditure.name}: ${getImpactPrefix(expenditure)}$${formatAmount(calculateImpact(expenditure))}B`"
-              ></div>
+              />
             </div>
             <div class="summary-total">
               <span>Net Revenue Change:</span>

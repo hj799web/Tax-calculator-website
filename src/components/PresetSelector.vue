@@ -7,9 +7,9 @@
       </h3>
       <button 
         class="toggle-button"
-        @click="isExpanded = !isExpanded"
         :aria-expanded="isExpanded"
         aria-controls="preset-grid"
+        @click="isExpanded = !isExpanded"
       >
         <span class="material-icons">{{ isExpanded ? 'expand_less' : 'expand_more' }}</span>
         <span class="sr-only">{{ isExpanded ? 'Hide' : 'Show' }} Presets</span>
@@ -17,7 +17,13 @@
     </div>
     
     <transition name="slide">
-      <div v-if="isExpanded" id="preset-grid" class="preset-grid" role="group" aria-label="Budget presets">
+      <div
+        v-if="isExpanded"
+        id="preset-grid"
+        class="preset-grid"
+        role="group"
+        aria-label="Budget presets"
+      >
         <div 
           v-for="(preset, key) in budgetPresets" 
           :key="key"
@@ -26,22 +32,31 @@
           <button 
             class="preset-button" 
             :class="{ 'active': activePreset === key }"
+            :aria-pressed="activePreset === key"
+            :aria-label="`Apply ${preset.label} preset`"
             @click="applyPreset(key)"
             @mouseenter="hoveredPreset = key"
             @mouseleave="hoveredPreset = null"
-            :aria-pressed="activePreset === key"
-            :aria-label="`Apply ${preset.label} preset`"
           >
             <div class="preset-content">
-              <div class="preset-label">{{ preset.label }}</div>
-              <div class="preset-description" :id="`preset-desc-${key}`">{{ getShortDescription(preset.description) }}</div>
+              <div class="preset-label">
+                {{ preset.label }}
+              </div>
+              <div
+                :id="`preset-desc-${key}`"
+                class="preset-description"
+              >
+                {{ getShortDescription(preset.description) }}
+              </div>
               
-              <div v-if="preset.fiscalBalance" class="preset-fiscal-badge" :class="preset.fiscalBalance">
+              <div
+                v-if="preset.fiscalBalance"
+                class="preset-fiscal-badge"
+                :class="preset.fiscalBalance"
+              >
                 {{ getFiscalBalanceLabel(preset.fiscalBalance) }}
               </div>
             </div>
-            
-
           </button>
         </div>
       </div>
@@ -49,37 +64,65 @@
     
     <!-- Preset Information Panel -->
     <div class="preset-info-panel">
-      <div v-if="hoveredPreset" class="preset-details">
-        <h4 class="preset-details-title">{{ budgetPresets[hoveredPreset]?.label }}</h4>
-        <p class="preset-details-description">{{ budgetPresets[hoveredPreset]?.description }}</p>
-        <div v-if="budgetPresets[hoveredPreset]?.fiscalBalance" class="preset-fiscal-badge-large" :class="budgetPresets[hoveredPreset]?.fiscalBalance">
+      <div
+        v-if="hoveredPreset"
+        class="preset-details"
+      >
+        <h4 class="preset-details-title">
+          {{ budgetPresets[hoveredPreset]?.label }}
+        </h4>
+        <p class="preset-details-description">
+          {{ budgetPresets[hoveredPreset]?.description }}
+        </p>
+        <div
+          v-if="budgetPresets[hoveredPreset]?.fiscalBalance"
+          class="preset-fiscal-badge-large"
+          :class="budgetPresets[hoveredPreset]?.fiscalBalance"
+        >
           {{ getFiscalBalanceLabel(budgetPresets[hoveredPreset]?.fiscalBalance) }}
         </div>
       </div>
       
-      <div v-if="!hoveredPreset && activePreset" class="preset-details">
-        <h4 class="preset-details-title">{{ budgetPresets[activePreset]?.label }}</h4>
-        <p class="preset-details-description">{{ budgetPresets[activePreset]?.description }}</p>
-        <div v-if="budgetPresets[activePreset]?.fiscalBalance" class="preset-fiscal-badge-large" :class="budgetPresets[activePreset]?.fiscalBalance">
+      <div
+        v-if="!hoveredPreset && activePreset"
+        class="preset-details"
+      >
+        <h4 class="preset-details-title">
+          {{ budgetPresets[activePreset]?.label }}
+        </h4>
+        <p class="preset-details-description">
+          {{ budgetPresets[activePreset]?.description }}
+        </p>
+        <div
+          v-if="budgetPresets[activePreset]?.fiscalBalance"
+          class="preset-fiscal-badge-large"
+          :class="budgetPresets[activePreset]?.fiscalBalance"
+        >
           {{ getFiscalBalanceLabel(budgetPresets[activePreset]?.fiscalBalance) }}
         </div>
       </div>
       
-      <div v-if="!hoveredPreset && !activePreset" class="preset-details preset-details-empty">
+      <div
+        v-if="!hoveredPreset && !activePreset"
+        class="preset-details preset-details-empty"
+      >
         <p>Hover over a preset to see details or click to apply it to your budget.</p>
       </div>
     </div>
     
     <!-- Active Preset Info -->
-    <div v-if="activePreset" class="active-preset-info">
+    <div
+      v-if="activePreset"
+      class="active-preset-info"
+    >
       <div class="active-preset-label">
         <span class="material-icons">check_circle</span>
         Active Preset: {{ budgetPresets[activePreset]?.label }}
       </div>
       <button 
         class="reset-button" 
-        @click="resetPreset"
         aria-label="Reset active preset"
+        @click="resetPreset"
       >
         <span class="material-icons">restart_alt</span>
         Reset
@@ -103,6 +146,18 @@ export default {
       activePreset: null,
       hoveredPreset: null
     };
+  },
+  
+  watch: {
+    // Watch for changes in the store's activePreset value
+    'budgetSimulatorStore.activePreset': function(newValue) {
+      this.activePreset = newValue;
+    }
+  },
+  
+  mounted() {
+    // Initialize activePreset from store on component mount
+    this.activePreset = this.budgetSimulatorStore.activePreset;
   },
   
   computed: {
@@ -223,7 +278,7 @@ export default {
 
 .preset-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   gap: 0.75rem;
   padding: 1rem;
   background-color: #f8fafc;
@@ -231,20 +286,29 @@ export default {
 
 .preset-tile {
   position: relative;
+  width: 100%;
+}
+
+/* This creates a square aspect ratio using padding trick */
+.preset-tile::before {
+  content: "";
+  display: block;
+  padding-top: 100%; /* Creates a 1:1 aspect ratio */
 }
 
 .preset-button {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  min-height: 100px;
-  padding: 1rem;
+  padding: 0.75rem;
   border: 1px solid #e2e8f0;
   border-radius: 0.5rem;
   background-color: white;
   cursor: pointer;
   transition: all 0.2s;
   text-align: left;
-  position: relative;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -274,20 +338,27 @@ export default {
   flex-direction: column;
   height: 100%;
   z-index: 2;
+  justify-content: space-between;
 }
 
 .preset-label {
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 600;
   color: #1e40af;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
+  line-height: 1.2;
 }
 
 .preset-description {
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   color: #64748b;
   flex-grow: 1;
-  line-height: 1.4;
+  line-height: 1.3;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  -webkit-box-orient: vertical;
 }
 
 .preset-fiscal-badge {

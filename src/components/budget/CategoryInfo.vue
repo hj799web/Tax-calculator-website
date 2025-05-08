@@ -4,7 +4,9 @@
     <div class="info-tooltip">
       <strong>{{ name }}</strong>
       <p>{{ description }}</p>
-      <p class="mt-1"><strong>Base Amount:</strong> ${{ baseAmount ? baseAmount.toFixed(1) : '0.0' }}B</p>
+      <p class="mt-1">
+        <strong>Base Amount:</strong> ${{ baseAmount ? baseAmount.toFixed(1) : '0.0' }}B
+      </p>
       <p><strong>Current Setting:</strong> {{ currentSetting || 0 }}%</p>
       <p><strong>Adjusted Amount:</strong> ${{ baseAmount && currentSetting ? (baseAmount * currentSetting / 100).toFixed(1) : '0.0' }}B</p>
     </div>

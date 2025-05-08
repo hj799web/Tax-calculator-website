@@ -1,12 +1,30 @@
 <template>
   <div class="mb-4 w-full">
-    <div class="group-header" @click="toggleExpansion">
-      <h3 class="text-sm font-medium text-gray-700">{{ title }}</h3>
+    <div
+      class="group-header"
+      @click="toggleExpansion"
+    >
+      <h3 class="text-sm font-medium text-gray-700">
+        {{ title }}
+      </h3>
       <div class="toggle-button">
         {{ expanded ? 'Collapse' : 'Expand' }}
-        <span class="icon ml-1" :class="{ 'rotated': expanded }">
-          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="6 9 12 15 18 9"></polyline>
+        <span
+          class="icon ml-1"
+          :class="{ 'rotated': expanded }"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="12"
+            height="12"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="6 9 12 15 18 9" />
           </svg>
         </span>
       </div>
@@ -15,8 +33,11 @@
       <span>Total {{ title }}:</span>
       <span>{{ formatCurrency(totalAmount) }}</span>
     </div>
-    <div class="group-content w-full" :class="{ 'expanded': expanded }">
-      <slot></slot>
+    <div
+      class="group-content w-full"
+      :class="{ 'expanded': expanded }"
+    >
+      <slot />
     </div>
   </div>
 </template>

@@ -8,10 +8,10 @@
           Revenue Sources
         </h2>
         <button 
-          @click="isRevenueExpanded = !isRevenueExpanded" 
-          class="toggle-button flex items-center text-gray-500 hover:text-gray-700"
+          class="toggle-button flex items-center text-gray-500 hover:text-gray-700" 
           :aria-expanded="isRevenueExpanded"
           aria-controls="revenue-chart-content"
+          @click="isRevenueExpanded = !isRevenueExpanded"
         >
           <span class="material-icons text-sm">{{ isRevenueExpanded ? 'expand_less' : 'expand_more' }}</span>
           <span class="text-xs ml-1">{{ isRevenueExpanded ? 'Collapse' : 'Expand' }}</span>
@@ -19,14 +19,17 @@
       </div>
       
       <div 
+        v-show="isRevenueExpanded"
         id="revenue-chart-content"
         class="border-t border-gray-200 pt-3 transition-all duration-300"
         :class="{ 'h-0 overflow-hidden pt-0 border-t-0': !isRevenueExpanded }"
-        v-show="isRevenueExpanded"
       >
         <!-- Display Toggle -->
         <div class="flex justify-end mb-3">
-          <div class="inline-flex rounded-md shadow-sm" role="group">
+          <div
+            class="inline-flex rounded-md shadow-sm"
+            role="group"
+          >
             <button 
               type="button" 
               class="px-3 py-1 text-xs font-medium rounded-l-md" 
@@ -47,12 +50,15 @@
         </div>
         
         <!-- Revenue Chart -->
-        <div class="chart-container" :class="{ 'overflow-x-auto': isMobile }">
+        <div
+          class="chart-container"
+          :class="{ 'overflow-x-auto': isMobile }"
+        >
           <div :style="{ height: chartHeight, minWidth: isMobile ? '600px' : 'auto' }">
             <Bar
+              :key="chartUpdateKey"
               :data="revenueChartData"
               :options="revenueChartOptions"
-              :key="chartUpdateKey"
             />
           </div>
         </div>
@@ -62,7 +68,10 @@
           <!-- Income Tax Category -->
           <div class="category-group">
             <div class="category-header flex items-center mb-2">
-              <span class="legend-color" style="background-color: #2B6CB0"></span>
+              <span
+                class="legend-color"
+                style="background-color: #2B6CB0"
+              />
               <span class="legend-label font-semibold">Income Tax</span>
               <span class="ml-auto font-semibold">
                 <template v-if="displayMode === 'amount'">
@@ -76,8 +85,15 @@
             
             <!-- Income Tax Items -->
             <div class="category-items grid grid-cols-2 gap-2 pl-6">
-              <div v-for="source in incomeTaxSources" :key="source.id" class="legend-item">
-                <span class="legend-color" :style="{ backgroundColor: source.color }"></span>
+              <div
+                v-for="source in incomeTaxSources"
+                :key="source.id"
+                class="legend-item"
+              >
+                <span
+                  class="legend-color"
+                  :style="{ backgroundColor: source.color }"
+                />
                 <span class="legend-label">{{ source.name }}</span>
                 <span class="ml-auto">
                   <template v-if="displayMode === 'amount'">
@@ -94,7 +110,10 @@
           <!-- Consumption Tax Category -->
           <div class="category-group">
             <div class="category-header flex items-center mb-2">
-              <span class="legend-color" style="background-color: #2F855A"></span>
+              <span
+                class="legend-color"
+                style="background-color: #2F855A"
+              />
               <span class="legend-label font-semibold">Consumption Tax</span>
               <span class="ml-auto font-semibold">
                 <template v-if="displayMode === 'amount'">
@@ -108,8 +127,15 @@
             
             <!-- Consumption Tax Items -->
             <div class="category-items grid grid-cols-2 gap-2 pl-6">
-              <div v-for="source in consumptionTaxSources" :key="source.id" class="legend-item">
-                <span class="legend-color" :style="{ backgroundColor: source.color }"></span>
+              <div
+                v-for="source in consumptionTaxSources"
+                :key="source.id"
+                class="legend-item"
+              >
+                <span
+                  class="legend-color"
+                  :style="{ backgroundColor: source.color }"
+                />
                 <span class="legend-label">{{ source.name }}</span>
                 <span class="ml-auto">
                   <template v-if="displayMode === 'amount'">
@@ -126,7 +152,10 @@
           <!-- Other Revenue Category -->
           <div class="category-group">
             <div class="category-header flex items-center mb-2">
-              <span class="legend-color" style="background-color: #C05621"></span>
+              <span
+                class="legend-color"
+                style="background-color: #C05621"
+              />
               <span class="legend-label font-semibold">Other Revenue Sources</span>
               <span class="ml-auto font-semibold">
                 <template v-if="displayMode === 'amount'">
@@ -140,8 +169,15 @@
             
             <!-- Other Revenue Items -->
             <div class="category-items grid grid-cols-2 gap-2 pl-6">
-              <div v-for="source in otherRevenueSources" :key="source.id" class="legend-item">
-                <span class="legend-color" :style="{ backgroundColor: source.color }"></span>
+              <div
+                v-for="source in otherRevenueSources"
+                :key="source.id"
+                class="legend-item"
+              >
+                <span
+                  class="legend-color"
+                  :style="{ backgroundColor: source.color }"
+                />
                 <span class="legend-label">{{ source.name }}</span>
                 <span class="ml-auto">
                   <template v-if="displayMode === 'amount'">
@@ -166,10 +202,10 @@
           Spending Breakdown
         </h2>
         <button 
-          @click="isSpendingExpanded = !isSpendingExpanded" 
-          class="toggle-button flex items-center text-gray-500 hover:text-gray-700"
+          class="toggle-button flex items-center text-gray-500 hover:text-gray-700" 
           :aria-expanded="isSpendingExpanded"
           aria-controls="spending-chart-content"
+          @click="isSpendingExpanded = !isSpendingExpanded"
         >
           <span class="material-icons text-sm">{{ isSpendingExpanded ? 'expand_less' : 'expand_more' }}</span>
           <span class="text-xs ml-1">{{ isSpendingExpanded ? 'Collapse' : 'Expand' }}</span>
@@ -177,10 +213,10 @@
       </div>
       
       <div 
+        v-show="isSpendingExpanded"
         id="spending-chart-content"
         class="border-t border-gray-200 pt-3 transition-all duration-300"
         :class="{ 'h-0 overflow-hidden pt-0 border-t-0': !isSpendingExpanded }"
-        v-show="isSpendingExpanded"
       >
         <!-- Spending Pie Chart -->
         <SpendingPieChart 
@@ -379,6 +415,7 @@ watch(displayMode, () => {
   chartUpdateKey.value += 1;
 });
 
+// Watch for changes in revenue sources to update chart
 watch(() => budgetStore.revenueSources, () => {
   chartUpdateKey.value += 1;
 }, { deep: true });

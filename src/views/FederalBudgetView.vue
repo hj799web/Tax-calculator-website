@@ -4,13 +4,22 @@
     <h2 class="section-title">
       Federal Budget Allocation
     </h2>
-    <p class="allocation-description" v-if="yearStore.budgetYear === '2023-2024'">
+    <p
+      v-if="yearStore.budgetYear === '2023-2024'"
+      class="allocation-description"
+    >
       The <strong>Budget 2023-2024 Allocation Chart</strong> represents the proposed spending allocations presented by the Canadian federal government for the 2023-2024 fiscal year.
     </p>
-    <p class="allocation-description" v-else>
+    <p
+      v-else
+      class="allocation-description"
+    >
       The <strong>2022–2023 Canada's Federal Budget Allocation Chart</strong> offers a detailed yet simplified breakdown of how the Canadian federal government spent its money during the 2022–2023 fiscal year—data sourced from the Public Accounts of Canada financial report.
     </p>
-    <p v-if="yearStore.budgetYear === '2023-2024'" class="budget-explanation">
+    <p
+      v-if="yearStore.budgetYear === '2023-2024'"
+      class="budget-explanation"
+    >
       The <strong>2023-2024 Canada Federal Budget Allocation Chart</strong> shows the comprehensive breakdown of major allocations in the 2023-2024 federal budget. In contrast, the <strong>Budget 2023-2024 Pie Chart</strong> represents the proposed spending allocations presented by the Canadian federal government for 2023-2024.
     </p>
 
@@ -19,13 +28,19 @@
       <h2 class="section-title">
         Budget Visualizations
       </h2>
-      <div v-if="netFederalTaxPerPeriod > 0" class="charts-wrapper">
+      <div
+        v-if="netFederalTaxPerPeriod > 0"
+        class="charts-wrapper"
+      >
         <!-- Render the appropriate chart based on selected year -->
         <FederalBudgetPieChart v-if="yearStore.budgetYear === '2022-2023'" />
         <FederalBudget2024PieChart v-if="yearStore.budgetYear === '2023-2024'" />
         <Budget2024PieChart v-if="yearStore.budgetYear === '2023-2024'" />
       </div>
-      <div v-else class="no-federal-taxes">
+      <div
+        v-else
+        class="no-federal-taxes"
+      >
         No federal taxes to visualize
       </div>
     </section>
@@ -42,7 +57,10 @@
         <span>{{ formatCurrency(netFederalTaxPerPeriod) }}</span>
       </div>
       <!-- Normal-sized sort button -->
-      <button class="sort-button" @click="toggleSortAmount">
+      <button
+        class="sort-button"
+        @click="toggleSortAmount"
+      >
         Sort by Amount ({{ sortOrder.toUpperCase() }})
       </button>
       <table class="allocation-table">
@@ -54,7 +72,10 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="category in sortedBudgetCategories" :key="category.id">
+          <tr
+            v-for="category in sortedBudgetCategories"
+            :key="category.id"
+          >
             <td>{{ category.name }}</td>
             <td>{{ formatCurrency(category.allocatedAmount) }}</td>
             <td>{{ category.percentage.toFixed(2) }}%</td>

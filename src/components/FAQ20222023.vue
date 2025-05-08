@@ -1,5 +1,8 @@
 <template>
-  <div id="faq-2022-2023" class="section">
+  <div
+    id="faq-2022-2023"
+    class="section"
+  >
     <h2>FAQ - 2022-2023 Budget</h2>
     
     <h3>How accurate is the calculator?</h3>

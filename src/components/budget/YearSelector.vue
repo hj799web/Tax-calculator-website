@@ -1,5 +1,9 @@
 <template>
-  <div class="year-selector" role="radiogroup" aria-label="Fiscal Year Selector">
+  <div
+    class="year-selector"
+    role="radiogroup"
+    aria-label="Fiscal Year Selector"
+  >
     <button 
       role="radio"
       :aria-checked="currentYear === 2024"

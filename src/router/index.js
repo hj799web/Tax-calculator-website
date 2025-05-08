@@ -17,6 +17,16 @@ const routes = [
     path: '/simulator',
     name: 'finance-minister-simulator',
     component: () => import('../views/FinanceMinisterSimulator.vue')
+  },
+  {
+    path: '/budget-simulator',
+    name: 'shared-budget',
+    component: () => import('../views/FinanceMinisterSimulator.vue'),
+    meta: {
+      isSharedBudget: true
+    },
+    // Pass URL query parameters as props to the component
+    props: (route) => ({ ...route.query })
   }
 ]
 

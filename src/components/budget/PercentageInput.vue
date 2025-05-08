@@ -6,27 +6,27 @@
       <span>{{ max }}%</span>
     </div>
     <input 
-      type="range" 
       :id="id" 
+      type="range" 
       :value="modelValue" 
-      @input="updateValue($event.target.value)"
-      :min="min" 
+      :min="min"
       :max="max" 
-      :step="step"
+      :step="step" 
       class="slider"
       :disabled="disabled"
+      @input="updateValue($event.target.value)"
     >
     <div class="input-controls">
       <div class="input-group">
         <input 
           type="number" 
           :value="modelValue"
-          @input="updateValue($event.target.value)"
           :min="min"
           :max="max"
           :step="step"
           class="percentage-input"
           :disabled="disabled"
+          @input="updateValue($event.target.value)"
         >
         <span class="input-suffix">%</span>
       </div>
@@ -34,10 +34,10 @@
         <input 
           type="number" 
           :value="amountValue"
-          @input="updateAmountValue($event.target.value)"
           class="amount-input"
           :step="0.1"
           :disabled="disabled"
+          @input="updateAmountValue($event.target.value)"
         >
         <span class="input-suffix">B</span>
       </div>

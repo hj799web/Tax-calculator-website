@@ -3,14 +3,17 @@
     <h2 class="section-title">
       Budget Categories
     </h2>
-<!-- Introduction Text -->
-<p class="intro-text">
+    <SentimentSensitivityControl />
+    <!-- Introduction Text -->
+    <p class="intro-text">
       {{ introText }}
     </p>
     <!-- Category Selection Dropdown -->
     <div class="category-select">
       <select v-model.number="selectedCategory">
-        <option :value="0">All Categories</option>
+        <option :value="0">
+          All Categories
+        </option>
         <option
           v-for="cat in currentBudgetCategories"
           :key="cat.id"
@@ -79,6 +82,7 @@
 </template>
 
 <script setup>
+import SentimentSensitivityControl from '@/components/SentimentSensitivityControl.vue'
 import { ref, computed, watch } from 'vue'
 import { formatBudget } from '../utils.js'
 import { useYearStore } from '../stores/year.js'

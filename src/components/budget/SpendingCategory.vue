@@ -1,22 +1,31 @@
 <template>
-  <div class="spending-tile w-full" :style="{ '--tile-color': category.color || parentColor }">
+  <div
+    class="spending-tile w-full"
+    :style="{ '--tile-color': category.color || parentColor }"
+  >
     <div class="tile-header w-full">
       <div class="flex items-center flex-grow overflow-hidden">
         <div 
           class="w-2 h-2 rounded-full mr-1 flex-shrink-0" 
           :style="{ backgroundColor: category.color || parentColor }"
-        ></div>
-        <label :for="`spending-${category.id}`" class="block text-sm font-medium text-gray-700 truncate">
+        />
+        <label
+          :for="`spending-${category.id}`"
+          class="block text-sm font-medium text-gray-700 truncate"
+        >
           {{ category.name }}
         </label>
       </div>
-      <div class="text-sm font-medium text-gray-700 text-right" style="min-width: 95px;">
+      <div
+        class="text-sm font-medium text-gray-700 text-right"
+        style="min-width: 95px;"
+      >
         {{ formatCurrency(category.baseAmount * spendingFactor / 100) }}
         <span 
           class="text-xs ml-1" 
           :class="spendingFactor > 100 ? 'text-green-600' : spendingFactor < 100 ? 'text-red-600' : 'text-gray-600'"
         >
-          ({{ spendingFactor > 100 ? '+' : ''}}{{ (spendingFactor - 100).toFixed(0) }}%)
+          ({{ spendingFactor > 100 ? '+' : '' }}{{ (spendingFactor - 100).toFixed(0) }}%)
         </span>
       </div>
     </div>
@@ -26,7 +35,7 @@
         v-model="localSpendingFactor"
         :disabled="disabled"
         class="w-full"
-        :baseAmount="category.baseAmount"
+        :base-amount="category.baseAmount"
       />
       <div class="mt-2 flex justify-end w-full">
         <CategoryInfo

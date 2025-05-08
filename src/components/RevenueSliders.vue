@@ -4,41 +4,89 @@
       <div class="overflow-y-auto pr-2 max-h-[60vh]">
         <!-- Income Taxes Group -->
         <div class="mb-4">
-          <div class="group-header" @click="toggleGroupExpansion('incomeTaxes')">
-            <h3 class="text-sm font-medium text-gray-700">Income Taxes</h3>
-            <div class="group-total">${{ formatCurrency(incomeTaxTotal, 1) }}B</div>
+          <div
+            class="group-header"
+            @click="toggleGroupExpansion('incomeTaxes')"
+          >
+            <h3 class="text-sm font-medium text-gray-700">
+              Income Taxes
+            </h3>
+            <div class="group-total">
+              ${{ formatCurrency(incomeTaxTotal, 1) }}B
+            </div>
             <div class="toggle-button">
               {{ expandedGroups.incomeTaxes ? 'Collapse' : 'Expand' }}
-              <span class="icon ml-1" :class="{ 'rotated': expandedGroups.incomeTaxes }">
-                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="6 9 12 15 18 9"></polyline>
+              <span
+                class="icon ml-1"
+                :class="{ 'rotated': expandedGroups.incomeTaxes }"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <polyline points="6 9 12 15 18 9" />
                 </svg>
               </span>
             </div>
           </div>
           
-          <div class="group-content" :class="{ 'expanded': expandedGroups.incomeTaxes }">
+          <div
+            class="group-content"
+            :class="{ 'expanded': expandedGroups.incomeTaxes }"
+          >
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <!-- Personal Income Tax -->
-              <div class="revenue-tile" :style="{ '--tile-color': budgetStore.revenueSources.personalIncomeTax?.color || '#4299E1' }">
+              <div
+                class="revenue-tile"
+                :style="{ '--tile-color': budgetStore.revenueSources.personalIncomeTax?.color || '#4299E1' }"
+              >
                 <div class="tile-header">
-                  <div class="tile-title">Personal Income Tax</div>
+                  <div class="tile-title">
+                    Personal Income Tax
+                  </div>
                   <div class="tile-amount">
-                    <div class="total-amount">${{ formatCurrency(budgetStore.revenueSources.personalIncomeTax?.adjustedAmount || budgetStore.revenueSources.personalIncomeTax?.amount, 1) }}B</div>
-                    <div class="base-amount">Base: ${{ formatCurrency(budgetStore.revenueSources.personalIncomeTax?.base * budgetStore.revenueSources.personalIncomeTax?.rateByYear[budgetStore.currentYear], 1) }}B</div>
-                    <div class="additional-revenue" v-if="getAdditionalRevenue('personalIncomeTax') !== 0">
+                    <div class="total-amount">
+                      ${{ formatCurrency(budgetStore.revenueSources.personalIncomeTax?.adjustedAmount || budgetStore.revenueSources.personalIncomeTax?.amount, 1) }}B
+                    </div>
+                    <div class="base-amount">
+                      Base: ${{ formatCurrency(budgetStore.revenueSources.personalIncomeTax?.base * budgetStore.revenueSources.personalIncomeTax?.rateByYear[budgetStore.currentYear], 1) }}B
+                    </div>
+                    <div
+                      v-if="getAdditionalRevenue('personalIncomeTax') !== 0"
+                      class="additional-revenue"
+                    >
                       {{ getAdditionalRevenue('personalIncomeTax') > 0 ? '+' : '' }}${{ formatCurrency(getAdditionalRevenue('personalIncomeTax'), 1) }}B
                     </div>
-                    <div class="tax-expenditure-impact" v-if="budgetStore.revenueSources.personalIncomeTax?.expenditureImpact !== 0">
+                    <div
+                      v-if="budgetStore.revenueSources.personalIncomeTax?.expenditureImpact !== 0"
+                      class="tax-expenditure-impact"
+                    >
                       <span class="impact-label">Tax Expenditure Impact:</span>
-                      <span class="impact-value" :class="{'positive': budgetStore.revenueSources.personalIncomeTax?.expenditureImpact > 0, 'negative': budgetStore.revenueSources.personalIncomeTax?.expenditureImpact < 0}">
+                      <span
+                        class="impact-value"
+                        :class="{'positive': budgetStore.revenueSources.personalIncomeTax?.expenditureImpact > 0, 'negative': budgetStore.revenueSources.personalIncomeTax?.expenditureImpact < 0}"
+                      >
                         {{ budgetStore.revenueSources.personalIncomeTax?.expenditureImpact > 0 ? '+' : '' }}${{ formatCurrency(budgetStore.revenueSources.personalIncomeTax?.expenditureImpact, 1) }}B
                       </span>
                     </div>
                   </div>
                 </div>
-                <div class="tile-note">{{ budgetStore.revenueSources.personalIncomeTax?.note }}</div>
-                <div class="tax-expenditure-note" v-if="budgetStore.revenueSources.personalIncomeTax?.expenditureImpact !== 0">
+                <div class="tile-note">
+                  <span>
+                    Personal Income Tax represents federal income tax collected from individuals and households. This is 'personalIncomeTax' in all calculations and documentation.
+                  </span>
+                </div>
+                <div
+                  v-if="budgetStore.revenueSources.personalIncomeTax?.expenditureImpact !== 0"
+                  class="tax-expenditure-note"
+                >
                   This revenue figure includes the impact of personal tax credit and deferral adjustments.
                 </div>
                 <div class="slider-container">
@@ -48,34 +96,34 @@
                     <span>{{ getLabel('personalIncomeTax', 'max') }}%</span>
                   </div>
                   <input 
+                    v-model="localSliderValues.personalIncomeTax" 
                     type="range" 
                     :min="getLabel('personalIncomeTax', 'min')" 
                     :max="getLabel('personalIncomeTax', 'max')" 
                     :step="0.1" 
-                    v-model="revenueRates.personalIncomeTax" 
-                    @input="updateRevenueRate('personalIncomeTax')"
                     class="slider"
-                  >
+                    @input="onSliderInput('personalIncomeTax', localSliderValues.personalIncomeTax)" 
+                    /> <!-- 🆕 PERFORMANCE NOTE: Debounced slider commit using localSliderValues -->
                   <div class="input-controls">
                     <div class="input-group">
                       <input 
-                        type="number" 
                         v-model.number="revenueRates.personalIncomeTax" 
-                        @change="updateRevenueRate('personalIncomeTax')"
+                        type="number" 
                         class="percentage-input"
                         :min="getLabel('personalIncomeTax', 'min')"
                         :max="getLabel('personalIncomeTax', 'max')"
                         step="0.1"
+                        @change="updateRevenueRate('personalIncomeTax')"
                       >
                       <span class="input-suffix">%</span>
                     </div>
                     <div class="input-group">
                       <input 
-                        type="number" 
                         v-model.number="amountInputs.personalIncomeTax" 
-                        @change="updateAmountInput('personalIncomeTax')"
+                        type="number" 
                         class="amount-input"
                         step="0.1"
+                        @change="updateAmountInput('personalIncomeTax')"
                       >
                       <span class="input-suffix">B</span>
                     </div>
@@ -84,25 +132,50 @@
               </div>
               
               <!-- Corporate Income Tax -->
-              <div class="revenue-tile" :style="{ '--tile-color': budgetStore.revenueSources.corporateIncomeTax?.color || '#48BB78' }">
+              <div
+                class="revenue-tile"
+                :style="{ '--tile-color': budgetStore.revenueSources.corporateIncomeTax?.color || '#48BB78' }"
+              >
                 <div class="tile-header">
-                  <div class="tile-title">Corporate Income Tax</div>
+                  <div class="tile-title">
+                    Corporate Income Tax
+                  </div>
                   <div class="tile-amount">
-                    <div class="total-amount">${{ formatCurrency(budgetStore.revenueSources.corporateIncomeTax?.adjustedAmount || budgetStore.revenueSources.corporateIncomeTax?.amount, 1) }}B</div>
-                    <div class="base-amount">Base: ${{ formatCurrency(budgetStore.revenueSources.corporateIncomeTax?.base * budgetStore.revenueSources.corporateIncomeTax?.rateByYear[budgetStore.currentYear], 1) }}B</div>
-                    <div class="additional-revenue" v-if="getAdditionalRevenue('corporateIncomeTax') !== 0">
+                    <div class="total-amount">
+                      ${{ formatCurrency(budgetStore.revenueSources.corporateIncomeTax?.adjustedAmount || budgetStore.revenueSources.corporateIncomeTax?.amount, 1) }}B
+                    </div>
+                    <div class="base-amount">
+                      Base: ${{ formatCurrency(budgetStore.revenueSources.corporateIncomeTax?.base * budgetStore.revenueSources.corporateIncomeTax?.rateByYear[budgetStore.currentYear], 1) }}B
+                    </div>
+                    <div
+                      v-if="getAdditionalRevenue('corporateIncomeTax') !== 0"
+                      class="additional-revenue"
+                    >
                       {{ getAdditionalRevenue('corporateIncomeTax') > 0 ? '+' : '' }}${{ formatCurrency(getAdditionalRevenue('corporateIncomeTax'), 1) }}B
                     </div>
-                    <div class="tax-expenditure-impact" v-if="budgetStore.revenueSources.corporateIncomeTax?.expenditureImpact !== 0">
+                    <div
+                      v-if="budgetStore.revenueSources.corporateIncomeTax?.expenditureImpact !== 0"
+                      class="tax-expenditure-impact"
+                    >
                       <span class="impact-label">Tax Expenditure Impact:</span>
-                      <span class="impact-value" :class="{'positive': budgetStore.revenueSources.corporateIncomeTax?.expenditureImpact > 0, 'negative': budgetStore.revenueSources.corporateIncomeTax?.expenditureImpact < 0}">
+                      <span
+                        class="impact-value"
+                        :class="{'positive': budgetStore.revenueSources.corporateIncomeTax?.expenditureImpact > 0, 'negative': budgetStore.revenueSources.corporateIncomeTax?.expenditureImpact < 0}"
+                      >
                         {{ budgetStore.revenueSources.corporateIncomeTax?.expenditureImpact > 0 ? '+' : '' }}${{ formatCurrency(budgetStore.revenueSources.corporateIncomeTax?.expenditureImpact, 1) }}B
                       </span>
                     </div>
                   </div>
                 </div>
-                <div class="tile-note">{{ budgetStore.revenueSources.corporateIncomeTax?.note }}</div>
-                <div class="tax-expenditure-note" v-if="budgetStore.revenueSources.corporateIncomeTax?.expenditureImpact !== 0">
+                <div class="tile-note">
+                  <span>
+                    Corporate Income Tax represents federal tax collected from corporations. This is shown as 'corporateIncomeTax' in the store and as 'corporateTax' in the sentiment system and badges.
+                  </span>
+                </div>
+                <div
+                  v-if="budgetStore.revenueSources.corporateIncomeTax?.expenditureImpact !== 0"
+                  class="tax-expenditure-note"
+                >
                   This revenue figure includes the impact of corporate tax expenditure adjustments.
                 </div>
                 <div class="slider-container">
@@ -112,34 +185,34 @@
                     <span>{{ getLabel('corporateIncomeTax', 'max') }}%</span>
                   </div>
                   <input 
+                    v-model="localSliderValues.corporateIncomeTax" 
                     type="range" 
                     :min="getLabel('corporateIncomeTax', 'min')" 
                     :max="getLabel('corporateIncomeTax', 'max')" 
                     :step="0.1" 
-                    v-model="revenueRates.corporateIncomeTax" 
-                    @input="updateRevenueRate('corporateIncomeTax')"
                     class="slider"
-                  >
+                    @input="onSliderInput('corporateIncomeTax', localSliderValues.corporateIncomeTax)" 
+                    /> <!-- 🆕 PERFORMANCE NOTE: Debounced slider commit using localSliderValues -->
                   <div class="input-controls">
                     <div class="input-group">
                       <input 
-                        type="number" 
                         v-model.number="revenueRates.corporateIncomeTax" 
-                        @change="updateRevenueRate('corporateIncomeTax')"
+                        type="number" 
                         class="percentage-input"
                         :min="getLabel('corporateIncomeTax', 'min')"
                         :max="getLabel('corporateIncomeTax', 'max')"
                         step="0.1"
+                        @change="updateRevenueRate('corporateIncomeTax')"
                       >
                       <span class="input-suffix">%</span>
                     </div>
                     <div class="input-group">
                       <input 
-                        type="number" 
                         v-model.number="amountInputs.corporateIncomeTax" 
-                        @change="updateAmountInput('corporateIncomeTax')"
+                        type="number" 
                         class="amount-input"
                         step="0.1"
+                        @change="updateAmountInput('corporateIncomeTax')"
                       >
                       <span class="input-suffix">B</span>
                     </div>
@@ -152,41 +225,90 @@
 
         <!-- Consumption Taxes Group -->
         <div class="mb-4">
-          <div class="group-header" @click="toggleGroupExpansion('consumptionTaxes')">
-            <h3 class="text-sm font-medium text-gray-700">Consumption Taxes</h3>
-            <div class="group-total">${{ formatCurrency(consumptionTaxTotal, 1) }}B</div>
+          <div
+            class="group-header"
+            @click="toggleGroupExpansion('consumptionTaxes')"
+          >
+            <h3 class="text-sm font-medium text-gray-700">
+              Consumption Taxes
+            </h3>
+            <div class="group-total">
+              ${{ formatCurrency(consumptionTaxTotal, 1) }}B
+            </div>
             <div class="toggle-button">
               {{ expandedGroups.consumptionTaxes ? 'Collapse' : 'Expand' }}
-              <span class="icon ml-1" :class="{ 'rotated': expandedGroups.consumptionTaxes }">
-                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="6 9 12 15 18 9"></polyline>
+              <span
+                class="icon ml-1"
+                :class="{ 'rotated': expandedGroups.consumptionTaxes }"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <polyline points="6 9 12 15 18 9" />
                 </svg>
               </span>
             </div>
           </div>
           
-          <div class="group-content" :class="{ 'expanded': expandedGroups.consumptionTaxes }">
+          <div
+            class="group-content"
+            :class="{ 'expanded': expandedGroups.consumptionTaxes }"
+          >
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <!-- GST/HST -->
-              <div class="revenue-tile" :style="{ '--tile-color': budgetStore.revenueSources.gst?.color || '#ED8936' }">
+              <div
+                class="revenue-tile"
+                :style="{ '--tile-color': budgetStore.revenueSources.gst?.color || '#ED8936' }"
+              >
                 <div class="tile-header">
-                  <div class="tile-title">GST/HST</div>
+                  <div class="tile-title">
+                    GST/HST
+                  </div>
                   <div class="tile-amount">
-                    <div class="total-amount">${{ formatCurrency(budgetStore.revenueSources.gst?.adjustedAmount || budgetStore.revenueSources.gst?.amount, 1) }}B</div>
-                    <div class="base-amount">Base: ${{ formatCurrency(budgetStore.revenueSources.gst?.base * budgetStore.revenueSources.gst?.rateByYear[budgetStore.currentYear], 1) }}B</div>
-                    <div class="additional-revenue" v-if="getAdditionalRevenue('gst') !== 0">
+                    <div class="total-amount">
+                      ${{ formatCurrency(budgetStore.revenueSources.gst?.adjustedAmount || budgetStore.revenueSources.gst?.amount, 1) }}B
+                    </div>
+                    <div class="base-amount">
+                      Base: ${{ formatCurrency(budgetStore.revenueSources.gst?.base * budgetStore.revenueSources.gst?.rateByYear[budgetStore.currentYear], 1) }}B
+                    </div>
+                    <div
+                      v-if="getAdditionalRevenue('gst') !== 0"
+                      class="additional-revenue"
+                    >
                       {{ getAdditionalRevenue('gst') > 0 ? '+' : '' }}${{ formatCurrency(getAdditionalRevenue('gst'), 1) }}B
                     </div>
-                    <div class="tax-expenditure-impact" v-if="budgetStore.revenueSources.gst?.expenditureImpact !== 0">
+                    <div
+                      v-if="budgetStore.revenueSources.gst?.expenditureImpact !== 0"
+                      class="tax-expenditure-impact"
+                    >
                       <span class="impact-label">Tax Expenditure Impact:</span>
-                      <span class="impact-value" :class="{'positive': budgetStore.revenueSources.gst?.expenditureImpact > 0, 'negative': budgetStore.revenueSources.gst?.expenditureImpact < 0}">
+                      <span
+                        class="impact-value"
+                        :class="{'positive': budgetStore.revenueSources.gst?.expenditureImpact > 0, 'negative': budgetStore.revenueSources.gst?.expenditureImpact < 0}"
+                      >
                         {{ budgetStore.revenueSources.gst?.expenditureImpact > 0 ? '+' : '' }}${{ formatCurrency(budgetStore.revenueSources.gst?.expenditureImpact, 1) }}B
                       </span>
                     </div>
                   </div>
                 </div>
-                <div class="tile-note">{{ budgetStore.revenueSources.gst?.note }}</div>
-                <div class="tax-expenditure-note" v-if="budgetStore.revenueSources.gst?.expenditureImpact !== 0">
+                <div class="tile-note">
+                  <!-- GST/HST clarification for user -->
+                  <span>
+                    The GST/HST slider controls the combined Goods and Services Tax (GST) and Harmonized Sales Tax (HST) rate. This is represented as 'gst' in all calculations and documentation.
+                  </span>
+                </div>
+                <div
+                  v-if="budgetStore.revenueSources.gst?.expenditureImpact !== 0"
+                  class="tax-expenditure-note"
+                >
                   This revenue figure includes the impact of GST/HST expenditure adjustments.
                 </div>
                 <div class="slider-container">
@@ -196,34 +318,34 @@
                     <span>{{ getLabel('gst', 'max') }}%</span>
                   </div>
                   <input 
+                    v-model="localSliderValues.gst" 
                     type="range" 
                     :min="getLabel('gst', 'min')" 
                     :max="getLabel('gst', 'max')" 
                     :step="0.1" 
-                    v-model="revenueRates.gst" 
-                    @input="updateRevenueRate('gst')"
                     class="slider"
-                  >
+                    @input="onSliderInput('gst', localSliderValues.gst)" 
+                    /> <!-- 🆕 PERFORMANCE NOTE: Debounced slider commit using localSliderValues -->
                   <div class="input-controls">
                     <div class="input-group">
                       <input 
-                        type="number" 
                         v-model.number="revenueRates.gst" 
-                        @change="updateRevenueRate('gst')"
+                        type="number" 
                         class="percentage-input"
                         :min="getLabel('gst', 'min')"
                         :max="getLabel('gst', 'max')"
                         step="0.1"
+                        @change="updateRevenueRate('gst')"
                       >
                       <span class="input-suffix">%</span>
                     </div>
                     <div class="input-group">
                       <input 
-                        type="number" 
                         v-model.number="amountInputs.gst" 
-                        @change="updateAmountInput('gst')"
+                        type="number" 
                         class="amount-input"
                         step="0.1"
+                        @change="updateAmountInput('gst')"
                       >
                       <span class="input-suffix">B</span>
                     </div>
@@ -232,25 +354,50 @@
               </div>
               
               <!-- Customs Duties -->
-              <div class="revenue-tile" :style="{ '--tile-color': budgetStore.revenueSources.customsDuties?.color || '#F56565' }">
+              <div
+                class="revenue-tile"
+                :style="{ '--tile-color': budgetStore.revenueSources.customsDuties?.color || '#F56565' }"
+              >
                 <div class="tile-header">
-                  <div class="tile-title">Customs Duties</div>
+                  <div class="tile-title">
+                    Customs Duties
+                  </div>
                   <div class="tile-amount">
-                    <div class="total-amount">${{ formatCurrency(budgetStore.revenueSources.customsDuties?.adjustedAmount || budgetStore.revenueSources.customsDuties?.amount, 1) }}B</div>
-                    <div class="base-amount">Base: ${{ formatCurrency(budgetStore.revenueSources.customsDuties?.base * budgetStore.revenueSources.customsDuties?.rateByYear[budgetStore.currentYear], 1) }}B</div>
-                    <div class="additional-revenue" v-if="getAdditionalRevenue('customsDuties') !== 0">
+                    <div class="total-amount">
+                      ${{ formatCurrency(budgetStore.revenueSources.customsDuties?.adjustedAmount || budgetStore.revenueSources.customsDuties?.amount, 1) }}B
+                    </div>
+                    <div class="base-amount">
+                      Base: ${{ formatCurrency(budgetStore.revenueSources.customsDuties?.base * budgetStore.revenueSources.customsDuties?.rateByYear[budgetStore.currentYear], 1) }}B
+                    </div>
+                    <div
+                      v-if="getAdditionalRevenue('customsDuties') !== 0"
+                      class="additional-revenue"
+                    >
                       {{ getAdditionalRevenue('customsDuties') > 0 ? '+' : '' }}${{ formatCurrency(getAdditionalRevenue('customsDuties'), 1) }}B
                     </div>
-                    <div class="tax-expenditure-impact" v-if="budgetStore.revenueSources.customsDuties?.expenditureImpact !== 0">
+                    <div
+                      v-if="budgetStore.revenueSources.customsDuties?.expenditureImpact !== 0"
+                      class="tax-expenditure-impact"
+                    >
                       <span class="impact-label">Tax Expenditure Impact:</span>
-                      <span class="impact-value" :class="{'positive': budgetStore.revenueSources.customsDuties?.expenditureImpact > 0, 'negative': budgetStore.revenueSources.customsDuties?.expenditureImpact < 0}">
+                      <span
+                        class="impact-value"
+                        :class="{'positive': budgetStore.revenueSources.customsDuties?.expenditureImpact > 0, 'negative': budgetStore.revenueSources.customsDuties?.expenditureImpact < 0}"
+                      >
                         {{ budgetStore.revenueSources.customsDuties?.expenditureImpact > 0 ? '+' : '' }}${{ formatCurrency(budgetStore.revenueSources.customsDuties?.expenditureImpact, 1) }}B
                       </span>
                     </div>
                   </div>
                 </div>
-                <div class="tile-note">{{ budgetStore.revenueSources.customsDuties?.note }}</div>
-                <div class="tax-expenditure-note" v-if="budgetStore.revenueSources.customsDuties?.expenditureImpact !== 0">
+                <div class="tile-note">
+                  <span>
+                    Customs Duties are taxes on imported goods. This is 'customsDuties' in all calculations and documentation.
+                  </span>
+                </div>
+                <div
+                  v-if="budgetStore.revenueSources.customsDuties?.expenditureImpact !== 0"
+                  class="tax-expenditure-note"
+                >
                   This revenue figure includes the impact of customs duties expenditure adjustments.
                 </div>
                 <div class="slider-container">
@@ -260,34 +407,34 @@
                     <span>{{ getLabel('customsDuties', 'max') }}%</span>
                   </div>
                   <input 
+                    v-model="localSliderValues.customsDuties" 
                     type="range" 
                     :min="getLabel('customsDuties', 'min')" 
                     :max="getLabel('customsDuties', 'max')" 
                     :step="0.1" 
-                    v-model="revenueRates.customsDuties" 
-                    @input="updateRevenueRate('customsDuties')"
                     class="slider"
-                  >
+                    @input="onSliderInput('customsDuties', localSliderValues.customsDuties)" 
+                    /> <!-- 🆕 PERFORMANCE NOTE: Debounced slider commit using localSliderValues -->
                   <div class="input-controls">
                     <div class="input-group">
                       <input 
-                        type="number" 
                         v-model.number="revenueRates.customsDuties" 
-                        @change="updateRevenueRate('customsDuties')"
+                        type="number" 
                         class="percentage-input"
                         :min="getLabel('customsDuties', 'min')"
                         :max="getLabel('customsDuties', 'max')"
                         step="0.1"
+                        @change="updateRevenueRate('customsDuties')"
                       >
                       <span class="input-suffix">%</span>
                     </div>
                     <div class="input-group">
                       <input 
-                        type="number" 
                         v-model.number="amountInputs.customsDuties" 
-                        @change="updateAmountInput('customsDuties')"
+                        type="number" 
                         class="amount-input"
                         step="0.1"
+                        @change="updateAmountInput('customsDuties')"
                       >
                       <span class="input-suffix">B</span>
                     </div>
@@ -298,25 +445,50 @@
             
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
               <!-- Carbon Pricing -->
-              <div class="revenue-tile" :style="{ '--tile-color': budgetStore.revenueSources.carbonPricing?.color || '#38B2AC' }">
+              <div
+                class="revenue-tile"
+                :style="{ '--tile-color': budgetStore.revenueSources.carbonPricing?.color || '#38B2AC' }"
+              >
                 <div class="tile-header">
-                  <div class="tile-title">Carbon Pricing</div>
+                  <div class="tile-title">
+                    Carbon Pricing
+                  </div>
                   <div class="tile-amount">
-                    <div class="total-amount">${{ formatCurrency(budgetStore.revenueSources.carbonPricing?.adjustedAmount || budgetStore.revenueSources.carbonPricing?.amount, 1) }}B</div>
-                    <div class="base-amount">Base: ${{ formatCurrency(budgetStore.revenueSources.carbonPricing?.base * budgetStore.revenueSources.carbonPricing?.rateByYear[budgetStore.currentYear], 1) }}B</div>
-                    <div class="additional-revenue" v-if="getAdditionalRevenue('carbonPricing') !== 0">
+                    <div class="total-amount">
+                      ${{ formatCurrency(budgetStore.revenueSources.carbonPricing?.adjustedAmount || budgetStore.revenueSources.carbonPricing?.amount, 1) }}B
+                    </div>
+                    <div class="base-amount">
+                      Base: ${{ formatCurrency(budgetStore.revenueSources.carbonPricing?.base * budgetStore.revenueSources.carbonPricing?.rateByYear[budgetStore.currentYear], 1) }}B
+                    </div>
+                    <div
+                      v-if="getAdditionalRevenue('carbonPricing') !== 0"
+                      class="additional-revenue"
+                    >
                       {{ getAdditionalRevenue('carbonPricing') > 0 ? '+' : '' }}${{ formatCurrency(getAdditionalRevenue('carbonPricing'), 1) }}B
                     </div>
-                    <div class="tax-expenditure-impact" v-if="budgetStore.revenueSources.carbonPricing?.expenditureImpact !== 0">
+                    <div
+                      v-if="budgetStore.revenueSources.carbonPricing?.expenditureImpact !== 0"
+                      class="tax-expenditure-impact"
+                    >
                       <span class="impact-label">Tax Expenditure Impact:</span>
-                      <span class="impact-value" :class="{'positive': budgetStore.revenueSources.carbonPricing?.expenditureImpact > 0, 'negative': budgetStore.revenueSources.carbonPricing?.expenditureImpact < 0}">
+                      <span
+                        class="impact-value"
+                        :class="{'positive': budgetStore.revenueSources.carbonPricing?.expenditureImpact > 0, 'negative': budgetStore.revenueSources.carbonPricing?.expenditureImpact < 0}"
+                      >
                         {{ budgetStore.revenueSources.carbonPricing?.expenditureImpact > 0 ? '+' : '' }}${{ formatCurrency(budgetStore.revenueSources.carbonPricing?.expenditureImpact, 1) }}B
                       </span>
                     </div>
                   </div>
                 </div>
-                <div class="tile-note">{{ budgetStore.revenueSources.carbonPricing?.note }}</div>
-                <div class="tax-expenditure-note" v-if="budgetStore.revenueSources.carbonPricing?.expenditureImpact !== 0">
+                <div class="tile-note">
+                  <span>
+                    Carbon Pricing includes revenue from carbon taxes and cap-and-trade systems. This is 'carbonPricing' in the store and 'carbonTax' in the sentiment system and badges.
+                  </span>
+                </div>
+                <div
+                  v-if="budgetStore.revenueSources.carbonPricing?.expenditureImpact !== 0"
+                  class="tax-expenditure-note"
+                >
                   This revenue figure includes the impact of carbon pricing expenditure adjustments.
                 </div>
                 <div class="slider-container">
@@ -326,34 +498,34 @@
                     <span>{{ getLabel('carbonPricing', 'max') }}%</span>
                   </div>
                   <input 
+                    v-model="localSliderValues.carbonPricing" 
                     type="range" 
                     :min="getLabel('carbonPricing', 'min')" 
                     :max="getLabel('carbonPricing', 'max')" 
                     :step="0.1" 
-                    v-model="revenueRates.carbonPricing" 
-                    @input="updateRevenueRate('carbonPricing')"
                     class="slider"
-                  >
+                    @input="onSliderInput('carbonPricing', localSliderValues.carbonPricing)" 
+                    /> <!-- 🆕 PERFORMANCE NOTE: Debounced slider commit using localSliderValues -->
                   <div class="input-controls">
                     <div class="input-group">
                       <input 
-                        type="number" 
                         v-model.number="revenueRates.carbonPricing" 
-                        @change="updateRevenueRate('carbonPricing')"
+                        type="number" 
                         class="percentage-input"
                         :min="getLabel('carbonPricing', 'min')"
                         :max="getLabel('carbonPricing', 'max')"
                         step="0.1"
+                        @change="updateRevenueRate('carbonPricing')"
                       >
                       <span class="input-suffix">%</span>
                     </div>
                     <div class="input-group">
                       <input 
-                        type="number" 
                         v-model.number="amountInputs.carbonPricing" 
-                        @change="updateAmountInput('carbonPricing')"
+                        type="number" 
                         class="amount-input"
                         step="0.1"
+                        @change="updateAmountInput('carbonPricing')"
                       >
                       <span class="input-suffix">B</span>
                     </div>
@@ -362,25 +534,50 @@
               </div>
               
               <!-- Excise Taxes -->
-              <div class="revenue-tile" :style="{ '--tile-color': budgetStore.revenueSources.exciseTaxes?.color || '#9F7AEA' }">
+              <div
+                class="revenue-tile"
+                :style="{ '--tile-color': budgetStore.revenueSources.exciseTaxes?.color || '#9F7AEA' }"
+              >
                 <div class="tile-header">
-                  <div class="tile-title">Excise Taxes</div>
+                  <div class="tile-title">
+                    Excise Taxes
+                  </div>
                   <div class="tile-amount">
-                    <div class="total-amount">${{ formatCurrency(budgetStore.revenueSources.exciseTaxes?.adjustedAmount || budgetStore.revenueSources.exciseTaxes?.amount, 1) }}B</div>
-                    <div class="base-amount">Base: ${{ formatCurrency(budgetStore.revenueSources.exciseTaxes?.base * budgetStore.revenueSources.exciseTaxes?.rateByYear[budgetStore.currentYear], 1) }}B</div>
-                    <div class="additional-revenue" v-if="getAdditionalRevenue('exciseTaxes') !== 0">
+                    <div class="total-amount">
+                      ${{ formatCurrency(budgetStore.revenueSources.exciseTaxes?.adjustedAmount || budgetStore.revenueSources.exciseTaxes?.amount, 1) }}B
+                    </div>
+                    <div class="base-amount">
+                      Base: ${{ formatCurrency(budgetStore.revenueSources.exciseTaxes?.base * budgetStore.revenueSources.exciseTaxes?.rateByYear[budgetStore.currentYear], 1) }}B
+                    </div>
+                    <div
+                      v-if="getAdditionalRevenue('exciseTaxes') !== 0"
+                      class="additional-revenue"
+                    >
                       {{ getAdditionalRevenue('exciseTaxes') > 0 ? '+' : '' }}${{ formatCurrency(getAdditionalRevenue('exciseTaxes'), 1) }}B
                     </div>
-                    <div class="tax-expenditure-impact" v-if="budgetStore.revenueSources.exciseTaxes?.expenditureImpact !== 0">
+                    <div
+                      v-if="budgetStore.revenueSources.exciseTaxes?.expenditureImpact !== 0"
+                      class="tax-expenditure-impact"
+                    >
                       <span class="impact-label">Tax Expenditure Impact:</span>
-                      <span class="impact-value" :class="{'positive': budgetStore.revenueSources.exciseTaxes?.expenditureImpact > 0, 'negative': budgetStore.revenueSources.exciseTaxes?.expenditureImpact < 0}">
+                      <span
+                        class="impact-value"
+                        :class="{'positive': budgetStore.revenueSources.exciseTaxes?.expenditureImpact > 0, 'negative': budgetStore.revenueSources.exciseTaxes?.expenditureImpact < 0}"
+                      >
                         {{ budgetStore.revenueSources.exciseTaxes?.expenditureImpact > 0 ? '+' : '' }}${{ formatCurrency(budgetStore.revenueSources.exciseTaxes?.expenditureImpact, 1) }}B
                       </span>
                     </div>
                   </div>
                 </div>
-                <div class="tile-note">{{ budgetStore.revenueSources.exciseTaxes?.note }}</div>
-                <div class="tax-expenditure-note" v-if="budgetStore.revenueSources.exciseTaxes?.expenditureImpact !== 0">
+                <div class="tile-note">
+                  <span>
+                    Excise Taxes include federal taxes on specific goods such as alcohol, tobacco, and fuel. This is 'exciseTaxes' in all calculations and documentation.
+                  </span>
+                </div>
+                <div
+                  v-if="budgetStore.revenueSources.exciseTaxes?.expenditureImpact !== 0"
+                  class="tax-expenditure-note"
+                >
                   This revenue figure includes the impact of excise taxes expenditure adjustments.
                 </div>
                 <div class="slider-container">
@@ -390,34 +587,34 @@
                     <span>{{ getLabel('exciseTaxes', 'max') }}%</span>
                   </div>
                   <input 
+                    v-model="localSliderValues.exciseTaxes" 
                     type="range" 
                     :min="getLabel('exciseTaxes', 'min')" 
                     :max="getLabel('exciseTaxes', 'max')" 
                     :step="0.1" 
-                    v-model="revenueRates.exciseTaxes" 
-                    @input="updateRevenueRate('exciseTaxes')"
                     class="slider"
-                  >
+                    @input="onSliderInput('exciseTaxes', localSliderValues.exciseTaxes)" 
+                    /> <!-- 🆕 PERFORMANCE NOTE: Debounced slider commit using localSliderValues -->
                   <div class="input-controls">
                     <div class="input-group">
                       <input 
-                        type="number" 
                         v-model.number="revenueRates.exciseTaxes" 
-                        @change="updateRevenueRate('exciseTaxes')"
+                        type="number" 
                         class="percentage-input"
                         :min="getLabel('exciseTaxes', 'min')"
                         :max="getLabel('exciseTaxes', 'max')"
                         step="0.1"
+                        @change="updateRevenueRate('exciseTaxes')"
                       >
                       <span class="input-suffix">%</span>
                     </div>
                     <div class="input-group">
                       <input 
-                        type="number" 
                         v-model.number="amountInputs.exciseTaxes" 
-                        @change="updateAmountInput('exciseTaxes')"
+                        type="number" 
                         class="amount-input"
                         step="0.1"
+                        @change="updateAmountInput('exciseTaxes')"
                       >
                       <span class="input-suffix">B</span>
                     </div>
@@ -430,41 +627,89 @@
 
         <!-- Other Revenue Sources Group -->
         <div class="mb-4">
-          <div class="group-header" @click="toggleGroupExpansion('otherRevenues')">
-            <h3 class="text-sm font-medium text-gray-700">Other Revenue Sources</h3>
-            <div class="group-total">${{ formatCurrency(otherRevenueTotal, 1) }}B</div>
+          <div
+            class="group-header"
+            @click="toggleGroupExpansion('otherRevenues')"
+          >
+            <h3 class="text-sm font-medium text-gray-700">
+              Other Revenue Sources
+            </h3>
+            <div class="group-total">
+              ${{ formatCurrency(otherRevenueTotal, 1) }}B
+            </div>
             <div class="toggle-button">
               {{ expandedGroups.otherRevenues ? 'Collapse' : 'Expand' }}
-              <span class="icon ml-1" :class="{ 'rotated': expandedGroups.otherRevenues }">
-                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="6 9 12 15 18 9"></polyline>
+              <span
+                class="icon ml-1"
+                :class="{ 'rotated': expandedGroups.otherRevenues }"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <polyline points="6 9 12 15 18 9" />
                 </svg>
               </span>
             </div>
           </div>
           
-          <div class="group-content" :class="{ 'expanded': expandedGroups.otherRevenues }">
+          <div
+            class="group-content"
+            :class="{ 'expanded': expandedGroups.otherRevenues }"
+          >
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <!-- Employment Insurance Premiums -->
-              <div class="revenue-tile" :style="{ '--tile-color': budgetStore.revenueSources.eiPremiums?.color || '#667EEA' }">
+              <div
+                class="revenue-tile"
+                :style="{ '--tile-color': budgetStore.revenueSources.eiPremiums?.color || '#667EEA' }"
+              >
                 <div class="tile-header">
-                  <div class="tile-title">EI Premiums</div>
+                  <div class="tile-title">
+                    EI Premiums
+                  </div>
                   <div class="tile-amount">
-                    <div class="total-amount">${{ formatCurrency(budgetStore.revenueSources.eiPremiums?.adjustedAmount || budgetStore.revenueSources.eiPremiums?.amount, 1) }}B</div>
-                    <div class="base-amount">Base: ${{ formatCurrency(budgetStore.revenueSources.eiPremiums?.base * budgetStore.revenueSources.eiPremiums?.rateByYear[budgetStore.currentYear], 1) }}B</div>
-                    <div class="additional-revenue" v-if="getAdditionalRevenue('eiPremiums') !== 0">
+                    <div class="total-amount">
+                      ${{ formatCurrency(budgetStore.revenueSources.eiPremiums?.adjustedAmount || budgetStore.revenueSources.eiPremiums?.amount, 1) }}B
+                    </div>
+                    <div class="base-amount">
+                      Base: ${{ formatCurrency(budgetStore.revenueSources.eiPremiums?.base * budgetStore.revenueSources.eiPremiums?.rateByYear[budgetStore.currentYear], 1) }}B
+                    </div>
+                    <div
+                      v-if="getAdditionalRevenue('eiPremiums') !== 0"
+                      class="additional-revenue"
+                    >
                       {{ getAdditionalRevenue('eiPremiums') > 0 ? '+' : '' }}${{ formatCurrency(getAdditionalRevenue('eiPremiums'), 1) }}B
                     </div>
-                    <div class="tax-expenditure-impact" v-if="budgetStore.revenueSources.eiPremiums?.expenditureImpact !== 0">
+                    <div
+                      v-if="budgetStore.revenueSources.eiPremiums?.expenditureImpact !== 0"
+                      class="tax-expenditure-impact"
+                    >
                       <span class="impact-label">Tax Expenditure Impact:</span>
-                      <span class="impact-value" :class="{'positive': budgetStore.revenueSources.eiPremiums?.expenditureImpact > 0, 'negative': budgetStore.revenueSources.eiPremiums?.expenditureImpact < 0}">
+                      <span
+                        class="impact-value"
+                        :class="{'positive': budgetStore.revenueSources.eiPremiums?.expenditureImpact > 0, 'negative': budgetStore.revenueSources.eiPremiums?.expenditureImpact < 0}"
+                      >
                         {{ budgetStore.revenueSources.eiPremiums?.expenditureImpact > 0 ? '+' : '' }}${{ formatCurrency(budgetStore.revenueSources.eiPremiums?.expenditureImpact, 1) }}B
                       </span>
                     </div>
                   </div>
                 </div>
-                <div class="tile-note">{{ budgetStore.revenueSources.eiPremiums?.note }}</div>
-                <div class="tax-expenditure-note" v-if="budgetStore.revenueSources.eiPremiums?.expenditureImpact !== 0">
+                <div class="tile-note">
+                  <span>
+                    Employment Insurance (EI) Premiums are mandatory payroll contributions collected from employees and employers. This is 'eiPremiums' in all calculations and documentation.
+                  </span>
+                </div>
+                <div
+                  v-if="budgetStore.revenueSources.eiPremiums?.expenditureImpact !== 0"
+                  class="tax-expenditure-note"
+                >
                   This revenue figure includes the impact of employment insurance premiums expenditure adjustments.
                 </div>
                 <div class="slider-container">
@@ -474,34 +719,34 @@
                     <span>{{ getLabel('eiPremiums', 'max') }}%</span>
                   </div>
                   <input 
+                    v-model="localSliderValues.eiPremiums" 
                     type="range" 
                     :min="getLabel('eiPremiums', 'min')" 
                     :max="getLabel('eiPremiums', 'max')" 
                     :step="0.1" 
-                    v-model="revenueRates.eiPremiums" 
-                    @input="updateRevenueRate('eiPremiums')"
                     class="slider"
-                  >
+                    @input="onSliderInput('eiPremiums', localSliderValues.eiPremiums)" 
+                    /> <!-- 🆕 PERFORMANCE NOTE: Debounced slider commit using localSliderValues -->
                   <div class="input-controls">
                     <div class="input-group">
                       <input 
-                        type="number" 
                         v-model.number="revenueRates.eiPremiums" 
-                        @change="updateRevenueRate('eiPremiums')"
+                        type="number" 
                         class="percentage-input"
                         :min="getLabel('eiPremiums', 'min')"
                         :max="getLabel('eiPremiums', 'max')"
                         step="0.1"
+                        @change="updateRevenueRate('eiPremiums')"
                       >
                       <span class="input-suffix">%</span>
                     </div>
                     <div class="input-group">
                       <input 
-                        type="number" 
                         v-model.number="amountInputs.eiPremiums" 
-                        @change="updateAmountInput('eiPremiums')"
+                        type="number" 
                         class="amount-input"
                         step="0.1"
+                        @change="updateAmountInput('eiPremiums')"
                       >
                       <span class="input-suffix">B</span>
                     </div>
@@ -510,25 +755,50 @@
               </div>
               
               <!-- Crown Corporation Profits -->
-              <div class="revenue-tile" :style="{ '--tile-color': budgetStore.revenueSources.crownProfits?.color || '#F687B3' }">
+              <div
+                class="revenue-tile"
+                :style="{ '--tile-color': budgetStore.revenueSources.crownProfits?.color || '#F687B3' }"
+              >
                 <div class="tile-header">
-                  <div class="tile-title">Crown Corp Profits</div>
+                  <div class="tile-title">
+                    Crown Corp Profits
+                  </div>
                   <div class="tile-amount">
-                    <div class="total-amount">${{ formatCurrency(budgetStore.revenueSources.crownProfits?.adjustedAmount || budgetStore.revenueSources.crownProfits?.amount, 1) }}B</div>
-                    <div class="base-amount">Base: ${{ formatCurrency(budgetStore.revenueSources.crownProfits?.base * budgetStore.revenueSources.crownProfits?.rateByYear[budgetStore.currentYear], 1) }}B</div>
-                    <div class="additional-revenue" v-if="getAdditionalRevenue('crownProfits') !== 0">
+                    <div class="total-amount">
+                      ${{ formatCurrency(budgetStore.revenueSources.crownProfits?.adjustedAmount || budgetStore.revenueSources.crownProfits?.amount, 1) }}B
+                    </div>
+                    <div class="base-amount">
+                      Base: ${{ formatCurrency(budgetStore.revenueSources.crownProfits?.base * budgetStore.revenueSources.crownProfits?.rateByYear[budgetStore.currentYear], 1) }}B
+                    </div>
+                    <div
+                      v-if="getAdditionalRevenue('crownProfits') !== 0"
+                      class="additional-revenue"
+                    >
                       {{ getAdditionalRevenue('crownProfits') > 0 ? '+' : '' }}${{ formatCurrency(getAdditionalRevenue('crownProfits'), 1) }}B
                     </div>
-                    <div class="tax-expenditure-impact" v-if="budgetStore.revenueSources.crownProfits?.expenditureImpact !== 0">
+                    <div
+                      v-if="budgetStore.revenueSources.crownProfits?.expenditureImpact !== 0"
+                      class="tax-expenditure-impact"
+                    >
                       <span class="impact-label">Tax Expenditure Impact:</span>
-                      <span class="impact-value" :class="{'positive': budgetStore.revenueSources.crownProfits?.expenditureImpact > 0, 'negative': budgetStore.revenueSources.crownProfits?.expenditureImpact < 0}">
+                      <span
+                        class="impact-value"
+                        :class="{'positive': budgetStore.revenueSources.crownProfits?.expenditureImpact > 0, 'negative': budgetStore.revenueSources.crownProfits?.expenditureImpact < 0}"
+                      >
                         {{ budgetStore.revenueSources.crownProfits?.expenditureImpact > 0 ? '+' : '' }}${{ formatCurrency(budgetStore.revenueSources.crownProfits?.expenditureImpact, 1) }}B
                       </span>
                     </div>
                   </div>
                 </div>
-                <div class="tile-note">{{ budgetStore.revenueSources.crownProfits?.note }}</div>
-                <div class="tax-expenditure-note" v-if="budgetStore.revenueSources.crownProfits?.expenditureImpact !== 0">
+                <div class="tile-note">
+                  <span>
+                    Crown Corporation Profits are net profits from government-owned businesses. This is 'crownProfits' in all calculations and documentation.
+                  </span>
+                </div>
+                <div
+                  v-if="budgetStore.revenueSources.crownProfits?.expenditureImpact !== 0"
+                  class="tax-expenditure-note"
+                >
                   This revenue figure includes the impact of crown corporation profits expenditure adjustments.
                 </div>
                 <div class="slider-container">
@@ -538,34 +808,34 @@
                     <span>{{ getLabel('crownProfits', 'max') }}%</span>
                   </div>
                   <input 
+                    v-model="localSliderValues.crownProfits" 
                     type="range" 
                     :min="getLabel('crownProfits', 'min')" 
                     :max="getLabel('crownProfits', 'max')" 
                     :step="0.1" 
-                    v-model="revenueRates.crownProfits" 
-                    @input="updateRevenueRate('crownProfits')"
                     class="slider"
-                  >
+                    @input="onSliderInput('crownProfits', localSliderValues.crownProfits)" 
+                    /> <!-- 🆕 PERFORMANCE NOTE: Debounced slider commit using localSliderValues -->
                   <div class="input-controls">
                     <div class="input-group">
                       <input 
-                        type="number" 
                         v-model.number="revenueRates.crownProfits" 
-                        @change="updateRevenueRate('crownProfits')"
+                        type="number" 
                         class="percentage-input"
                         :min="getLabel('crownProfits', 'min')"
                         :max="getLabel('crownProfits', 'max')"
                         step="0.1"
+                        @change="updateRevenueRate('crownProfits')"
                       >
                       <span class="input-suffix">%</span>
                     </div>
                     <div class="input-group">
                       <input 
-                        type="number" 
                         v-model.number="amountInputs.crownProfits" 
-                        @change="updateAmountInput('crownProfits')"
+                        type="number" 
                         class="amount-input"
                         step="0.1"
+                        @change="updateAmountInput('crownProfits')"
                       >
                       <span class="input-suffix">B</span>
                     </div>
@@ -576,25 +846,50 @@
             
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
               <!-- Resource Royalties -->
-              <div class="revenue-tile" :style="{ '--tile-color': budgetStore.revenueSources.resourceRoyalties?.color || '#B794F4' }">
+              <div
+                class="revenue-tile"
+                :style="{ '--tile-color': budgetStore.revenueSources.resourceRoyalties?.color || '#B794F4' }"
+              >
                 <div class="tile-header">
-                  <div class="tile-title">Resource Royalties</div>
+                  <div class="tile-title">
+                    Resource Royalties
+                  </div>
                   <div class="tile-amount">
-                    <div class="total-amount">${{ formatCurrency(budgetStore.revenueSources.resourceRoyalties?.adjustedAmount || budgetStore.revenueSources.resourceRoyalties?.amount, 1) }}B</div>
-                    <div class="base-amount">Base: ${{ formatCurrency(budgetStore.revenueSources.resourceRoyalties?.base * budgetStore.revenueSources.resourceRoyalties?.rateByYear[budgetStore.currentYear], 1) }}B</div>
-                    <div class="additional-revenue" v-if="getAdditionalRevenue('resourceRoyalties') !== 0">
+                    <div class="total-amount">
+                      ${{ formatCurrency(budgetStore.revenueSources.resourceRoyalties?.adjustedAmount || budgetStore.revenueSources.resourceRoyalties?.amount, 1) }}B
+                    </div>
+                    <div class="base-amount">
+                      Base: ${{ formatCurrency(budgetStore.revenueSources.resourceRoyalties?.base * budgetStore.revenueSources.resourceRoyalties?.rateByYear[budgetStore.currentYear], 1) }}B
+                    </div>
+                    <div
+                      v-if="getAdditionalRevenue('resourceRoyalties') !== 0"
+                      class="additional-revenue"
+                    >
                       {{ getAdditionalRevenue('resourceRoyalties') > 0 ? '+' : '' }}${{ formatCurrency(getAdditionalRevenue('resourceRoyalties'), 1) }}B
                     </div>
-                    <div class="tax-expenditure-impact" v-if="budgetStore.revenueSources.resourceRoyalties?.expenditureImpact !== 0">
+                    <div
+                      v-if="budgetStore.revenueSources.resourceRoyalties?.expenditureImpact !== 0"
+                      class="tax-expenditure-impact"
+                    >
                       <span class="impact-label">Tax Expenditure Impact:</span>
-                      <span class="impact-value" :class="{'positive': budgetStore.revenueSources.resourceRoyalties?.expenditureImpact > 0, 'negative': budgetStore.revenueSources.resourceRoyalties?.expenditureImpact < 0}">
+                      <span
+                        class="impact-value"
+                        :class="{'positive': budgetStore.revenueSources.resourceRoyalties?.expenditureImpact > 0, 'negative': budgetStore.revenueSources.resourceRoyalties?.expenditureImpact < 0}"
+                      >
                         {{ budgetStore.revenueSources.resourceRoyalties?.expenditureImpact > 0 ? '+' : '' }}${{ formatCurrency(budgetStore.revenueSources.resourceRoyalties?.expenditureImpact, 1) }}B
                       </span>
                     </div>
                   </div>
                 </div>
-                <div class="tile-note">{{ budgetStore.revenueSources.resourceRoyalties?.note }}</div>
-                <div class="tax-expenditure-note" v-if="budgetStore.revenueSources.resourceRoyalties?.expenditureImpact !== 0">
+                <div class="tile-note">
+                  <span>
+                    Resource Royalties are payments for the extraction of natural resources such as oil, gas, and minerals. This is 'resourceRoyalties' in all calculations and documentation.
+                  </span>
+                </div>
+                <div
+                  v-if="budgetStore.revenueSources.resourceRoyalties?.expenditureImpact !== 0"
+                  class="tax-expenditure-note"
+                >
                   This revenue figure includes the impact of resource royalties expenditure adjustments.
                 </div>
                 <div class="slider-container">
@@ -604,34 +899,34 @@
                     <span>{{ getLabel('resourceRoyalties', 'max') }}%</span>
                   </div>
                   <input 
+                    v-model="localSliderValues.resourceRoyalties" 
                     type="range" 
                     :min="getLabel('resourceRoyalties', 'min')" 
                     :max="getLabel('resourceRoyalties', 'max')" 
                     :step="0.1" 
-                    v-model="revenueRates.resourceRoyalties" 
-                    @input="updateRevenueRate('resourceRoyalties')"
                     class="slider"
-                  >
+                    @input="onSliderInput('resourceRoyalties', localSliderValues.resourceRoyalties)" 
+                    /> <!-- 🆕 PERFORMANCE NOTE: Debounced slider commit using localSliderValues -->
                   <div class="input-controls">
                     <div class="input-group">
                       <input 
-                        type="number" 
                         v-model.number="revenueRates.resourceRoyalties" 
-                        @change="updateRevenueRate('resourceRoyalties')"
+                        type="number" 
                         class="percentage-input"
                         :min="getLabel('resourceRoyalties', 'min')"
                         :max="getLabel('resourceRoyalties', 'max')"
                         step="0.1"
+                        @change="updateRevenueRate('resourceRoyalties')"
                       >
                       <span class="input-suffix">%</span>
                     </div>
                     <div class="input-group">
                       <input 
-                        type="number" 
                         v-model.number="amountInputs.resourceRoyalties" 
-                        @change="updateAmountInput('resourceRoyalties')"
+                        type="number" 
                         class="amount-input"
                         step="0.1"
+                        @change="updateAmountInput('resourceRoyalties')"
                       >
                       <span class="input-suffix">B</span>
                     </div>
@@ -640,25 +935,50 @@
               </div>
               
               <!-- Non-Tax Revenue -->
-              <div class="revenue-tile" :style="{ '--tile-color': budgetStore.revenueSources.nonTaxRevenue?.color || '#FC8181' }">
+              <div
+                class="revenue-tile"
+                :style="{ '--tile-color': budgetStore.revenueSources.nonTaxRevenue?.color || '#FC8181' }"
+              >
                 <div class="tile-header">
-                  <div class="tile-title">Non-Tax Revenue</div>
+                  <div class="tile-title">
+                    Non-Tax Revenue
+                  </div>
                   <div class="tile-amount">
-                    <div class="total-amount">${{ formatCurrency(budgetStore.revenueSources.nonTaxRevenue?.adjustedAmount || budgetStore.revenueSources.nonTaxRevenue?.amount, 1) }}B</div>
-                    <div class="base-amount">Base: ${{ formatCurrency(budgetStore.revenueSources.nonTaxRevenue?.base * budgetStore.revenueSources.nonTaxRevenue?.rateByYear[budgetStore.currentYear], 1) }}B</div>
-                    <div class="additional-revenue" v-if="getAdditionalRevenue('nonTaxRevenue') !== 0">
+                    <div class="total-amount">
+                      ${{ formatCurrency(budgetStore.revenueSources.nonTaxRevenue?.adjustedAmount || budgetStore.revenueSources.nonTaxRevenue?.amount, 1) }}B
+                    </div>
+                    <div class="base-amount">
+                      Base: ${{ formatCurrency(budgetStore.revenueSources.nonTaxRevenue?.base * budgetStore.revenueSources.nonTaxRevenue?.rateByYear[budgetStore.currentYear], 1) }}B
+                    </div>
+                    <div
+                      v-if="getAdditionalRevenue('nonTaxRevenue') !== 0"
+                      class="additional-revenue"
+                    >
                       {{ getAdditionalRevenue('nonTaxRevenue') > 0 ? '+' : '' }}${{ formatCurrency(getAdditionalRevenue('nonTaxRevenue'), 1) }}B
                     </div>
-                    <div class="tax-expenditure-impact" v-if="budgetStore.revenueSources.nonTaxRevenue?.expenditureImpact !== 0">
+                    <div
+                      v-if="budgetStore.revenueSources.nonTaxRevenue?.expenditureImpact !== 0"
+                      class="tax-expenditure-impact"
+                    >
                       <span class="impact-label">Tax Expenditure Impact:</span>
-                      <span class="impact-value" :class="{'positive': budgetStore.revenueSources.nonTaxRevenue?.expenditureImpact > 0, 'negative': budgetStore.revenueSources.nonTaxRevenue?.expenditureImpact < 0}">
+                      <span
+                        class="impact-value"
+                        :class="{'positive': budgetStore.revenueSources.nonTaxRevenue?.expenditureImpact > 0, 'negative': budgetStore.revenueSources.nonTaxRevenue?.expenditureImpact < 0}"
+                      >
                         {{ budgetStore.revenueSources.nonTaxRevenue?.expenditureImpact > 0 ? '+' : '' }}${{ formatCurrency(budgetStore.revenueSources.nonTaxRevenue?.expenditureImpact, 1) }}B
                       </span>
                     </div>
                   </div>
                 </div>
-                <div class="tile-note">{{ budgetStore.revenueSources.nonTaxRevenue?.note }}</div>
-                <div class="tax-expenditure-note" v-if="budgetStore.revenueSources.nonTaxRevenue?.expenditureImpact !== 0">
+                <div class="tile-note">
+                  <span>
+                    Non-Tax Revenue includes government income from fees, licenses, and investments not classified as taxes. This is 'nonTaxRevenue' in all calculations and documentation.
+                  </span>
+                </div>
+                <div
+                  v-if="budgetStore.revenueSources.nonTaxRevenue?.expenditureImpact !== 0"
+                  class="tax-expenditure-note"
+                >
                   This revenue figure includes the impact of non-tax revenue expenditure adjustments.
                 </div>
                 <div class="slider-container">
@@ -668,34 +988,34 @@
                     <span>{{ getLabel('nonTaxRevenue', 'max') }}%</span>
                   </div>
                   <input 
+                    v-model="localSliderValues.nonTaxRevenue" 
                     type="range" 
                     :min="getLabel('nonTaxRevenue', 'min')" 
                     :max="getLabel('nonTaxRevenue', 'max')" 
                     :step="0.1" 
-                    v-model="revenueRates.nonTaxRevenue" 
-                    @input="updateRevenueRate('nonTaxRevenue')"
                     class="slider"
-                  >
+                    @input="onSliderInput('nonTaxRevenue', localSliderValues.nonTaxRevenue)" 
+                    /> <!-- 🆕 PERFORMANCE NOTE: Debounced slider commit using localSliderValues -->
                   <div class="input-controls">
                     <div class="input-group">
                       <input 
-                        type="number" 
                         v-model.number="revenueRates.nonTaxRevenue" 
-                        @change="updateRevenueRate('nonTaxRevenue')"
+                        type="number" 
                         class="percentage-input"
                         :min="getLabel('nonTaxRevenue', 'min')"
                         :max="getLabel('nonTaxRevenue', 'max')"
                         step="0.1"
+                        @change="updateRevenueRate('nonTaxRevenue')"
                       >
                       <span class="input-suffix">%</span>
                     </div>
                     <div class="input-group">
                       <input 
-                        type="number" 
                         v-model.number="amountInputs.nonTaxRevenue" 
-                        @change="updateAmountInput('nonTaxRevenue')"
+                        type="number" 
                         class="amount-input"
                         step="0.1"
+                        @change="updateAmountInput('nonTaxRevenue')"
                       >
                       <span class="input-suffix">B</span>
                     </div>
@@ -705,16 +1025,22 @@
             </div>
           </div>
         </div>
-        
       </div>
     </div>
     
     <!-- Revenue Summary Section -->
     <div class="revenue-summary">
       <div class="summary-card">
-        <div class="summary-title">Total Revenue</div>
-        <div class="summary-amount">${{ formatCurrency(budgetStore.totalRevenue, 1) }}B</div>
-        <div class="additional-revenue-total" v-if="budgetStore.additionalRevenue !== 0">
+        <div class="summary-title">
+          Total Revenue
+        </div>
+        <div class="summary-amount">
+          ${{ formatCurrency(budgetStore.totalRevenue, 1) }}B
+        </div>
+        <div
+          v-if="budgetStore.additionalRevenue !== 0"
+          class="additional-revenue-total"
+        >
           {{ budgetStore.additionalRevenue > 0 ? '+' : '' }}${{ formatCurrency(budgetStore.additionalRevenue, 1) }}B
         </div>
       </div>
@@ -724,6 +1050,7 @@
 
 <script setup>
 import { ref, onMounted, watch, computed } from 'vue';
+import debounce from 'lodash.debounce'; // 🆕 PERFORMANCE NOTE: Debounce slider commits to avoid excessive store updates
 import { useBudgetSimulatorStore } from '../stores/budgetSimulator.js';
 
 // Initialize the budget simulator store
@@ -739,6 +1066,19 @@ const expandedGroups = ref({
 // Local reactive object storing each revenue category's effective rate.
 // This is kept in sync with the store but allows for smoother UI updates.
 const revenueRates = ref({});
+
+// 🆕 PERFORMANCE NOTE: Separate visual slider state from store for smooth UX
+const localSliderValues = ref({});
+
+function initializeLocalSliderValues() {
+  localSliderValues.value = Object.fromEntries(
+    Object.entries(budgetStore.revenueSources).map(([key, src]) => [key, src.rate])
+  );
+}
+onMounted(() => {
+  initializeLocalSliderValues();
+});
+watch(() => budgetStore.revenueSources, initializeLocalSliderValues, { deep: true });
 
 // Local reactive object for amount inputs
 const amountInputs = ref({
@@ -852,6 +1192,16 @@ function initializeLocalValues() {
   updateAmountInputs();
 }
 
+// 🆕 PERFORMANCE NOTE: Debounced store commit for slider changes
+const commitSliderChange = debounce((sourceId, value) => {
+  budgetStore.updateRevenueRate(sourceId, value);
+}, 200);
+
+// 🆕 PERFORMANCE NOTE: Only commit to store after debounce
+function onSliderInput(sourceId, value) {
+  commitSliderChange(sourceId, value);
+}
+
 // Update revenue rate in the store.
 function updateRevenueRate(sourceId) {
   budgetStore.updateRevenueRate(sourceId, revenueRates.value[sourceId]);
@@ -906,6 +1256,48 @@ const formatCurrency = (value, decimals = 1) => {
 watch(() => budgetStore.revenueSources, () => {
   initializeLocalValues();
 }, { deep: true });
+
+// Watch for state version changes to detect batch updates (like preset applications)
+watch(() => budgetStore.stateVersion, (newVersion, oldVersion) => {
+  console.log(`[REVENUE SLIDERS] Detected state version change: ${oldVersion} → ${newVersion}, refreshing local values`);
+  initializeLocalValues();
+  
+  // Special handling for carbon tax to ensure UI is in sync
+  if (budgetStore.revenueSources.carbonPricing) {
+    console.log(`[CARBON TAX] Ensuring UI is in sync with store value: ${budgetStore.revenueSources.carbonPricing.rate}%`);
+    localSliderValues.value.carbonPricing = budgetStore.revenueSources.carbonPricing.rate;
+  }
+});
+
+// Watch for budget resets specifically (using lastUpdate as a trigger)
+watch(() => budgetStore.lastUpdate, () => {
+  console.log('Budget update detected - reinitializing sliders');
+  // Force a complete reinitialization of all slider values
+  // This ensures sliders reflect the reset values in the store
+  setTimeout(() => {
+    initializeLocalValues();
+  }, 50); // Small delay to ensure store has completed all updates
+});
+
+// Watch for changes in the revenue source update timestamp
+watch(() => budgetStore.lastRevenueSourceUpdate, () => {
+  console.log('Revenue source update detected - reinitializing sliders');
+  // Force a complete reinitialization of all slider values
+  setTimeout(() => {
+    initializeLocalValues();
+  }, 50); // Small delay to ensure store has completed all updates
+});
+
+// Watch for changes in auto-balance state
+watch(() => budgetStore.autoBalanceActive, (newValue, oldValue) => {
+  // When auto-balance is turned off (especially during reset), reinitialize sliders
+  if (oldValue === true && newValue === false) {
+    console.log('Auto-balance turned off - reinitializing sliders');
+    setTimeout(() => {
+      initializeLocalValues();
+    }, 50);
+  }
+});
 
 // Watch for changes in revenue rates to update amount inputs
 watch(() => revenueRates.value, () => {

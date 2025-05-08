@@ -1,46 +1,88 @@
 <template>
   <div class="how-it-works-container">
     <!-- Decorative 3D elements -->
-    <div class="floating-shape shape-1"></div>
-    <div class="floating-shape shape-2"></div>
-    <div class="floating-shape shape-3"></div>
-    <div class="floating-shape shape-4"></div>
+    <div class="floating-shape shape-1" />
+    <div class="floating-shape shape-2" />
+    <div class="floating-shape shape-3" />
+    <div class="floating-shape shape-4" />
     
     <div class="cube-container">
       <div class="cube">
-        <div class="cube-face front"></div>
-        <div class="cube-face back"></div>
-        <div class="cube-face right"></div>
-        <div class="cube-face left"></div>
-        <div class="cube-face top"></div>
-        <div class="cube-face bottom"></div>
+        <div class="cube-face front" />
+        <div class="cube-face back" />
+        <div class="cube-face right" />
+        <div class="cube-face left" />
+        <div class="cube-face top" />
+        <div class="cube-face bottom" />
       </div>
     </div>
     
     <div class="pyramid-container">
       <div class="pyramid">
-        <div class="pyramid-face pyramid-front"></div>
-        <div class="pyramid-face pyramid-right"></div>
-        <div class="pyramid-face pyramid-back"></div>
-        <div class="pyramid-face pyramid-left"></div>
+        <div class="pyramid-face pyramid-front" />
+        <div class="pyramid-face pyramid-right" />
+        <div class="pyramid-face pyramid-back" />
+        <div class="pyramid-face pyramid-left" />
       </div>
     </div>
     
     <div class="content-wrapper">
       <!-- Main title -->
-      <h1 class="main-title">How It Works</h1>
+      <h1 class="main-title">
+        How It Works
+      </h1>
       
       <div class="toc animate-in">
         <h2>Table of Contents</h2>
         <ol>
-          <li><a href="#calculator-methodology" @click.prevent="scrollToSection('calculator-methodology')">Calculator Methodology</a></li>
-          <li><a href="#tax-calculation-process" @click.prevent="scrollToSection('tax-calculation-process')">Tax Calculation Process</a></li>
-          <li><a href="#income-types-and-deductions" @click.prevent="scrollToSection('income-types-and-deductions')">Income Types and Deductions</a></li>
-          <li><a href="#government-spending-visualization" @click.prevent="scrollToSection('government-spending-visualization')">Government Spending Visualization</a></li>
-          <li><a href="#benefits-of-using-the-calculator" @click.prevent="scrollToSection('benefits-of-using-the-calculator')">Benefits of Using the Calculator</a></li>
-          <li><a href="#technical-implementation" @click.prevent="scrollToSection('technical-implementation')">Technical Implementation</a></li>
-          <li><a href="#data-sources-and-accuracy" @click.prevent="scrollToSection('data-sources-and-accuracy')">Data Sources and Accuracy</a></li>
-          <li><a href="#faq" @click.prevent="scrollToSection('faq')">FAQ</a></li>
+          <li>
+            <a
+              href="#calculator-methodology"
+              @click.prevent="scrollToSection('calculator-methodology')"
+            >Calculator Methodology</a>
+          </li>
+          <li>
+            <a
+              href="#tax-calculation-process"
+              @click.prevent="scrollToSection('tax-calculation-process')"
+            >Tax Calculation Process</a>
+          </li>
+          <li>
+            <a
+              href="#income-types-and-deductions"
+              @click.prevent="scrollToSection('income-types-and-deductions')"
+            >Income Types and Deductions</a>
+          </li>
+          <li>
+            <a
+              href="#government-spending-visualization"
+              @click.prevent="scrollToSection('government-spending-visualization')"
+            >Government Spending Visualization</a>
+          </li>
+          <li>
+            <a
+              href="#benefits-of-using-the-calculator"
+              @click.prevent="scrollToSection('benefits-of-using-the-calculator')"
+            >Benefits of Using the Calculator</a>
+          </li>
+          <li>
+            <a
+              href="#technical-implementation"
+              @click.prevent="scrollToSection('technical-implementation')"
+            >Technical Implementation</a>
+          </li>
+          <li>
+            <a
+              href="#data-sources-and-accuracy"
+              @click.prevent="scrollToSection('data-sources-and-accuracy')"
+            >Data Sources and Accuracy</a>
+          </li>
+          <li>
+            <a
+              href="#faq"
+              @click.prevent="scrollToSection('faq')"
+            >FAQ</a>
+          </li>
         </ol>
       </div>
       
@@ -48,7 +90,10 @@
         <p>The Canada Tax Calculator is a comprehensive, user-friendly tool designed to help Canadians understand their tax obligations and see how their tax dollars contribute to government spending. This documentation explains the calculator's methodology, features, and benefits.</p>
       </div>
       
-      <div id="calculator-methodology" class="section animate-in">
+      <div
+        id="calculator-methodology"
+        class="section animate-in"
+      >
         <h2>Calculator Methodology</h2>
         
         <h3>Tax Rates and Brackets</h3>
@@ -69,7 +114,10 @@
         </ul>
       </div>
       
-      <div id="tax-calculation-process" class="section animate-in">
+      <div
+        id="tax-calculation-process"
+        class="section animate-in"
+      >
         <h2>Tax Calculation Process</h2>
         <p>The calculator follows these steps to determine your tax obligations:</p>
         
@@ -116,7 +164,10 @@
         </ul>
       </div>
       
-      <div id="income-types-and-deductions" class="section animate-in">
+      <div
+        id="income-types-and-deductions"
+        class="section animate-in"
+      >
         <h2>Income Types and Deductions</h2>
         <p>The calculator handles various income types differently, reflecting Canada's tax system:</p>
         
@@ -151,7 +202,10 @@
         </ul>
       </div>
       
-      <div id="government-spending-visualization" class="section animate-in">
+      <div
+        id="government-spending-visualization"
+        class="section animate-in"
+      >
         <h2>Government Spending Visualization</h2>
         <p>A unique feature of our calculator is the visualization of how your tax dollars are allocated across different government spending categories:</p>
         
@@ -177,7 +231,10 @@
         <p>Based on your federal tax amount, the calculator shows exactly how much of your personal tax contribution goes to each spending category.</p>
       </div>
       
-      <div id="benefits-of-using-the-calculator" class="section animate-in">
+      <div
+        id="benefits-of-using-the-calculator"
+        class="section animate-in"
+      >
         <h2>Benefits of Using the Calculator</h2>
         
         <h3>Accurate Tax Estimation</h3>
@@ -217,7 +274,10 @@
         </ul>
       </div>
       
-      <div id="technical-implementation" class="section animate-in">
+      <div
+        id="technical-implementation"
+        class="section animate-in"
+      >
         <h2>Technical Implementation</h2>
         <p>The Canada Tax Calculator is built using modern web technologies:</p>
         <ul>
@@ -230,7 +290,10 @@
         </ul>
       </div>
       
-      <div id="data-sources-and-accuracy" class="section animate-in">
+      <div
+        id="data-sources-and-accuracy"
+        class="section animate-in"
+      >
         <h2>Data Sources and Accuracy</h2>
         <p>The calculator uses data from authoritative sources:</p>
         <ul>
@@ -241,7 +304,10 @@
         <p>While the calculator provides accurate estimates based on the information provided, it is designed for educational and planning purposes. Individual tax situations may vary, and users should consult with a tax professional for personalized advice.</p>
       </div>
       
-      <div id="faq" class="section animate-in">
+      <div
+        id="faq"
+        class="section animate-in"
+      >
         <h2>FAQ</h2>
         
         <h3>How accurate is the calculator?</h3>
@@ -266,7 +332,12 @@
       <div class="footer">
         <p>This documentation was last updated: March 2024</p>
         <p>For questions or feedback, please contact: <a href="mailto:fiscal-insights@outlook.com">fiscal-insights@outlook.com</a></p>
-        <router-link to="/" class="back-link">← Back to Calculator</router-link>
+        <router-link
+          to="/"
+          class="back-link"
+        >
+          ← Back to Calculator
+        </router-link>
       </div>
     </div>
   </div>

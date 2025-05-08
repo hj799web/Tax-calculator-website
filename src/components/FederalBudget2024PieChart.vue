@@ -9,9 +9,15 @@
         />
       </div>
       <!-- Legend container using a Vue ref -->
-      <div class="legend-container" ref="legendRef"></div>
+      <div
+        ref="legendRef"
+        class="legend-container"
+      />
     </div>
-    <div v-else class="no-data">
+    <div
+      v-else
+      class="no-data"
+    >
       <p>No budget data available to display.</p>
     </div>
   </div>

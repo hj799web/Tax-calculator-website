@@ -1,7 +1,43 @@
 import { defineStore } from "pinia";
+import { getBudgetBadges } from "@/utils/generateBadgesFromBudget";
+
+// Helper for conditional logging in development environment only
+const devLog = (message, ...args) => {
+  if (process.env.NODE_ENV === 'development') {
+    console.log(message, ...args);
+  }
+};
+
+// Helper for conditional warning in development environment only
+const devWarn = (message, ...args) => {
+  if (process.env.NODE_ENV === 'development') {
+    console.warn(message, ...args);
+  }
+};
+
 
 export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
   state: () => ({
+    // State management and batch processing
+    isBatchUpdateInProgress: false,
+    stateVersion: 0, // Incremented after each batch update to trigger reactivity
+
+    // Badge system state
+    sentimentUpdateRequired: false, // Flag for debounced sentiment update
+    badges: [],
+    lastBadgeUpdate: Date.now(),
+    lastSentimentUpdate: Date.now(), // Trigger for sentiment recalculation
+    activePreset: null,
+    // Auto-balance feature state
+    autoBalanceActive: false,
+    // Auto-balance configuration
+    autoBalanceConfig: {
+      revenueToSpendingRatio: 0.5, // 50% revenue / 50% spending (0.5 means 50/50 split)
+      minSpendingFactor: 0.1,      // Minimum spending factor (10% of original)
+      maxSpendingFactor: 2.0,      // Maximum spending factor (200% of original)
+      prioritizePIT: true,         // Whether to prioritize Personal Income Tax adjustments
+    },
+    _isRecalculating: false, // Reentrancy guard
     // Revenue sources with base values, rates, and year-specific rates
     revenueSources: {
       personalIncomeTax: {
@@ -529,9 +565,9 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
 
     // Budget goals and goal status
     budgetGoals: {
-      enabled: false,
-      targetRevenue: null,
-      targetDeficit: null,
+      enabled: true,
+      revenueTarget: 400, // Target revenue in billions
+      deficitTarget: 30, // Target deficit in billions
     },
     goalStatus: {
       revenue: {
@@ -551,6 +587,9 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
     // Current fiscal year
     currentYear: 2024,
     
+    // Reactive trigger for spending updates
+    lastSpendingUpdate: Date.now(),
+    
     // Reactive trigger for tax expenditure updates
     lastTaxExpenditureUpdate: Date.now(),
     
@@ -558,7 +597,6 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
     lastRevenueSourceUpdate: Date.now(),
     
     // Budget goals
-    autoBalanceActive: false,
     lastUpdate: 0,
 
     // Explicit state for expanded groups
@@ -586,6 +624,57 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
           value: year,
           label: `${year - 1}-${year}`,
         }));
+    },
+
+    // Unified getter for all consumers (sentiment, badges, export, etc.)
+    budgetData() {
+      // Always return a valid structure
+      try {
+        // Access the budgetDataForBadges getter, not calling it as a function
+        return this.budgetDataForBadges;
+      } catch (e) {
+        console.error('[budgetData] Error in budgetDataForBadges:', e);
+        // Fallback: return a minimal valid object if something goes wrong
+        // Include default revenue mix values to prevent fiscal chaos warnings
+        return {
+          totalRevenue: 0,
+          totalSpending: 0,
+          surplus: 0,
+          revenueMix: {
+            personalIncomeTax: this.revenueSources.personalIncomeTax?.rate ?? 21,
+            personalIncomeTaxAmount: this.revenueSources.personalIncomeTax?.adjustedAmount ?? 210,
+            
+            corporateIncomeTax: this.revenueSources.corporateIncomeTax?.rate ?? 15,
+            corporateIncomeTaxAmount: this.revenueSources.corporateIncomeTax?.adjustedAmount ?? 80,
+            
+            gst: this.revenueSources.gst?.rate ?? 5,
+            gstAmount: this.revenueSources.gst?.adjustedAmount ?? 50,
+            
+            carbonPricing: this.revenueSources.carbonPricing?.rate ?? 1,
+            carbonPricingAmount: this.revenueSources.carbonPricing?.adjustedAmount ?? 10,
+            
+            exciseTaxes: this.revenueSources.exciseTaxes?.rate ?? 2.5,
+            exciseTaxesAmount: this.revenueSources.exciseTaxes?.adjustedAmount ?? 25,
+            
+            eiPremiums: this.revenueSources.eiPremiums?.rate ?? 1.35,
+            eiPremiumsAmount: this.revenueSources.eiPremiums?.adjustedAmount ?? 13.5,
+            
+            customsDuties: this.revenueSources.customsDuties?.rate ?? 1,
+            customsDutiesAmount: this.revenueSources.customsDuties?.adjustedAmount ?? 10,
+            
+            crownProfits: this.revenueSources.crownProfits?.rate ?? 2.5,
+            crownProfitsAmount: this.revenueSources.crownProfits?.adjustedAmount ?? 25,
+            
+            nonTaxRevenue: this.revenueSources.nonTaxRevenue?.rate ?? 3,
+            nonTaxRevenueAmount: this.revenueSources.nonTaxRevenue?.adjustedAmount ?? 30,
+            
+            resourceRoyalties: this.revenueSources.resourceRoyalties?.rate ?? 1,
+            resourceRoyaltiesAmount: this.revenueSources.resourceRoyalties?.adjustedAmount ?? 10
+          },
+          taxExpenditures: {},
+          budgetItems: {}
+        };
+      }  
     },
 
     baselineRevenue() {
@@ -617,22 +706,36 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
       return this.totalRevenue - this.totalSpending;
     },
 
-    totalRevenue() {
-      // Calculate total revenue directly from all revenue sources with explicit number conversion
-      let total = 0;
-      try {
-        for (const sourceId in this.revenueSources) {
-          const amount = Number(this.revenueSources[sourceId]?.adjustedAmount) || 0;
-          total += amount;
-        }
-        return isNaN(total) ? 0 : total;
-      } catch (e) {
-        console.error('Error calculating total revenue:', e);
-        return 0;
-      }
+    // Category totals for revenue sources
+    incomeTaxTotal() {
+      // Personal Income Tax + Corporate Income Tax
+      const personalIncomeTax = Number(this.revenueSources.personalIncomeTax?.adjustedAmount) || 0;
+      const corporateIncomeTax = Number(this.revenueSources.corporateIncomeTax?.adjustedAmount) || 0;
+      return personalIncomeTax + corporateIncomeTax;
     },
-
-
+    
+    consumptionTaxTotal() {
+      // GST/HST + Excise Taxes + Carbon Pricing + Customs Duties
+      const gst = Number(this.revenueSources.gst?.adjustedAmount) || 0;
+      const exciseTaxes = Number(this.revenueSources.exciseTaxes?.adjustedAmount) || 0;
+      const carbonPricing = Number(this.revenueSources.carbonPricing?.adjustedAmount) || 0;
+      const customsDuties = Number(this.revenueSources.customsDuties?.adjustedAmount) || 0;
+      return gst + exciseTaxes + carbonPricing + customsDuties;
+    },
+    
+    otherRevenueTotal() {
+      // EI Premiums + Crown Corporation Profits + Resource Royalties + Non-Tax Revenue
+      const eiPremiums = Number(this.revenueSources.eiPremiums?.adjustedAmount) || 0;
+      const crownProfits = Number(this.revenueSources.crownProfits?.adjustedAmount) || 0;
+      const resourceRoyalties = Number(this.revenueSources.resourceRoyalties?.adjustedAmount) || 0;
+      const nonTaxRevenue = Number(this.revenueSources.nonTaxRevenue?.adjustedAmount) || 0;
+      return eiPremiums + crownProfits + resourceRoyalties + nonTaxRevenue;
+    },
+    
+    totalRevenue() {
+      // Sum of all category totals
+      return this.incomeTaxTotal + this.consumptionTaxTotal + this.otherRevenueTotal;
+    },
 
     mainCategoriesSpending() {
       const mains = Object.values(this.spendingCategories).filter(
@@ -721,26 +824,161 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
       return (groupId) => {
         const children = this.getGroupChildren(groupId);
         if (children.length === 0) return 1;
-        const totalAmount = children.reduce(
-          (sum, child) => sum + child.baseAmount,
-          0
-        );
-        const weightedFactor = children.reduce(
-          (sum, child) => sum + child.baseAmount * child.adjustmentFactor,
-          0
-        );
+        const totalAmount = children.reduce((sum, child) => sum + child.baseAmount, 0);
+        const weightedFactor = children.reduce((sum, child) => sum + child.baseAmount * child.adjustmentFactor, 0);
         return totalAmount > 0 ? weightedFactor / totalAmount : 1;
       };
     },
 
-    getGDP() {
-      return 2500; // $2.5 trillion expressed in billions
+    // Badge system getters
+    budgetDataForBadges() {
+      // Debug logging to identify mismatches (development only)
+      devLog('[KEY MAPPING] Store spending categories:', Object.keys(this.spendingCategories));
+      
+      // Prepare the budget data in the format expected by the badge engine
+      const budgetData = {
+        totalRevenue: this.totalRevenue,
+        totalSpending: this.totalSpending,
+        surplus: this.surplus,
+        // revenueMix: Sent to sentiment scoring and badge systems.
+        // Key mapping:
+        // - corporateTax is sourced from corporateIncomeTax in the store
+        // - gst represents GST/HST combined (no separate hst key)
+        // - All keys should match those expected by the sentiment scoring system
+        revenueMix: {
+          // Include both rate and amount for each revenue source
+          personalIncomeTax: this.revenueSources.personalIncomeTax?.rate ?? 21,
+          personalIncomeTaxAmount: this.revenueSources.personalIncomeTax?.adjustedAmount ?? 210,
+          
+          corporateIncomeTax: this.revenueSources.corporateIncomeTax?.rate ?? 15,
+          corporateIncomeTaxAmount: this.revenueSources.corporateIncomeTax?.adjustedAmount ?? 80,
+          
+          gst: this.revenueSources.gst?.rate ?? 5,
+          gstAmount: this.revenueSources.gst?.adjustedAmount ?? 50,
+          
+          hst: this.revenueSources.gst?.rate ?? 5, // If you ever separate HST, update here
+          hstAmount: this.revenueSources.gst?.adjustedAmount ?? 50,
+          
+          exciseTaxes: this.revenueSources.exciseTaxes?.rate ?? 2.5,
+          exciseTaxesAmount: this.revenueSources.exciseTaxes?.adjustedAmount ?? 25,
+          
+          carbonPricing: this.revenueSources.carbonPricing?.rate ?? 1,
+          carbonPricingAmount: this.revenueSources.carbonPricing?.adjustedAmount ?? 10,
+          
+          eiPremiums: this.revenueSources.eiPremiums?.rate ?? 1.35,
+          eiPremiumsAmount: this.revenueSources.eiPremiums?.adjustedAmount ?? 13.5,
+          
+          customsDuties: this.revenueSources.customsDuties?.rate ?? 1,
+          customsDutiesAmount: this.revenueSources.customsDuties?.adjustedAmount ?? 10,
+          
+          crownProfits: this.revenueSources.crownProfits?.rate ?? 2.5,
+          crownProfitsAmount: this.revenueSources.crownProfits?.adjustedAmount ?? 25,
+          
+          nonTaxRevenue: this.revenueSources.nonTaxRevenue?.rate ?? 3,
+          nonTaxRevenueAmount: this.revenueSources.nonTaxRevenue?.adjustedAmount ?? 30,
+          
+          resourceRoyalties: this.revenueSources.resourceRoyalties?.rate ?? 1,
+          resourceRoyaltiesAmount: this.revenueSources.resourceRoyalties?.adjustedAmount ?? 10
+        },
+        taxExpenditures: {
+          // Correct key mapping - match the expected badge keys to internal store keys
+          personalIncomeTaxCredits: this.taxExpenditures.personalTaxCredits || { adjustmentPercent: 0 },
+          corporateTaxExpenditures: this.taxExpenditures.corporateTaxExpenditures || { adjustmentPercent: 0 },
+          gstExpenditures: this.taxExpenditures.gstExpenditures || { adjustmentPercent: 0 },
+          deferrals: this.taxExpenditures.taxDeferrals || { adjustmentPercent: 0 }
+        },
+        budgetItems: {
+          // Main spending categories with corrected mappings
+          healthcare: this.spendingCategories.healthcare?.adjustedAmount ?? 0,
+          education: this.spendingCategories.education?.adjustedAmount ?? 0,
+          
+          // Fixed key mappings for mismatched categories
+          childrenAndFamilies: this.spendingCategories.childrenFamilies?.adjustedAmount ?? 0,
+          supportForSeniors: this.spendingCategories.seniors?.adjustedAmount ?? 0,
+          
+          indigenousServices: this.spendingCategories.indigenousServices?.adjustedAmount ?? 0,
+          defense: this.spendingCategories.defense?.adjustedAmount ?? 0,
+          
+          // Other spending categories – standardized keys
+          scienceAndInnovation: this.spendingCategories.scienceAndInnovation?.adjustedAmount ?? 0,
+          infrastructure: this.spendingCategories.infrastructure?.adjustedAmount ?? 0,
+          digitalGovernment: this.spendingCategories.digitalGovernment?.adjustedAmount ?? 0,
+          environmentAndClimateChange: this.spendingCategories.environmentAndClimateChange?.adjustedAmount ?? 0,
+          carbonPricing: this.spendingCategories.carbonPricing?.adjustedAmount ?? 0,
+          agriculture: this.spendingCategories.agriculture?.adjustedAmount ?? 0,
+          internationalDevelopment: this.spendingCategories.internationalDevelopment?.adjustedAmount ?? 0,
+          culturalPrograms: this.spendingCategories.culturalPrograms?.adjustedAmount ?? 0,
+          transit: this.spendingCategories.transit?.adjustedAmount ?? 0,
+          economicDevelopment: this.spendingCategories.economicDevelopment?.adjustedAmount ?? 0,
+          indigenousOperations: this.spendingCategories.indigenousOperations?.adjustedAmount ?? 0,
+          diplomaticRepresentation: this.spendingCategories.diplomaticRepresentation?.adjustedAmount ?? 0
+        }
+      };
+      
+      // Debug log the mapped data (development only)
+      devLog('[KEY MAPPING] Mapped budget data for badges:', {
+        revenueKeyCount: Object.keys(budgetData.revenueMix).length,
+        expenditureKeyCount: Object.keys(budgetData.taxExpenditures).length,
+        spendingCategoryKeyCount: Object.keys(budgetData.budgetItems).length
+      });
+      
+      return budgetData;
     },
 
-
+    earnedBadges() {
+      return this.badges;
+    },
   },
 
   actions: {
+    setSentimentUpdateRequired(val = true) {
+      this.sentimentUpdateRequired = val;
+    },
+    clearSentimentDirty() {
+      this.sentimentUpdateRequired = false;
+    },
+    triggerSentimentUpdate() {
+      // Update the lastSentimentUpdate timestamp to force reactivity
+      this.lastSentimentUpdate = Date.now();
+      console.log('[STORE] Triggered sentiment update:', this.lastSentimentUpdate);
+    },
+    beginBatchUpdate() {
+      if (this.isBatchUpdateInProgress) {
+        console.warn('[STORE] Batch update already in progress');
+        return false;
+      }
+      
+      console.log('[STORE] Beginning batch update');
+      // Disable sentiment updates during batch operations
+      this.setSentimentUpdateRequired(false);
+      this.isBatchUpdateInProgress = true;
+      return true;
+    },
+    completeBatchUpdate() {
+      if (!this.isBatchUpdateInProgress) {
+        console.warn('[STORE] No batch update in progress');
+        return false;
+      }
+      
+      console.log('[STORE] Completing batch update');
+      // Perform all recalculations once
+      this.recalculateTotals();
+      
+      // Update state version to trigger reactivity
+      this.stateVersion++;
+      console.log(`[STORE] State version updated to ${this.stateVersion}`);
+      
+      // Enable sentiment updates and trigger a calculation
+      this.setSentimentUpdateRequired(true);
+      this.triggerSentimentUpdate();
+      
+      // Sync to localStorage to ensure UI components can refresh
+      this.syncToLocalStorage();
+      
+      // Mark batch update as complete
+      this.isBatchUpdateInProgress = false;
+      return true;
+    },
     initializeStore() {
       // Initialize with default values if not already loaded
       if (!this.loadFromLocalStorage()) {
@@ -781,7 +1019,27 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
       // Signal initialization complete
       this.lastUpdate = Date.now();
     },
-
+    
+    // Load budget data from localStorage
+    loadFromLocalStorage() {
+      try {
+        const storedData = localStorage.getItem("budgetSimulator");
+        if (storedData) {
+          // Optionally, parse and restore any desired parts of the state:
+          const parsedData = JSON.parse(storedData);
+          this.activePreset = parsedData.activePreset || null;
+          // If you want to restore other properties, you can set them here:
+          // e.g., this.badges = parsedData.badges || [];
+          console.log("Loaded budget from localStorage:", parsedData);
+          return true;
+        }
+        return false;
+      } catch (error) {
+        console.error("Error loading budget from localStorage:", error);
+        return false;
+      }
+    },
+  
     setCurrentYear(year) {
       // Update revenue sources immutably with year-specific rates
       const updatedSources = {};
@@ -823,27 +1081,85 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
       this.expandedGroups = { ...this.expandedGroups, [groupId]: group ? group.isExpanded : false };
     },
 
-    updateRevenueRate(sourceId, newRate) {
+    /**
+     * Canonical method for updating revenue source rates with proper reactivity
+     * @param {string} sourceId - The ID of the revenue source to update
+     * @param {number} newRate - The new rate to set
+     * @returns {boolean} - Success flag
+     */
+    setRevenueRate(sourceId, newRate) {
       const source = this.revenueSources[sourceId];
-      if (source) {
-        console.log(`Updating revenue source ${sourceId} rate from ${source.rate} to ${newRate}`);
-        source.rate = newRate;
-        // Update the amount based on the new rate
-        source.amount = source.base * source.rate;
-        
+      if (!source) {
+        devWarn(`Revenue source not found: ${sourceId}`);
+        return false;
+      }
+      
+      // Clamp the rate to valid range if min/max are defined
+      let clampedRate = newRate;
+      if (source.minRate !== undefined) {
+        clampedRate = Math.max(source.minRate, clampedRate);
+      }
+      if (source.maxRate !== undefined) {
+        clampedRate = Math.min(source.maxRate, clampedRate);
+      }
+      
+      // Create a shallow copy of the source for reactive updates
+      const updatedSource = { ...source };
+      
+      // Update the rate and recalculate the amount
+      updatedSource.rate = clampedRate;
+      updatedSource.amount = updatedSource.base * updatedSource.rate;
+      
+      // Special logging for carbon tax to help diagnose issues
+      if (sourceId === 'carbonPricing') {
+        devLog(`[CARBON TAX] Updating rate from ${source.rate} to ${clampedRate}, batch mode: ${this.isBatchUpdateInProgress}`);
+      } else {
+        devLog(`Updating revenue source ${sourceId} rate from ${source.rate} to ${clampedRate}`);
+      }
+      
+      // Update the rate history for the current year
+      if (updatedSource.rateByYear) {
+        updatedSource.rateByYear = { ...updatedSource.rateByYear };
+        updatedSource.rateByYear[this.currentYear] = clampedRate;
+      }
+      
+      // Update the revenue source reactively
+      this.revenueSources = {
+        ...this.revenueSources,
+        [sourceId]: updatedSource
+      };
+      
+      // Update the adjusted amount (accounting for tax expenditure impacts)
+      this.updateRevenueSourceAdjustedAmount(sourceId);
+      
+      // Only perform additional updates if not in batch mode
+      if (!this.isBatchUpdateInProgress) {
         // Recalculate totals for display
         this.recalculateTotals();
         
-        // Update the reactive trigger to force component updates
+        // Update the reactive triggers to force component updates
         this.lastRevenueSourceUpdate = Date.now();
-        console.log(`Updated lastRevenueSourceUpdate: ${this.lastRevenueSourceUpdate}`);
+        this.lastUpdate = Date.now();
+        
+        // Signal that sentiment update is needed
+        this.setSentimentUpdateRequired(true);
         
         // Sync to localStorage
         this.syncToLocalStorage();
+        
+        devLog(`Updated revenue source ${sourceId} rate to ${clampedRate}%, amount: ${this.revenueSources[sourceId].amount.toFixed(2)}B, adjusted: ${this.revenueSources[sourceId].adjustedAmount?.toFixed(2)}B`);
       }
+      
+      return true;
     },
-
-
+    
+    /**
+     * Legacy method for backward compatibility - delegates to setRevenueRate
+     * @deprecated Use setRevenueRate instead
+     */
+    updateRevenueRate(sourceId, newRate) {
+      return this.setRevenueRate(sourceId, newRate);
+    },
 
     recalculateTotals() {
       // Update all revenue sources to reflect current tax expenditures
@@ -860,9 +1176,26 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
         this.updateGoalStatus();
       }
       
+      // Update badges based on current budget
+      this.updateBadges();
+      
       // If auto-balance is active, attempt to balance the budget
-      if (this.autoBalanceActive) {
-        this.autoBalanceBudget();
+      // But avoid infinite recursion by checking a flag
+      if (this.autoBalanceActive && !this._isRecalculating) {
+        this._isRecalculating = true;
+        
+        try {
+          // If we have a target deficit, use goal-based balancing
+          if (this.budgetGoals.enabled && this.budgetGoals.targetDeficit !== null) {
+            // Call autoBalanceBudgetForGoal directly
+            this.autoBalanceBudgetForGoal();
+          } else {
+            // Otherwise use regular auto-balance
+            this.autoBalanceBudget();
+          }
+        } finally {
+          this._isRecalculating = false;
+        }
       }
       
       // Check for deficit/surplus limits
@@ -896,7 +1229,12 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
             }
           });
       }
-      this.lastUpdate = Date.now();
+      // Only update timestamps if not in batch mode
+      if (!this.isBatchUpdateInProgress) {
+        this.lastUpdate = Date.now();
+        // Signal that sentiment update is needed
+        this.setSentimentUpdateRequired(true);
+      }
     },
 
     updateGroupSpendingFactor(groupId, factor) {
@@ -907,25 +1245,30 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
         Object.values(group.children).forEach((child) => {
           child.adjustmentFactor = factor;
         });
-        this.lastUpdate = Date.now();
+        // Only update timestamps if not in batch mode
+        if (!this.isBatchUpdateInProgress) {
+          this.lastUpdate = Date.now();
+          // Signal that sentiment update is needed
+          this.setSentimentUpdateRequired(true);
+        }
       }
     },
 
     updateBudgetGoals(goals) {
       if (goals.enabled !== undefined) this.budgetGoals.enabled = goals.enabled;
-      if (goals.targetRevenue !== undefined)
-        this.budgetGoals.targetRevenue = goals.targetRevenue;
-      if (goals.targetDeficit !== undefined)
-        this.budgetGoals.targetDeficit = goals.targetDeficit;
+      if (goals.revenueTarget !== undefined)
+        this.budgetGoals.revenueTarget = goals.revenueTarget;
+      if (goals.deficitTarget !== undefined)
+        this.budgetGoals.deficitTarget = goals.deficitTarget;
     },
 
     updateGoalStatus(statusData = {}) {
-      const revenueGoal = this.budgetGoals.targetRevenue || 0;
+      const revenueGoal = this.budgetGoals.revenueTarget || 0;
       const currentRevenue = this.totalRevenue || 0;
       const revenueStatus =
         revenueGoal > 0 ? (currentRevenue / revenueGoal) * 100 : 100;
 
-      const deficitGoal = this.budgetGoals.targetDeficit || 0;
+      const deficitGoal = this.budgetGoals.deficitTarget || 0;
       const currentDeficit = this.surplus < 0 ? Math.abs(this.surplus) : 0;
       const deficitStatus =
         deficitGoal > 0
@@ -943,87 +1286,669 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
     },
 
     autoBalanceBudget() {
-      const currentDeficit = this.totalSpending - this.totalRevenue;
-      if (currentDeficit <= 0) return;
-      const reductionFactor = this.totalRevenue / this.totalSpending;
-      Object.values(this.spendingCategories).forEach((cat) => {
-        if (!cat.isGroup) {
-          cat.adjustmentFactor = Math.max(0.5, cat.adjustmentFactor * reductionFactor);
-        } else if (cat.children) {
-          Object.values(cat.children).forEach((child) => {
-            child.adjustmentFactor = Math.max(0.5, child.adjustmentFactor * reductionFactor);
-          });
+      // Prevent recursive calls
+      if (this._isRecalculating) {
+        console.log('Avoiding recursive auto-balance call');
+        return;
+      }
+      
+      try {
+        this._isRecalculating = true;
+        
+        // Calculate the current deficit
+        const currentDeficit = this.totalSpending - this.totalRevenue;
+        
+        // If there's no deficit or a surplus, no need to balance
+        if (currentDeficit <= 0) {
+          console.log('Budget already balanced or in surplus');
+          return;
         }
-      });
-      this.lastUpdate = Date.now();
+        
+        console.log(`Attempting to balance budget. Current deficit: $${currentDeficit.toFixed(1)}B`);
+        
+        // Define priority order for revenue sources to adjust
+        const prioritySourceIds = [
+          'personalIncomeTax',  // First choice: adjust personal income tax
+          'corporateIncomeTax', // Second choice: adjust corporate income tax
+          'gst',                // Third choice: adjust GST
+          'carbonPricing',      // Fourth choice: adjust carbon pricing
+          'exciseTaxes',        // Fifth choice: adjust excise taxes
+          'customsDuties',      // Sixth choice: adjust customs duties
+          'resourceRoyalties',  // Seventh choice: adjust resource royalties (corrected from naturalResourceRoyalties)
+          'nonTaxRevenue'       // Eighth choice: adjust non-tax revenue (corrected from otherRevenues)
+        ];
+        
+        // Filter to get only available and adjustable revenue sources
+        const adjustableSources = prioritySourceIds
+          .map(id => this.revenueSources[id])
+          .filter(source => source && source.base > 0 && source.rate < (source.maxRate || 100));
+        
+        if (adjustableSources.length === 0) {
+          console.log('No adjustable revenue sources found');
+          return;
+        }
+        
+        // Calculate how much deficit remains to be covered
+        let remainingDeficit = currentDeficit;
+        let adjustedSources = [];
+        
+        // First try to adjust one major source if it can cover most of the deficit
+        for (const source of adjustableSources) {
+          // Calculate how much additional revenue this source can generate
+          const currentRevenue = source.amount;
+          const maxPossibleRevenue = source.base * (source.maxRate || 100);
+          const additionalRevenuePotential = maxPossibleRevenue - currentRevenue;
+          
+          // If this source alone can cover at least 70% of the deficit, use it
+          if (additionalRevenuePotential >= remainingDeficit * 0.7) {
+            // Calculate the new rate needed to cover the deficit
+            const rateIncrease = remainingDeficit / source.base;
+            const newRate = Math.min(source.rate + rateIncrease, source.maxRate || 100);
+            
+            console.log(`Adjusting ${source.name} rate from ${source.rate.toFixed(1)}% to ${newRate.toFixed(1)}%`);
+            
+            // Update the revenue source rate
+            this.updateRevenueSourceRate(source.id, newRate);
+            adjustedSources.push(source.name);
+            
+            // The deficit is now covered
+            remainingDeficit = 0;
+            break;
+          }
+        }
+        
+        // If we still have a deficit, adjust multiple sources
+        if (remainingDeficit > 0) {
+          // Sort sources by their potential to generate additional revenue
+          adjustableSources.sort((a, b) => {
+            const aPotential = a.base * ((a.maxRate || 100) - a.rate);
+            const bPotential = b.base * ((b.maxRate || 100) - b.rate);
+            return bPotential - aPotential; // Sort in descending order
+          });
+          
+          // Adjust sources one by one until the deficit is covered
+          for (const source of adjustableSources) {
+            // Skip sources we've already adjusted
+            if (adjustedSources.includes(source.name)) continue;
+            
+            // Calculate how much additional revenue this source can generate
+            const currentRevenue = source.amount;
+            const maxPossibleRevenue = source.base * (source.maxRate || 100);
+            const additionalRevenuePotential = maxPossibleRevenue - currentRevenue;
+            
+            // If this source can help reduce the deficit
+            if (additionalRevenuePotential > 0) {
+              // Determine how much of the remaining deficit this source should cover
+              const deficitToCover = Math.min(remainingDeficit, additionalRevenuePotential);
+              
+              // Calculate the new rate needed
+              const rateIncrease = deficitToCover / source.base;
+              const newRate = Math.min(source.rate + rateIncrease, source.maxRate || 100);
+              
+              console.log(`Adjusting ${source.name} rate from ${source.rate.toFixed(1)}% to ${newRate.toFixed(1)}%`);
+              
+              // Update the revenue source rate
+              this.updateRevenueSourceRate(source.id, newRate);
+              adjustedSources.push(source.name);
+              
+              // Update the remaining deficit
+              remainingDeficit -= deficitToCover;
+              
+              // If we've covered the deficit, we can stop
+              if (remainingDeficit <= 0.1) break;
+            }
+          }
+        }
+        
+        // Signal update
+        this.lastUpdate = Date.now();
+        
+        if (adjustedSources.length > 0) {
+          console.log(`Budget auto-balanced by adjusting ${adjustedSources.length} revenue source(s): ${adjustedSources.join(', ')}`);
+        } else {
+          console.log('Could not auto-balance the budget with available revenue sources');
+        }
+      } catch (e) {
+        console.error('Error in autoBalanceBudget:', e);
+      } finally {
+        // Reset the reentrancy guard
+        this._isRecalculating = false;
+      }
     },
 
-    resetBudget() {
-      // Reset budget goals immutably
-      this.budgetGoals = {
-        enabled: false,
-        targetRevenue: 450,
-        targetDeficit: 0,
-      };
+    toggleAutoBalance(active) {
+      // Update the store state
+      this.autoBalanceActive = active;
 
-      // Reset revenue sources immutably
-      const resetRevenueSources = {};
-      for (const sourceId in this.revenueSources) {
-        const source = this.revenueSources[sourceId];
-        const defaultRate = this.getDefaultRate(sourceId);
-        resetRevenueSources[sourceId] = {
-          ...source,
-          rate: defaultRate,
-          amount: source.base * defaultRate,
-          adjustedAmount: source.base * defaultRate,
-          expenditureImpact: 0
-        };
+      // Diagnostic logging
+      console.log('[AutoBalance] toggleAutoBalance called with:', {
+        active,
+        goalsEnabled: this.budgetGoals.enabled,
+        targetDeficit: this.budgetGoals.targetDeficit
+      });
+
+      // Make sure budget goals are enabled when auto-balance is activated
+      if (active && !this.budgetGoals.enabled) {
+        this.budgetGoals.enabled = true;
       }
-      this.revenueSources = resetRevenueSources;
 
-      // Reset spending categories immutably
-      const resetCategories = {};
-      for (const catId in this.spendingCategories) {
-        const cat = this.spendingCategories[catId];
-        if (!cat.isGroup) {
-          resetCategories[catId] = { ...cat, adjustmentFactor: 1 };
-        } else if (cat.children) {
-          const resetChildren = {};
-          for (const childId in cat.children) {
-            resetChildren[childId] = { ...cat.children[childId], adjustmentFactor: 1 };
+      // If auto-balance is now enabled, balance the budget
+      if (this.autoBalanceActive) {
+        // If goals are enabled but targetDeficit is null/undefined, default to zero
+        if (this.budgetGoals.enabled && (this.budgetGoals.targetDeficit === null || this.budgetGoals.targetDeficit === undefined)) {
+          console.log('[AutoBalance] budgetGoals.targetDeficit was not set; defaulting to 0');
+          this.budgetGoals.targetDeficit = 0;
+        }
+        if (this.budgetGoals.enabled && this.budgetGoals.targetDeficit !== null && this.budgetGoals.targetDeficit !== undefined) {
+          console.log("[AutoBalance] Using goal-based auto-balance (target deficit mode)");
+          const feedback = this.autoBalanceBudgetForGoal();
+          if (feedback && feedback.message) {
+            console.log(`[AutoBalance] Result: ${feedback.message}`);
           }
-          resetCategories[catId] = { ...cat, children: resetChildren };
+        } else {
+          console.log("[AutoBalance] Using standard auto-balance (no target deficit)");
+          this.autoBalanceBudget();
         }
       }
-      this.spendingCategories = resetCategories;
+    },
 
-      // Reset tax expenditures immutably
-      const resetExpenditures = {};
-      for (const expId in this.taxExpenditures) {
-        const exp = this.taxExpenditures[expId];
-        resetExpenditures[expId] = {
-          ...exp,
-          adjustment: exp.baseAdjustment || 0,
-          adjustmentFactor: 0,
-          revenueImpact: 0
+    /**
+     * Auto-balance the budget to meet a specific deficit goal
+     * @returns {Object} Feedback object with success flag and message
+     */
+    autoBalanceBudgetForGoal() {
+      const feedback = {
+        success: false,
+        message: '',
+        achieved: false,
+        deficitGap: 0
+      };
+      
+      try {
+        this.beginBatchUpdate();
+        
+        // Ensure budget goals are enabled
+        this.budgetGoals.enabled = true;
+        
+        // Set default target deficit if not set
+        if (this.budgetGoals.targetDeficit === null || this.budgetGoals.targetDeficit === undefined) {
+          this.budgetGoals.targetDeficit = 0;
+        }
+        
+        const targetDeficit = this.budgetGoals.targetDeficit;
+        const currentDeficit = this.totalSpending - this.totalRevenue;
+        // Calculate how much additional revenue is needed to meet the target deficit:
+        // desiredRevenue = totalSpending - targetDeficit, so adjustment = desiredRevenue - currentRevenue
+        const revenueAdjustmentNeeded = currentDeficit - targetDeficit;
+        
+        devLog(`Need to adjust revenue by $${revenueAdjustmentNeeded.toFixed(1)}B to reach target deficit of $${targetDeficit.toFixed(1)}B`);
+        
+        // If we're already close enough, don't adjust
+        if (Math.abs(revenueAdjustmentNeeded) < 0.1) {
+          devLog('Already at target, no adjustment needed');
+          feedback.success = true;
+          feedback.achieved = true;
+          feedback.message = 'Already at target deficit';
+          feedback.deficitGap = 0;
+          return feedback;
+        }
+        
+        // Define the main revenue sources eligible for adjustment
+        const mainRevenueSources = [
+          'personalIncomeTax',
+          'corporateIncomeTax',
+          'gst',
+          'exciseTaxes',
+          'carbonPricing',
+          'eiPremiums',
+          'customsDuties'
+        ];
+        
+        // Filter to those that exist and have a valid base value
+        const adjustableSources = mainRevenueSources
+          .map(id => ({
+            id,
+            ...this.revenueSources[id]
+          }))
+          .filter(source => source && source.base > 0);
+        
+        if (adjustableSources.length === 0) {
+          feedback.success = false;
+          feedback.message = 'No adjustable revenue sources found';
+          return feedback;
+        }
+        
+        // Use the adjustRevenueProportionally helper method
+        const result = this.adjustRevenueProportionally(revenueAdjustmentNeeded, adjustableSources);
+        
+        if (!result.success) {
+          feedback.success = false;
+          feedback.message = result.message || 'Failed to adjust revenue sources';
+          return feedback;
+        }
+        
+        // Check if we achieved the target
+        const finalDeficit = this.totalSpending - this.totalRevenue;
+        const finalGap = Math.abs(finalDeficit - targetDeficit);
+        const thresholdAchieved = 0.5; // $0.5B threshold for considering goal achieved
+        
+        feedback.achieved = finalGap <= thresholdAchieved;
+        feedback.deficitGap = finalGap;
+        
+        if (!feedback.achieved) {
+          feedback.success = false;
+          feedback.message = `Auto-balance could not reach the target (off by $${finalGap.toFixed(2)}B). Some sliders may be at their min/max bounds.`;
+          devWarn(`[AutoBalance] Could not reach target. Gap: $${finalGap.toFixed(2)}B`);
+        } else {
+          feedback.success = true;
+          feedback.message = 'Auto-balance succeeded.';
+        }
+        
+        return feedback;
+      } catch (err) {
+        feedback.success = false;
+        feedback.message = `Error in autoBalanceBudgetForGoal: ${err.message || err}`;
+        console.error(feedback.message);
+        return feedback;
+      } finally {
+        this.completeBatchUpdate();
+      }
+    },
+
+    /**
+     * Helper method to adjust revenue sources proportionally to meet a target adjustment amount
+     * @param {number} totalAdjustment - Dollar amount to adjust (positive = increase, negative = decrease)
+     * @param {Array} adjustableSources - Array of revenue sources that can be adjusted
+     * @returns {Object} - Result with success flag and details of changes
+     */
+    adjustRevenueProportionally(totalAdjustment, adjustableSources) {
+      // Skip if adjustment is negligible
+      if (Math.abs(totalAdjustment) < 1e-2) {
+        return { success: true, changes: {}, message: 'No adjustment needed' };
+      }
+      
+      // Prepare result object
+      const result = {
+        success: true,
+        changes: {},
+        actualAdjustment: 0,
+        message: ''
+      };
+      
+      // Validate inputs
+      if (!Array.isArray(adjustableSources) || adjustableSources.length === 0) {
+        return {
+          success: false,
+          changes: {},
+          message: 'No adjustable revenue sources available'
         };
       }
-      this.taxExpenditures = resetExpenditures;
+      
+      try {
+        // Step 1: Prioritize PIT if configured to do so
+        let remainingAdjustment = totalAdjustment;
+        if (this.autoBalanceConfig.prioritizePIT) {
+          const pitSource = adjustableSources.find(item => item.id === 'personalIncomeTax');
+          if (pitSource && pitSource.source) {
+            const oldRate = pitSource.source.rate;
+            const pitBase = pitSource.source.base;
+            const pitMax = pitSource.source.maxRate !== undefined ? pitSource.source.maxRate : 100;
+            const pitMin = pitSource.source.minRate !== undefined ? pitSource.source.minRate : 0;
+            
+            // Allocate 50% of the total adjustment to PIT
+            const targetPitAdjustment = totalAdjustment * 0.5;
+            let rateChange = targetPitAdjustment / pitBase;
+            let newRate = Math.min(Math.max(oldRate + rateChange, pitMin), pitMax);
+            
+            // Calculate actual change after clamping
+            rateChange = newRate - oldRate;
+            const actualPitAdjustment = rateChange * pitBase;
+            
+            // Store the change
+            result.changes[pitSource.id] = {
+              oldRate,
+              newRate,
+              amountChange: actualPitAdjustment
+            };
+            
+            // Update remaining adjustment needed
+            remainingAdjustment -= actualPitAdjustment;
+            result.actualAdjustment += actualPitAdjustment;
+            
+            devLog(`[AutoBalance] PIT: ${oldRate.toFixed(3)} → ${newRate.toFixed(3)} | Δ$${actualPitAdjustment.toFixed(2)}B`);
+          }
+        }
 
-      // Reset expanded groups immutably
-      this.expandedGroups = {
-        incomeTaxes: true,
-        consumptionTaxes: true,
-        otherRevenues: true,
-        mainCategories: true,
-        otherCategories: false,
-        governmentOperations: false,
-        taxExpenditures: true,
+        // Step 2: Distribute remaining adjustment to other sources proportionally
+        if (Math.abs(remainingAdjustment) > 1e-2) {
+          // Filter sources, excluding PIT if we already adjusted it
+          const otherSources = this.autoBalanceConfig.prioritizePIT
+            ? adjustableSources.filter(item => item.id !== 'personalIncomeTax')
+            : adjustableSources;
+          
+          if (otherSources.length === 0) {
+            devLog('[AutoBalance] No other adjustable sources found for remaining adjustment');
+          } else {
+            // Calculate total base for proportional distribution
+            const totalBase = otherSources.reduce((sum, item) => sum + item.source.base, 0);
+            
+            if (totalBase <= 0) {
+              devLog('[AutoBalance] Warning: Total base for remaining sources is zero or negative');
+            } else {
+              // Calculate and apply changes for each source
+              otherSources.forEach(item => {
+                const oldRate = item.source.rate;
+                const base = item.source.base;
+                const maxRate = item.source.maxRate !== undefined ? item.source.maxRate : 100;
+                const minRate = item.source.minRate !== undefined ? item.source.minRate : 0;
+                
+                // Calculate proportional adjustment based on this source's share of the total base
+                const share = base / totalBase;
+                let targetAdjustment = remainingAdjustment * share;
+                let rateChange = targetAdjustment / base;
+                let newRate = Math.min(Math.max(oldRate + rateChange, minRate), maxRate);
+                
+                // Calculate actual adjustment after clamping
+                rateChange = newRate - oldRate;
+                const actualAdjustment = rateChange * base;
+                
+                // Store the change
+                result.changes[item.id] = {
+                  oldRate,
+                  newRate,
+                  amountChange: actualAdjustment
+                };
+                
+                result.actualAdjustment += actualAdjustment;
+                
+                devLog(`[AutoBalance] ${item.source.name || item.id}: ${oldRate.toFixed(3)} → ${newRate.toFixed(3)} | Δ$${actualAdjustment.toFixed(2)}B`);
+              });
+            }
+          }
+        }
+        
+        // Check if we achieved a sufficient portion of the requested adjustment
+        const achievementRatio = Math.abs(result.actualAdjustment / totalAdjustment);
+        result.success = achievementRatio >= 0.8; // Success if we achieved at least 80% of the target
+        
+        if (!result.success) {
+          result.message = `Revenue adjustment achieved only ${(achievementRatio * 100).toFixed(1)}% of target`;
+        }
+        
+        return result;
+      } catch (err) {
+        devWarn('[AutoBalance] Error in adjustRevenueProportionally:', err);
+        return {
+          success: false,
+          changes: {},
+          message: `Error adjusting revenue: ${err.message || err}`
+        };
+      }
+    },
+    
+    /**
+     * Helper method to adjust spending categories proportionally to meet a target adjustment amount
+     * @param {number} totalAdjustment - Dollar amount to adjust (positive = increase, negative = decrease)
+     * @returns {Object} - Result with success flag and details of changes
+     */
+    adjustSpendingProportionally(totalAdjustment) {
+      // Skip if adjustment is negligible
+      if (Math.abs(totalAdjustment) < 1e-2) {
+        return { success: true, changes: {}, message: 'No adjustment needed' };
+      }
+      
+      // Prepare result object
+      const result = {
+        success: true,
+        changes: {},
+        actualAdjustment: 0,
+        message: ''
       };
+      
+      try {
+        // Find all non-group spending categories
+        const adjustableCategories = Object.entries(this.spendingCategories)
+          // eslint-disable-next-line no-unused-vars
+          .filter(([id, category]) => !category.isGroup && category.baseAmount > 0)
+          .map(([id, category]) => ({ id, category }));
+        
+        if (adjustableCategories.length === 0) {
+          return {
+            success: false,
+            changes: {},
+            message: 'No adjustable spending categories available'
+          };
+        }
+        
+        // Calculate total base amount for proportional distribution
+        const totalBaseAmount = adjustableCategories.reduce(
+          (sum, item) => sum + item.category.baseAmount,
+          0
+        );
+        
+        if (totalBaseAmount <= 0) {
+          return {
+            success: false,
+            changes: {},
+            message: 'Total base amount for spending categories is zero or negative'
+          };
+        }
+        
+        // Calculate and apply changes for each category
+        adjustableCategories.forEach(item => {
+          const oldFactor = item.category.adjustmentFactor || 1;
+          const baseAmount = item.category.baseAmount;
+          
+          // Calculate proportional adjustment
+          const share = baseAmount / totalBaseAmount;
+          const targetAdjustment = totalAdjustment * share;
+          
+          // Calculate new factor: current factor + ($ change / base amount)
+          let factorChange = targetAdjustment / baseAmount;
+          let newFactor = oldFactor + factorChange;
+          
+          // Clamp to configured min/max factor values
+          newFactor = Math.max(this.autoBalanceConfig.minSpendingFactor, 
+                      Math.min(this.autoBalanceConfig.maxSpendingFactor, newFactor));
+          
+          // Calculate actual adjustment after clamping
+          factorChange = newFactor - oldFactor;
+          const actualAdjustment = factorChange * baseAmount;
+          
+          // Store the change
+          result.changes[item.id] = {
+            oldFactor,
+            newFactor,
+            amountChange: actualAdjustment
+          };
+          
+          result.actualAdjustment += actualAdjustment;
+          
+          devLog(`[AutoBalance] Spending ${item.id}: ${oldFactor.toFixed(3)} → ${newFactor.toFixed(3)} | Δ$${actualAdjustment.toFixed(2)}B`);
+        });
+        
+        // Check if we achieved a sufficient portion of the requested adjustment
+        const achievementRatio = Math.abs(result.actualAdjustment / totalAdjustment);
+        result.success = achievementRatio >= 0.8; // Success if we achieved at least 80% of the target
+        
+        if (!result.success) {
+          result.message = `Spending adjustment achieved only ${(achievementRatio * 100).toFixed(1)}% of target`;
+        }
+        
+        return result;
+      } catch (err) {
+        devWarn('[AutoBalance] Error in adjustSpendingProportionally:', err);
+        return {
+          success: false,
+          changes: {},
+          message: `Error adjusting spending: ${err.message || err}`
+        };
+      }
+    },
+    
+    resetBudget() {
+      devLog('Starting budget reset...');
+      
+      // Store the current auto-balance state to log it
+      const wasAutoBalanceActive = this.autoBalanceActive;
+      if (wasAutoBalanceActive) {
+        devLog('Auto-Balance was active - disabling it for reset');
+      }
+      
+      // Disable auto-balance first to prevent it from interfering with the reset
+      // This must happen before any other changes
+      this.autoBalanceActive = false;
+      
+      // Reset active preset
+      this.activePreset = null;
+      
+      // Clear badges
+      this.badges = [];
+      
+      // Ensure currentYear is set to the default value
+      if (!this.currentYear) {
+        this.currentYear = 2024;
+      }
+      
+      // Skip automatic recalculation to ensure we maintain exact values
+      this._isRecalculating = true; // Prevent recursive calls
+      
+      try {
+        // Define exact original values for all revenue sources
+        const sources = {
+          // Income Taxes: 290B total (210 + 80)
+          personalIncomeTax: { rate: 21, amount: 210, adjustedAmount: 210 },
+          corporateIncomeTax: { rate: 15, amount: 80, adjustedAmount: 80 },
+          
+          // Consumption Taxes: 76B total (50 + 12 + 8 + 6)
+          gst: { rate: 5, amount: 50, adjustedAmount: 50 },
+          exciseTaxes: { rate: 2.5, amount: 12, adjustedAmount: 12 },
+          carbonPricing: { rate: 1, amount: 8, adjustedAmount: 8 },
+          customsDuties: { rate: 1, amount: 6, adjustedAmount: 6 },
+          
+          // Other Revenue: 68B total (27 + 6 + 5 + 30)
+          eiPremiums: { rate: 1.35, amount: 27, adjustedAmount: 27 },
+          crownProfits: { rate: 2.5, amount: 6, adjustedAmount: 6 },
+          resourceRoyalties: { rate: 1, amount: 5, adjustedAmount: 5 },
+          nonTaxRevenue: { rate: 3, amount: 30, adjustedAmount: 30 }
+        };
+        
+        // Calculate expected total dynamically instead of hardcoding it
+        const expectedTotal = Object.values(sources).reduce((total, source) => total + source.amount, 0);
+        devLog(`Expected total revenue after reset: ${expectedTotal}B`);
 
-      // Update all revenue sources to account for reset tax expenditures
-      for (const sourceId in this.revenueSources) {
-        this.updateRevenueSourceAdjustedAmount(sourceId);
+        // Create a new shallow copy of revenue sources to maintain reactivity
+        const resetSources = { ...this.revenueSources };
+        
+        // Reset each revenue source individually to preserve all properties
+        Object.keys(sources).forEach(sourceId => {
+          if (resetSources[sourceId]) {
+            const source = sources[sourceId];
+            
+            // Create a shallow copy of each source to maintain reactivity
+            resetSources[sourceId] = {
+              ...resetSources[sourceId],
+              rate: source.rate,
+              amount: source.amount,
+              adjustedAmount: source.adjustedAmount,
+              expenditureImpact: 0
+            };
+            
+            devLog(`Reset ${sourceId} to rate: ${source.rate}, amount: ${source.amount}B`);
+          } else {
+            devWarn(`Revenue source ${sourceId} does not exist and cannot be reset`);
+          }
+        });
+        
+        // Apply the immutable update to revenue sources
+        this.revenueSources = resetSources;
+        
+        // Reset spending categories immutably
+        const resetCategories = {};
+        for (const catId in this.spendingCategories) {
+          const cat = this.spendingCategories[catId];
+          if (!cat.isGroup) {
+            resetCategories[catId] = { ...cat, adjustmentFactor: 1 };
+          } else if (cat.children) {
+            const resetChildren = {};
+            for (const childId in cat.children) {
+              resetChildren[childId] = { ...cat.children[childId], adjustmentFactor: 1 };
+            }
+            resetCategories[catId] = { ...cat, children: resetChildren };
+          }
+        }
+        this.spendingCategories = resetCategories;
+        
+        // Reset expanded groups immutably
+        this.expandedGroups = {
+          incomeTaxes: true,
+          consumptionTaxes: true,
+          otherRevenues: true,
+          mainCategories: true,
+          otherCategories: false,
+          governmentOperations: false,
+          taxExpenditures: true,
+        };
+        
+        // Handle CPP Premiums if they exist in the store but not in our defaults
+        if (this.revenueSources.cppPremiums) {
+          devLog('CPP Premiums found in store but not in defaults - setting to zero');
+          // Update immutably
+          this.revenueSources = {
+            ...this.revenueSources,
+            cppPremiums: {
+              ...this.revenueSources.cppPremiums,
+              rate: 0,
+              amount: 0,
+              adjustedAmount: 0,
+              expenditureImpact: 0
+            }
+          };
+        }
+        
+        // Now perform a controlled recalculation
+        this.recalculateTotals();
+        
+        // Verify the total revenue is correct
+        const actualTotal = this.totalRevenue;
+        
+        devLog(`Total revenue after reset: ${actualTotal}B (expected: ${expectedTotal}B)`);
+        
+        // Ensure badges remain empty after recalculation
+        this.badges = [];
+        this.lastBadgeUpdate = Date.now();
+        
+        // Force a UI update for all revenue sources
+        this.lastRevenueSourceUpdate = Date.now();
+        
+        // Double-check that auto-balance is still disabled
+        // This is critical when auto-balance was active before reset
+        if (this.autoBalanceActive) {
+          devWarn('Auto-balance was re-enabled during reset - forcing it off again');
+          this.autoBalanceActive = false;
+        }
+        
+        // Double-check totals one more time
+        const finalTotal = this.totalRevenue;
+        if (Math.abs(finalTotal - expectedTotal) > 0.5) {
+          devWarn(`Final revenue check: ${finalTotal}B doesn't match expected ${expectedTotal}B`);
+          // Force direct correction of any discrepancy immutably
+          const correction = expectedTotal - finalTotal;
+          
+          this.revenueSources = {
+            ...this.revenueSources,
+            personalIncomeTax: {
+              ...this.revenueSources.personalIncomeTax,
+              amount: this.revenueSources.personalIncomeTax.amount + correction,
+              adjustedAmount: this.revenueSources.personalIncomeTax.adjustedAmount + correction,
+              rate: (this.revenueSources.personalIncomeTax.amount + correction) / this.revenueSources.personalIncomeTax.base
+            }
+          };
+          
+          devLog(`Applied final correction of ${correction}B to personal income tax`);
+        }
+      } finally {
+        this._isRecalculating = false;
       }
 
       // Signal reset complete
@@ -1032,7 +1957,8 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
       // Sync to localStorage
       this.syncToLocalStorage();
 
-      console.log('Budget reset to initial state');
+      console.log('Budget reset to initial state with badges cleared');
+      console.log('Total Revenue after reset:', this.totalRevenue);
     },
 
     syncToLocalStorage() {
@@ -1045,6 +1971,9 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
           currentYear: this.currentYear,
           budgetGoals: this.budgetGoals,
           goalStatus: this.goalStatus,
+          badges: this.badges,
+          lastBadgeUpdate: this.lastBadgeUpdate,
+          activePreset: this.activePreset
         };
 
         for (const sourceId in this.revenueSources) {
@@ -1068,65 +1997,6 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
         localStorage.setItem("budgetSimulator", JSON.stringify(budgetData));
       } catch (error) {
         console.error("Error saving budget to localStorage:", error);
-      }
-    },
-
-    loadFromLocalStorage() {
-      try {
-        const savedData = localStorage.getItem("budgetSimulator");
-        if (savedData) {
-          const budgetData = JSON.parse(savedData);
-
-          if (budgetData.revenueSources) {
-            for (const sourceId in budgetData.revenueSources) {
-              if (this.revenueSources[sourceId]) {
-                this.revenueSources[sourceId].rate =
-                  budgetData.revenueSources[sourceId].rate;
-                this.revenueSources[sourceId].amount =
-                  this.revenueSources[sourceId].base *
-                  this.revenueSources[sourceId].rate;
-              }
-            }
-          }
-
-          if (budgetData.spendingCategories) {
-            for (const catId in budgetData.spendingCategories) {
-              if (this.spendingCategories[catId]) {
-                this.spendingCategories[catId].adjustmentFactor =
-                  budgetData.spendingCategories[catId].adjustmentFactor;
-              }
-            }
-          }
-
-          if (budgetData.taxExpenditures) {
-            for (const expId in budgetData.taxExpenditures) {
-              if (this.taxExpenditures[expId]) {
-                this.taxExpenditures[expId].adjustmentFactor =
-                  budgetData.taxExpenditures[expId].adjustmentFactor;
-              }
-            }
-          }
-
-          if (budgetData.expandedGroups) {
-            this.expandedGroups = budgetData.expandedGroups;
-          }
-
-          if (budgetData.currentYear) {
-            this.currentYear = budgetData.currentYear;
-          }
-
-          if (budgetData.budgetGoals) {
-            this.budgetGoals = budgetData.budgetGoals;
-          }
-
-          if (budgetData.goalStatus) {
-            this.goalStatus = budgetData.goalStatus;
-          }
-
-          this.recalculateTotals();
-        }
-      } catch (error) {
-        console.error("Error loading budget from localStorage:", error);
       }
     },
 
@@ -1165,18 +2035,16 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
     updateTaxExpenditureAdjustment(expenditureId, adjustment) {
       try {
         const expenditure = this.taxExpenditures[expenditureId];
-        if (!expenditure) {
-          console.error(`Tax expenditure not found: ${expenditureId}`);
-          return;
-        }
+        if (!expenditure) return;
 
-        // Clamp the adjustment between 0 and 100 with explicit number conversion
         const numAdjustment = Number(adjustment) || 0;
-        const clampedAdjustment = Math.max(0, Math.min(100, numAdjustment));
+        const clampedAdjustment = Math.max(-100, Math.min(100, numAdjustment));
 
         // Calculate the revenue impact with explicit number conversion
         const netAmount = Number(expenditure.netAmount) || 0;
         const revenueImpact = -1 * netAmount * (clampedAdjustment / 100);
+
+        console.log(`Updating tax expenditure ${expenditureId} to ${clampedAdjustment}%, impact: ${revenueImpact}B, batch mode: ${this.isBatchUpdateInProgress}`);
 
         // Update the tax expenditure immutably
         this.taxExpenditures = {
@@ -1193,13 +2061,18 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
           this.updateRevenueSourceAdjustedAmount(expenditure.linkedRevenueSource);
         }
 
-        // Signal update
-        this.lastUpdate = Date.now();
-
-        // Sync to localStorage
-        this.syncToLocalStorage();
-
-        console.log(`Updated tax expenditure ${expenditureId} to ${clampedAdjustment}%, impact: ${revenueImpact}B`);
+        // Only update timestamps if not in batch mode
+        if (!this.isBatchUpdateInProgress) {
+          // Signal update
+          this.lastUpdate = Date.now();
+          this.lastTaxExpenditureUpdate = Date.now();
+          
+          // Signal that sentiment update is needed
+          this.setSentimentUpdateRequired(true);
+          
+          // Sync to localStorage
+          this.syncToLocalStorage();
+        }
       } catch (e) {
         console.error(`Error updating tax expenditure ${expenditureId}:`, e);
       }
@@ -1312,47 +2185,12 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
       }
     },
     
+    /**
+     * Alternative method name for backward compatibility - delegates to setRevenueRate
+     * @deprecated Use setRevenueRate instead
+     */
     updateRevenueSourceRate(sourceId, newRate) {
-      const source = this.revenueSources[sourceId];
-      if (!source) {
-        console.error(`Revenue source not found: ${sourceId}`);
-        return;
-      }
-      
-      // Clamp the rate to valid range if min/max are defined
-      let clampedRate = newRate;
-      if (source.minRate !== undefined) {
-        clampedRate = Math.max(source.minRate, clampedRate);
-      }
-      if (source.maxRate !== undefined) {
-        clampedRate = Math.min(source.maxRate, clampedRate);
-      }
-      
-      // Update the rate and recalculate the amount
-      source.rate = clampedRate;
-      source.amount = source.base * source.rate;
-      
-      // Update the adjusted amount (which will include tax expenditure impacts)
-      this.updateRevenueSourceAdjustedAmount(sourceId);
-      
-      // Update the revenue source in the current year's rate history
-      if (source.rateByYear) {
-        source.rateByYear[this.currentYear] = clampedRate;
-      }
-      
-      // Force reactive update by shallow copying revenueSources
-      this.revenueSources = { ...this.revenueSources };
-      
-      // Update the reactive trigger to force component updates
-      this.lastRevenueSourceUpdate = Date.now();
-      
-      // Update lastUpdate to trigger reactivity
-      this.lastUpdate = Date.now();
-      
-      // Sync to localStorage
-      this.syncToLocalStorage();
-      
-      console.log(`Updated revenue source ${sourceId} rate to ${clampedRate}%, amount: ${source.amount}B, adjusted: ${source.adjustedAmount}B`);
+      return this.setRevenueRate(sourceId, newRate);
     },
 
     resetTaxExpenditures() {
@@ -1363,23 +2201,59 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
         resetExpenditures[expId] = {
           ...exp,
           adjustmentFactor: 0,
-          revenueImpact: 0
+          revenueImpact: 0,
+          adjustmentPercent: 0,
+          adjustedAmount: exp.baseAmount
         };
       }
       this.taxExpenditures = resetExpenditures;
+      this.lastTaxExpenditureUpdate = Date.now();
 
       // Update all revenue sources to reflect reset expenditures
       for (const sourceId in this.revenueSources) {
         this.updateRevenueSourceAdjustedAmount(sourceId);
       }
 
-      // Signal update
+      // Signal update and recalculate totals
       this.lastUpdate = Date.now();
-
-      // Sync to localStorage
-      this.syncToLocalStorage();
-
+      this.recalculateTotals();
+      
+      // Update badges after tax expenditures are reset
+      this.updateBadges();
+      
       console.log('Reset all tax expenditures to 0');
     },
+
+    updateBadges() {
+      // Get the budget data in the format expected by the badge engine
+      const budgetData = this.budgetDataForBadges;
+      
+      console.log('%c[STORE DEBUG] updateBadges called', 'background: #e74c3c; color: white; padding: 2px 5px; border-radius: 3px;');
+      console.log('Active preset in store:', this.activePreset);
+      console.log('Budget data for badges:', budgetData);
+      
+      // CRITICAL FIX: Ensure we're passing the activePreset correctly
+      // The activePreset must be a string, not undefined or null
+      const presetKey = this.activePreset || null;
+      
+      console.log('%c[STORE DEBUG] Calling getBudgetBadges with preset:', 'color: #e67e22;', presetKey);
+      
+      // Get the earned badges using the getBudgetBadges function, passing the active preset
+      const earnedBadges = getBudgetBadges(budgetData, presetKey);
+      
+      console.log('%c[STORE DEBUG] Earned badges:', 'color: #2ecc71;', earnedBadges.map(b => b.title));
+      
+      // Update the badges state
+      this.badges = [...earnedBadges]; // Use spread operator to ensure reactivity
+      this.lastBadgeUpdate = Date.now();
+      
+      // Force a UI update by triggering a reactive property
+      this.$patch({ lastBadgeUpdate: Date.now() });
+      
+      // Sync to localStorage
+      this.syncToLocalStorage();
+    },
+    
+
   },
 });
