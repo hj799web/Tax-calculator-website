@@ -101,8 +101,8 @@
 
 <script setup>
 import { computed, watch } from 'vue';
-import { useBudgetSimulatorStore } from '@/stores/budgetSimulator';
-import { badgeConfig } from '@/config/badgeConfig';
+import { useBudgetSimulatorStore } from '@/domains/budget';
+import { badgeConfig } from '@/domains/badges/config/badgeConfig';
 
 // Props
 const props = defineProps({

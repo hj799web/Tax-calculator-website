@@ -25,7 +25,7 @@
 </template>
 
 <script setup>
-import { sentimentConfig } from '@/config/sentimentConfig.js'
+import { sentimentConfig } from '@/domains/sentiment/config/sentimentConfig.js'
 
 defineProps({
   provinces: {

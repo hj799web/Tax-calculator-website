@@ -45,7 +45,7 @@
 <script setup>
 import { ref, computed, watch, nextTick } from 'vue'
 import SentimentGroupSelector from './SentimentGroupSelector.vue'
-import { useBudgetSimulatorStore } from '@/stores/budgetSimulator'
+import { useBudgetSimulatorStore } from '@/domains/budget/store/budgetSimulator'
 
 // Get access to the budget store
 const budgetStore = useBudgetSimulatorStore()

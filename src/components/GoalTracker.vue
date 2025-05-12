@@ -190,7 +190,7 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { useBudgetSimulatorStore } from '../stores/budgetSimulator';
+import { useBudgetSimulatorStore } from '../domains/budget/store/budgetSimulator';
 
 // Props
 const props = defineProps({

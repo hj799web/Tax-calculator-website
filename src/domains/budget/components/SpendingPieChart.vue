@@ -33,7 +33,7 @@
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
 import { Pie } from 'vue-chartjs';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, Title } from 'chart.js';
-import { useBudgetSimulatorStore } from '@/stores/budgetSimulator';
+import { useBudgetSimulatorStore } from '@/domains/budget/store/budgetSimulator';
 
 // Register Chart.js components
 ChartJS.register(ArcElement, Tooltip, Legend, Title);

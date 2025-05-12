@@ -426,7 +426,7 @@
 
 <script setup>
 import { computed, defineEmits, defineProps } from 'vue';
-import { useBudgetSimulatorStore } from '@/stores/budgetSimulator';
+import { useBudgetSimulatorStore } from '@/domains/budget/store/budgetSimulator';
 import CategoryGroup from './CategoryGroup.vue';
 // eslint-disable-next-line no-unused-vars
 import SpendingCategory from './SpendingCategory.vue';

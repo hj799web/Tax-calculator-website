@@ -1051,7 +1051,7 @@
 <script setup>
 import { ref, onMounted, watch, computed } from 'vue';
 import debounce from 'lodash.debounce'; // 🆕 PERFORMANCE NOTE: Debounce slider commits to avoid excessive store updates
-import { useBudgetSimulatorStore } from '../stores/budgetSimulator.js';
+import { useBudgetSimulatorStore } from '../domains/budget/store/budgetSimulator.js';
 
 // Initialize the budget simulator store
 const budgetStore = useBudgetSimulatorStore();

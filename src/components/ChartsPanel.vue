@@ -231,10 +231,10 @@
 
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
-import { useBudgetSimulatorStore } from '../stores/budgetSimulator.js';
+import { useBudgetSimulatorStore } from '../domains/budget/store/budgetSimulator.js';
 import { Bar } from 'vue-chartjs';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
-import SpendingPieChart from './budget/SpendingPieChart.vue';
+import SpendingPieChart from '@/domains/budget/components/SpendingPieChart.vue';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 

@@ -198,11 +198,11 @@
                   class="social-link"
                 >
                   <img
-                    src="https://cdn-icons-png.flaticon.com/512/561/561127.png"
+                    src="@/assets/email-icon.svg"
                     alt="Email"
                     class="social-icon"
                   >
-                  <span>fiscal-insights@outlook.com</span>
+                  Contact Us
                 </a>
                 <a
                   href="https://www.instagram.com/fiscal_insights1/"
@@ -215,19 +215,25 @@
                     alt="Instagram"
                     class="social-icon"
                   >
-                  <span>@fiscal_insights1</span>
+                  @fiscal_insights1
                 </a>
               </div>
             </div>
             <div class="footer-section">
-              <h3>Disclaimer</h3>
-              <p>This calculator is a simplified estimate. Actual tax amounts may vary.</p>
-              <p>Based on 2024 approximate tax rules and brackets.</p>
-              <p>Last updated: March 2024</p>
+              <h3>Legal</h3>
+              <div class="legal-links">
+                <router-link
+                  to="/terms-of-service"
+                  class="legal-link"
+                >
+                  Terms of Service
+                </router-link>
+              </div>
             </div>
           </div>
           <div class="footer-bottom">
-            <p>&copy; 2024 Fiscal Insights. All rights reserved.</p>
+            <p>Contact us: <a href="mailto:fiscal-insights@outlook.com" class="text-blue-600 hover:text-blue-800">fiscal-insights@outlook.com</a></p>
+            <p>&copy; {{ new Date().getFullYear() }} Fiscal Insights. All rights reserved.</p>
           </div>
         </footer>
       </div>

@@ -27,6 +27,11 @@ const routes = [
     },
     // Pass URL query parameters as props to the component
     props: (route) => ({ ...route.query })
+  },
+  {
+    path: '/terms-of-service',
+    name: 'terms-of-service',
+    component: () => import('../views/TermsOfServiceView.vue')
   }
 ]
 

@@ -1,9 +1,9 @@
 // src/utils/computeSentimentScores.js
 // src/utils/computeSentimentScores.js
 
-import { sentimentConfig, REACTIVITY_AMPLIFIER } from '@/config/sentimentConfig.js'
-import { applyBadgeModifiers } from '@/config/badgeSentimentModifiers.js'
-import { budgetScenarioModifiers } from '@/config/budgetScenarioModifiers.js'
+import { sentimentConfig, REACTIVITY_AMPLIFIER } from '@/domains/sentiment/config/sentimentConfig.js'
+import { applyBadgeModifiers } from '@/domains/badges/config/badgeSentimentModifiers.js'
+import { budgetScenarioModifiers } from '@/domains/budget/config/budgetScenarioModifiers.js'
 
 /**
  * Computes sentiment scores for each category group (provinces, demographics, sectors)
@@ -550,7 +550,7 @@ function calculateOverallScore(result, activeParty = null) {
   return Math.max(1, Math.min(5, finalScore));
 }
 
-import { useSentimentSettingsStore } from '@/stores/sentimentSettings'
+import { useSentimentSettingsStore } from '@/domains/sentiment/store/sentimentSettings'
 
 function getSensitivityMultiplier({ province, demographic, sector }, sensitivitySettings = null) {
   let settings = sensitivitySettings;
@@ -583,7 +583,7 @@ import {
   getPrecedenceOverride,
   PRECEDENCE_LEVELS,
   TRIGGER_PATHS
-} from '@/config/sentimentPrecedenceRules';
+} from '@/domains/sentiment/config/sentimentPrecedenceRules';
 
 // Helper function to check if a value is within tolerance of a target value
 function isWithinTolerance(value, target, tolerancePercent = 1) {

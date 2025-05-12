@@ -212,27 +212,29 @@
 </template>
 
 <script setup>
-import CollapsibleSentimentBanner from '../components/CollapsibleSentimentBanner.vue'
-import SentimentSensitivityControl from '../components/SentimentSensitivityControl.vue'
+import CollapsibleSentimentBanner from '@/domains/sentiment/components/CollapsibleSentimentBanner.vue'
+import SentimentSensitivityControl from '@/domains/sentiment/components/SentimentSensitivityControl.vue'
 import SharedBudgetDetailModal from '../components/SharedBudgetDetailModal.vue'
-import SocialShareModal from '../components/SocialShareModal.vue'
+import { SocialShareModal } from '@/domains/social'
 
 import { computed, ref, onMounted, watch } from 'vue'
-import { useBudgetSimulatorStore } from '../stores/budgetSimulator.js'
-import { computeSentimentScores, getSentimentLabel, getSentimentEmoji } from '../utils/computeSentimentScores'
+import { useBudgetSimulatorStore } from '@/domains/budget'
+import { computeSentimentScores, getSentimentLabel, getSentimentEmoji } from '@/domains/sentiment/utils/computeSentimentScores'
 // Import scenario logic if needed
 import RevenueSliders from '../components/RevenueSliders.vue'
 import GoalTracker from '../components/GoalTracker.vue'
 import PartyBudgetSharing from '../components/PartyBudgetSharing.vue'
 import ChartsPanel from '../components/ChartsPanel.vue'
-import YearSelector from '../components/budget/YearSelector.vue';
-import BudgetResults from '../components/budget/BudgetResults.vue';
-import SpendingControls from '../components/budget/SpendingControls.vue';
-import PresetSelector from '../components/PresetSelector.vue';
-import AchievementBadge from '@/components/AchievementBadge.vue';
-import BadgeGalleryModal from '@/components/BadgeGalleryModal.vue';
-import RadarSentiment from '@/components/RadarSentiment.vue';
-import { setPreset } from '@/presets';
+import YearSelector from '@/domains/budget/components/YearSelector.vue'
+import BudgetResults from '@/domains/budget/components/BudgetResults.vue'
+import SpendingControls from '@/domains/budget/components/SpendingControls.vue'
+import PresetSelector from '../components/PresetSelector.vue'
+import AchievementBadge from '@/domains/badges/components/AchievementBadge.vue'
+import BadgeGalleryModal from '@/domains/badges/components/BadgeGalleryModal.vue'
+import RadarSentiment from '@/domains/sentiment/components/RadarSentiment.vue'
+import { setPreset } from '@/presets'
+
+import { parseSharedBudgetParams, applySharedBudgetToStore } from '@/domains/budget/utils/sharedBudget.js'
 
 const budgetStore = useBudgetSimulatorStore();
 const currentYear = ref(budgetStore.currentYear);
@@ -460,7 +462,6 @@ const sharedBudgetData = ref({}); // will hold the parsed shared budget data
 const isSharedBudget = ref(false);
 
 import { useRoute } from 'vue-router';
-import { parseSharedBudgetParams, applySharedBudgetToStore } from '../utils/sharedBudget.js';
 
 // Get the current route
 const route = useRoute();

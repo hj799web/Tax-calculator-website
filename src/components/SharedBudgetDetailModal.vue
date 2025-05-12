@@ -158,7 +158,7 @@
 
 <script setup>
 import { computed } from 'vue';
-import BudgetSentimentBadgeCard from './BudgetSentimentBadgeCard.vue';
+import BudgetSentimentBadgeCard from '@/domains/badges/components/BudgetSentimentBadgeCard.vue';
 
 const props = defineProps({
   modelValue: {

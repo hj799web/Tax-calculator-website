@@ -82,7 +82,7 @@
 </template>
 
 <script setup>
-import SentimentSensitivityControl from '@/components/SentimentSensitivityControl.vue'
+import SentimentSensitivityControl from '@/domains/sentiment/components/SentimentSensitivityControl.vue'
 import { ref, computed, watch } from 'vue'
 import { formatBudget } from '../utils.js'
 import { useYearStore } from '../stores/year.js'

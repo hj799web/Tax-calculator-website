@@ -38,7 +38,6 @@
             </button>
           </div>
 
-
           <!-- Body Content -->
           <div class="overflow-y-auto" style="max-height: calc(v-bind('modalMaxHeight') - 4rem); overflow-x: hidden;">
             <!-- Two Column Layout -->
@@ -109,7 +108,7 @@
                         </div>
                       </div>
                       
-                      <!-- Detailed Budget Sentiment and Badge Card - First thing users see -->
+                      <!-- Detailed Budget Sentiment and Badge Card -->
                       <div class="link-preview-detailed-card">
                         <h3 class="text-xl font-bold mb-3">Budget Impact Analysis</h3>
                         <BudgetSentimentBadgeCard :budget-data="previewBudgetData" />
@@ -257,11 +256,12 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import html2canvas from 'html2canvas';
-import BudgetSentimentBadgeCard from './BudgetSentimentBadgeCard.vue';
-import { useBudgetSimulatorStore } from '../stores/budgetSimulator.js';
+import BudgetSentimentBadgeCard from '@/domains/badges/components/BudgetSentimentBadgeCard.vue';
+import { useBudgetSimulatorStore } from '@/domains/budget';
 
 // Build previewBudgetData from current store/computed values
 const previewBudgetData = computed(() => ({
+  sentiment: budgetStore.sentimentAnalysis?.overall || 3,
   surplus: effectiveBudgetSurplus.value,
   revenue: effectiveTotalRevenue.value,
   debt: effectiveDebtToGdpRatio.value,

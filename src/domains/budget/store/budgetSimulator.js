@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { getBudgetBadges } from "@/utils/generateBadgesFromBudget";
+import { getBudgetBadges } from "@/domains/badges/utils/generateBadgesFromBudget";
 
 // Helper for conditional logging in development environment only
 const devLog = (message, ...args) => {

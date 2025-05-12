@@ -179,10 +179,10 @@
 <script setup>
 import { reactive } from 'vue';
 import { ref, computed, watch, onMounted, onUnmounted, nextTick } from 'vue';
-import { useBudgetSimulatorStore } from '@/stores/budgetSimulator';
-import { useSentimentSettingsStore } from '@/stores/sentimentSettings';
-import { budgetScenarioModifiers } from '@/config/budgetScenarioModifiers';
-import { computeSentimentScores, getSentimentLabel, getSentimentEmoji, getSentimentColor } from '@/utils/computeSentimentScores';
+import { useBudgetSimulatorStore } from '@/domains/budget/store/budgetSimulator';
+import { useSentimentSettingsStore } from '@/domains/sentiment/store/sentimentSettings';
+import { budgetScenarioModifiers } from '@/domains/budget/config/budgetScenarioModifiers';
+import { computeSentimentScores, getSentimentLabel, getSentimentEmoji, getSentimentColor } from '@/domains/sentiment/utils/computeSentimentScores';
 import Chart from 'chart.js/auto';
 
 // Component props

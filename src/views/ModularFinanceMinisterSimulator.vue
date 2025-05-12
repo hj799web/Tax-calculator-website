@@ -92,14 +92,14 @@
 
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue';
-import { useBudgetSimulatorStore } from '../stores/budgetSimulator.js';
+import { useBudgetSimulatorStore } from '@/domains/budget';
 import { storeToRefs } from 'pinia';
 import RevenueSliders from '../components/RevenueSliders.vue';
 import GoalTracker from '../components/GoalTracker.vue';
 import ChartsPanel from '../components/ChartsPanel.vue';
-import YearSelector from '../components/budget/YearSelector.vue';
-import BudgetResults from '../components/budget/BudgetResults.vue';
-import SpendingControls from '../components/budget/SpendingControls.vue';
+import YearSelector from '@/domains/budget/components/YearSelector.vue';
+import BudgetResults from '@/domains/budget/components/BudgetResults.vue';
+import SpendingControls from '@/domains/budget/components/SpendingControls.vue';
 import PresetSelector from '../components/PresetSelector.vue';
 
 // Initialize store and local state

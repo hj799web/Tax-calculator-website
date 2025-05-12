@@ -324,7 +324,7 @@
 
 <script setup>
 // Props: budgetTitle, badge, narrative, totalRevenue, totalSpending, surplus, sentimentScores, includeFullBreakdown, budget, formatCurrency
-import { getSentimentLabel, getSentimentEmoji } from '@/utils/computeSentimentScores';
+import { getSentimentEmoji, getSentimentLabel } from '@/domains/sentiment/utils/computeSentimentScores';
 
 const props = defineProps({
   budgetTitle: { type: String, default: 'Budget Summary' },

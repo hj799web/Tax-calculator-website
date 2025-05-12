@@ -1,4 +1,4 @@
-import { baselineSentimentOverrides } from './baselineSentimentOverrides.js';
+import { baselineSentimentOverrides } from '@/domains/sentiment/config/baselineSentimentOverrides.js';
 
 /**
  * sentimentConfig.js

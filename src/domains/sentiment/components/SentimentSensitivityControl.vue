@@ -63,7 +63,7 @@
 
 <script setup>
 import { computed } from 'vue';
-import { useSentimentSettingsStore } from '@/stores/sentimentSettings';
+import { useSentimentSettingsStore } from '@/domains/sentiment/store/sentimentSettings';
 
 const sentimentSettings = useSentimentSettingsStore();
 

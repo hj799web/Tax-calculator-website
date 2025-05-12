@@ -133,7 +133,7 @@
 
 <script>
 import { mapStores } from 'pinia';
-import { useBudgetSimulatorStore } from '@/stores/budgetSimulator';
+import { useBudgetSimulatorStore } from '@/domains/budget/store/budgetSimulator';
 import { budgetPresets, setPreset } from '@/presets';
 
 export default {

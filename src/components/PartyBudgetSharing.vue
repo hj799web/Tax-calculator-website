@@ -52,7 +52,7 @@
 <script setup>
 import { ref } from 'vue';
 import { getAvailablePartyBudgets, generatePartyBudgetUrl, applyPartyBudget } from '@/utils/partyBudgets';
-import { useBudgetSimulatorStore } from '@/stores/budgetSimulator';
+import { useBudgetSimulatorStore } from '@/domains/budget/store/budgetSimulator';
 
 // Get party budgets from the utility
 const partyBudgets = getAvailablePartyBudgets();

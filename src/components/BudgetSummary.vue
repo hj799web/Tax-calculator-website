@@ -270,9 +270,9 @@
 
 <script setup>
 import { ref, computed, nextTick } from 'vue';
-import { useBudgetSimulatorStore } from '../stores/budgetSimulator.js';
-import ExportPanel from './budget/ExportPanel.vue';
-import AchievementBadge from './AchievementBadge.vue';
+import { useBudgetSimulatorStore } from '../domains/budget/store/budgetSimulator.js';
+import ExportPanel from '@/domains/budget/components/ExportPanel.vue';
+import AchievementBadge from '@/domains/badges/components/AchievementBadge.vue';
 
 // Initialize the budget simulator store
 const budgetStore = useBudgetSimulatorStore();

@@ -38,9 +38,9 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { useBudgetSimulatorStore } from '@/stores/budgetSimulator.js'
-import { downloadBudgetPDF } from '@/utils/generateExportPDF'
-import { computeSentimentScores } from '@/utils/computeSentimentScores'
+import { useBudgetSimulatorStore } from '@/domains/budget/store/budgetSimulator.js'
+import { downloadBudgetPDF } from '@/domains/budget/utils/generateExportPDF'
+import { computeSentimentScores } from '@/domains/sentiment/utils/computeSentimentScores'
 import ExportCard from './ExportCard.vue'
 
 const budgetStore = useBudgetSimulatorStore()

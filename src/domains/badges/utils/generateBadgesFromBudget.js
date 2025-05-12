@@ -1,4 +1,4 @@
-import { badgeConfig } from '@/config/badgeConfig';
+import { badgeConfig } from '@/domains/badges/config/badgeConfig';
 
 /**
  * Sensitivity factor: 60% more sensitive (i.e., multiplier of 1.6)

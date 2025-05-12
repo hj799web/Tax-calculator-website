@@ -279,8 +279,8 @@
 import { ref, watch, onMounted, computed } from 'vue';
 import { onUnmounted } from 'vue';
 import ExportPanel from './ExportPanel.vue';
-import { useBudgetSimulatorStore } from '../../stores/budgetSimulator.js';
-import AchievementBadge from '../AchievementBadge.vue';
+import { useBudgetSimulatorStore } from '@/domains/budget/store/budgetSimulator.js';
+import AchievementBadge from '@/domains/badges/components/AchievementBadge.vue';
 import html2canvas from 'html2canvas';
 
 // State for collapsible sections
