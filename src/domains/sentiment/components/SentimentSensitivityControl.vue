@@ -68,43 +68,43 @@ import { useSentimentSettingsStore } from '@/domains/sentiment/store/sentimentSe
 const sentimentSettings = useSentimentSettingsStore();
 
 const overall = computed({
-  get: () => sentimentSettings.overall,
-  set: (val) => sentimentSettings.setOverall(val)
+  get: () => sentimentSettings.sensitivity.overall,
+  set: (val) => sentimentSettings.setSensitivity('overall', val)
 });
 
 const regions = computed({
-  get: () => sentimentSettings.regions,
-  set: (val) => sentimentSettings.setRegions(val)
+  get: () => sentimentSettings.sensitivity.regions,
+  set: (val) => sentimentSettings.setSensitivity('regions', val)
 });
 
 const demographics = computed({
-  get: () => sentimentSettings.demographics,
-  set: (val) => sentimentSettings.setDemographics(val)
+  get: () => sentimentSettings.sensitivity.demographics,
+  set: (val) => sentimentSettings.setSensitivity('demographics', val)
 });
 
 const sectors = computed({
-  get: () => sentimentSettings.sectors,
-  set: (val) => sentimentSettings.setSectors(val)
+  get: () => sentimentSettings.sensitivity.sectors,
+  set: (val) => sentimentSettings.setSensitivity('sectors', val)
 });
 
 function updateOverall() {
   console.log('[SENSITIVITY DEBUG] Setting overall to:', overall.value);
-  sentimentSettings.setOverall(overall.value);
+  sentimentSettings.setSensitivity('overall', overall.value);
 }
 
 function updateRegions() {
   console.log('[SENSITIVITY DEBUG] Setting regions to:', regions.value);
-  sentimentSettings.setRegions(regions.value);
+  sentimentSettings.setSensitivity('regions', regions.value);
 }
 
 function updateDemographics() {
   console.log('[SENSITIVITY DEBUG] Setting demographics to:', demographics.value);
-  sentimentSettings.setDemographics(demographics.value);
+  sentimentSettings.setSensitivity('demographics', demographics.value);
 }
 
 function updateSectors() {
   console.log('[SENSITIVITY DEBUG] Setting sectors to:', sectors.value);
-  sentimentSettings.setSectors(sectors.value);
+  sentimentSettings.setSensitivity('sectors', sectors.value);
 }
 
 function resetAll() {

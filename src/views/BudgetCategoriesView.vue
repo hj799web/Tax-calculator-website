@@ -3,11 +3,6 @@
     <h2 class="section-title">
       Budget Categories
     </h2>
-    <SentimentSensitivityControl />
-    <!-- Introduction Text -->
-    <p class="intro-text">
-      {{ introText }}
-    </p>
     <!-- Category Selection Dropdown -->
     <div class="category-select">
       <select v-model.number="selectedCategory">
@@ -43,7 +38,7 @@
         class="budget-category"
       >
         <h3>
-          {{ category.name }} ({{ formatBudget(category.amount) }})
+          {{ category.name }} ({{ formatCurrency(category.amount) }})
         </h3>
         <button
           class="toggle-description-button"
@@ -69,7 +64,7 @@
                 class="subsection"
               >
                 <h4>
-                  {{ sub.name }} – {{ formatBudget(sub.amount) }}
+                  {{ sub.name }} – {{ formatCurrency(sub.amount) }}
                 </h4>
                 <p>{{ sub.description }}</p>
               </div>
@@ -82,10 +77,9 @@
 </template>
 
 <script setup>
-import SentimentSensitivityControl from '@/domains/sentiment/components/SentimentSensitivityControl.vue'
 import { ref, computed, watch } from 'vue'
-import { formatBudget } from '../utils.js'
-import { useYearStore } from '../stores/year.js'
+import { formatCurrency } from '@/domains/calculator/utils/chartUtils.js'
+import { useYearStore } from '@/domains/calculator/store/year.js'
 
 // Get the year store
 const yearStore = useYearStore()
@@ -566,13 +560,6 @@ const selectedCategory = ref(0)
 // Computed property to get the current budget categories based on the selected year
 const currentBudgetCategories = computed(() => {
   return yearStore.budgetYear === '2023-2024' ? budgetCategories2024.value : budgetCategories20222023.value
-})
-
-// Computed property for the intro text based on the selected year
-const introText = computed(() => {
-  return yearStore.budgetYear === '2023-2024'
-    ? "These budget categories are for the 2023-2024 fiscal year. Data is sourced from the Federal Budget 2023-2024 offering a view of how federal funds are allocated across key sectors such as healthcare, defense, infrastructure, and more."
-    : "These budget categories are for the 2022–2023 fiscal year. Data is sourced from the Public Accounts of Canada offering a view of how federal funds are allocated across key sectors such as healthcare, defense, infrastructure, and more."
 })
 
 // Computed property to filter categories based on selection

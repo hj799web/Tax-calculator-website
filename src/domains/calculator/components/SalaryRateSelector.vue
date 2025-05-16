@@ -25,8 +25,8 @@
 </template>
 
 <script setup>
-import { useSalaryStore } from '../stores/salary'
-import { salaryOptions } from '../constants.js'
+import { useSalaryStore } from '@/domains/calculator/store/salary.js'
+import { salaryOptions } from '@/domains/calculator/constants/taxData.js'
 import { storeToRefs } from 'pinia';
 
 const salaryStore = useSalaryStore();

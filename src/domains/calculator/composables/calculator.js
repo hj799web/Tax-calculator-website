@@ -1,5 +1,5 @@
 import { computed } from 'vue'
-import { useCalculatorStore } from '../stores/calculator.js'
+import { useCalculatorStore } from '@/domains/calculator/store/calculator.js'
 import { storeToRefs } from 'pinia';
 import { useVuelidate } from '@vuelidate/core'
 import { numeric, minValue } from '@vuelidate/validators'

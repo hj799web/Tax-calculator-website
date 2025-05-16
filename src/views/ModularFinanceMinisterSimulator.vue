@@ -2,19 +2,7 @@
   <div class="simulator-container">
     <div class="simulator-header">
       <h1 class="simulator-title">Finance Minister Simulator</h1>
-      <div v-if="isMobile" class="year-selector">
-        <select 
-          v-model="currentYear" 
-          @change="updateBudgetForYear" 
-          class="year-select-mobile"
-          aria-label="Select year"
-        >
-          <option v-for="year in [2020, 2021, 2022, 2023, 2024, 2025]" :key="year" :value="year">
-            {{ year }}
-          </option>
-        </select>
-      </div>
-      <div v-else class="year-selector">
+      <div class="year-selector">
         <button 
           class="year-button"
           @click="decrementYear"
@@ -118,7 +106,6 @@ const isMobile = ref(window.innerWidth < 768);
 onMounted(() => {
   try {
     budgetStore.initializeBudget();
-    window.addEventListener('resize', handleResize);
   } catch (err) {
     error.value = 'Failed to initialize budget. Please try again.';
     console.error('Budget initialization error:', err);
@@ -165,6 +152,10 @@ const handleResize = debounce(() => {
   isMobile.value = window.innerWidth < 768;
 }, 250);
 
+onMounted(() => {
+  window.addEventListener('resize', handleResize);
+});
+
 onUnmounted(() => {
   window.removeEventListener('resize', handleResize);
 });
@@ -176,14 +167,6 @@ watch(currentYear, (newYear) => {
 </script>
 
 <style scoped>
-/* ----------------------------------------------------------
-   Mobile-friendly overrides (≤768 px & ≤480 px)
-   – Single-column layout
-   – Icon-only year controls
-   – Reduced shadows & transforms
----------------------------------------------------------- */
-
-/* Mobile-friendly adjustments for screens ≤480px and ≤768px */
 .simulator-container {
   max-width: 1600px;
   margin: 0 auto;
@@ -485,12 +468,7 @@ watch(currentYear, (newYear) => {
   }
   
   .simulator-card {
-    padding: 1rem;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  }
-  
-  .card-content {
-    min-height: 150px;
+    padding: 1.25rem;
   }
   
   .card-title {
@@ -499,10 +477,6 @@ watch(currentYear, (newYear) => {
 }
 
 @container (max-width: 480px) {
-  .simulator-container {
-    padding: 0.5rem;
-  }
-  
   .simulator-header {
     padding: 1rem;
   }
@@ -513,44 +487,11 @@ watch(currentYear, (newYear) => {
   
   .year-selector {
     flex-direction: column;
-    gap: 0.5rem;
-  }
-  
-  .year-button {
-    padding: 0.5rem;
-    font-size: 0.875rem;
-    min-width: 40px;
-  }
-
-  .year-button:disabled {
-    opacity: 0.4;
-  }
-
-  .material-icons {
-    font-size: 1.5rem;
-  }
-
-  .year-display {
-    font-size: 1rem;
-    min-width: 60px;
+    gap: 0.75rem;
   }
   
   .simulator-card {
     padding: 1rem;
-  }
-
-  .card-title {
-    font-size: 1.125rem;
-  }
-
-  .simulator-header,
-  .simulator-card {
-    backdrop-filter: none;
-    transform: none !important;
-    transition: none;
-    border-radius: 0.5rem;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    background: #fff;
   }
 }
 
@@ -617,61 +558,6 @@ watch(currentYear, (newYear) => {
   .year-button,
   .error-boundary {
     display: none;
-  }
-}
-
-.year-select-mobile {
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  color: #2d3748;
-  background: white;
-  border: 1px solid #e2e8f0;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 
-    0 4px 6px rgba(0, 0, 0, 0.1),
-    0 2px 4px rgba(0, 0, 0, 0.06);
-  will-change: transform, box-shadow;
-  width: 100%;
-  max-width: 200px;
-  appearance: none;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-  background-repeat: no-repeat;
-  background-position: right 0.75rem center;
-  background-size: 1.25rem;
-  padding-right: 2.5rem;
-  display: block;
-  margin: 1rem auto;
-  width: 60%;
-  padding: 0.5rem;
-}
-
-.year-select-mobile:focus {
-  outline: none;
-  border-color: #4299e1;
-  box-shadow: 
-    0 6px 8px rgba(0, 0, 0, 0.12),
-    0 3px 6px rgba(0, 0, 0, 0.1);
-}
-
-.year-select-mobile:active {
-  transform: translateY(-1px) translateZ(0);
-  box-shadow: 
-    0 6px 8px rgba(0, 0, 0, 0.12),
-    0 3px 6px rgba(0, 0, 0, 0.1);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .year-select-mobile {
-    transition: none;
-    transform: none !important;
-  }
-}
-
-@media (forced-colors: active) {
-  .year-select-mobile {
-    border: 2px solid CanvasText;
   }
 }
 </style>

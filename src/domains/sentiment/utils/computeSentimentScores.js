@@ -1,7 +1,7 @@
 // src/utils/computeSentimentScores.js
 // src/utils/computeSentimentScores.js
 
-import { sentimentConfig, REACTIVITY_AMPLIFIER } from '@/domains/sentiment/config/sentimentConfig.js'
+import { sentimentConfig, REACTIVITY_AMPLIFIER, CLAMP_RANGE, OVERRIDE_THRESHOLD } from '@/domains/sentiment/config/sentimentConfig.js'
 import { applyBadgeModifiers } from '@/domains/badges/config/badgeSentimentModifiers.js'
 import { budgetScenarioModifiers } from '@/domains/budget/config/budgetScenarioModifiers.js'
 
@@ -31,6 +31,11 @@ import {
   calculatePolicyAlignmentScore,
   applyPolicyAlignmentToScore 
 } from './partyBudgetSentiment';
+
+// Helper function to clamp values between -1 and 1
+function clamp(value) {
+  return Math.max(-CLAMP_RANGE, Math.min(CLAMP_RANGE, value));
+}
 
 export function computeSentimentScores(budget, earnedBadges = [], activePreset = null, sensitivitySettings = null) {
   // Debug log for revenueMix
@@ -614,6 +619,11 @@ function computeScore(triggers, budget, groupContext = {}, sensitivitySettings =
   // Track effects with their precedence levels
   const effects = [];
   const activeTriggers = [];
+  const criticalAlerts = []; // New array to track critical alerts
+  
+  // Track weighted scores for aggregation
+  let weightedSum = 0;
+  let totalWeight = 0;
   
   // Check for data-driven precedence overrides first
   // This handles special cases like high carbon pricing in Alberta/Saskatchewan
@@ -656,7 +666,7 @@ function computeScore(triggers, budget, groupContext = {}, sensitivitySettings =
       
       // Check each condition in the array
       for (const condition of triggerConfig) {
-        const { min, max, score } = condition;
+        const { min, max, score, severity, weight = 1.0 } = condition;
         
         // Check if the budget value passes either the minimum or maximum condition
         const passesMin = min !== undefined && value >= min;
@@ -666,13 +676,36 @@ function computeScore(triggers, budget, groupContext = {}, sensitivitySettings =
           if (path === 'revenueMix.carbonPricing') {
             console.log(`[CARBON TAX][MATCH] Province: ${entity}, Matched Trigger:`, triggerConfig, `Score: ${score}`);
           }
-          // Apply reactivity amplifier to make scores more dramatic
-          const amplifiedScore = amplifyScore(score);
           
-          // Apply sensitivity by adjusting distance from neutral
+          // Check if this is a critical alert
+          if (Math.abs(score) > OVERRIDE_THRESHOLD || severity === 'extreme') {
+            criticalAlerts.push({
+              path,
+              score,
+              severity,
+              value,
+              entity,
+              category
+            });
+            console.log(`[CRITICAL] Found critical alert for ${category}.${entity}: ${path} with score ${score}`);
+            continue; // Skip normal processing for critical alerts
+          }
+          
+          // Normal processing for non-critical triggers
+          const clampedScore = clamp(score);
+          
+          // Apply group weight and sensitivity
+          const groupWeight = weight || 1.0;
+          const sensitivityMultiplier = getSensitivityMultiplier(groupContext, sensitivitySettings);
+          const weightedScore = clampedScore * groupWeight * sensitivityMultiplier;
+          
+          weightedSum += weightedScore;
+          totalWeight += groupWeight;
+          
+          // Continue with existing processing for effects array
+          const amplifiedScore = amplifyScore(clampedScore);
           const distanceFromNeutral = amplifiedScore - 3;
-          const multiplier = getSensitivityMultiplier(groupContext, sensitivitySettings);
-          const adjustedDistance = distanceFromNeutral * multiplier;
+          const adjustedDistance = distanceFromNeutral * sensitivityMultiplier;
           const finalScore = Math.max(1, Math.min(5, 3 + adjustedDistance));
           
           // For array-based triggers, create a special trigger path for high values
@@ -705,30 +738,49 @@ function computeScore(triggers, budget, groupContext = {}, sensitivitySettings =
       }
     } else {
       // Handle regular object-based triggers
-      const { min, max, score } = triggerConfig;
+      const { min, max, score, severity, weight = 1.0 } = triggerConfig;
       const value = getNestedValue(budget, path);
       if (value === undefined || isNaN(value)) continue;
       
-      // Special debug logging for carbon pricing to help diagnose issues
+      // Special debug logging for carbon pricing
       if (path === 'revenueMix.carbonPricing') {
-        // Enhanced debug logging for carbon tax trigger
         console.log(`[CARBON TAX][DEBUG] Province: ${entity}, Value: ${value}, TriggerConfig:`, triggerConfig);
-        
-        // Extra logging for near-zero values
         if (value <= 0.05) {
           console.log(`[CARBON TAX][CRITICAL] Near-zero carbon tax value detected: ${value}`);
         }
       }
 
-      // Use the tolerance-based matching function instead of direct comparison
+      // Use the tolerance-based matching function
       if (matchesTrigger(value, triggerConfig)) {
-        // Apply reactivity amplifier to make scores more dramatic
-        const amplifiedScore = amplifyScore(score);
+        // Check if this is a critical alert
+        if (Math.abs(score) > OVERRIDE_THRESHOLD || severity === 'extreme') {
+          criticalAlerts.push({
+            path,
+            score,
+            severity,
+            value,
+            entity,
+            category
+          });
+          console.log(`[CRITICAL] Found critical alert for ${category}.${entity}: ${path} with score ${score}`);
+          continue; // Skip normal processing for critical alerts
+        }
         
-        // Apply sensitivity by adjusting distance from neutral
+        // Normal processing for non-critical triggers
+        const clampedScore = clamp(score);
+        
+        // Apply group weight and sensitivity
+        const groupWeight = weight || 1.0;
+        const sensitivityMultiplier = getSensitivityMultiplier(groupContext, sensitivitySettings);
+        const weightedScore = clampedScore * groupWeight * sensitivityMultiplier;
+        
+        weightedSum += weightedScore;
+        totalWeight += groupWeight;
+        
+        // Continue with existing processing
+        const amplifiedScore = amplifyScore(clampedScore);
         const distanceFromNeutral = amplifiedScore - 3;
-        const multiplier = getSensitivityMultiplier(groupContext, sensitivitySettings);
-        const adjustedScore = 3 + (distanceFromNeutral * multiplier);
+        const adjustedScore = 3 + (distanceFromNeutral * sensitivityMultiplier);
         
         // Special case for carbon pricing in Alberta/Saskatchewan
         let finalScore = adjustedScore;
@@ -769,6 +821,32 @@ function computeScore(triggers, budget, groupContext = {}, sensitivitySettings =
     }
   }
   
+  // Calculate aggregate raw score
+  const aggregateRaw = totalWeight > 0 ? weightedSum / totalWeight : 0;
+  console.log(`[AGGREGATE] Raw score for ${category}.${entity}: ${aggregateRaw} (weighted sum: ${weightedSum}, total weight: ${totalWeight})`);
+  
+  // Calculate final sentiment value using new formula
+  const sentimentValue = Math.max(1, Math.min(5, Math.round(3 + 2 * aggregateRaw)));
+  console.log(`[SENTIMENT] Calculated sentiment value: ${sentimentValue} from aggregateRaw: ${aggregateRaw}`);
+  
+  // If we have critical alerts, handle them first
+  if (criticalAlerts.length > 0) {
+    console.log(`[CRITICAL] Processing ${criticalAlerts.length} critical alerts for ${category}.${entity}`);
+    
+    // Calculate the average of critical alerts
+    const criticalTotal = criticalAlerts.reduce((sum, alert) => sum + alert.score, 0);
+    const criticalAverage = criticalTotal / criticalAlerts.length;
+    
+    // Return the critical score with the alerts
+    return {
+      score: Math.max(1, Math.min(5, criticalAverage)), // Use criticalAverage instead of sentimentValue
+      activeTriggers: criticalAlerts.map(alert => alert.path),
+      hasPrecedence: true,
+      criticalAlerts,
+      aggregateRaw
+    };
+  }
+  
   // Check for absolute precedence triggers
   const absoluteEffects = effects.filter(e => e.precedence === PRECEDENCE_LEVELS.ABSOLUTE);
   
@@ -782,9 +860,10 @@ function computeScore(triggers, budget, groupContext = {}, sensitivitySettings =
     
     // Apply badges only if allowed by precedence rules
     return {
-      score: Math.max(1, Math.min(5, absoluteScore)),
+      score: Math.max(1, Math.min(5, absoluteScore)), // Use absoluteScore instead of sentimentValue
       activeTriggers,
-      hasPrecedence: true
+      hasPrecedence: true,
+      aggregateRaw
     };
   }
   
@@ -799,27 +878,27 @@ function computeScore(triggers, budget, groupContext = {}, sensitivitySettings =
 
   // Calculate the average score
   if (count) {
-    const averageScore = total / count;
-    
     console.log('[SCORE DEBUG] Calculated score:', {
       total,
       count,
-      averageScore,
-      finalScore: Math.max(1, Math.min(5, averageScore))
+      averageScore: total / count,
+      finalScore: sentimentValue // Use new sentiment value
     });
     
     // Return the score and active triggers for badge processing
     return {
-      score: Math.max(1, Math.min(5, averageScore)),
+      score: sentimentValue, // Use new sentiment value
       activeTriggers,
-      hasPrecedence: false
+      hasPrecedence: false,
+      aggregateRaw
     };
   } else {
     // Return neutral with empty active triggers
     return {
-      score: 3, 
+      score: sentimentValue, // Use new sentiment value
       activeTriggers: [],
-      hasPrecedence: false
+      hasPrecedence: false,
+      aggregateRaw
     };
   }
 }
@@ -858,16 +937,8 @@ function amplifyScore(score) {
   // Calculate distance from neutral (3)
   const distanceFromNeutral = score - 3;
   
-  // Apply biases based on whether the score is positive or negative
-  let biasMultiplier;
-  
-  if (distanceFromNeutral < 0) {
-    // For negative scores: apply extra negativity bias (unchanged)
-    biasMultiplier = 1.25;
-  } else {
-    // For positive scores: reduce sensitivity by 15%
-    biasMultiplier = 0.85; // 1.0 - 0.15 = 0.85 (15% less sensitive)
-  }
+  // Apply balanced multiplier for both positive and negative scores
+  const biasMultiplier = 1.0; // Equal treatment for positive and negative scores
   
   // Amplify the distance with both the amplifier and appropriate bias
   const amplifiedDistance = distanceFromNeutral * amplifier * biasMultiplier;

@@ -716,29 +716,65 @@ function getTotalImpactPrefix() {
 .simulator-card {
   background-color: white;
   border-radius: 0.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 
+    0 10px 20px rgba(0, 0, 0, 0.19),
+    0 6px 6px rgba(0, 0, 0, 0.23);
   overflow: hidden;
+  transform: translateZ(0);
+  transition: all 0.3s ease;
+  will-change: transform, box-shadow;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  display: flex;
+  flex-direction: column;
+  min-height: 1440px;
+}
+
+.simulator-card:hover {
+  transform: translateY(-5px) translateZ(20px) rotateX(2deg);
+  box-shadow: 
+    0 15px 30px rgba(0, 0, 0, 0.25),
+    0 10px 10px rgba(0, 0, 0, 0.22);
+}
+
+.card-title, .card-content, .main-category-header, .main-category-item, .other-category-header, .other-category-item, .subcategory-header, .subcategory-item, .gov-ops-header, .gov-ops-item, .tax-expenditure-header, .tax-expenditure-item, .impact-value, .reset-button {
+  word-break: break-word;
+  white-space: normal;
 }
 
 .card-title {
   display: flex;
   align-items: center;
-  padding: 0.75rem 1rem;
+  padding: 1.25rem 1.5rem 1rem 1.5rem;
   background-color: #f8f9fa;
   border-bottom: 1px solid #e9ecef;
-  font-size: 1.125rem;
-  font-weight: 600;
+  font-size: 1.5rem;
+  font-weight: 700;
   color: #2d3748;
+  transform: translateZ(30px);
+  transition: transform 0.3s ease;
+  position: relative;
+  z-index: 2;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+  box-shadow: none;
 }
 
 .card-title .icon {
-  margin-right: 0.5rem;
-  font-size: 1.25rem;
+  margin-right: 0.75rem;
+  font-size: 1.5rem;
   color: #4263eb;
 }
 
 .card-content {
   padding: 1rem;
+  transform: translateZ(10px);
+  transition: transform 0.3s ease;
+  flex-grow: 1;
+  position: relative;
+  z-index: 0;
 }
 
 .action-button {
@@ -783,27 +819,46 @@ function getTotalImpactPrefix() {
 .tax-expenditure-item,
 .main-category-item,
 .other-category-item,
-.subcategory-item {
+.subcategory-item,
+.gov-ops-item {
   border: 1px solid #e2e8f0;
   border-radius: 0.375rem;
   overflow: hidden;
+  transform: translateZ(0);
+  transition: all 0.3s ease;
+  will-change: transform, box-shadow;
+}
+
+.tax-expenditure-item:hover,
+.main-category-item:hover,
+.other-category-item:hover,
+.subcategory-item:hover,
+.gov-ops-item:hover {
+  transform: translateY(-2px) translateZ(10px) rotateX(1deg);
+  box-shadow: 
+    0 6px 8px rgba(0, 0, 0, 0.12),
+    0 3px 6px rgba(0, 0, 0, 0.1);
 }
 
 .tax-expenditure-header,
 .main-category-header,
 .other-category-header,
-.subcategory-header {
+.subcategory-header,
+.gov-ops-header {
   background-color: #f8fafc;
   padding: 0.75rem 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  transform: translateZ(20px);
+  transition: transform 0.3s ease;
 }
 
 .tax-expenditure-header h4,
 .main-category-header h4,
 .other-category-header h4,
-.subcategory-header h4 {
+.subcategory-header h4,
+.gov-ops-header h4 {
   margin: 0;
   font-size: 1rem;
   font-weight: 600;
@@ -813,7 +868,8 @@ function getTotalImpactPrefix() {
 .tax-expenditure-base,
 .main-category-base,
 .other-category-base,
-.subcategory-base {
+.subcategory-base,
+.gov-ops-base {
   font-size: 0.875rem;
   color: #4a5568;
 }
@@ -857,14 +913,18 @@ function getTotalImpactPrefix() {
 .tax-expenditure-content,
 .main-category-content,
 .other-category-content,
-.subcategory-content {
+.subcategory-content,
+.gov-ops-content {
   padding: 1rem;
+  transform: translateZ(10px);
+  transition: transform 0.3s ease;
 }
 
 .tax-expenditure-description,
 .main-category-description,
 .other-category-description,
-.subcategory-description {
+.subcategory-description,
+.gov-ops-description {
   font-size: 0.875rem;
   color: #4a5568;
   margin-bottom: 1rem;
@@ -874,7 +934,8 @@ function getTotalImpactPrefix() {
 .tax-expenditure-controls,
 .main-category-controls,
 .other-category-controls,
-.subcategory-controls {
+.subcategory-controls,
+.gov-ops-controls {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -899,7 +960,8 @@ function getTotalImpactPrefix() {
 .tax-expenditure-impact,
 .main-category-impact,
 .other-category-impact,
-.subcategory-impact {
+.subcategory-impact,
+.gov-ops-impact {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1074,5 +1136,303 @@ function getTotalImpactPrefix() {
   justify-content: space-between;
   align-items: center;
   font-weight: 600;
+}
+
+.spending-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 1rem;
+  box-shadow: 
+    0 10px 20px rgba(0, 0, 0, 0.19),
+    0 6px 6px rgba(0, 0, 0, 0.23);
+  backdrop-filter: blur(10px);
+  transform: translateZ(0);
+  transition: all 0.3s ease;
+  will-change: transform, box-shadow;
+  contain: content;
+}
+
+.spending-controls:hover {
+  transform: translateY(-5px) translateZ(0);
+  box-shadow: 
+    0 15px 30px rgba(0, 0, 0, 0.25),
+    0 10px 10px rgba(0, 0, 0, 0.22);
+}
+
+.spending-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: 
+    0 4px 6px rgba(0, 0, 0, 0.1),
+    0 2px 4px rgba(0, 0, 0, 0.06);
+  transform: translateZ(0);
+  transition: all 0.3s ease;
+  will-change: transform, box-shadow;
+}
+
+.spending-group:hover {
+  transform: translateY(-2px) translateZ(0);
+  box-shadow: 
+    0 6px 8px rgba(0, 0, 0, 0.12),
+    0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.group-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.group-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #2d3748;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.group-title .material-icons {
+  color: #4299e1;
+}
+
+.group-total {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #2d3748;
+}
+
+.spending-items {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.spending-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  background: #f7fafc;
+  border-radius: 0.5rem;
+  transform: translateZ(0);
+  transition: all 0.3s ease;
+  will-change: transform, background-color;
+}
+
+.spending-item:hover {
+  background: #edf2f7;
+  transform: translateY(-1px) translateZ(0);
+}
+
+.item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.item-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.item-description {
+  font-size: 0.875rem;
+  color: #4a5568;
+}
+
+.item-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.amount-input {
+  width: 120px;
+  padding: 0.5rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  color: #2d3748;
+  background: white;
+  transform: translateZ(0);
+  transition: all 0.3s ease;
+  will-change: transform, border-color, box-shadow;
+}
+
+.amount-input:focus {
+  outline: none;
+  border-color: #4299e1;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+}
+
+.amount-input:hover {
+  border-color: #4299e1;
+}
+
+.percentage-display {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #4a5568;
+  min-width: 4rem;
+  text-align: right;
+}
+
+/* Responsive Design */
+@container (max-width: 768px) {
+  .spending-controls {
+    padding: 1rem;
+  }
+  
+  .spending-group {
+    padding: 1rem;
+  }
+  
+  .group-title {
+    font-size: 1rem;
+  }
+  
+  .group-total {
+    font-size: 1.125rem;
+  }
+  
+  .amount-input {
+    width: 100px;
+  }
+}
+
+@container (max-width: 480px) {
+  .spending-controls {
+    padding: 0.75rem;
+  }
+  
+  .spending-group {
+    padding: 0.75rem;
+  }
+  
+  .group-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .group-total {
+    text-align: left;
+  }
+  
+  .spending-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .item-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .amount-input {
+    width: 100%;
+  }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) {
+  .simulator-card:hover {
+    transform: none;
+    box-shadow: 
+      0 10px 20px rgba(0, 0, 0, 0.19),
+      0 6px 6px rgba(0, 0, 0, 0.23);
+  }
+  
+  .simulator-card:active {
+    transform: translateY(-2px) translateZ(10px) rotateX(1deg);
+    box-shadow: 
+      0 12px 24px rgba(0, 0, 0, 0.2),
+      0 8px 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  .amount-input:hover {
+    border-color: #e2e8f0;
+  }
+  
+  .amount-input:focus {
+    border-color: #4299e1;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .simulator-card,
+  .card-title,
+  .card-content {
+    transition: none;
+    transform: none !important;
+  }
+}
+
+/* High Contrast Mode */
+@media (forced-colors: active) {
+  .spending-controls,
+  .spending-group {
+    border: 2px solid CanvasText;
+  }
+  
+  .group-title .material-icons {
+    border: 2px solid CanvasText;
+  }
+  
+  .spending-item {
+    border: 2px solid CanvasText;
+  }
+  
+  .amount-input {
+    border: 2px solid CanvasText;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .spending-controls {
+    box-shadow: none;
+    border: 1px solid #000;
+  }
+  
+  .spending-group {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #000;
+  }
+  
+  .spending-item {
+    break-inside: avoid;
+    border: 1px solid #000;
+  }
+  
+  .amount-input {
+    border: 1px solid #000;
+  }
+}
+
+@media (max-width: 600px) {
+  .card-title, .card-content {
+    font-size: 0.95rem;
+    padding: 0.5rem 0.5rem;
+  }
+  .main-category-header, .other-category-header, .subcategory-header, .gov-ops-header, .tax-expenditure-header {
+    font-size: 0.9rem;
+    padding: 0.5rem 0.5rem;
+  }
+  .main-category-item, .other-category-item, .subcategory-item, .gov-ops-item, .tax-expenditure-item {
+    padding: 0.5rem 0.5rem;
+  }
 }
 </style>

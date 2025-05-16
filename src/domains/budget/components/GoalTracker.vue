@@ -190,7 +190,7 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { useBudgetSimulatorStore } from '../domains/budget/store/budgetSimulator';
+import { useBudgetSimulatorStore } from '../store/budgetSimulator';
 
 // Props
 const props = defineProps({
@@ -446,7 +446,15 @@ function handleAutoBalanceChange() {
   
   // Set the message based on the current state
   if (autoBalanceEnabled.value) {
-    if (localGoals.value.targetDeficit !== null) {
+    if (localGoals.value.targetRevenue !== null) {
+      const amount = localGoals.value.targetRevenue.toFixed(1);
+      autoBalanceMessage.value = `Auto-balancing revenue to reach your $${amount}B revenue goal...`;
+      
+      // Directly update the store
+      budgetStore.budgetGoals.targetRevenue = localGoals.value.targetRevenue;
+      budgetStore.budgetGoals.enabled = true;
+      budgetStore.toggleAutoBalance(true);
+    } else if (localGoals.value.targetDeficit !== null) {
       const isDeficit = localGoals.value.targetDeficit >= 0;
       const amount = isDeficit ? 
         localGoals.value.targetDeficit.toFixed(1) : 
@@ -461,7 +469,7 @@ function handleAutoBalanceChange() {
       budgetStore.budgetGoals.enabled = true;
       budgetStore.toggleAutoBalance(true);
     } else {
-      autoBalanceMessage.value = 'Please set a deficit/surplus goal to auto-balance the budget.';
+      autoBalanceMessage.value = 'Please set either a revenue goal or a deficit/surplus goal to auto-balance the budget.';
       autoBalanceEnabled.value = false;
     }
   } else {
@@ -537,6 +545,243 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.goal-tracker {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 1rem;
+  box-shadow: 
+    0 10px 20px rgba(0, 0, 0, 0.19),
+    0 6px 6px rgba(0, 0, 0, 0.23);
+  backdrop-filter: blur(10px);
+  transform: translateZ(0);
+  transition: all 0.3s ease;
+  will-change: transform, box-shadow;
+  contain: content;
+}
+
+.goal-tracker:hover {
+  transform: translateY(-5px) translateZ(0);
+  box-shadow: 
+    0 15px 30px rgba(0, 0, 0, 0.25),
+    0 10px 10px rgba(0, 0, 0, 0.22);
+}
+
+.goal-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: 
+    0 4px 6px rgba(0, 0, 0, 0.1),
+    0 2px 4px rgba(0, 0, 0, 0.06);
+  transform: translateZ(0);
+  transition: all 0.3s ease;
+  will-change: transform, box-shadow;
+}
+
+.goal-item:hover {
+  transform: translateY(-2px) translateZ(0);
+  box-shadow: 
+    0 6px 8px rgba(0, 0, 0, 0.12),
+    0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.goal-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.goal-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f7fafc;
+  border-radius: 0.5rem;
+  color: #4299e1;
+  font-size: 1.5rem;
+}
+
+.goal-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.goal-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.goal-description {
+  font-size: 0.875rem;
+  color: #4a5568;
+}
+
+.goal-progress {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.progress-bar {
+  width: 200px;
+  height: 0.5rem;
+  background: #e2e8f0;
+  border-radius: 0.25rem;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #4299e1;
+  border-radius: 0.25rem;
+  transition: width 0.3s ease;
+  will-change: width;
+}
+
+.progress-value {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #2d3748;
+  min-width: 3rem;
+  text-align: right;
+}
+
+.goal-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: #f7fafc;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.status-achieved {
+  color: #38a169;
+  background: #f0fff4;
+}
+
+.status-in-progress {
+  color: #3182ce;
+  background: #ebf8ff;
+}
+
+.status-not-started {
+  color: #718096;
+  background: #f7fafc;
+}
+
+/* Responsive Design */
+@container (max-width: 768px) {
+  .goal-tracker {
+    padding: 1rem;
+  }
+  
+  .goal-item {
+    padding: 0.75rem;
+  }
+  
+  .goal-title {
+    font-size: 1rem;
+  }
+  
+  .progress-bar {
+    width: 150px;
+  }
+}
+
+@container (max-width: 480px) {
+  .goal-tracker {
+    padding: 0.75rem;
+  }
+  
+  .goal-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .goal-info {
+    width: 100%;
+  }
+  
+  .goal-progress {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .progress-bar {
+    width: 100%;
+    flex: 1;
+  }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) {
+  .goal-tracker:hover,
+  .goal-item:hover {
+    transform: none;
+  }
+  
+  .goal-tracker:active,
+  .goal-item:active {
+    transform: translateY(-2px) translateZ(0);
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .goal-tracker,
+  .goal-item,
+  .progress-fill {
+    transition: none;
+    transform: none !important;
+  }
+}
+
+/* High Contrast Mode */
+@media (forced-colors: active) {
+  .goal-tracker,
+  .goal-item {
+    border: 2px solid CanvasText;
+  }
+  
+  .goal-icon,
+  .goal-status {
+    border: 2px solid CanvasText;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .goal-tracker {
+    box-shadow: none;
+    border: 1px solid #000;
+  }
+  
+  .goal-item {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #000;
+  }
+  
+  .goal-icon,
+  .goal-status {
+    border: 1px solid #000;
+  }
+}
+
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;

@@ -1,8 +1,15 @@
 import { defineStore, storeToRefs } from "pinia";
 import { ref, computed } from "vue";
-import { useSalaryStore } from '../stores/salary.js'
-import { useYearStore } from '../stores/year.js'
-import { useConfigStore } from "./config.js";
+import { useSalaryStore } from '@/domains/calculator/store/salary.js'
+import { useYearStore } from '@/domains/calculator/store/year.js'
+import { useConfigStore } from "@/domains/calculator/store/config.js";
+import {
+  calculateBracketTax,
+  calculateDividendTaxCredit,
+  calculateEiPremium,
+  calculateChildCredit,
+  calculateEffectiveBPA
+} from '../utils/taxCalculations.js';
 import {
   federalBasicPersonalAmount2022,
   federalBasicPersonalAmount2023,
@@ -18,7 +25,24 @@ import {
   provincialTaxBrackets2024,
   budgetCategories2022,
   budgetCategories2024
-} from "../constants.js";
+} from "../constants/taxData.js";
+
+// Province name to code mapping
+const provinceCodeMap = {
+  'Alberta': 'AB',
+  'British Columbia': 'BC',
+  'Manitoba': 'MB',
+  'New Brunswick': 'NB',
+  'Newfoundland and Labrador': 'NL',
+  'Nova Scotia': 'NS',
+  'Ontario': 'ON',
+  'Prince Edward Island': 'PE',
+  'Quebec': 'QC',
+  'Saskatchewan': 'SK',
+  'Northwest Territories': 'NT',
+  'Nunavut': 'NU',
+  'Yukon': 'YT'
+};
 
 export const useCalculatorStore = defineStore('calculator', () => {
 
@@ -48,9 +72,10 @@ export const useCalculatorStore = defineStore('calculator', () => {
   const numberOfDependentsWithDisabilities = ref(undefined)
 
   const federalDividendTaxCredit = computed(() => {
-    const fedEligibleCredit = 0.1502 * grossedUpEligibleDividends.value;
-    const fedIneligibleCredit = 0.09 * grossedUpIneligibleDividends.value;
-    return fedEligibleCredit + fedIneligibleCredit;
+    return calculateDividendTaxCredit(
+      grossedUpEligibleDividends.value,
+      grossedUpIneligibleDividends.value
+    );
   });
 
   const regularIncome = computed(() =>
@@ -75,23 +100,6 @@ export const useCalculatorStore = defineStore('calculator', () => {
   const annualRegularIncome = computed(() => regularIncome.value * periodMultiplier.value);
   const annualTaxableCapitalGains = computed(() => taxableCapitalGains.value * periodMultiplier.value);
   const annualRrspDeduction = computed(() => (rrspDeduction.value || 0) * periodMultiplier.value);
-
-  function calculateBracketTax(taxable, brackets) {
-    let tax = 0;
-    let previousUpTo = 0;
-    for (const bracket of brackets) {
-      if (taxable > bracket.upTo) {
-        const slice = bracket.upTo - previousUpTo;
-        tax += slice * bracket.rate;
-        previousUpTo = bracket.upTo;
-      } else {
-        const slice = taxable - previousUpTo;
-        tax += slice * bracket.rate;
-        break;
-      }
-    }
-    return Math.max(tax, 0);
-  }
 
   // Get the appropriate tax brackets and basic personal amount based on selected year
   const currentFederalTaxBrackets = computed(() => {
@@ -132,24 +140,20 @@ export const useCalculatorStore = defineStore('calculator', () => {
 
   // Federal + Provincial BPA
   const effectiveFederalBPA = computed(() => {
-    if (maritalStatus.value === 'Married or Common-Law') {
-      return currentFederalBasicPersonalAmount.value + 12500;
-    }
-    return currentFederalBasicPersonalAmount.value;
+    return calculateEffectiveBPA(currentFederalBasicPersonalAmount.value, maritalStatus.value);
   });
+
   const effectiveProvincialBPA = computed(() => {
     if (!selectedRegion.value) return 0;
-    const basePA = currentProvincialBasicPersonalAmounts.value[selectedRegion.value] || 0;
-    if (maritalStatus.value === 'Married or Common-Law') {
-      return basePA + 9000; // approximate
-    }
-    return basePA;
+    const provinceCode = provinceCodeMap[selectedRegion.value];
+    if (!provinceCode) return 0;
+    const basePA = currentProvincialBasicPersonalAmounts.value[provinceCode] || 0;
+    return calculateEffectiveBPA(basePA, maritalStatus.value);
   });
 
   // Simple child credit
   const childCredit = computed(() => {
-    const numKids = numberOfChildrenUnder18.value || 0;
-    return 2000 * numKids;
+    return calculateChildCredit(numberOfChildrenUnder18.value);
   });
 
   // Full Fed Taxable
@@ -176,7 +180,9 @@ export const useCalculatorStore = defineStore('calculator', () => {
   // Provincial
   const netProvincialTaxAnnual = computed(() => {
     if (!selectedRegion.value || totalFederalTaxableIncome.value <= 0) return 0;
-    const brackets = currentProvincialTaxBrackets.value[selectedRegion.value];
+    const provinceCode = provinceCodeMap[selectedRegion.value];
+    if (!provinceCode) return 0;
+    const brackets = currentProvincialTaxBrackets.value[provinceCode];
     if (!brackets) return 0;
     let provTaxable = totalFederalTaxableIncome.value - effectiveProvincialBPA.value;
     provTaxable = Math.max(provTaxable, 0);
@@ -196,9 +202,8 @@ export const useCalculatorStore = defineStore('calculator', () => {
   });
 
   // EI
-  const annualEiMax = 1002.45;
   const eiPremiumAnnual = computed(() => {
-    return Math.min(annualRegularIncome.value * 0.0163, annualEiMax);
+    return calculateEiPremium(annualRegularIncome.value);
   });
 
   // Net Income

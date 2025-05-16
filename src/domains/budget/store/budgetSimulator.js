@@ -1314,13 +1314,16 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
           'carbonPricing',      // Fourth choice: adjust carbon pricing
           'exciseTaxes',        // Fifth choice: adjust excise taxes
           'customsDuties',      // Sixth choice: adjust customs duties
-          'resourceRoyalties',  // Seventh choice: adjust resource royalties (corrected from naturalResourceRoyalties)
-          'nonTaxRevenue'       // Eighth choice: adjust non-tax revenue (corrected from otherRevenues)
+          'resourceRoyalties',  // Seventh choice: adjust resource royalties
+          'nonTaxRevenue'       // Eighth choice: adjust non-tax revenue
         ];
         
         // Filter to get only available and adjustable revenue sources
         const adjustableSources = prioritySourceIds
-          .map(id => this.revenueSources[id])
+          .map(id => ({
+            id,
+            ...this.revenueSources[id]
+          }))
           .filter(source => source && source.base > 0 && source.rate < (source.maxRate || 100));
         
         if (adjustableSources.length === 0) {
@@ -1348,7 +1351,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
             console.log(`Adjusting ${source.name} rate from ${source.rate.toFixed(1)}% to ${newRate.toFixed(1)}%`);
             
             // Update the revenue source rate
-            this.updateRevenueSourceRate(source.id, newRate);
+            this.setRevenueRate(source.id, newRate);
             adjustedSources.push(source.name);
             
             // The deficit is now covered
@@ -1388,7 +1391,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
               console.log(`Adjusting ${source.name} rate from ${source.rate.toFixed(1)}% to ${newRate.toFixed(1)}%`);
               
               // Update the revenue source rate
-              this.updateRevenueSourceRate(source.id, newRate);
+              this.setRevenueRate(source.id, newRate);
               adjustedSources.push(source.name);
               
               // Update the remaining deficit
@@ -1461,7 +1464,8 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
         success: false,
         message: '',
         achieved: false,
-        deficitGap: 0
+        deficitGap: 0,
+        revenueGap: 0
       };
       
       try {
@@ -1475,21 +1479,31 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
           this.budgetGoals.targetDeficit = 0;
         }
         
+        // Calculate revenue adjustment needed
+        let revenueAdjustmentNeeded = 0;
+        if (this.budgetGoals.targetRevenue !== null && this.budgetGoals.targetRevenue !== undefined) {
+          revenueAdjustmentNeeded = this.budgetGoals.targetRevenue - this.totalRevenue;
+          feedback.revenueGap = Math.abs(revenueAdjustmentNeeded);
+        }
+        
+        // Calculate deficit adjustment needed
         const targetDeficit = this.budgetGoals.targetDeficit;
         const currentDeficit = this.totalSpending - this.totalRevenue;
-        // Calculate how much additional revenue is needed to meet the target deficit:
-        // desiredRevenue = totalSpending - targetDeficit, so adjustment = desiredRevenue - currentRevenue
-        const revenueAdjustmentNeeded = currentDeficit - targetDeficit;
+        const deficitAdjustmentNeeded = currentDeficit - targetDeficit;
+        feedback.deficitGap = Math.abs(deficitAdjustmentNeeded);
         
-        devLog(`Need to adjust revenue by $${revenueAdjustmentNeeded.toFixed(1)}B to reach target deficit of $${targetDeficit.toFixed(1)}B`);
+        // If we have both targets, prioritize revenue target
+        const adjustmentNeeded = this.budgetGoals.targetRevenue !== null ? 
+          revenueAdjustmentNeeded : deficitAdjustmentNeeded;
+        
+        devLog(`Need to adjust revenue by $${adjustmentNeeded.toFixed(1)}B to reach target`);
         
         // If we're already close enough, don't adjust
-        if (Math.abs(revenueAdjustmentNeeded) < 0.1) {
+        if (Math.abs(adjustmentNeeded) < 0.1) {
           devLog('Already at target, no adjustment needed');
           feedback.success = true;
           feedback.achieved = true;
-          feedback.message = 'Already at target deficit';
-          feedback.deficitGap = 0;
+          feedback.message = 'Already at target';
           return feedback;
         }
         
@@ -1519,7 +1533,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
         }
         
         // Use the adjustRevenueProportionally helper method
-        const result = this.adjustRevenueProportionally(revenueAdjustmentNeeded, adjustableSources);
+        const result = this.adjustRevenueProportionally(adjustmentNeeded, adjustableSources);
         
         if (!result.success) {
           feedback.success = false;
@@ -1528,20 +1542,37 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
         }
         
         // Check if we achieved the target
-        const finalDeficit = this.totalSpending - this.totalRevenue;
-        const finalGap = Math.abs(finalDeficit - targetDeficit);
-        const thresholdAchieved = 0.5; // $0.5B threshold for considering goal achieved
+        const finalRevenue = this.totalRevenue;
+        const finalDeficit = this.totalSpending - finalRevenue;
         
-        feedback.achieved = finalGap <= thresholdAchieved;
-        feedback.deficitGap = finalGap;
-        
-        if (!feedback.achieved) {
-          feedback.success = false;
-          feedback.message = `Auto-balance could not reach the target (off by $${finalGap.toFixed(2)}B). Some sliders may be at their min/max bounds.`;
-          devWarn(`[AutoBalance] Could not reach target. Gap: $${finalGap.toFixed(2)}B`);
+        // Check revenue target achievement
+        if (this.budgetGoals.targetRevenue !== null) {
+          const revenueGap = Math.abs(finalRevenue - this.budgetGoals.targetRevenue);
+          const revenueThreshold = this.budgetGoals.targetRevenue * 0.05; // 5% threshold
+          feedback.achieved = revenueGap <= revenueThreshold;
+          
+          if (!feedback.achieved) {
+            feedback.success = false;
+            feedback.message = `Auto-balance could not reach the revenue target (off by $${revenueGap.toFixed(2)}B). Some sliders may be at their min/max bounds.`;
+            devWarn(`[AutoBalance] Could not reach revenue target. Gap: $${revenueGap.toFixed(2)}B`);
+          } else {
+            feedback.success = true;
+            feedback.message = 'Auto-balance succeeded in reaching revenue target.';
+          }
         } else {
-          feedback.success = true;
-          feedback.message = 'Auto-balance succeeded.';
+          // Check deficit target achievement
+          const deficitGap = Math.abs(finalDeficit - targetDeficit);
+          const thresholdAchieved = 0.5; // $0.5B threshold for considering goal achieved
+          feedback.achieved = deficitGap <= thresholdAchieved;
+          
+          if (!feedback.achieved) {
+            feedback.success = false;
+            feedback.message = `Auto-balance could not reach the deficit target (off by $${deficitGap.toFixed(2)}B). Some sliders may be at their min/max bounds.`;
+            devWarn(`[AutoBalance] Could not reach deficit target. Gap: $${deficitGap.toFixed(2)}B`);
+          } else {
+            feedback.success = true;
+            feedback.message = 'Auto-balance succeeded in reaching deficit target.';
+          }
         }
         
         return feedback;
@@ -1589,11 +1620,11 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
         let remainingAdjustment = totalAdjustment;
         if (this.autoBalanceConfig.prioritizePIT) {
           const pitSource = adjustableSources.find(item => item.id === 'personalIncomeTax');
-          if (pitSource && pitSource.source) {
-            const oldRate = pitSource.source.rate;
-            const pitBase = pitSource.source.base;
-            const pitMax = pitSource.source.maxRate !== undefined ? pitSource.source.maxRate : 100;
-            const pitMin = pitSource.source.minRate !== undefined ? pitSource.source.minRate : 0;
+          if (pitSource) {
+            const oldRate = pitSource.rate;
+            const pitBase = pitSource.base;
+            const pitMax = pitSource.maxRate !== undefined ? pitSource.maxRate : 100;
+            const pitMin = pitSource.minRate !== undefined ? pitSource.minRate : 0;
             
             // Allocate 50% of the total adjustment to PIT
             const targetPitAdjustment = totalAdjustment * 0.5;
@@ -1615,6 +1646,9 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
             remainingAdjustment -= actualPitAdjustment;
             result.actualAdjustment += actualPitAdjustment;
             
+            // Apply the change
+            this.setRevenueRate(pitSource.id, newRate);
+            
             devLog(`[AutoBalance] PIT: ${oldRate.toFixed(3)} → ${newRate.toFixed(3)} | Δ$${actualPitAdjustment.toFixed(2)}B`);
           }
         }
@@ -1630,17 +1664,17 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
             devLog('[AutoBalance] No other adjustable sources found for remaining adjustment');
           } else {
             // Calculate total base for proportional distribution
-            const totalBase = otherSources.reduce((sum, item) => sum + item.source.base, 0);
+            const totalBase = otherSources.reduce((sum, item) => sum + item.base, 0);
             
             if (totalBase <= 0) {
               devLog('[AutoBalance] Warning: Total base for remaining sources is zero or negative');
             } else {
               // Calculate and apply changes for each source
               otherSources.forEach(item => {
-                const oldRate = item.source.rate;
-                const base = item.source.base;
-                const maxRate = item.source.maxRate !== undefined ? item.source.maxRate : 100;
-                const minRate = item.source.minRate !== undefined ? item.source.minRate : 0;
+                const oldRate = item.rate;
+                const base = item.base;
+                const maxRate = item.maxRate !== undefined ? item.maxRate : 100;
+                const minRate = item.minRate !== undefined ? item.minRate : 0;
                 
                 // Calculate proportional adjustment based on this source's share of the total base
                 const share = base / totalBase;
@@ -1661,7 +1695,10 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
                 
                 result.actualAdjustment += actualAdjustment;
                 
-                devLog(`[AutoBalance] ${item.source.name || item.id}: ${oldRate.toFixed(3)} → ${newRate.toFixed(3)} | Δ$${actualAdjustment.toFixed(2)}B`);
+                // Apply the change
+                this.setRevenueRate(item.id, newRate);
+                
+                devLog(`[AutoBalance] ${item.name || item.id}: ${oldRate.toFixed(3)} → ${newRate.toFixed(3)} | Δ$${actualAdjustment.toFixed(2)}B`);
               });
             }
           }

@@ -87,14 +87,14 @@
 </template>
 
 <script setup lang="js">
-import { formatCurrency } from '../utils.js'
-import { useCalculatorStore } from '../stores/calculator.js'
-import { useConfigStore } from '../stores/config.js'
-import { useYearStore } from '../stores/year.js'
+import { formatCurrency } from '@/domains/calculator/utils/chartUtils.js'
+import { useCalculatorStore } from '@/domains/calculator/store/calculator.js'
+import { useConfigStore } from '@/domains/calculator/store/config.js'
+import { useYearStore } from '@/domains/calculator/store/year.js'
 import { storeToRefs } from 'pinia'
-import FederalBudgetPieChart from '../components/FederalBudgetPieChart.vue'
-import Budget2024PieChart from '../components/Budget2024PieChart.vue'
-import FederalBudget2024PieChart from '../components/FederalBudget2024PieChart.vue'
+import FederalBudgetPieChart from '@/domains/calculator/components/FederalBudgetPieChart.vue'
+import Budget2024PieChart from '@/domains/calculator/components/Budget2024PieChart.vue'
+import FederalBudget2024PieChart from '@/domains/calculator/components/FederalBudget2024PieChart.vue'
 
 const { netFederalTaxPerPeriod, sortedBudgetCategories } = storeToRefs(useCalculatorStore())
 const configStore = useConfigStore()

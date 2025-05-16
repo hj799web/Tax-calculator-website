@@ -1,12 +1,10 @@
-import { formatCurrency } from '@/domains/calculator/utils/chartUtils.js'
+import { formatCurrency } from '../utils/chartUtils.js'
 import { storeToRefs } from 'pinia'
 import { useCalculatorStore } from '@/domains/calculator/store/calculator.js'
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
-
 export const usePdfGenerator = () => {
-
   const {
     netFederalTaxPerPeriod,
     netProvincialTaxPerPeriod,
@@ -66,11 +64,6 @@ export const usePdfGenerator = () => {
       const exportDate = new Date().toLocaleDateString('en-CA');
       doc.text(`${exportDate}`, pageWidth / 2, currentHeight, { align: 'center' });
       currentHeight += 10;
-
-      // Divider
-      /*doc.setDrawColor(200);
-      doc.line(margin, currentHeight, pageWidth - margin, currentHeight);
-      currentHeight += 5;*/
 
       // Tax Calculations Table
       doc.setFontSize(14);
@@ -141,4 +134,4 @@ export const usePdfGenerator = () => {
   }
 
   return { exportToPDF }
-}
+} 

@@ -253,16 +253,16 @@
 </template>
 
 <script setup>
-import SalaryRateSelector from './components/SalaryRateSelector.vue'
+import SalaryRateSelector from '@/domains/calculator/components/SalaryRateSelector.vue'
 import CalculatorView from './views/CalculatorView.vue'
 import ResultView from './views/ResultView.vue'
 import FederalBudgetView from './views/FederalBudgetView.vue'
 import BudgetCategoriesView from './views/BudgetCategoriesView.vue'
-import FAQSection from './components/FAQSection.vue'
+import FAQSection from '@/domains/faq/components/FAQSection.vue'
 
 import { ref } from 'vue'
 import logoImage from '@/assets/fiscal-insights-logo.jpg'
-import { useYearStore } from './stores/year.js'
+import { useYearStore } from '@/domains/calculator/store/year.js'
 import '@/assets/year-selector.css'
 
 let showBudgetCategories = ref(false)

@@ -1,3 +1,10 @@
+/**
+ * @deprecated This component is deprecated and will be removed in a future version.
+ * Please use BudgetResults.vue from @/domains/budget/components/ instead.
+ * This component's functionality has been superseded by BudgetResults.vue which provides
+ * enhanced features and better integration with the budget simulator.
+ */
+
 <template>
   <div class="budget-summary">
     <h2 class="text-lg font-semibold mb-3 text-gray-800 flex items-center">

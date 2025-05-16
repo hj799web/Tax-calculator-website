@@ -73,12 +73,12 @@
 </template>
 
 <script setup>
-import { formatCurrency } from '../utils.js'
+import { formatCurrency } from '@/domains/calculator/utils/chartUtils.js'
 import { storeToRefs } from 'pinia'
-import { useCalculatorStore } from '../stores/calculator.js'
-import { useCalculator } from '../composables/calculator.js'
-import { usePdfGenerator } from '../composables/pdfGenerator.js'
-import TaxPieChart from '../components/TaxPieChart.vue'
+import { useCalculatorStore } from '@/domains/calculator/store/calculator.js'
+import { useCalculator } from '@/domains/calculator/composables/calculator.js'
+import { usePdfGenerator } from '@/domains/calculator/composables/pdfGenerator.js'
+import TaxPieChart from '@/domains/calculator/components/TaxPieChart.vue'
 
 const {
   netFederalTaxPerPeriod,

@@ -3,11 +3,9 @@ import { ref } from "vue";
 import { budgetCategories2022, budgetCategories2024 } from "@/domains/calculator/constants/taxData.js";
 
 export const useConfigStore = defineStore('config', () => {
-
   const allExpanded = ref(false);
   const sortOrder = ref(localStorage.getItem('sortOrder') || 'desc');
   const selectedAllocationCategories = ref([]);
-
   const visibleDescriptions = ref([])
 
   function toggleDescription(categoryId) {
@@ -49,4 +47,4 @@ export const useConfigStore = defineStore('config', () => {
     toggleSortAmount,
     visibleDescriptions
   }
-})
+}) 

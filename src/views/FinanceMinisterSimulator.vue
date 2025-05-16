@@ -150,24 +150,32 @@
         </section>
 
         <!-- Spending Controls Section -->
-        <SpendingControls 
-          :main-categories="mainCategories"
-          :other-categories-groups="otherCategoriesGroups"
-          :sorted-gov-ops-children="sortedGovOpsChildren"
-          :spending-factors="spendingFactors"
-          :auto-balance-active="autoBalanceActive"
-          :expanded-groups="expandedGroups"
-          :total-main-categories="budgetStore.mainCategoriesSpending"
-          :total-other-categories="budgetStore.otherCategoriesTotal"
-          :total-gov-ops="budgetStore.governmentOperationsSpending"
-          :total-spending="budgetStore.totalSpending"
-          :get-group-children="budgetStore.getGroupChildren"
-          @update-spending-factor="updateSpendingFactor"
-          @update-group-spending-factor="updateGroupSpendingFactor"
-          @toggle-group-expansion="toggleGroupExpansion"
-          @reset-gov-ops="resetGovOpsSubcategories"
-          @reset-other-categories="resetOtherCategoriesSubcategories"
-        />
+        <section class="simulator-card spending-card">
+          <h2 class="card-title">
+            <span class="material-icons icon">payments</span>
+            Spending Controls
+          </h2>
+          <div class="card-content">
+            <SpendingControls 
+              :main-categories="mainCategories"
+              :other-categories-groups="otherCategoriesGroups"
+              :sorted-gov-ops-children="sortedGovOpsChildren"
+              :spending-factors="spendingFactors"
+              :auto-balance-active="autoBalanceActive"
+              :expanded-groups="expandedGroups"
+              :total-main-categories="budgetStore.mainCategoriesSpending"
+              :total-other-categories="budgetStore.otherCategoriesTotal"
+              :total-gov-ops="budgetStore.governmentOperationsSpending"
+              :total-spending="budgetStore.totalSpending"
+              :get-group-children="budgetStore.getGroupChildren"
+              @update-spending-factor="updateSpendingFactor"
+              @update-group-spending-factor="updateGroupSpendingFactor"
+              @toggle-group-expansion="toggleGroupExpansion"
+              @reset-gov-ops="resetGovOpsSubcategories"
+              @reset-other-categories="resetOtherCategoriesSubcategories"
+            />
+          </div>
+        </section>
 
         <!-- Charts Panel -->
         <section class="simulator-card charts-card">
@@ -180,10 +188,12 @@
             <span class="material-icons icon">people</span>
             Public Sentiment Settings
           </h2>
-          <div class="sentiment-controls-container">
-            <SentimentSensitivityControl />
+          <div class="card-content">
+            <div class="sentiment-controls-container">
+              <SentimentSensitivityControl />
+            </div>
+            <RadarSentiment />
           </div>
-          <RadarSentiment />
         </section>
       </div>
     </div>
@@ -214,21 +224,21 @@
 <script setup>
 import CollapsibleSentimentBanner from '@/domains/sentiment/components/CollapsibleSentimentBanner.vue'
 import SentimentSensitivityControl from '@/domains/sentiment/components/SentimentSensitivityControl.vue'
-import SharedBudgetDetailModal from '../components/SharedBudgetDetailModal.vue'
+import SharedBudgetDetailModal from '@/domains/budget/components/SharedBudgetDetailModal.vue'
 import { SocialShareModal } from '@/domains/social'
 
 import { computed, ref, onMounted, watch } from 'vue'
 import { useBudgetSimulatorStore } from '@/domains/budget'
 import { computeSentimentScores, getSentimentLabel, getSentimentEmoji } from '@/domains/sentiment/utils/computeSentimentScores'
 // Import scenario logic if needed
-import RevenueSliders from '../components/RevenueSliders.vue'
-import GoalTracker from '../components/GoalTracker.vue'
-import PartyBudgetSharing from '../components/PartyBudgetSharing.vue'
-import ChartsPanel from '../components/ChartsPanel.vue'
+import RevenueSliders from '@/domains/budget/components/RevenueSliders.vue'
+import GoalTracker from '@/domains/budget/components/GoalTracker.vue'
+import PartyBudgetSharing from '@/domains/social/components/PartyBudgetSharing.vue'
+import ChartsPanel from '@/domains/budget/components/ChartsPanel.vue'
 import YearSelector from '@/domains/budget/components/YearSelector.vue'
 import BudgetResults from '@/domains/budget/components/BudgetResults.vue'
 import SpendingControls from '@/domains/budget/components/SpendingControls.vue'
-import PresetSelector from '../components/PresetSelector.vue'
+import PresetSelector from '@/domains/calculator/components/PresetSelector.vue'
 import AchievementBadge from '@/domains/badges/components/AchievementBadge.vue'
 import BadgeGalleryModal from '@/domains/badges/components/BadgeGalleryModal.vue'
 import RadarSentiment from '@/domains/sentiment/components/RadarSentiment.vue'
@@ -787,8 +797,101 @@ onMounted(() => {
 }
 
 .sentiment-card {
-  grid-column: 2;
-  grid-row: 5;
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 
+    0 10px 20px rgba(0, 0, 0, 0.19),
+    0 6px 6px rgba(0, 0, 0, 0.23);
+  overflow: hidden;
+  transform: translateZ(0);
+  transition: all 0.3s ease;
+  will-change: transform, box-shadow;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  display: flex;
+  flex-direction: column;
+}
+
+.sentiment-card:hover {
+  transform: translateY(-5px) translateZ(20px) rotateX(2deg);
+  box-shadow: 
+    0 15px 30px rgba(0, 0, 0, 0.25),
+    0 10px 10px rgba(0, 0, 0, 0.22);
+}
+
+.sentiment-card .card-title {
+  display: flex;
+  align-items: center;
+  padding: 1.25rem 1.5rem 1rem 1.5rem;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2d3748;
+  transform: translateZ(30px);
+  transition: transform 0.3s ease;
+  position: relative;
+  z-index: 2;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+  box-shadow: none;
+}
+
+.sentiment-card .card-title .icon {
+  margin-right: 0.75rem;
+  font-size: 1.5rem;
+  color: #4263eb;
+}
+
+.sentiment-card .card-content {
+  padding: 1rem;
+  transform: translateZ(10px);
+  transition: transform 0.3s ease;
+  flex-grow: 1;
+  position: relative;
+  z-index: 0;
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) {
+  .sentiment-card:hover {
+    transform: none;
+    box-shadow: 
+      0 10px 20px rgba(0, 0, 0, 0.19),
+      0 6px 6px rgba(0, 0, 0, 0.23);
+  }
+  .sentiment-card:active {
+    transform: translateY(-2px) translateZ(10px) rotateX(1deg);
+    box-shadow: 
+      0 12px 24px rgba(0, 0, 0, 0.2),
+      0 8px 8px rgba(0, 0, 0, 0.15);
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .sentiment-card,
+  .sentiment-card .card-title,
+  .sentiment-card .card-content {
+    transition: none;
+    transform: none !important;
+  }
+}
+
+.card-title, .card-content, .simulator-card, .sentiment-controls-container, .summary-card {
+  word-break: break-word;
+  white-space: normal;
+}
+@media (max-width: 600px) {
+  .card-title, .card-content, .summary-card {
+    font-size: 0.95rem;
+    padding: 0.5rem 0.5rem;
+  }
+  .simulator-card, .sentiment-controls-container {
+    padding: 0.5rem 0.5rem;
+  }
 }
 
 .card-title {

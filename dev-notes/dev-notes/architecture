@@ -1,0 +1,70 @@
+Project Architecture: Domain-Driven Design
+The Fiscal Insights application follows a Domain-Driven Design (DDD) structure. Rather than organizing files by type (e.g., all components in a single directory), the project is organized around functional domains—self-contained modules representing distinct areas of the application’s functionality.
+
+This architecture supports greater modularity, scalability, maintainability, and clarity throughout the codebase.
+
+src/domains/
+Each subfolder under src/domains/ represents a domain. Within each domain, related components, state stores, configuration files, utilities, and composables are grouped together, creating a clear separation of responsibilities and reducing cross-domain dependencies.
+
+Each domain may include the following directories:
+
+components/: Vue components specific to that domain
+
+store/: Pinia store modules associated with the domain
+
+utils/: JavaScript utility functions relevant to domain logic
+
+config/: Domain-specific constants and configuration objects
+
+composables/: Reusable Vue Composition API functions
+
+budget/
+Manages federal budget simulation logic, visualizations (e.g., pie charts), sliders, alerts, export interfaces, and scenario modifiers.
+
+calculator/
+Handles user income input, tax calculation logic, year selection, preset management, and salary-related state.
+
+sentiment/
+Responsible for computing and displaying fiscal sentiment scores based on party budgets and user modifications. Includes rule hierarchies and sentiment override logic.
+
+social/
+Includes components and logic related to sharing simulation results, generating social/export cards, and presenting user-facing narratives.
+
+faq/
+Contains structured FAQ content, versioned by year. Can be expanded into a dynamic question-and-answer system.
+
+Shared Code and Cross-Domain Resources
+Code that is reused across multiple domains, such as atomic UI elements, common formatting utilities, or global directives, is placed in the following directories:
+
+src/shared/components/: Generic, reusable UI elements
+
+src/composables/: Composition functions used across multiple domains
+
+src/utils/: Application-wide helper functions not tied to a specific domain
+
+Over time, reusable logic is either refactored into shared modules or encapsulated within its domain once usage is isolated.
+
+Architectural Benefits
+Encapsulation: Each domain maintains responsibility for its own logic, components, and state.
+
+Modularity: Features can be developed, tested, and maintained independently.
+
+Clarity: Contributors can quickly understand where specific functionality lives.
+
+Scalability: New features can be introduced as new domains with minimal impact on existing modules.
+
+Maintainability: Reduces tight coupling and makes code easier to debug, test, and extend.
+
+Sample Domain Layout
+plaintext
+Copy
+Edit
+src/domains/budget/
+├── components/
+│   └── BudgetSummary.vue
+├── config/
+│   └── budgetScenarioModifiers.js
+├── store/
+│   └── budgetSimulator.js
+├── utils/
+│   └── sharedBudget.js

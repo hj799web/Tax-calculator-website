@@ -20,74 +20,74 @@ export const baselineSentimentOverrides = {
     // Western provinces - most deficit-sensitive
     Alberta: {
       baselineScore: 2.8,        // Moderately concerned, slightly below neutral
-      deficitSensitivity: 0.076832,   // Reduced by another 20%
-      debtRatioSensitivity: 0.087808  // Reduced by another 20%
+      deficitSensitivity: 0.065307,   // Reduced by 15% + 20% boost
+      debtRatioSensitivity: 0.074637  // Reduced by 15% + 20% boost
     },
     Saskatchewan: {
       baselineScore: 2.9,        // Slightly below neutral
-      deficitSensitivity: 0.021952,   // Reduced by another 20%
-      debtRatioSensitivity: 0.03136  // Reduced by another 20%
+      deficitSensitivity: 0.018659,   // Reduced by 15% + 20% boost
+      debtRatioSensitivity: 0.026656  // Reduced by 15% + 20% boost
     },
     Manitoba: {
       baselineScore: 3.0,        // Neutral
-      deficitSensitivity: 0.0307328,   // Reduced by another 20%
-      debtRatioSensitivity: 0.065856  // Reduced by another 20%
+      deficitSensitivity: 0.026123,   // Reduced by 15%
+      debtRatioSensitivity: 0.055978  // Reduced by 15%
     },
     BritishColumbia: {
       baselineScore: 2.9,        // Mixed sentiment (urban vs rural divide)
-      deficitSensitivity: 0.147,   // Reduced by another 30%
-      debtRatioSensitivity: 0.147  // Reduced by another 30%
+      deficitSensitivity: 0.12495,   // Reduced by 15%
+      debtRatioSensitivity: 0.12495  // Reduced by 15%
     },
     
     // Central Canada - mixed sentiment
     Ontario: {
       baselineScore: 3.0,        // Minimum possible for lowest sentiment
-      deficitSensitivity: 0.0420175,  // Reduced by another 50% (now at 25% of original)
-      debtRatioSensitivity: 0.036015  // Reduced by another 50% (now at 25% of original)
+      deficitSensitivity: 0.035715,  // Reduced by 15%
+      debtRatioSensitivity: 0.030613  // Reduced by 15%
     },
     Quebec: {
       baselineScore: 3.2,        // More tolerant of deficits for social programs
-      deficitSensitivity: 0.098,   // Reduced by another 30%
-      debtRatioSensitivity: 0.098  // Reduced by another 30%
+      deficitSensitivity: 0.0833,   // Reduced by 15%
+      debtRatioSensitivity: 0.0833  // Reduced by 15%
     },
     
     // Atlantic provinces - more dependent on federal transfers
     NovaScotia: {
       baselineScore: 3.8,        // Generally supportive of federal spending
-      deficitSensitivity: 0.049,   // Reduced by another 30%
-      debtRatioSensitivity: 0.049  // Reduced by another 30%
+      deficitSensitivity: 0.04165,   // Reduced by 15%
+      debtRatioSensitivity: 0.04165  // Reduced by 15%
     },
     NewBrunswick: {
       baselineScore: 3.6,        // Supportive of federal spending
-      deficitSensitivity: 0.0686,   // Reduced by another 30%
-      debtRatioSensitivity: 0.02401  // Reduced by another 30%
+      deficitSensitivity: 0.05831,   // Reduced by 15%
+      debtRatioSensitivity: 0.020409  // Reduced by 15%
     },
     "Prince Edward Island": {
       baselineScore: 3.7,        // Supportive of federal spending
-      deficitSensitivity: 0.049,   // Reduced by another 30%
-      debtRatioSensitivity: 0.049  // Reduced by another 30%
+      deficitSensitivity: 0.04165,   // Reduced by 15%
+      debtRatioSensitivity: 0.04165  // Reduced by 15%
     },
     "Newfoundland and Labrador": {
       baselineScore: 3.5,        // Supportive but with some concerns
-      deficitSensitivity: 0.098,   // Reduced by another 30%
-      debtRatioSensitivity: 0.098  // Reduced by another 30%
+      deficitSensitivity: 0.0833,   // Reduced by 15%
+      debtRatioSensitivity: 0.0833  // Reduced by 15%
     },
     
     // Northern territories - highly dependent on federal support
     Yukon: {
       baselineScore: 3.4,
-      deficitSensitivity: 0.049,   // Reduced by another 30%
-      debtRatioSensitivity: 0.049  // Reduced by another 30%
+      deficitSensitivity: 0.04165,   // Reduced by 15%
+      debtRatioSensitivity: 0.04165  // Reduced by 15%
     },
     "Northwest Territories": {
       baselineScore: 3.5,
-      deficitSensitivity: 0.049,   // Reduced by another 30%
-      debtRatioSensitivity: 0.049  // Reduced by another 30%
+      deficitSensitivity: 0.04165,   // Reduced by 15%
+      debtRatioSensitivity: 0.04165  // Reduced by 15%
     },
     Nunavut: {
       baselineScore: 3.6,
-      deficitSensitivity: 0.049,   // Reduced by another 30%
-      debtRatioSensitivity: 0.049  // Reduced by another 30%
+      deficitSensitivity: 0.04165,   // Reduced by 15%
+      debtRatioSensitivity: 0.04165  // Reduced by 15%
     }
   },
   

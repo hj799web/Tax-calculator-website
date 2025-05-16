@@ -153,57 +153,57 @@
   </section>
 </template>
   
-  <script>
-  import { useYearStore } from '@/stores/year';
-  import { computed } from 'vue';
-  
-  export default {
-    name: 'FAQSection',
-    setup() {
-      const yearStore = useYearStore();
-      
-      const selectedYear = computed(() => yearStore.selectedTaxYear);
-      const budgetYear = computed(() => yearStore.budgetYear);
-      
-      return {
-        selectedYear,
-        budgetYear
-      };
-    }
+<script>
+import { useYearStore } from '@/domains/calculator/store/year.js'
+import { computed } from 'vue';
+
+export default {
+  name: 'FAQSection',
+  setup() {
+    const yearStore = useYearStore();
+    
+    const selectedYear = computed(() => yearStore.selectedTaxYear);
+    const budgetYear = computed(() => yearStore.budgetYear);
+    
+    return {
+      selectedYear,
+      budgetYear
+    };
   }
-  </script>
+}
+</script>
   
-  <style scoped>
-  .faq-section {
-    margin: 40px auto;
-    padding: 20px;
-    background: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19);
-  }
-  
-  .section-title {
-    text-align: center;
-    color: #000000; /* Dark text for maximum readability */
-    margin-bottom: 20px;
-    font-size: 20px;
-    font-weight: 600;
-  }
-  
-  .faq-item {
-    margin-bottom: 15px;
-  }
-  
-  .faq-question {
-    font-weight: 600;
-    color: #000000; /* Dark text for questions */
-  }
-  
-  .faq-answer {
-    padding: 10px 20px;
-    color: #222222; /* Dark gray text for readability */
-    border-left: 3px solid #bdc3c7;
-    margin-top: 5px;
-    white-space: pre-line; /* Preserve line breaks */
-  }
-  </style>
+<style scoped>
+.faq-section {
+  margin: 40px auto;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19);
+}
+
+.section-title {
+  text-align: center;
+  color: #000000; /* Dark text for maximum readability */
+  margin-bottom: 20px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.faq-item {
+  margin-bottom: 15px;
+}
+
+.faq-question {
+  font-weight: 600;
+  color: #000000; /* Dark text for questions */
+}
+
+.faq-answer {
+  padding: 10px 20px;
+  color: #222222; /* Dark gray text for readability */
+  border-left: 3px solid #bdc3c7;
+  margin-top: 5px;
+  white-space: pre-line; /* Preserve line breaks */
+}
+</style>

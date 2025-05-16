@@ -20,9 +20,17 @@ import { baselineSentimentOverrides } from '@/domains/sentiment/config/baselineS
  *   REACTIVITY_AMPLIFIER: Magnifies sentiment shifts from neutral
  */
 
-export const MIN_MULTIPLIER = 0.2;          // Easier to hit positive thresholds
+export const MIN_MULTIPLIER = 0.1;          // Easier to hit positive thresholds
 export const MAX_MULTIPLIER = 1.8;          // More flexible upper limits
-export const REACTIVITY_AMPLIFIER = 12; // Moderately high sensitivity
+export const REACTIVITY_AMPLIFIER = 1.2; // Increased from 1.0 to make scores more reactive
+
+/**
+ * Constants for sentiment score calculations
+ * CLAMP_RANGE: Maximum absolute value for raw sentiment scores before clamping
+ * OVERRIDE_THRESHOLD: Threshold for critical alerts that override normal sentiment calculations
+ */
+export const CLAMP_RANGE = 2; // Increased from 1 to allow for more extreme scores
+export const OVERRIDE_THRESHOLD = 3;
 
 function mergeWithBaseline(configSection, baselineSection) {
   const result = {};
@@ -39,6 +47,122 @@ function mergeWithBaseline(configSection, baselineSection) {
 }
 
 export const sentimentConfig = {
+  // Update intervals in milliseconds
+  updateIntervals: {
+    quick: 500,    // For real-time updates
+    normal: 1000,  // Default update frequency
+    detailed: 2000 // For detailed analysis
+  },
+
+  // Impact thresholds for different sentiment levels
+  impactThresholds: {
+    low: 0.1,    // Minimal impact
+    medium: 0.3, // Moderate impact
+    high: 0.5    // Significant impact
+  },
+
+  // Weights for different demographic factors
+  demographicWeights: {
+    age: 0.3,
+    income: 0.3,
+    region: 0.2,
+    sector: 0.2
+  },
+
+  // Revenue impact weights
+  revenueWeights: {
+    personalIncomeTax: 0.3,
+    corporateIncomeTax: 0.2,
+    gst: 0.15,
+    otherTaxes: 0.35
+  },
+
+  // Spending impact weights
+  spendingWeights: {
+    healthcare: 0.25,
+    education: 0.2,
+    infrastructure: 0.15,
+    socialServices: 0.2,
+    other: 0.2
+  },
+
+  // Age group impact factors
+  ageGroupFactors: {
+    youth: {
+      education: 0.4,
+      socialServices: 0.3,
+      healthcare: 0.2,
+      other: 0.1
+    },
+    workingAge: {
+      personalIncomeTax: 0.3,
+      healthcare: 0.3,
+      infrastructure: 0.2,
+      other: 0.2
+    },
+    seniors: {
+      healthcare: 0.4,
+      socialServices: 0.4,
+      other: 0.2
+    }
+  },
+
+  // Income level impact factors
+  incomeLevelFactors: {
+    low: {
+      gst: 0.4,
+      socialServices: 0.4,
+      other: 0.2
+    },
+    middle: {
+      personalIncomeTax: 0.4,
+      healthcare: 0.3,
+      other: 0.3
+    },
+    high: {
+      corporateIncomeTax: 0.4,
+      personalIncomeTax: 0.3,
+      other: 0.3
+    }
+  },
+
+  // Color schemes for sentiment visualization
+  colors: {
+    positive: {
+      light: 'hsl(120, 70%, 75%)',
+      medium: 'hsl(120, 70%, 60%)',
+      dark: 'hsl(120, 70%, 45%)'
+    },
+    negative: {
+      light: 'hsl(0, 70%, 75%)',
+      medium: 'hsl(0, 70%, 60%)',
+      dark: 'hsl(0, 70%, 45%)'
+    },
+    neutral: {
+      light: 'hsl(200, 70%, 75%)',
+      medium: 'hsl(200, 70%, 60%)',
+      dark: 'hsl(200, 70%, 45%)'
+    }
+  },
+
+  // Emoji indicators for sentiment levels
+  emojis: {
+    veryPositive: '😊',
+    positive: '🙂',
+    neutral: '😐',
+    negative: '🙁',
+    veryNegative: '😢'
+  },
+
+  // Labels for sentiment levels
+  labels: {
+    veryPositive: 'Very Positive',
+    positive: 'Positive',
+    neutral: 'Neutral',
+    negative: 'Negative',
+    veryNegative: 'Very Negative'
+  },
+
   provinces: mergeWithBaseline({
     Ontario: {
       weight: 0.38, // Largest share—diverse, centrist-conservative tilt
@@ -746,18 +870,38 @@ export const sentimentConfig = {
       }
     },
     healthcare: {
-      weight: 0.20, // Healthcare stakeholders
+      weight: 0.20,
       triggers: {
-        // "revenueMix.personalIncomeTax": { min: 0.001, score: -300 },
-        // "revenueMix.gst": { min: 0.01, score: -37.5 },
-        // "revenueMix.hst": { min: 0.01, score: -37.5 },
-        // "taxExpenditures.personalIncomeTaxCredits.adjustmentPercent": { max: -0.01, score: -7.5 },
-        "budgetItems.healthcare": { min: 110 * MIN_MULTIPLIER, score: 5 },                     // 22 required - healthcare funding
-        "budgetItems.scienceAndInnovation": { min: 6 * MIN_MULTIPLIER, score: 4 },             // 1.2 required - medical research
-        "taxExpenditures.healthTaxCredits": { min: 10 * MIN_MULTIPLIER, score: 3 },  // 2 required - health tax credits
-        "budgetItems.supportForSeniors": { min: 70 * MIN_MULTIPLIER, score: 4 },               // 14 required - senior care
-        "budgetItems.childrenAndFamilies": { min: 25 * MIN_MULTIPLIER, score: 4 },             // 5 required - family health
-        "budgetItems.digitalGovernment": { min: 4 * MIN_MULTIPLIER, score: 4 }                 // 0.8 required - health records
+        "budgetItems.healthcare": [
+          { min: 110 * MIN_MULTIPLIER, score: 5 }, // Strong healthcare funding
+          { min: 90 * MIN_MULTIPLIER, score: 3 },  // Moderate funding
+          { max: 70 * MAX_MULTIPLIER, score: -4 }  // Insufficient funding
+        ],
+        "budgetItems.scienceAndInnovation": [
+          { min: 8 * MIN_MULTIPLIER, score: 5 },   // Strong medical research
+          { min: 5 * MIN_MULTIPLIER, score: 3 },   // Moderate research
+          { max: 3 * MAX_MULTIPLIER, score: -2 }   // Weak research
+        ],
+        "taxExpenditures.healthTaxCredits": [
+          { min: 12 * MIN_MULTIPLIER, score: 4 },  // Strong health credits
+          { min: 8 * MIN_MULTIPLIER, score: 2 },   // Moderate credits
+          { max: 4 * MAX_MULTIPLIER, score: -2 }   // Weak credits
+        ],
+        "budgetItems.supportForSeniors": [
+          { min: 80 * MIN_MULTIPLIER, score: 4 },  // Strong senior care
+          { min: 60 * MIN_MULTIPLIER, score: 2 },  // Moderate care
+          { max: 40 * MAX_MULTIPLIER, score: -3 }  // Weak care
+        ],
+        "budgetItems.childrenAndFamilies": [
+          { min: 25 * MIN_MULTIPLIER, score: 4 },  // Strong family health
+          { min: 20 * MIN_MULTIPLIER, score: 2 },  // Moderate support
+          { max: 15 * MAX_MULTIPLIER, score: -2 }  // Weak support
+        ],
+        "budgetItems.digitalGovernment": [
+          { min: 6 * MIN_MULTIPLIER, score: 4 },   // Strong health records
+          { min: 4 * MIN_MULTIPLIER, score: 2 },   // Moderate digital
+          { max: 2 * MAX_MULTIPLIER, score: -2 }   // Weak digital
+        ]
       }
     },
     defense: {
@@ -776,33 +920,73 @@ export const sentimentConfig = {
       }
     },
     education: {
-      weight: 0.10, // Education sector
+      weight: 0.10,
       triggers: {
-        // "revenueMix.personalIncomeTax": { min: 0.001, score: -300 },
-        // "revenueMix.gst": { min: 0.01, score: -37.5 },
-        // "revenueMix.hst": { min: 0.01, score: -37.5 },
-        // "taxExpenditures.personalIncomeTaxCredits.adjustmentPercent": { max: -0.01, score: -7.5 },
-        "budgetItems.education": { min: 30 * MIN_MULTIPLIER, score: 5 },                       // 6 required - education funding
-        "budgetItems.skillsDevelopment": { min: 5 * MIN_MULTIPLIER, score: 4 },                // 1 required - workforce training
-        "budgetItems.childrenAndFamilies": { min: 25 * MIN_MULTIPLIER, score: 4 },             // 5 required - early childhood education
-        "budgetItems.scienceAndInnovation": { min: 6 * MIN_MULTIPLIER, score: 4 },             // 1.2 required - research funding
-        "budgetItems.digitalGovernment": { min: 4 * MIN_MULTIPLIER, score: 4 },                // 0.8 required - digital learning
-        "budgetItems.loansInvestments.studentLoans": { min: 3 * MIN_MULTIPLIER, score: 5 }     // 0.6 required - education access
+        "budgetItems.education": [
+          { min: 30 * MIN_MULTIPLIER, score: 5 },  // Strong education funding
+          { min: 25 * MIN_MULTIPLIER, score: 3 },  // Moderate funding
+          { max: 20 * MAX_MULTIPLIER, score: -3 }  // Insufficient funding
+        ],
+        "budgetItems.skillsDevelopment": [
+          { min: 7 * MIN_MULTIPLIER, score: 5 },   // Strong training
+          { min: 5 * MIN_MULTIPLIER, score: 3 },   // Moderate training
+          { max: 3 * MAX_MULTIPLIER, score: -2 }   // Weak training
+        ],
+        "budgetItems.childrenAndFamilies": [
+          { min: 25 * MIN_MULTIPLIER, score: 4 },  // Strong early education
+          { min: 20 * MIN_MULTIPLIER, score: 2 },  // Moderate support
+          { max: 15 * MAX_MULTIPLIER, score: -2 }  // Weak support
+        ],
+        "budgetItems.scienceAndInnovation": [
+          { min: 8 * MIN_MULTIPLIER, score: 4 },   // Strong research
+          { min: 6 * MIN_MULTIPLIER, score: 2 },   // Moderate research
+          { max: 4 * MAX_MULTIPLIER, score: -2 }   // Weak research
+        ],
+        "budgetItems.digitalGovernment": [
+          { min: 6 * MIN_MULTIPLIER, score: 4 },   // Strong digital learning
+          { min: 4 * MIN_MULTIPLIER, score: 2 },   // Moderate digital
+          { max: 2 * MAX_MULTIPLIER, score: -2 }   // Weak digital
+        ],
+        "budgetItems.loansInvestments.studentLoans": [
+          { min: 5 * MIN_MULTIPLIER, score: 5 },   // Strong loan support
+          { min: 3 * MIN_MULTIPLIER, score: 3 },   // Moderate support
+          { max: 1 * MAX_MULTIPLIER, score: -3 }   // Weak support
+        ]
       }
     },
     energy: {
-      weight: 0.10, // Energy sector
+      weight: 0.10,
       triggers: {
-        // "revenueMix.personalIncomeTax": { min: 0.001, score: -300 },
-        // "revenueMix.gst": { min: 0.01, score: -37.5 },
-        // "revenueMix.hst": { min: 0.01, score: -37.5 },
-        // "taxExpenditures.personalIncomeTaxCredits.adjustmentPercent": { max: -0.01, score: -7.5 },
-        "budgetItems.environmentAndClimateChange": { min: 8 * MIN_MULTIPLIER, score: 4 },      // 1.6 required - clean energy transition
-        "budgetItems.economicDevelopment": { min: 8 * MIN_MULTIPLIER, score: 4 },              // 1.6 required - energy infrastructure
-        "revenueMix.carbonPricing": { max: 0.7 * MAX_MULTIPLIER, score: 4 },                       // 1.26 allowed - carbon pricing
-        "budgetItems.scienceAndInnovation": { min: 7 * MIN_MULTIPLIER, score: 5 },             // 1.4 required - energy innovation
-        "budgetItems.infrastructure": { min: 12 * MIN_MULTIPLIER, score: 5 },                  // 2.4 required - energy infrastructure
-        "revenueMix.corporateTax": { max: 14 * MAX_MULTIPLIER, score: 4 }                      // 25.2 allowed - investment climate
+        "budgetItems.environmentAndClimateChange": [
+          { min: 10 * MIN_MULTIPLIER, score: 5 },  // Strong clean energy
+          { min: 7 * MIN_MULTIPLIER, score: 3 },   // Moderate transition
+          { max: 4 * MAX_MULTIPLIER, score: -3 }   // Weak transition
+        ],
+        "budgetItems.economicDevelopment": [
+          { min: 10 * MIN_MULTIPLIER, score: 4 },  // Strong energy infrastructure
+          { min: 7 * MIN_MULTIPLIER, score: 2 },   // Moderate support
+          { max: 4 * MAX_MULTIPLIER, score: -2 }   // Weak support
+        ],
+        "revenueMix.carbonPricing": [
+          { max: 0.5 * MAX_MULTIPLIER, score: 5 }, // Low carbon pricing
+          { max: 0.8 * MAX_MULTIPLIER, score: 2 }, // Moderate pricing
+          { min: 1.2 * MIN_MULTIPLIER, score: -4 } // High pricing
+        ],
+        "budgetItems.scienceAndInnovation": [
+          { min: 9 * MIN_MULTIPLIER, score: 5 },   // Strong energy innovation
+          { min: 6 * MIN_MULTIPLIER, score: 3 },   // Moderate innovation
+          { max: 4 * MAX_MULTIPLIER, score: -2 }   // Weak innovation
+        ],
+        "budgetItems.infrastructure": [
+          { min: 15 * MIN_MULTIPLIER, score: 5 },  // Strong infrastructure
+          { min: 10 * MIN_MULTIPLIER, score: 3 },  // Moderate infrastructure
+          { max: 7 * MAX_MULTIPLIER, score: -3 }   // Weak infrastructure
+        ],
+        "revenueMix.corporateTax": [
+          { max: 13 * MAX_MULTIPLIER, score: 4 },  // Competitive tax rate
+          { max: 15 * MAX_MULTIPLIER, score: 2 },  // Moderate tax rate
+          { min: 17 * MIN_MULTIPLIER, score: -3 }  // High tax rate
+        ]
       }
     },
     tourism: {
@@ -820,18 +1004,38 @@ export const sentimentConfig = {
       }
     },
     agriculture: {
-      weight: 0.10, // Agricultural sector
+      weight: 0.10,
       triggers: {
-        // "revenueMix.personalIncomeTax": { min: 0.001, score: -300 },
-        // "revenueMix.gst": { min: 0.01, score: -37.5 },
-        // "revenueMix.hst": { min: 0.01, score: -37.5 },
-        // "taxExpenditures.personalIncomeTaxCredits.adjustmentPercent": { max: -0.01, score: -7.5 },
-        "budgetItems.agriculture": { min: 8 * MIN_MULTIPLIER, score: 5 },                      // 1.6 required - farm support
-        "revenueMix.carbonPricing": { max: 0.7 * MAX_MULTIPLIER, score: 4 },                       // 1.26 allowed - fuel dependency
-        "budgetItems.infrastructure": { min: 10 * MIN_MULTIPLIER, score: 4 },                  // 2 required - rural infrastructure
-        "budgetItems.environmentAndClimateChange": { min: 6 * MIN_MULTIPLIER, score: 4 },      // 1.2 required - climate adaptation
-        "budgetItems.scienceAndInnovation": { min: 5 * MIN_MULTIPLIER, score: 4 },             // 1 required - agricultural research
-        "budgetItems.internationalAssistance": { min: 4 * MIN_MULTIPLIER, score: 4 }           // 0.8 required - export markets
+        "budgetItems.agriculture": [
+          { min: 10 * MIN_MULTIPLIER, score: 5 },  // Strong farm support
+          { min: 7 * MIN_MULTIPLIER, score: 3 },   // Moderate support
+          { max: 4 * MAX_MULTIPLIER, score: -3 }   // Weak support
+        ],
+        "revenueMix.carbonPricing": [
+          { max: 0.5 * MAX_MULTIPLIER, score: 5 }, // Low carbon pricing
+          { max: 0.8 * MAX_MULTIPLIER, score: 2 }, // Moderate pricing
+          { min: 1.2 * MIN_MULTIPLIER, score: -4 } // High pricing
+        ],
+        "budgetItems.infrastructure": [
+          { min: 12 * MIN_MULTIPLIER, score: 5 },  // Strong rural infrastructure
+          { min: 8 * MIN_MULTIPLIER, score: 3 },   // Moderate infrastructure
+          { max: 5 * MAX_MULTIPLIER, score: -3 }   // Weak infrastructure
+        ],
+        "budgetItems.environmentAndClimateChange": [
+          { min: 8 * MIN_MULTIPLIER, score: 4 },   // Strong climate adaptation
+          { min: 5 * MIN_MULTIPLIER, score: 2 },   // Moderate adaptation
+          { max: 3 * MAX_MULTIPLIER, score: -2 }   // Weak adaptation
+        ],
+        "budgetItems.scienceAndInnovation": [
+          { min: 7 * MIN_MULTIPLIER, score: 4 },   // Strong agri-research
+          { min: 5 * MIN_MULTIPLIER, score: 2 },   // Moderate research
+          { max: 3 * MAX_MULTIPLIER, score: -2 }   // Weak research
+        ],
+        "budgetItems.internationalAssistance": [
+          { min: 6 * MIN_MULTIPLIER, score: 4 },   // Strong export support
+          { min: 4 * MIN_MULTIPLIER, score: 2 },   // Moderate support
+          { max: 2 * MAX_MULTIPLIER, score: -2 }   // Weak support
+        ]
       }
     },
     indigenous: {
@@ -852,76 +1056,155 @@ export const sentimentConfig = {
     technology: {
       weight: 0.10,
       triggers: {
-        // "revenueMix.personalIncomeTax": { min: 0.001, score: -300 },
-        // "revenueMix.gst": { min: 0.01, score: -37.5 },
-        // "revenueMix.hst": { min: 0.01, score: -37.5 },
-        // "taxExpenditures.personalIncomeTaxCredits.adjustmentPercent": { max: -0.01, score: -7.5 },
-        "budgetItems.scienceAndInnovation":     { min: 8  * MIN_MULTIPLIER, score: 5 },  // R&D
-        "budgetItems.digitalGovernment":        { min: 5  * MIN_MULTIPLIER, score: 4 },  // digital gov
-        "taxExpenditures.corporateTaxExpenditures.adjustmentPercent": { min: 15 * MIN_MULTIPLIER, score: 5 }, // startup incentives
-        "budgetItems.skillsDevelopment":       { min: 6  * MIN_MULTIPLIER, score: 5 },  // talent
-        "budgetItems.cybersecurity":          { min: 3  * MIN_MULTIPLIER, score: 4 },  // security
-        "revenueMix.corporateTax":             { max: 15 * MAX_MULTIPLIER, score: 4 }   // competitiveness
+        "budgetItems.scienceAndInnovation": [
+          { min: 8 * MIN_MULTIPLIER, score: 5 },  // Strong R&D funding
+          { min: 5 * MIN_MULTIPLIER, score: 3 },  // Moderate R&D funding
+          { max: 3 * MAX_MULTIPLIER, score: -2 }  // Insufficient R&D funding
+        ],
+        "budgetItems.digitalGovernment": [
+          { min: 6 * MIN_MULTIPLIER, score: 5 },  // Strong digital transformation
+          { min: 4 * MIN_MULTIPLIER, score: 3 },  // Moderate digital investment
+          { max: 2 * MAX_MULTIPLIER, score: -3 }  // Insufficient digital investment
+        ],
+        "taxExpenditures.corporateTaxExpenditures.adjustmentPercent": [
+          { min: 15 * MIN_MULTIPLIER, score: 5 }, // Strong startup incentives
+          { min: 10 * MIN_MULTIPLIER, score: 3 }, // Moderate incentives
+          { max: 5 * MAX_MULTIPLIER, score: -2 }  // Weak incentives
+        ],
+        "budgetItems.skillsDevelopment": [
+          { min: 8 * MIN_MULTIPLIER, score: 5 },  // Strong talent development
+          { min: 5 * MIN_MULTIPLIER, score: 3 },  // Moderate training
+          { max: 3 * MAX_MULTIPLIER, score: -2 }  // Insufficient training
+        ],
+        "budgetItems.cybersecurity": [
+          { min: 5 * MIN_MULTIPLIER, score: 5 },  // Strong security focus
+          { min: 3 * MIN_MULTIPLIER, score: 3 },  // Moderate security
+          { max: 1 * MAX_MULTIPLIER, score: -4 }  // Weak security
+        ],
+        "revenueMix.corporateTax": [
+          { max: 13 * MAX_MULTIPLIER, score: 5 }, // Very competitive tax rate
+          { max: 15 * MAX_MULTIPLIER, score: 3 }, // Moderate tax rate
+          { min: 18 * MIN_MULTIPLIER, score: -3 } // High tax rate
+        ],
+        "budgetItems.immigration": [
+          { min: 6 * MIN_MULTIPLIER, score: 4 },  // Strong talent attraction
+          { min: 4 * MIN_MULTIPLIER, score: 2 },  // Moderate immigration
+          { max: 2 * MAX_MULTIPLIER, score: -2 }  // Limited immigration
+        ]
       }
     },
     finance: {
       weight: 0.12,
       triggers: {
-        // "revenueMix.personalIncomeTax": { min: 0.001, score: -300 },
-        // "revenueMix.gst": { min: 0.01, score: -37.5 },
-        // "revenueMix.hst": { min: 0.01, score: -37.5 },
-        // "taxExpenditures.personalIncomeTaxCredits.adjustmentPercent": { max: -0.01, score: -7.5 },
-        "revenueMix.corporateTax":             { max: 15* MAX_MULTIPLIER, score: 5 },  // tax climate
-        "budgetItems.economicDevelopment":      { min: 7  * MIN_MULTIPLIER, score: 4 },  // stability
-        "budgetItems.digitalGovernment":        { min: 5  * MIN_MULTIPLIER, score: 4 },  // efficiency
-        "budgetItems.cybersecurity":          { min: 5  * MIN_MULTIPLIER, score: 5 },  // security
-        "budgetItems.internationalAssistance":  { min: 5  * MIN_MULTIPLIER, score: 4 },  // markets
-        "taxExpenditures.corporateTaxExpenditures.adjustmentPercent": { min: 10 * MIN_MULTIPLIER, score: 5 } // incentives
+        // Tax and regulatory environment
+        "revenueMix.corporateTax": [
+          { max: 13 * MAX_MULTIPLIER, score: 5 },  // Very positive for low corporate tax
+          { min: 20 * MIN_MULTIPLIER, score: -4 }  // Strongly negative for high corporate tax
+        ],
+        "budgetItems.economicDevelopment": { min: 8 * MIN_MULTIPLIER, score: 4 },  // Economic stability
+        "budgetItems.digitalGovernment": { min: 6 * MIN_MULTIPLIER, score: 4 },    // Digital infrastructure
+        "budgetItems.cybersecurity": { min: 6 * MIN_MULTIPLIER, score: 5 },        // Financial security
+        "budgetItems.internationalAssistance": { min: 6 * MIN_MULTIPLIER, score: 4 }, // Global markets
+        "taxExpenditures.corporateTaxExpenditures.adjustmentPercent": { min: 12 * MIN_MULTIPLIER, score: 5 }, // Investment incentives
+        "budgetItems.deficit": { max: 0.03, score: -3 },                          // Fiscal responsibility
+        "budgetItems.infrastructure": { min: 10 * MIN_MULTIPLIER, score: 3 }       // Economic infrastructure
       }
     },
     realEstate: {
       weight: 0.10,
       triggers: {
-        // "revenueMix.personalIncomeTax": { min: 0.001, score: -300 },
-        // "revenueMix.gst": { min: 0.01, score: -37.5 },
-        // "revenueMix.hst": { min: 0.01, score: -37.5 },
-        // "taxExpenditures.personalIncomeTaxCredits.adjustmentPercent": { max: -0.01, score: -7.5 },
-        "budgetItems.housing":                 { min: 12 * MIN_MULTIPLIER, score: 5 },  // development
-        "budgetItems.infrastructure":           { min: 15 * MIN_MULTIPLIER, score: 5 },  // community
-        "revenueMix.corporateTax":             { max: 14 * MAX_MULTIPLIER, score: 4 },  // climate
-        "taxExpenditures.homeownerTaxCredits": { min: 12 * MIN_MULTIPLIER, score: 4 }, // homeowner credits
-        "budgetItems.economicDevelopment":      { min: 6  * MIN_MULTIPLIER, score: 4 },  // urban dev
-        "budgetItems.environmentAndClimateChange": { min: 5 * MIN_MULTIPLIER, score: 3 }   // sustainability
+        // Housing and development
+        "budgetItems.housing": [
+          { min: 15 * MIN_MULTIPLIER, score: 5 },  // Strong support for housing investment
+          { max: 5 * MIN_MULTIPLIER, score: -3 }   // Negative if housing investment is too low
+        ],
+        "budgetItems.infrastructure": { min: 15 * MIN_MULTIPLIER, score: 5 },     // Community development
+        "revenueMix.corporateTax": { max: 14 * MAX_MULTIPLIER, score: 4 },        // Development climate
+        "taxExpenditures.homeownerTaxCredits": { min: 12 * MIN_MULTIPLIER, score: 4 }, // Homeowner incentives
+        "budgetItems.economicDevelopment": { min: 8 * MIN_MULTIPLIER, score: 4 }, // Urban development
+        "budgetItems.environmentAndClimateChange": { min: 6 * MIN_MULTIPLIER, score: 3 }, // Sustainability
+        "budgetItems.transit": { min: 10 * MIN_MULTIPLIER, score: 4 },            // Transit infrastructure
+        "budgetItems.digitalGovernment": { min: 5 * MIN_MULTIPLIER, score: 3 }    // Digital infrastructure
       }
     },
     creativeIndustries: {
       weight: 0.05,
       triggers: {
-        // "revenueMix.personalIncomeTax": { min: 0.001, score: -300 },
-        // "revenueMix.gst": { min: 0.01, score: -37.5 },
-        // "revenueMix.hst": { min: 0.01, score: -37.5 },
-        // "taxExpenditures.personalIncomeTaxCredits.adjustmentPercent": { max: -0.01, score: -7.5 },
-        "budgetItems.culturalPrograms":         { min: 6  * MIN_MULTIPLIER, score: 5 },  // arts grants
-        "budgetItems.tourism":                  { min: 3  * MIN_MULTIPLIER, score: 4 },  // cultural tourism
-        "budgetItems.digitalGovernment":        { min: 4  * MIN_MULTIPLIER, score: 4 },  // digital infra
-        "budgetItems.skillsDevelopment":       { min: 5  * MIN_MULTIPLIER, score: 4 },  // skills
-        "taxExpenditures.corporateTaxExpenditures.adjustmentPercent": { min: 12 * MIN_MULTIPLIER, score: 5 }, // film/media
-        "budgetItems.indigenousServices":       { min: 5  * MIN_MULTIPLIER, score: 4 }   // indigenous arts
+        "budgetItems.culturalPrograms": [
+          { min: 8 * MIN_MULTIPLIER, score: 5 },  // Strong arts funding
+          { min: 5 * MIN_MULTIPLIER, score: 3 },  // Moderate funding
+          { max: 3 * MAX_MULTIPLIER, score: -3 }  // Weak funding
+        ],
+        "budgetItems.tourism": [
+          { min: 5 * MIN_MULTIPLIER, score: 5 },  // Strong tourism support
+          { min: 3 * MIN_MULTIPLIER, score: 3 },  // Moderate support
+          { max: 2 * MAX_MULTIPLIER, score: -2 }  // Weak support
+        ],
+        "budgetItems.digitalGovernment": [
+          { min: 6 * MIN_MULTIPLIER, score: 4 },  // Strong digital support
+          { min: 4 * MIN_MULTIPLIER, score: 2 },  // Moderate support
+          { max: 2 * MAX_MULTIPLIER, score: -2 }  // Weak support
+        ],
+        "budgetItems.skillsDevelopment": [
+          { min: 7 * MIN_MULTIPLIER, score: 5 },  // Strong skills support
+          { min: 5 * MIN_MULTIPLIER, score: 3 },  // Moderate support
+          { max: 3 * MAX_MULTIPLIER, score: -2 }  // Weak support
+        ],
+        "taxExpenditures.corporateTaxExpenditures.adjustmentPercent": [
+          { min: 15 * MIN_MULTIPLIER, score: 5 }, // Strong incentives
+          { min: 10 * MIN_MULTIPLIER, score: 3 }, // Moderate incentives
+          { max: 5 * MAX_MULTIPLIER, score: -2 }  // Weak incentives
+        ],
+        "budgetItems.indigenousServices": [
+          { min: 7 * MIN_MULTIPLIER, score: 4 },  // Strong indigenous arts
+          { min: 5 * MIN_MULTIPLIER, score: 2 },  // Moderate support
+          { max: 3 * MAX_MULTIPLIER, score: -2 }  // Weak support
+        ],
+        "budgetItems.education": [
+          { min: 25 * MIN_MULTIPLIER, score: 4 }, // Strong arts education
+          { min: 20 * MIN_MULTIPLIER, score: 2 }, // Moderate support
+          { max: 15 * MAX_MULTIPLIER, score: -2 } // Weak support
+        ]
       }
     },
     manufacturing: {
       weight: 0.15,
       triggers: {
-        // "revenueMix.personalIncomeTax": { min: 0.001, score: -300 },
-        // "revenueMix.gst": { min: 0.01, score: -37.5 },
-        // "revenueMix.hst": { min: 0.01, score: -37.5 },
-        // "taxExpenditures.personalIncomeTaxCredits.adjustmentPercent": { max: -0.01, score: -7.5 },
-        "revenueMix.corporateTax":             { max: 13 * MAX_MULTIPLIER, score: 5 },  // tax
-        "budgetItems.economicDevelopment":      { min: 10 * MIN_MULTIPLIER, score: 5 }, // industry policy
-        "budgetItems.infrastructure":           { min: 12 * MIN_MULTIPLIER, score: 4 }, // supply chains
-        "revenueMix.carbonPricing":                 { max: 0.7 * MAX_MULTIPLIER, score: 4 }, // energy costs
-        "budgetItems.scienceAndInnovation":     { min: 7  * MIN_MULTIPLIER, score: 5 }, // automation
-        "budgetItems.skillsDevelopment":       { min: 5  * MIN_MULTIPLIER, score: 4 }  // training
+        "revenueMix.corporateTax": [
+          { max: 12 * MAX_MULTIPLIER, score: 5 }, // Very competitive tax rate
+          { max: 14 * MAX_MULTIPLIER, score: 3 }, // Moderate tax rate
+          { min: 16 * MIN_MULTIPLIER, score: -3 } // High tax rate
+        ],
+        "budgetItems.economicDevelopment": [
+          { min: 12 * MIN_MULTIPLIER, score: 5 }, // Strong industry support
+          { min: 8 * MIN_MULTIPLIER, score: 3 },  // Moderate support
+          { max: 5 * MAX_MULTIPLIER, score: -2 }  // Weak support
+        ],
+        "budgetItems.infrastructure": [
+          { min: 15 * MIN_MULTIPLIER, score: 5 }, // Strong infrastructure
+          { min: 10 * MIN_MULTIPLIER, score: 3 }, // Moderate infrastructure
+          { max: 7 * MAX_MULTIPLIER, score: -3 }  // Weak infrastructure
+        ],
+        "revenueMix.carbonPricing": [
+          { max: 0.5 * MAX_MULTIPLIER, score: 5 }, // Low carbon pricing
+          { max: 0.8 * MAX_MULTIPLIER, score: 2 }, // Moderate pricing
+          { min: 1.2 * MIN_MULTIPLIER, score: -4 } // High pricing
+        ],
+        "budgetItems.scienceAndInnovation": [
+          { min: 9 * MIN_MULTIPLIER, score: 5 },  // Strong innovation support
+          { min: 6 * MIN_MULTIPLIER, score: 3 },  // Moderate support
+          { max: 4 * MAX_MULTIPLIER, score: -2 }  // Weak support
+        ],
+        "budgetItems.skillsDevelopment": [
+          { min: 7 * MIN_MULTIPLIER, score: 5 },  // Strong training support
+          { min: 5 * MIN_MULTIPLIER, score: 3 },  // Moderate training
+          { max: 3 * MAX_MULTIPLIER, score: -2 }  // Weak training
+        ],
+        "budgetItems.trade": [
+          { min: 8 * MIN_MULTIPLIER, score: 4 },  // Strong trade support
+          { min: 5 * MIN_MULTIPLIER, score: 2 },  // Moderate support
+          { max: 3 * MAX_MULTIPLIER, score: -2 }  // Weak support
+        ]
       }
     },
     veteransServices: {
@@ -942,15 +1225,41 @@ export const sentimentConfig = {
     publicSector: {
       weight: 0.10,
       triggers: {
-        // "revenueMix.personalIncomeTax": { min: 0.001, score: -300 },
-        // "revenueMix.gst": { min: 0.01, score: -37.5 },
-        // "revenueMix.hst": { min: 0.01, score: -37.5 },
-        // "taxExpenditures.personalIncomeTaxCredits.adjustmentPercent": { max: -0.01, score: -7.5 },
-        "budgetItems.publicAdministration":     { min: 12 * MIN_MULTIPLIER, score: 5 }, // service funding
-        "budgetItems.digitalGovernment":        { min: 6  * MIN_MULTIPLIER, score: 5 }, // modernization
-        "revenueMix.personalIncomeTaxRevenue":  { min: 18 * MIN_MULTIPLIER, score: 4 }, // revenue
-        "budgetItems.skillsDevelopment":       { min: 5  * MIN_MULTIPLIER, score: 4 }, // training
-        "budgetItems.cybersecurity":          { min: 3  * MIN_MULTIPLIER, score: 4 }  // gov security
+        "budgetItems.publicAdministration": [
+          { min: 15 * MIN_MULTIPLIER, score: 5 }, // Strong service funding
+          { min: 10 * MIN_MULTIPLIER, score: 3 }, // Moderate funding
+          { max: 7 * MAX_MULTIPLIER, score: -3 }  // Weak funding
+        ],
+        "budgetItems.digitalGovernment": [
+          { min: 8 * MIN_MULTIPLIER, score: 5 },  // Strong modernization
+          { min: 5 * MIN_MULTIPLIER, score: 3 },  // Moderate investment
+          { max: 3 * MAX_MULTIPLIER, score: -3 }  // Weak investment
+        ],
+        "revenueMix.personalIncomeTaxRevenue": [
+          { min: 20 * MIN_MULTIPLIER, score: 5 }, // Strong revenue base
+          { min: 15 * MIN_MULTIPLIER, score: 3 }, // Moderate revenue
+          { max: 10 * MAX_MULTIPLIER, score: -3 } // Weak revenue
+        ],
+        "budgetItems.skillsDevelopment": [
+          { min: 7 * MIN_MULTIPLIER, score: 5 },  // Strong training
+          { min: 5 * MIN_MULTIPLIER, score: 3 },  // Moderate training
+          { max: 3 * MAX_MULTIPLIER, score: -2 }  // Weak training
+        ],
+        "budgetItems.cybersecurity": [
+          { min: 5 * MIN_MULTIPLIER, score: 5 },  // Strong security
+          { min: 3 * MIN_MULTIPLIER, score: 3 },  // Moderate security
+          { max: 1 * MAX_MULTIPLIER, score: -4 }  // Weak security
+        ],
+        "budgetItems.mentalHealth": [
+          { min: 8 * MIN_MULTIPLIER, score: 4 },  // Strong mental health
+          { min: 5 * MIN_MULTIPLIER, score: 2 },  // Moderate support
+          { max: 3 * MAX_MULTIPLIER, score: -2 }  // Weak support
+        ],
+        "budgetItems.deficit": [
+          { max: 0.02, score: 4 },  // Very low deficit
+          { max: 0.04, score: 2 },  // Moderate deficit
+          { min: 0.06, score: -3 }  // High deficit
+        ]
       }
     }
   }, baselineSentimentOverrides.sectors)
