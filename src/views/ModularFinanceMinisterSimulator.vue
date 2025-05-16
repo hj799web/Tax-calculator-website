@@ -1,400 +1,677 @@
 <template>
-  <div class="finance-minister-simulator">
-    <div class="main-container">
-      <h1 class="main-title">
-        Budget Simulator: Be the Finance Minister
-      </h1>
+  <div class="simulator-container">
+    <div class="simulator-header">
+      <h1 class="simulator-title">Finance Minister Simulator</h1>
+      <div v-if="isMobile" class="year-selector">
+        <select 
+          v-model="currentYear" 
+          @change="updateBudgetForYear" 
+          class="year-select-mobile"
+          aria-label="Select year"
+        >
+          <option v-for="year in [2020, 2021, 2022, 2023, 2024, 2025]" :key="year" :value="year">
+            {{ year }}
+          </option>
+        </select>
+      </div>
+      <div v-else class="year-selector">
+        <button 
+          class="year-button"
+          @click="decrementYear"
+          :disabled="currentYear <= 2020"
+          aria-label="Previous year"
+        >
+          <span class="material-icons">chevron_left</span>
+        </button>
+        <span class="year-display">{{ currentYear }}</span>
+        <button 
+          class="year-button"
+          @click="incrementYear"
+          :disabled="currentYear >= 2025"
+          aria-label="Next year"
+        >
+          <span class="material-icons">chevron_right</span>
+        </button>
+      </div>
+    </div>
 
-      <!-- Year Selector -->
-      <YearSelector 
-        :current-year="currentYear" 
-        @year-selected="selectYear" 
-      />
+    <div class="simulator-grid">
+      <!-- Goals Card -->
+      <div class="simulator-card goals-card">
+        <div class="card-header">
+          <h2 class="card-title">Budget Goals</h2>
+        </div>
+        <div class="card-content">
+          <GoalTracker />
+        </div>
+      </div>
 
-      <div class="simulator-grid">
-        <!-- Budget Goals Section -->
-        <section class="simulator-card goals-card">
-          <h2 class="card-title">
-            <span class="material-icons icon">flag</span>
-            Budget Goals
-          </h2>
-          <div class="card-content">
-            <GoalTracker 
-              :current-revenue="budgetStore.totalRevenue"
-              :current-spending="budgetStore.totalSpending"
-              :initial-goals="budgetStore.budgetGoals"
-              :surplus="budgetStore.surplus"
-              @goal-status-changed="updateGoalStatus"
-              @auto-balance-toggled="toggleAutoBalance"
-            />
-          </div>
-        </section>
+      <!-- Results Card -->
+      <div class="simulator-card results-card">
+        <div class="card-header">
+          <h2 class="card-title">Budget Results</h2>
+        </div>
+        <div class="card-content">
+          <BudgetResults />
+        </div>
+      </div>
 
-        <!-- Budget Results Section -->
-        <BudgetResults 
-          :auto-balance-active="autoBalanceActive"
-          @reset-budget="resetBudget"
-          @toggle-auto-balance="toggleAutoBalance"
-          @save-budget="saveBudget"
-        />
-        
-        <!-- Budget Presets Section -->
-        <PresetSelector
-          @preset-applied="handlePresetApplied"
-          @preset-reset="resetBudget"
-        />
+      <!-- Revenue Card -->
+      <div class="simulator-card revenue-card">
+        <div class="card-header">
+          <h2 class="card-title">Revenue Sources</h2>
+        </div>
+        <div class="card-content">
+          <RevenueSliders />
+        </div>
+      </div>
 
-        <!-- Revenue Sources Section -->
-        <section class="simulator-card revenue-card">
-          <h2 class="card-title">
-            <span class="material-icons icon">payments</span>
-            Revenue Sources
-          </h2>
-          <div class="card-content">
-            <RevenueSliders :auto-balance-active="autoBalanceActive" />
-          </div>
-        </section>
+      <!-- Spending Card -->
+      <div class="simulator-card spending-card">
+        <div class="card-header">
+          <h2 class="card-title">Spending Controls</h2>
+        </div>
+        <div class="card-content">
+          <SpendingControls />
+        </div>
+      </div>
 
-        <!-- Spending Controls Section -->
-        <SpendingControls 
-          :main-categories="mainCategories"
-          :other-categories-groups="otherCategoriesGroups"
-          :sorted-gov-ops-children="sortedGovOpsChildren"
-          :spending-factors="spendingFactors"
-          :auto-balance-active="autoBalanceActive"
-          :expanded-groups="expandedGroups"
-          :total-main-categories="budgetStore.mainCategoriesSpending"
-          :total-other-categories="budgetStore.otherCategoriesTotal"
-          :total-gov-ops="budgetStore.governmentOperationsSpending"
-          :total-spending="budgetStore.totalSpending"
-          :get-group-children="budgetStore.getGroupChildren"
-          :tax-expenditures="taxExpenditures"
-          :total-tax-expenditures="totalTaxExpenditures"
-          :tax-expenditure-revenue-impact="taxExpenditureRevenueImpact"
-          @update-spending-factor="updateSpendingFactor"
-          @update-group-spending-factor="updateGroupSpendingFactor"
-          @toggle-group-expansion="toggleGroupExpansion"
-          @reset-gov-ops="resetGovOpsSubcategories"
-          @reset-other-categories="resetOtherCategoriesSubcategories"
-          @update-tax-expenditure-adjustment="updateTaxExpenditureAdjustment"
-          @reset-tax-expenditure="resetTaxExpenditure"
-          @reset-all-tax-expenditures="resetAllTaxExpenditures"
-        />
-
-        <!-- Charts Panel -->
-        <section class="simulator-card charts-card">
+      <!-- Charts Card -->
+      <div class="simulator-card charts-card">
+        <div class="card-header">
+          <h2 class="card-title">Budget Analysis</h2>
+        </div>
+        <div class="card-content">
           <ChartsPanel />
-        </section>
+        </div>
+      </div>
+    </div>
+
+    <!-- Error Boundary -->
+    <div v-if="error" class="error-boundary">
+      <div class="error-content">
+        <span class="material-icons error-icon">error_outline</span>
+        <h3 class="error-title">Something went wrong</h3>
+        <p class="error-message">{{ error }}</p>
+        <button class="error-button" @click="resetError">Try Again</button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue';
-import { useBudgetSimulatorStore } from '@/domains/budget';
-import { storeToRefs } from 'pinia';
-import RevenueSliders from '../components/RevenueSliders.vue';
-import GoalTracker from '../components/GoalTracker.vue';
-import ChartsPanel from '../components/ChartsPanel.vue';
-import YearSelector from '@/domains/budget/components/YearSelector.vue';
+import { ref, onMounted, onUnmounted, watch } from 'vue';
+import { useBudgetSimulatorStore } from '@/domains/budget/store/budgetSimulator';
+import GoalTracker from '@/domains/budget/components/GoalTracker.vue';
 import BudgetResults from '@/domains/budget/components/BudgetResults.vue';
+import RevenueSliders from '@/domains/budget/components/RevenueSliders.vue';
 import SpendingControls from '@/domains/budget/components/SpendingControls.vue';
-import PresetSelector from '../components/PresetSelector.vue';
+import ChartsPanel from '@/domains/budget/components/ChartsPanel.vue';
+import { debounce } from 'lodash-es';
 
-// Initialize store and local state
 const budgetStore = useBudgetSimulatorStore();
-const { 
-  spendingCategories, 
-  taxExpenditures, 
-  totalTaxExpenditures, 
-  taxExpenditureRevenueImpact 
-} = storeToRefs(budgetStore);
+const currentYear = ref(2023);
+const error = ref(null);
+const isMobile = ref(window.innerWidth < 768);
 
-// Initialize local state
-const currentYear = ref(budgetStore.currentYear);
-const expandedGroups = ref({
-  mainCategories: true,
-  otherCategories: false,
-  governmentOperations: false,
-  taxExpenditures: true
-});
-const spendingFactors = ref({});
-// Use computed property to access store's autoBalanceActive state
-const autoBalanceActive = computed(() => budgetStore.autoBalanceActive);
-
-// Computed property for fiscal year display
-// eslint-disable-next-line no-unused-vars
-const fiscalYear = computed(() => {
-  return `${currentYear.value - 1}-${currentYear.value}`;
-});
-
-function selectYear(year) {
-  currentYear.value = year;
-  budgetStore.setCurrentYear(year);
-  initializeLocalValues();
-}
-
-const mainCategories = computed(() => {
-  return Object.values(budgetStore.spendingCategories)
-    .filter(category => !category.isGroup)
-    .sort((a, b) => a.id - b.id);
-});
-
-const otherCategoriesGroups = computed(() => {
-  return Object.values(budgetStore.spendingCategories)
-    .filter(category => category.isGroup && category.id !== 9)
-    .sort((a, b) => a.id - b.id);
-});
-
-const sortedGovOpsChildren = computed(() => {
-  const govOps = budgetStore.spendingCategories.governmentOperations;
-  if (govOps && govOps.children) {
-    // Use a more reliable sorting method for decimal IDs
-    return Object.values(govOps.children).sort((a, b) => {
-      // First convert to string and split by decimal point
-      const aParts = a.id.toString().split('.');
-      const bParts = b.id.toString().split('.');
-      
-      // Compare the integer part first
-      const aInt = parseInt(aParts[0]);
-      const bInt = parseInt(bParts[0]);
-      if (aInt !== bInt) return aInt - bInt;
-      
-      // If integer parts are the same, compare decimal parts
-      const aDecimal = aParts.length > 1 ? parseInt(aParts[1]) : 0;
-      const bDecimal = bParts.length > 1 ? parseInt(bParts[1]) : 0;
-      return aDecimal - bDecimal;
-    });
-  }
-  return [];
-});
-
-function initializeLocalValues() {
-  Object.values(budgetStore.spendingCategories).forEach(category => {
-    if (!category.isGroup) {
-      spendingFactors.value[category.id] = Math.round((category.adjustmentFactor || 1) * 100) || 100;
-    } else if (category.children) {
-      spendingFactors.value[category.id] = Math.round(budgetStore.getGroupFactor(category.id) * 100) || 100;
-      Object.values(category.children).forEach(child => {
-        spendingFactors.value[child.id] = Math.round((child.adjustmentFactor || 1) * 100) || 100;
-      });
-    }
-  });
-  // Ensure Government Operations subcategories are initialized
-  const govOps = budgetStore.spendingCategories.governmentOperations;
-  if (govOps && govOps.children) {
-    Object.values(govOps.children).forEach(child => {
-      if (spendingFactors.value[child.id] === undefined) {
-        spendingFactors.value[child.id] = 100;
-      }
-    });
-  }
-}
-
-function toggleGroupExpansion(groupId) {
-  expandedGroups.value[groupId] = !expandedGroups.value[groupId];
-}
-
-function updateSpendingFactor(categoryId, value) {
-  const factor = value / 100;
-  budgetStore.updateSpendingFactor(categoryId, factor);
-  if (autoBalanceActive.value) {
-    budgetStore.autoBalanceBudget();
-  }
-}
-
-function updateGroupSpendingFactor(groupId, value) {
-  const factor = value / 100;
-  budgetStore.updateGroupSpendingFactor(groupId, factor);
-  if (autoBalanceActive.value) {
-    budgetStore.autoBalanceBudget();
-  }
-}
-
-function toggleAutoBalance(isActive) {
-  // Update the store's state directly
-  budgetStore.toggleAutoBalance(isActive);
-  
-  console.log('Auto-balance mode:', isActive ? 'enabled' : 'disabled');
-}
-
-function resetBudget() {
-  budgetStore.resetBudget();
-  initializeLocalValues();
-}
-
-function saveBudget() {
-  budgetStore.syncToLocalStorage();
-  alert('Budget saved successfully!');
-}
-
-function updateGoalStatus(statusData) {
-  budgetStore.updateGoalStatus(statusData);
-}
-
-function resetGovOpsSubcategories() {
-  const govOps = budgetStore.spendingCategories.governmentOperations;
-  if (govOps && govOps.children) {
-    Object.values(govOps.children).forEach(child => {
-      spendingFactors.value[child.id] = 100;
-      budgetStore.updateSpendingFactor(child.id, 1);
-    });
-  }
-}
-
-function resetOtherCategoriesSubcategories() {
-  otherCategoriesGroups.value.forEach(group => {
-    const children = budgetStore.getGroupChildren(group.id);
-    if (children) {
-      Object.values(children).forEach(child => {
-        spendingFactors.value[child.id] = 100;
-        budgetStore.updateSpendingFactor(child.id, 1);
-      });
-    }
-  });
-}
-
-function updateTaxExpenditureAdjustment(expenditureId, value) {
-  console.log('Updating tax expenditure adjustment:', expenditureId, value);
-  budgetStore.updateTaxExpenditureAdjustment(expenditureId, value);
-  console.log('Updated tax expenditure adjustment:', expenditureId, value);
-}
-
-function resetTaxExpenditure(expenditureId) {
-  console.log('Resetting tax expenditure:', expenditureId);
-  budgetStore.updateTaxExpenditureAdjustment(expenditureId, 0);
-  console.log('Reset tax expenditure:', expenditureId);
-}
-
-function resetAllTaxExpenditures() {
-  console.log('Resetting all tax expenditures');
-  budgetStore.resetTaxExpenditures();
-  console.log('All tax expenditures reset');
-  // Force UI update
-  lastUpdate.value = Date.now();
-}
-
-function handlePresetApplied(presetKey) {
-  console.log(`Applied budget preset: ${presetKey}`);
-  // Force UI update
-  lastUpdate.value = Date.now();
-}
-
-watch([() => budgetStore.spendingCategories, () => budgetStore.taxExpenditures], () => {
-  initializeLocalValues();
-}, { deep: true });
-
+// Initialize budget store
 onMounted(() => {
-  budgetStore.initializeStore();
-  initializeLocalValues();
-  
-  // Log the tax expenditures to verify they're loaded
-  console.log('Tax Expenditures on mount:', taxExpenditures.value);
-  console.log('Budget Store direct access:', budgetStore.taxExpenditures);
+  try {
+    budgetStore.initializeBudget();
+    window.addEventListener('resize', handleResize);
+  } catch (err) {
+    error.value = 'Failed to initialize budget. Please try again.';
+    console.error('Budget initialization error:', err);
+  }
+});
+
+// Year control functions
+const incrementYear = () => {
+  if (currentYear.value < 2025) {
+    currentYear.value++;
+    updateBudgetForYear();
+  }
+};
+
+const decrementYear = () => {
+  if (currentYear.value > 2020) {
+    currentYear.value--;
+    updateBudgetForYear();
+  }
+};
+
+const updateBudgetForYear = () => {
+  try {
+    budgetStore.updateBudgetForYear(currentYear.value);
+  } catch (err) {
+    error.value = 'Failed to update budget for the selected year.';
+    console.error('Budget update error:', err);
+  }
+};
+
+// Error handling
+const resetError = () => {
+  error.value = null;
+  try {
+    budgetStore.initializeBudget();
+  } catch (err) {
+    error.value = 'Failed to reset budget. Please refresh the page.';
+    console.error('Budget reset error:', err);
+  }
+};
+
+// Responsive handling
+const handleResize = debounce(() => {
+  isMobile.value = window.innerWidth < 768;
+}, 250);
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize);
+});
+
+// Watch for year changes
+watch(currentYear, (newYear) => {
+  updateBudgetForYear();
 });
 </script>
 
 <style scoped>
-.finance-minister-simulator {
-  padding: 1rem;
-  background-color: #f8f9fa;
-  min-height: 100vh;
-}
+/* ----------------------------------------------------------
+   Mobile-friendly overrides (≤768 px & ≤480 px)
+   – Single-column layout
+   – Icon-only year controls
+   – Reduced shadows & transforms
+---------------------------------------------------------- */
 
-.main-container {
-  max-width: 1200px;
+/* Mobile-friendly adjustments for screens ≤480px and ≤768px */
+.simulator-container {
+  max-width: 1600px;
   margin: 0 auto;
+  padding: 2rem;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f6f8fc 0%, #e9f0f7 100%);
+  container-type: inline-size;
 }
 
-.main-title {
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: #2d3748;
+.simulator-header {
   text-align: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 1rem;
+  box-shadow: 
+    0 10px 20px rgba(0, 0, 0, 0.19),
+    0 6px 6px rgba(0, 0, 0, 0.23);
+  backdrop-filter: blur(10px);
+  transform: translateZ(0);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  will-change: transform, box-shadow;
+}
+
+.simulator-header:hover {
+  transform: translateY(-5px) translateZ(0);
+  box-shadow: 
+    0 15px 30px rgba(0, 0, 0, 0.25),
+    0 10px 10px rgba(0, 0, 0, 0.22);
+}
+
+.simulator-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1a365d;
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.year-selector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.year-button {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  color: #2d3748;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 
+    0 4px 6px rgba(0, 0, 0, 0.1),
+    0 2px 4px rgba(0, 0, 0, 0.06);
+  will-change: transform, box-shadow;
+}
+
+.year-button:hover:not(:disabled) {
+  background: #f7fafc;
+  transform: translateY(-2px) translateZ(0);
+  box-shadow: 
+    0 6px 8px rgba(0, 0, 0, 0.12),
+    0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.year-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.year-display {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #2d3748;
+  min-width: 100px;
+  text-align: center;
 }
 
 .simulator-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: auto auto auto auto;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 1.5rem;
+  margin-top: 2rem;
+  container-type: inline-size;
 }
 
 .simulator-card {
-  background-color: white;
-  border-radius: 0.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 
+    0 10px 20px rgba(0, 0, 0, 0.19),
+    0 6px 6px rgba(0, 0, 0, 0.23);
+  backdrop-filter: blur(10px);
+  transform: translateZ(0);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  will-change: transform, box-shadow;
+  contain: content;
+  perspective: 1000px;
+  transform-style: preserve-3d;
 }
 
-.goals-card {
-  grid-column: 1;
-  grid-row: 1;
+.simulator-card:hover {
+  transform: translateY(-5px) translateZ(0) rotateX(2deg);
+  box-shadow: 
+    0 15px 30px rgba(0, 0, 0, 0.25),
+    0 10px 10px rgba(0, 0, 0, 0.22);
 }
 
-.results-card {
-  grid-column: 1;
-  grid-row: 2;
-}
-
-.revenue-card {
-  grid-column: 1;
-  grid-row: 3;
-}
-
-.spending-card {
-  grid-column: 2;
-  grid-row: 1 / span 3;
-  min-height: 1200px;
+.card-header {
   display: flex;
-  flex-direction: column;
-}
-
-.charts-card {
-  grid-column: 1 / span 2;
-  grid-row: 4;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #e2e8f0;
+  transform: translateZ(20px);
+  transition: transform 0.3s ease;
 }
 
 .card-title {
-  display: flex;
-  align-items: center;
-  padding: 0.75rem 1rem;
-  background-color: #f8f9fa;
-  border-bottom: 1px solid #e9ecef;
-  font-size: 1.125rem;
+  font-size: 1.25rem;
   font-weight: 600;
   color: #2d3748;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transform: translateZ(30px);
+  transition: transform 0.3s ease;
 }
 
-.card-title .icon {
-  margin-right: 0.5rem;
-  font-size: 1.25rem;
-  color: #4263eb;
+.card-title .material-icons {
+  color: #4299e1;
 }
 
 .card-content {
-  padding: 1rem;
+  position: relative;
+  min-height: 200px;
+  contain: content;
+  transform: translateZ(10px);
+  transition: transform 0.3s ease;
 }
 
-@media (max-width: 768px) {
+/* Card Grid Layout */
+.goals-card {
+  grid-column: span 4;
+  grid-row: 1;
+  transform: translateZ(0) rotateX(0deg);
+  transition: transform 0.3s ease;
+}
+
+.goals-card:hover {
+  transform: translateY(-5px) translateZ(20px) rotateX(2deg);
+}
+
+.results-card {
+  grid-column: span 8;
+  grid-row: 1;
+  transform: translateZ(0) rotateX(0deg);
+  transition: transform 0.3s ease;
+}
+
+.results-card:hover {
+  transform: translateY(-5px) translateZ(20px) rotateX(2deg);
+}
+
+.revenue-card {
+  grid-column: span 6;
+  grid-row: 2;
+  transform: translateZ(0) rotateX(0deg);
+  transition: transform 0.3s ease;
+}
+
+.revenue-card:hover {
+  transform: translateY(-5px) translateZ(20px) rotateX(2deg);
+}
+
+.spending-card {
+  grid-column: span 6;
+  grid-row: 2;
+  transform: translateZ(0) rotateX(0deg);
+  transition: transform 0.3s ease;
+}
+
+.spending-card:hover {
+  transform: translateY(-5px) translateZ(20px) rotateX(2deg);
+}
+
+.charts-card {
+  grid-column: span 12;
+  grid-row: 3;
+  transform: translateZ(0) rotateX(0deg);
+  transition: transform 0.3s ease;
+}
+
+.charts-card:hover {
+  transform: translateY(-5px) translateZ(20px) rotateX(2deg);
+}
+
+/* Error Boundary */
+.error-boundary {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+}
+
+.error-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 
+    0 10px 20px rgba(0, 0, 0, 0.19),
+    0 6px 6px rgba(0, 0, 0, 0.23);
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+.error-icon {
+  font-size: 3rem;
+  color: #e53e3e;
+  margin-bottom: 1rem;
+}
+
+.error-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 0.5rem;
+}
+
+.error-message {
+  color: #4a5568;
+  margin-bottom: 1.5rem;
+}
+
+.error-button {
+  padding: 0.75rem 1.5rem;
+  background: #4299e1;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  will-change: transform, background-color;
+}
+
+.error-button:hover {
+  background: #3182ce;
+  transform: translateY(-2px) translateZ(0);
+}
+
+/* Responsive Design */
+@container (max-width: 1200px) {
+  .simulator-container {
+    padding: 1.5rem;
+  }
+  
+  .simulator-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.25rem;
+  }
+}
+
+@container (max-width: 768px) {
+  .simulator-container {
+    padding: 1rem;
+  }
+  
+  .simulator-header {
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .simulator-title {
+    font-size: 2rem;
+  }
+  
   .simulator-grid {
     grid-template-columns: 1fr;
+    gap: 1rem;
   }
   
-  .goals-card,
-  .results-card,
-  .revenue-card,
-  .spending-card,
-  .charts-card {
-    grid-column: 1;
+  .simulator-card {
+    padding: 1rem;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   }
   
-  .goals-card { grid-row: 1; }
-  .results-card { grid-row: 2; }
-  .revenue-card { grid-row: 3; }
-  .spending-card { grid-row: 4; }
-  .charts-card { grid-row: 5; }
+  .card-content {
+    min-height: 150px;
+  }
+  
+  .card-title {
+    font-size: 1.125rem;
+  }
+}
+
+@container (max-width: 480px) {
+  .simulator-container {
+    padding: 0.5rem;
+  }
+  
+  .simulator-header {
+    padding: 1rem;
+  }
+  
+  .simulator-title {
+    font-size: 1.75rem;
+  }
+  
+  .year-selector {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .year-button {
+    padding: 0.5rem;
+    font-size: 0.875rem;
+    min-width: 40px;
+  }
+
+  .year-button:disabled {
+    opacity: 0.4;
+  }
+
+  .material-icons {
+    font-size: 1.5rem;
+  }
+
+  .year-display {
+    font-size: 1rem;
+    min-width: 60px;
+  }
+  
+  .simulator-card {
+    padding: 1rem;
+  }
+
+  .card-title {
+    font-size: 1.125rem;
+  }
+
+  .simulator-header,
+  .simulator-card {
+    backdrop-filter: none;
+    transform: none !important;
+    transition: none;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    background: #fff;
+  }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) {
+  .simulator-card:hover {
+    transform: none;
+    box-shadow: 
+      0 10px 20px rgba(0, 0, 0, 0.19),
+      0 6px 6px rgba(0, 0, 0, 0.23);
+  }
+  
+  .simulator-card:active {
+    transform: translateY(-2px) translateZ(10px) rotateX(1deg);
+    box-shadow: 
+      0 12px 24px rgba(0, 0, 0, 0.2),
+      0 8px 8px rgba(0, 0, 0, 0.15);
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .simulator-card,
+  .year-button,
+  .simulator-header,
+  .error-button,
+  .card-header,
+  .card-title,
+  .card-content {
+    transition: none;
+    transform: none !important;
+  }
+}
+
+/* High Contrast Mode */
+@media (forced-colors: active) {
+  .simulator-card {
+    border: 2px solid CanvasText;
+  }
+  
+  .card-header {
+    border-bottom: 2px solid CanvasText;
+  }
+  
+  .year-button,
+  .error-button {
+    border: 2px solid CanvasText;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .simulator-container {
+    background: none;
+    padding: 0;
+  }
+  
+  .simulator-card {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #000;
+  }
+  
+  .year-button,
+  .error-boundary {
+    display: none;
+  }
+}
+
+.year-select-mobile {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  color: #2d3748;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 
+    0 4px 6px rgba(0, 0, 0, 0.1),
+    0 2px 4px rgba(0, 0, 0, 0.06);
+  will-change: transform, box-shadow;
+  width: 100%;
+  max-width: 200px;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1.25rem;
+  padding-right: 2.5rem;
+  display: block;
+  margin: 1rem auto;
+  width: 60%;
+  padding: 0.5rem;
+}
+
+.year-select-mobile:focus {
+  outline: none;
+  border-color: #4299e1;
+  box-shadow: 
+    0 6px 8px rgba(0, 0, 0, 0.12),
+    0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.year-select-mobile:active {
+  transform: translateY(-1px) translateZ(0);
+  box-shadow: 
+    0 6px 8px rgba(0, 0, 0, 0.12),
+    0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .year-select-mobile {
+    transition: none;
+    transform: none !important;
+  }
+}
+
+@media (forced-colors: active) {
+  .year-select-mobile {
+    border: 2px solid CanvasText;
+  }
 }
 </style>
