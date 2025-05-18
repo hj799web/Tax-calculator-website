@@ -73,7 +73,7 @@
 
         <!-- Salary Rate Selector Section -->
         <SalaryRateSelector />
-        <section class="calculator-section">
+        <section class="calculator-section budget-simulator">
           <div class="calculator-wrapper">
             <!-- Calculator and Results Section -->
             <CalculatorView />
@@ -82,11 +82,10 @@
             <ResultView />
             <!-- End of calculator-container -->
           </div>
-        <!-- End of calculator-wrapper -->
         </section>
 
         <!-- Understanding Your Tax Breakdown Section -->
-        <section id="how-it-works">
+        <section id="how-it-works" class="income-section">
           <h2 class="section-title">
             Understanding Your Tax Breakdown
           </h2>
@@ -98,7 +97,7 @@
         </section>
 
         <!-- Budget Categories Section - Now Collapsible -->
-        <section class="budget-categories-section">
+        <section class="budget-categories-section expenses-section">
           <div class="section-header">
             <h2 class="section-title">
               Budget Categories
@@ -122,7 +121,7 @@
         <!-- End of budget-categories-section -->
 
         <!-- FAQ Section - Now Collapsible -->
-        <section class="faq-section">
+        <section class="faq-section summary-section">
           <div class="section-header">
             <h2 class="section-title">
               Taxpayer FAQs

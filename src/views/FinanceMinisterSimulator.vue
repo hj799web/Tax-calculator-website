@@ -3,6 +3,7 @@
     class="finance-minister-simulator"
     :class="{ 'panel-collapsed': !badgePanelExpanded }"
   >
+    <OnboardingTour />
     <!-- Public Sentiment Banner (includes fiscal chaos warning when needed) -->
     <CollapsibleSentimentBanner
       :emoji="groupSentimentEmoji"
@@ -115,11 +116,12 @@
       <div class="simulator-grid">
         <!-- Budget Goals Section -->
         <section id="budget-goals" class="simulator-card goals-card">
-          <h2 class="card-title">
+          <h2 class="card-title" @click="toggleSection('budgetGoals')">
             <span class="material-icons icon">flag</span>
             Budget Goals
+            <span class="material-icons toggle-icon" :class="{ 'rotated': !sectionsExpanded.budgetGoals }">expand_more</span>
           </h2>
-          <div class="card-content">
+          <div class="card-content" v-show="sectionsExpanded.budgetGoals">
             <!-- Budget Goals feature temporarily disabled -->
             <GoalTracker 
               v-if="FEATURES_ENABLED.budgetGoals"
@@ -163,22 +165,24 @@
 
         <!-- Revenue Sources Section -->
         <section id="revenue-sources" class="simulator-card revenue-card">
-          <h2 class="card-title">
+          <h2 class="card-title" @click="toggleSection('revenueSources')">
             <span class="material-icons icon">payments</span>
             Revenue Sources
+            <span class="material-icons toggle-icon" :class="{ 'rotated': !sectionsExpanded.revenueSources }">expand_more</span>
           </h2>
-          <div class="card-content">
+          <div class="card-content" v-show="sectionsExpanded.revenueSources">
             <RevenueSliders :auto-balance-active="autoBalanceActive" />
           </div>
         </section>
 
         <!-- Spending Controls Section -->
         <section id="spending-controls" class="simulator-card spending-card">
-          <h2 class="card-title">
+          <h2 class="card-title" @click="toggleSection('spendingControls')">
             <span class="material-icons icon">payments</span>
             Spending Controls
+            <span class="material-icons toggle-icon" :class="{ 'rotated': !sectionsExpanded.spendingControls }">expand_more</span>
           </h2>
-          <div class="card-content">
+          <div class="card-content" v-show="sectionsExpanded.spendingControls">
             <SpendingControls 
               :main-categories="mainCategories"
               :other-categories-groups="otherCategoriesGroups"
@@ -205,13 +209,14 @@
           <ChartsPanel />
         </section>
         
-        <!-- Public Sentiment Panel -->
+        <!-- Public Sentiment Section -->
         <section id="public-sentiment" class="simulator-card sentiment-card">
-          <h2 class="card-title">
-            <span class="material-icons icon">people</span>
-            Public Sentiment Settings
+          <h2 class="card-title" @click="toggleSection('publicSentiment')">
+            <span class="material-icons icon">sentiment_satisfied</span>
+            Public Sentiment
+            <span class="material-icons toggle-icon" :class="{ 'rotated': !sectionsExpanded.publicSentiment }">expand_more</span>
           </h2>
-          <div class="card-content">
+          <div class="card-content" v-show="sectionsExpanded.publicSentiment">
             <div class="sentiment-controls-container">
               <SentimentSensitivityControl />
             </div>
@@ -251,6 +256,7 @@ import SharedBudgetDetailModal from '@/domains/budget/components/SharedBudgetDet
 import { SocialShareModal } from '@/domains/social'
 import MainNavigation from '@/components/MainNavigation.vue'
 import logoImage from '@/assets/fiscal-insights-logo.jpg'
+import OnboardingTour from '@/components/OnboardingTour.vue'
 
 import { computed, ref, onMounted, watch, nextTick } from 'vue'
 import { useBudgetSimulatorStore } from '@/domains/budget'
@@ -648,6 +654,19 @@ function scrollToSection(sectionId) {
     }
   });
 }
+
+// Add sections expanded state
+const sectionsExpanded = ref({
+  budgetGoals: true,
+  revenueSources: true,
+  spendingControls: true,
+  publicSentiment: true
+});
+
+// Add toggle function
+const toggleSection = (section) => {
+  sectionsExpanded.value[section] = !sectionsExpanded.value[section];
+};
 </script>
 
 <style scoped>
@@ -948,22 +967,31 @@ function scrollToSection(sectionId) {
 .card-title {
   display: flex;
   align-items: center;
-  padding: 0.75rem 1rem;
-  background-color: #f8f9fa;
-  border-bottom: 1px solid #e9ecef;
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: #2d3748;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  padding: 16px;
+  margin: 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  transition: background-color 0.2s ease;
 }
 
-.card-title .icon {
-  margin-right: 0.5rem;
-  font-size: 1.25rem;
-  color: #4263eb;
+.card-title:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.toggle-icon {
+  margin-left: auto;
+  transition: transform 0.3s ease;
+}
+
+.toggle-icon.rotated {
+  transform: rotate(-90deg);
 }
 
 .card-content {
-  padding: 1rem;
+  padding: 16px;
+  transition: all 0.3s ease;
 }
 
 @media (max-width: 768px) {
