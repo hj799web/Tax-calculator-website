@@ -249,7 +249,7 @@ function safeDestroyChart(context = 'unknown') {
 
 // Tabs configuration
 const tabs = [
-  { id: 'provinces', label: 'Regions' },
+  { id: 'provinces', label: 'Provinces and territories' },
   { id: 'demographics', label: 'Demographics' },
   { id: 'sectors', label: 'Sectors' }
 ];
@@ -1053,5 +1053,16 @@ input:checked + .toggle-slider:before {
 /* Scrollbar styling */
 .sentiment-details::-webkit-scrollbar {
   width: 6px;
+}
+
+@media (max-width: 600px) {
+  .card-title, .card-content, .summary-card, .main-category-header, .other-category-header, .subcategory-header, .gov-ops-header, .tax-expenditure-header, .tile-title, .tile-amount, .slider-labels {
+    writing-mode: initial !important;
+    text-orientation: initial !important;
+    transform: none !important;
+    display: block !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+  }
 }
 </style>

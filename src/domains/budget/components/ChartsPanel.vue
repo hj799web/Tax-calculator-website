@@ -743,4 +743,15 @@ onUnmounted(() => {
     border: 1px solid CanvasText;
   }
 }
+
+@media (max-width: 600px) {
+  .card-title, .card-content, .summary-card, .main-category-header, .other-category-header, .subcategory-header, .gov-ops-header, .tax-expenditure-header, .tile-title, .tile-amount, .slider-labels {
+    writing-mode: initial !important;
+    text-orientation: initial !important;
+    transform: none !important;
+    display: block !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+  }
+}
 </style>

@@ -76,6 +76,34 @@
 
       <MainNavigation />
 
+      <!-- Sub Navigation Bar -->
+      <nav class="sub-navigation">
+        <a @click="scrollToSection('budget-goals')" class="sub-nav-link">
+          <span class="material-icons">flag</span>
+          Budget Goals
+        </a>
+        <a @click="scrollToSection('budget-results')" class="sub-nav-link">
+          <span class="material-icons">summarize</span>
+          Budget Results
+        </a>
+        <a @click="scrollToSection('revenue-sources')" class="sub-nav-link">
+          <span class="material-icons">payments</span>
+          Revenue Sources
+        </a>
+        <a @click="scrollToSection('spending-controls')" class="sub-nav-link">
+          <span class="material-icons">payments</span>
+          Spending Controls
+        </a>
+        <a @click="scrollToSection('budget-analysis')" class="sub-nav-link">
+          <span class="material-icons">bar_chart</span>
+          Budget Analysis
+        </a>
+        <a @click="scrollToSection('public-sentiment')" class="sub-nav-link">
+          <span class="material-icons">people</span>
+          Public Sentiment
+        </a>
+      </nav>
+
       <p class="description">Experience what it's like to manage Canada's federal budget. Adjust revenue sources and spending priorities to balance the budget while considering public sentiment across different regions and sectors.</p>
 
       <!-- Year Selector -->
@@ -86,7 +114,7 @@
 
       <div class="simulator-grid">
         <!-- Budget Goals Section -->
-        <section class="simulator-card goals-card">
+        <section id="budget-goals" class="simulator-card goals-card">
           <h2 class="card-title">
             <span class="material-icons icon">flag</span>
             Budget Goals
@@ -113,6 +141,7 @@
           <strong>⚠️ Public outrage: Revenue system in chaos! ⚠️</strong>
         </div>
         <BudgetResults 
+          id="budget-results"
           :total-revenue="budgetStore.totalRevenue"
           :total-spending="budgetStore.totalSpending"
           :surplus="budgetStore.surplus"
@@ -133,7 +162,7 @@
         </section>
 
         <!-- Revenue Sources Section -->
-        <section class="simulator-card revenue-card">
+        <section id="revenue-sources" class="simulator-card revenue-card">
           <h2 class="card-title">
             <span class="material-icons icon">payments</span>
             Revenue Sources
@@ -144,7 +173,7 @@
         </section>
 
         <!-- Spending Controls Section -->
-        <section class="simulator-card spending-card">
+        <section id="spending-controls" class="simulator-card spending-card">
           <h2 class="card-title">
             <span class="material-icons icon">payments</span>
             Spending Controls
@@ -172,12 +201,12 @@
         </section>
 
         <!-- Charts Panel -->
-        <section class="simulator-card charts-card">
+        <section id="budget-analysis" class="simulator-card charts-card">
           <ChartsPanel />
         </section>
         
         <!-- Public Sentiment Panel -->
-        <section class="simulator-card sentiment-card">
+        <section id="public-sentiment" class="simulator-card sentiment-card">
           <h2 class="card-title">
             <span class="material-icons icon">people</span>
             Public Sentiment Settings
@@ -223,7 +252,7 @@ import { SocialShareModal } from '@/domains/social'
 import MainNavigation from '@/components/MainNavigation.vue'
 import logoImage from '@/assets/fiscal-insights-logo.jpg'
 
-import { computed, ref, onMounted, watch } from 'vue'
+import { computed, ref, onMounted, watch, nextTick } from 'vue'
 import { useBudgetSimulatorStore } from '@/domains/budget'
 import { computeSentimentScores, getSentimentLabel, getSentimentEmoji } from '@/domains/sentiment/utils/computeSentimentScores'
 // Import scenario logic if needed
@@ -600,6 +629,25 @@ onMounted(() => {
 });
 
 const logoUrl = logoImage
+
+// Update scrollToSection function with better handling
+function scrollToSection(sectionId) {
+  // Use nextTick to ensure DOM is updated
+  nextTick(() => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      // Add a small offset to account for any fixed headers
+      const offset = 80; // Adjust this value based on your header height
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
+  });
+}
 </script>
 
 <style scoped>
@@ -743,7 +791,7 @@ const logoUrl = logoImage
   font-weight: 700;
   color: #2d3748;
   text-align: center;
-  margin-bottom: 0;
+  margin-bottom: 1rem;
   padding-bottom: 0;
 }
 
@@ -1068,7 +1116,7 @@ const logoUrl = logoImage
   display: flex;
   justify-content: center;
   gap: 20px;
-  margin: -10px 0 0 0;
+  margin: 0;
   padding: 0;
   background-color: #f8f9fa;
   border-radius: 8px;
@@ -1088,5 +1136,53 @@ const logoUrl = logoImage
 
 .site-logo:hover {
   transform: scale(1.05);
+}
+
+/* Sub Navigation Styles */
+.sub-navigation {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin: 15px 0;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+  flex-wrap: wrap;
+}
+
+.sub-nav-link {
+  color: #3498db;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer; /* Add cursor pointer to show it's clickable */
+}
+
+.sub-nav-link:hover {
+  background-color: #3498db;
+  color: white;
+}
+
+.sub-nav-link .material-icons {
+  font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+  .sub-navigation {
+    gap: 8px;
+    padding: 8px;
+  }
+  
+  .sub-nav-link {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+  }
 }
 </style>

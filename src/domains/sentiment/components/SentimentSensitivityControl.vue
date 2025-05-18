@@ -17,7 +17,7 @@
     <button @click="resetAll">Reset to Default</button>
     <div class="category-sliders">
       <div class="slider-group">
-        <label for="regions-sensitivity">Regions Multiplier</label>
+        <label for="regions-sensitivity">Provinces and territories Multiplier</label>
         <input
           id="regions-sensitivity"
           type="range"
@@ -142,5 +142,16 @@ label {
 input[type="range"] {
   flex: 1;
   min-width: 150px;
+}
+
+@media (max-width: 600px) {
+  .card-title, .card-content, .summary-card, .main-category-header, .other-category-header, .subcategory-header, .gov-ops-header, .tax-expenditure-header, .tile-title, .tile-amount, .slider-labels {
+    writing-mode: initial !important;
+    text-orientation: initial !important;
+    transform: none !important;
+    display: block !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+  }
 }
 </style>
