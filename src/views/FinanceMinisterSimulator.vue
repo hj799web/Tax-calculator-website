@@ -63,26 +63,20 @@
     />
 
     <div class="main-container">
-      <div class="flex justify-between items-center mb-4">
-        <h1 class="main-title">Budget Simulator: Be the Finance Minister</h1>
-        <div class="flex gap-2">
-          <button 
-            @click="openSocialShareModal"
-            class="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 flex items-center gap-1"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
-              <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
-            </svg>
-            <span>Share</span>
-          </button>
-          <button 
-            @click="resetBudget"
-            class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700"
-          >
-            Reset
-          </button>
-        </div>
+      <div class="logo-container">
+        <img
+          :src="logoUrl"
+          alt="Fiscal Insights Logo"
+          class="site-logo"
+        >
       </div>
+      <div class="flex justify-between items-center mb-0">
+        <h1 class="main-title">Budget Simulator: Be the Finance Minister</h1>
+      </div>
+
+      <MainNavigation />
+
+      <p class="description">Experience what it's like to manage Canada's federal budget. Adjust revenue sources and spending priorities to balance the budget while considering public sentiment across different regions and sectors.</p>
 
       <!-- Year Selector -->
       <YearSelector 
@@ -226,6 +220,8 @@ import CollapsibleSentimentBanner from '@/domains/sentiment/components/Collapsib
 import SentimentSensitivityControl from '@/domains/sentiment/components/SentimentSensitivityControl.vue'
 import SharedBudgetDetailModal from '@/domains/budget/components/SharedBudgetDetailModal.vue'
 import { SocialShareModal } from '@/domains/social'
+import MainNavigation from '@/components/MainNavigation.vue'
+import logoImage from '@/assets/fiscal-insights-logo.jpg'
 
 import { computed, ref, onMounted, watch } from 'vue'
 import { useBudgetSimulatorStore } from '@/domains/budget'
@@ -602,6 +598,8 @@ watch(() => budgetStore.spendingCategories, () => {
 onMounted(() => {
   initializeLocalValues();
 });
+
+const logoUrl = logoImage
 </script>
 
 <style scoped>
@@ -735,8 +733,9 @@ onMounted(() => {
 .main-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding-top: 20px; /* Reduced padding at the top */
-  box-sizing: border-box; /* Include padding in width calculation */
+  padding-top: 10px;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .main-title {
@@ -744,8 +743,8 @@ onMounted(() => {
   font-weight: 700;
   color: #2d3748;
   text-align: center;
-  margin-bottom: 1.5rem;
-  /* Remove the left margin and handle centering differently */
+  margin-bottom: 0;
+  padding-bottom: 0;
 }
 
 .simulator-grid {
@@ -885,9 +884,13 @@ onMounted(() => {
   white-space: normal;
 }
 @media (max-width: 600px) {
-  .card-title, .card-content, .summary-card {
-    font-size: 0.95rem;
-    padding: 0.5rem 0.5rem;
+  .card-title, .card-content, .summary-card, .main-category-header, .other-category-header, .subcategory-header, .gov-ops-header, .tax-expenditure-header, .tile-title, .tile-amount, .slider-labels {
+    writing-mode: initial !important;
+    text-orientation: initial !important;
+    transform: none !important;
+    display: block !important;
+    white-space: normal !important;
+    word-break: break-word !important;
   }
   .simulator-card, .sentiment-controls-container {
     padding: 0.5rem 0.5rem;
@@ -918,33 +921,14 @@ onMounted(() => {
 @media (max-width: 768px) {
   .simulator-grid {
     grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    gap: 1rem;
   }
-  
-  .goals-card,
-  .results-card,
-  .preset-panel-container,
-  .revenue-card,
-  .spending-card,
-  .charts-card {
-    grid-column: 1;
-  }
-  
-  .goals-card { grid-row: 1; }
-  .results-card { grid-row: 2; }
-  .preset-panel-container {
-    grid-row: 3;
-  }
-
-  .revenue-card {
-    grid-row: 4;
-  }
-  
-  .spending-card {
-    grid-row: 5;
-  }
-  
-  .charts-card {
-    grid-row: 6;
+  .simulator-card {
+    width: 100%;
+    min-width: 0;
+    margin: 0 auto 1rem auto;
+    box-sizing: border-box;
   }
 }
 
@@ -963,5 +947,146 @@ onMounted(() => {
   margin-bottom: 15px;
   color: #2c3e50;
   text-align: center;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .simulator-grid {
+    grid-template-columns: 1fr 1.4fr;
+    gap: 1.25rem;
+  }
+  
+  .main-container {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 992px) {
+  .simulator-grid {
+    grid-template-columns: 1fr 1.2fr;
+    gap: 1rem;
+  }
+  
+  .main-container {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .finance-minister-simulator {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  .simulator-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .simulator-card {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto 1rem auto;
+    box-sizing: border-box;
+  }
+  
+  .spending-card {
+    min-height: auto;
+    height: fit-content;
+  }
+  
+  .card-title {
+    font-size: 1.1rem;
+  }
+  
+  .fixed-badge-container {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto 1rem auto;
+    border-radius: 8px;
+  }
+  
+  .finance-minister-simulator.panel-collapsed {
+    padding-left: 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .simulator-grid {
+    gap: 0.75rem;
+  }
+  
+  .simulator-card {
+    max-width: 100%;
+    padding: 0.75rem;
+  }
+  
+  .card-title {
+    font-size: 1rem;
+  }
+  
+  .main-container {
+    padding: 10px;
+  }
+  
+  .main-title {
+    font-size: 1.5rem;
+    padding: 0 10px;
+  }
+  
+  .fixed-badge-container {
+    max-width: 100%;
+  }
+  
+  /* Prevent vertical stretching of content */
+  .card-content {
+    min-height: auto;
+    height: fit-content;
+  }
+  
+  /* Maintain aspect ratios for charts and visual elements */
+  .charts-card,
+  .sentiment-card {
+    aspect-ratio: auto;
+    height: fit-content;
+  }
+}
+
+.description {
+  text-align: center;
+  color: #4a5568;
+  font-size: 0.95rem;
+  margin: 1rem auto 1.5rem;
+  max-width: 800px;
+  line-height: 1.5;
+}
+
+.main-navigation {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin: -10px 0 0 0;
+  padding: 0;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.logo-container {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.site-logo {
+  max-width: 180px;
+  height: auto;
+  transition: transform 0.3s ease;
+}
+
+.site-logo:hover {
+  transform: scale(1.05);
 }
 </style>
