@@ -256,17 +256,18 @@ export default {
         }
         
         .shepherd-text {
-          font-size: 1rem;
-          line-height: 1.5;
-          padding: 1.5rem;
-          max-width: 300px;
+          font-size: 0.75rem;
+          line-height: 1.3;
+          padding: 0.75rem;
+          max-width: 212px;
         }
         
         .shepherd-button {
-          padding: 0.5rem 1rem;
-          border-radius: 4px;
+          padding: 0.25rem 0.625rem;
+          border-radius: 3px;
           font-weight: 500;
           transition: all 0.2s ease;
+          font-size: 0.75rem;
         }
         
         .shepherd-button:not(:disabled):hover {
@@ -290,8 +291,8 @@ export default {
         .shepherd-element {
           transition: transform 0.3s ease, opacity 0.3s ease;
           opacity: 0;
-          max-width: 350px;
-          margin-top: 32px;
+          max-width: 238px;
+          margin-top: 20px;
           will-change: transform, opacity;
         }
 
@@ -301,11 +302,11 @@ export default {
         }
 
         .shepherd-element[data-popper-placement^='top'] {
-          transform: translateY(16px);
+          transform: translateY(12px);
         }
 
         .shepherd-element[data-popper-placement^='bottom'] {
-          transform: translateY(-16px);
+          transform: translateY(-12px);
         }
         
         .tour-button {
