@@ -120,6 +120,7 @@
         <div
           v-show="activeTab === 'spending' || !isMobileView"
           class="tab-content"
+          :class="{ 'mobile-view': isMobileView }"
         >
           <!-- Spending -->
           <div class="result-item">
@@ -163,6 +164,23 @@
               <div class="tooltip-text">
                 {{ formatPercentage(Math.abs(surplusValue), totalRevenueValue) }} of total revenue
               </div>
+            </span>
+          </div>
+
+          <!-- Debt-to-GDP Ratio -->
+          <div class="result-item" :class="{ 'mobile-view': isMobileView }">
+            <span class="result-label">
+              <span class="material-icons text-gray-500 mr-1 text-xs">account_balance</span>
+              Debt-to-GDP Ratio:
+              <span class="info-icon tooltip-container" style="margin-left: 4px; cursor: pointer;">
+                ⓘ
+                <div class="tooltip-text">
+                  The ratio of total federal debt to the size of the Canadian economy (GDP). Lower is generally better for fiscal health.
+                </div>
+              </span>
+            </span>
+            <span class="font-medium text-gray-700 text-sm">
+              {{ budgetStore.debtToGdpRatio.toFixed(1) }}%
             </span>
           </div>
           
