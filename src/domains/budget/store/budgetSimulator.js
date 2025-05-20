@@ -255,7 +255,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
       healthcare: {
         id: "healthcare",
         name: "Healthcare (CHT)",
-        baseAmount: 100.2, // $100.2B (Health and Social Transfers to Provinces)
+        baseAmount: 104.9, // $104.9B (Health and Social Transfers to Provinces)
         adjustmentFactor: 1,
         description:
           "Canada Health Transfer to provinces and territories for healthcare services.",
@@ -264,7 +264,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
       seniors: {
         id: "seniors",
         name: "Support for Seniors",
-        baseAmount: 76.0, // $76.0B (Elderly Benefits)
+        baseAmount: 79.6, // $79.6B (Elderly Benefits)
         adjustmentFactor: 1,
         description:
           "Old Age Security, Guaranteed Income Supplement, and other senior support programs.",
@@ -273,7 +273,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
       childrenFamilies: {
         id: "childrenFamilies",
         name: "Children and Families",
-        baseAmount: 26.3, // $26.3B (Canada Child Benefit)
+        baseAmount: 27.5, // $27.5B (Canada Child Benefit)
         adjustmentFactor: 1,
         description:
           "Canada Child Benefit and other family support programs.",
@@ -282,7 +282,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
       indigenousServices: {
         id: "indigenousServices",
         name: "Indigenous Services & Reconciliation",
-        baseAmount: 23.3, // $23.3B (Indigenous Settlements)
+        baseAmount: 24.4, // $24.4B (Indigenous Settlements)
         adjustmentFactor: 1,
         description:
           "Services, infrastructure, and reconciliation efforts for Indigenous communities.",
@@ -291,7 +291,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
       employmentInsurance: {
         id: "employmentInsurance",
         name: "Employment Insurance",
-        baseAmount: 23.1, // $23.1B (Employment Insurance)
+        baseAmount: 24.2, // $24.2B (Employment Insurance)
         adjustmentFactor: 1,
         description:
           "Benefits for unemployed workers, parental leave, and skills training.",
@@ -300,7 +300,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
       defensePublicSafety: {
         id: "defensePublicSafety",
         name: "Defense & Public Safety",
-        baseAmount: 32.6, // $32.6B (Defence & National Security)
+        baseAmount: 34.1, // $34.1B (Defence & National Security)
         adjustmentFactor: 1,
         description:
           "Military, RCMP, border services, and other security agencies.",
@@ -309,7 +309,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
       debtServicing: {
         id: "debtServicing",
         name: "Debt Servicing",
-        baseAmount: 47.3, // $47.3B (Public Debt Charges)
+        baseAmount: 49.5, // $49.5B (Public Debt Charges)
         adjustmentFactor: 1,
         description: "Interest payments on the federal debt.",
         color: "#667EEA", // indigo-500
@@ -325,7 +325,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
           studentLoans: {
             id: "studentLoans",
             name: "Student Loans",
-            baseAmount: 2.5, // $2.5B
+            baseAmount: 2.6, // $2.6B
             adjustmentFactor: 1,
             description: "Financial assistance for post-secondary education.",
             color: "#ECC94B", // yellow-500
@@ -341,7 +341,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
           internationalDevelopment: {
             id: "internationalDevelopment",
             name: "International Development",
-            baseAmount: 2.0, // $2.0B
+            baseAmount: 2.1, // $2.1B
             adjustmentFactor: 1,
             description: "Foreign aid and development assistance.",
             color: "#ECC94B", // yellow-500
@@ -358,7 +358,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
           defenseSector: {
             id: "defenseSector",
             name: "Defense Sector",
-            baseAmount: 1.5, // $1.5B
+            baseAmount: 1.6, // $1.6B
             adjustmentFactor: 1,
             description:
               "Investments in defense equipment and technology.",
@@ -367,7 +367,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
           economicDevelopment: {
             id: "economicDevelopment",
             name: "Economic Development",
-            baseAmount: 3.2, // $3.2B
+            baseAmount: 3.3, // $3.3B
             adjustmentFactor: 1,
             description:
               "Regional development programs and initiatives.",
@@ -386,7 +386,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
           transportationInfrastructure: {
             id: "transportationInfrastructure",
             name: "Transportation Infrastructure",
-            baseAmount: 15.0, // $15.0B
+            baseAmount: 15.7, // $15.7B
             adjustmentFactor: 1,
             description:
               "Investments in national transportation infrastructure, including roadways, bridges, ports, and rail systems.",
@@ -395,7 +395,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
           environmentalPrograms: {
             id: "environmentalPrograms",
             name: "Environmental Programs",
-            baseAmount: 8.0, // $8.0B
+            baseAmount: 8.4, // $8.4B
             adjustmentFactor: 1,
             description:
               "Funds dedicated to climate change initiatives, conservation efforts, and environmental protection.",
@@ -404,7 +404,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
           publicSafetyEmergency: {
             id: "publicSafetyEmergency",
             name: "Public Safety and Emergency Preparedness",
-            baseAmount: 9.0, // $9.0B
+            baseAmount: 9.4, // $9.4B
             adjustmentFactor: 1,
             description:
               "Funding for national security agencies to respond to emergencies and public safety threats.",
@@ -413,7 +413,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
           governmentBuildings: {
             id: "governmentBuildings",
             name: "Government Buildings and Properties",
-            baseAmount: 7.0, // $7.0B
+            baseAmount: 7.3, // $7.3B
             adjustmentFactor: 1,
             description:
               "Maintenance and construction of government buildings for essential services.",
@@ -422,7 +422,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
           researchInnovation: {
             id: "researchInnovation",
             name: "Research and Innovation",
-            baseAmount: 10.0, // $10.0B
+            baseAmount: 10.5, // $10.5B
             adjustmentFactor: 1,
             description:
               "Investments in research and development across sectors for scientific advances.",
@@ -431,7 +431,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
           digitalGovernment: {
             id: "digitalGovernment",
             name: "Digital Government and IT Infrastructure",
-            baseAmount: 5.0, // $5.0B
+            baseAmount: 5.2, // $5.2B
             adjustmentFactor: 1,
             description:
               "Modernizing federal digital services and IT infrastructure.",
@@ -440,7 +440,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
           federalEmployeeSalaries: {
             id: "federalEmployeeSalaries",
             name: "Federal Employee Salaries and Benefits",
-            baseAmount: 35.0, // $35.0B
+            baseAmount: 36.6, // $36.6B
             adjustmentFactor: 1,
             description:
               "Salaries, pensions, and benefits for federal employees.",
@@ -609,6 +609,10 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
       governmentOperations: false,
       taxExpenditures: true,
     },
+    fiscalIndicators: {
+      gdp: 2500, // $2.5 trillion (2024 estimate)
+      debt: 1173, // $1.173 trillion (2024 estimate)
+    },
   }),
 
   getters: {
@@ -624,6 +628,19 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
           value: year,
           label: `${year - 1}-${year}`,
         }));
+    },
+
+    currentDebt() {
+      // Add the current year's deficit (if any) to the base debt
+      const baseDebt = this.fiscalIndicators?.debt || 0;
+      const deficit = this.surplus < 0 ? Math.abs(this.surplus) : 0;
+      return baseDebt + deficit;
+    },
+
+    debtToGdpRatio() {
+      const gdp = this.fiscalIndicators?.gdp || 0;
+      const debt = this.currentDebt || 0;
+      return gdp && gdp > 0 ? (debt / gdp) * 100 : 0;
     },
 
     // Unified getter for all consumers (sentiment, badges, export, etc.)
