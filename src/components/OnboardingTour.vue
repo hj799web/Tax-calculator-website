@@ -353,35 +353,29 @@ export default {
           position: fixed;
           bottom: 20px;
           left: 20px;
-          padding: 12px 24px;
-          background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+          padding: 8px 16px;
+          background: linear-gradient(135deg, #3498db, #2980b9);
           color: white;
           border: none;
-          border-radius: 8px;
+          border-radius: 20px;
           cursor: pointer;
-          font-weight: 500;
+          font-weight: 600;
+          font-size: 0.9rem;
+          transition: all 0.3s ease;
+          box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
           z-index: 1000;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
           display: flex;
           align-items: center;
           gap: 8px;
-          transition: all 0.3s ease;
-          font-size: 14px;
-          letter-spacing: 0.5px;
-          backdrop-filter: blur(8px);
-          border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         .tour-button:hover {
-          background: linear-gradient(135deg, #2d2d2d, #1a1a1a);
           transform: translateY(-2px);
-          box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
-          border: 1px solid rgba(255, 255, 255, 0.2);
+          box-shadow: 0 6px 15px rgba(52, 152, 219, 0.4);
         }
 
-        .tour-button .material-icons {
-          font-size: 18px;
-          opacity: 0.9;
+        .tour-button i {
+          font-size: 0.9rem;
         }
 
         .tour-button:active {
