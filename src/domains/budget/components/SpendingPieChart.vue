@@ -155,16 +155,31 @@ const chartOptions = computed(() => {
         labels: {
           color: props.darkMode ? '#E2E8F0' : '#2D3748',
           font: {
-            size: 12
+            size: window.innerWidth < 768 ? 10 : 12
           },
-          boxWidth: 15,
-          padding: 15
+          boxWidth: window.innerWidth < 768 ? 12 : 15,
+          padding: window.innerWidth < 768 ? 10 : 15,
+          generateLabels: (chart) => {
+            const datasets = chart.data.datasets;
+            return chart.data.labels.map((label, i) => {
+              const value = datasets[0].data[i];
+              const total = datasets[0].data.reduce((a, b) => a + b, 0);
+              const percentage = total > 0 ? Math.round((value / total) * 100) : 0;
+              return {
+                text: `${label} (${percentage}%)`,
+                fillStyle: datasets[0].backgroundColor[i],
+                strokeStyle: datasets[0].backgroundColor[i],
+                lineWidth: 0,
+                hidden: isNaN(datasets[0].data[i]),
+                index: i
+              };
+            });
+          }
         }
       },
       tooltip: {
         callbacks: {
           label: (context) => {
-            // Safe handling of null/undefined values
             if (!context || context.raw === undefined || context.raw === null) {
               return 'No data available';
             }
@@ -185,9 +200,16 @@ const chartOptions = computed(() => {
         bodyColor: props.darkMode ? '#E2E8F0' : '#2D3748',
         borderColor: props.darkMode ? '#2D3748' : '#E2E8F0',
         borderWidth: 1,
-        padding: 10,
+        padding: window.innerWidth < 768 ? 8 : 10,
         displayColors: true,
-        usePointStyle: true
+        usePointStyle: true,
+        bodyFont: {
+          size: window.innerWidth < 768 ? 11 : 12
+        },
+        titleFont: {
+          size: window.innerWidth < 768 ? 12 : 14
+        },
+        maxWidth: window.innerWidth < 768 ? 200 : 300
       },
       title: {
         display: false
@@ -196,9 +218,17 @@ const chartOptions = computed(() => {
   };
 });
 
-// Handle responsive legend
-const updateLegendPosition = () => {
-  chartOptions.value.plugins.legend.position = window.innerWidth < 768 ? 'bottom' : 'right';
+// Handle responsive legend and tooltip
+const updateResponsiveSettings = () => {
+  const isMobile = window.innerWidth < 768;
+  chartOptions.value.plugins.legend.position = isMobile ? 'bottom' : 'right';
+  chartOptions.value.plugins.legend.labels.font.size = isMobile ? 10 : 12;
+  chartOptions.value.plugins.legend.labels.boxWidth = isMobile ? 12 : 15;
+  chartOptions.value.plugins.legend.labels.padding = isMobile ? 10 : 15;
+  chartOptions.value.plugins.tooltip.padding = isMobile ? 8 : 10;
+  chartOptions.value.plugins.tooltip.bodyFont.size = isMobile ? 11 : 12;
+  chartOptions.value.plugins.tooltip.titleFont.size = isMobile ? 12 : 14;
+  chartOptions.value.plugins.tooltip.maxWidth = isMobile ? 200 : 300;
 };
 
 // Watch for spending changes to update the chart
@@ -217,10 +247,10 @@ watch(() => props.darkMode, () => {
   chartData.value.datasets[0].borderColor = props.darkMode ? '#2D3748' : '#FFFFFF';
 }, { immediate: true });
 
-// Set up resize listener for responsive legend
+// Set up resize listener for responsive settings
 onMounted(() => {
-  window.addEventListener('resize', updateLegendPosition);
-  updateLegendPosition(); // Initial setup
+  window.addEventListener('resize', updateResponsiveSettings);
+  updateResponsiveSettings(); // Initial setup
   
   // Safely mount the chart after a short delay to ensure DOM is ready
   setTimeout(() => {
@@ -231,7 +261,7 @@ onMounted(() => {
 
 // Clean up event listener and chart resources
 onUnmounted(() => {
-  window.removeEventListener('resize', updateLegendPosition);
+  window.removeEventListener('resize', updateResponsiveSettings);
   
   // Ensure chart is unmounted before component is destroyed
   chartMounted.value = false;
@@ -248,7 +278,9 @@ onUnmounted(() => {
   background-color: white;
   border-radius: 0.5rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .dark-mode {
@@ -259,39 +291,43 @@ onUnmounted(() => {
 .chart-title {
   font-size: 1.25rem;
   font-weight: 600;
+  color: #2d3748;
   margin-bottom: 1rem;
   text-align: center;
+  width: 100%;
 }
 
 .chart-container {
   width: 100%;
   height: 100%;
+  min-height: 300px;
   position: relative;
 }
 
 .no-data-message {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 200px;
-  width: 100%;
-  font-size: 1rem;
-  color: #718096;
   text-align: center;
-  padding: 1rem;
-  border: 1px dashed #CBD5E0;
-  border-radius: 0.5rem;
+  color: #718096;
+  padding: 2rem;
+  font-style: italic;
 }
 
-.dark-mode .no-data-message {
-  color: #A0AEC0;
-  border-color: #4A5568;
-}
-
-/* Responsive styles */
 @media (max-width: 768px) {
+  .spending-pie-chart {
+    padding: 0.75rem;
+  }
+  
+  .chart-title {
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+  }
+  
   .chart-container {
-    height: 250px;
+    min-height: 250px;
+  }
+  
+  .no-data-message {
+    padding: 1.5rem;
+    font-size: 0.9rem;
   }
 }
 

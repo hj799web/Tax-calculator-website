@@ -222,19 +222,13 @@ watch(currentYear, (newYear) => {
   border: 1px solid #e2e8f0;
   border-radius: 0.5rem;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 
-    0 4px 6px rgba(0, 0, 0, 0.1),
-    0 2px 4px rgba(0, 0, 0, 0.06);
-  will-change: transform, box-shadow;
+  transition: background-color 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .year-button:hover:not(:disabled) {
   background: #f7fafc;
-  transform: translateY(-2px) translateZ(0);
-  box-shadow: 
-    0 6px 8px rgba(0, 0, 0, 0.12),
-    0 3px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .year-button:disabled {
@@ -497,47 +491,27 @@ watch(currentYear, (newYear) => {
 
 /* Touch Device Optimizations */
 @media (hover: none) {
-  .simulator-card:hover {
+  .year-button:hover:not(:disabled) {
     transform: none;
-    box-shadow: 
-      0 10px 20px rgba(0, 0, 0, 0.19),
-      0 6px 6px rgba(0, 0, 0, 0.23);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
   
-  .simulator-card:active {
-    transform: translateY(-2px) translateZ(10px) rotateX(1deg);
-    box-shadow: 
-      0 12px 24px rgba(0, 0, 0, 0.2),
-      0 8px 8px rgba(0, 0, 0, 0.15);
+  .year-button:active:not(:disabled) {
+    background: #f7fafc;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   }
 }
 
 /* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
-  .simulator-card,
-  .year-button,
-  .simulator-header,
-  .error-button,
-  .card-header,
-  .card-title,
-  .card-content {
+  .year-button {
     transition: none;
-    transform: none !important;
   }
 }
 
 /* High Contrast Mode */
 @media (forced-colors: active) {
-  .simulator-card {
-    border: 2px solid CanvasText;
-  }
-  
-  .card-header {
-    border-bottom: 2px solid CanvasText;
-  }
-  
-  .year-button,
-  .error-button {
+  .year-button {
     border: 2px solid CanvasText;
   }
 }

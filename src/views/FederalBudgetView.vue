@@ -104,140 +104,164 @@ const { sortOrder } = storeToRefs(configStore)
 </script>
 
 <style scoped>
-/* ===== Charts Section Styles ===== */
-.charts-wrapper {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 25px; /* Increased from 20px for better spacing */
-  justify-content: center;
-  align-items: flex-start; /* Align items at the top */
-  margin: 0 auto;
-  width: 100%;
-  max-width: 770px; /* Increased from 700px to accommodate larger charts */
-  overflow: visible !important; /* Ensure content and tooltips are visible */
-  position: relative; /* For tooltip positioning */
-  z-index: 2; /* Ensure tooltips appear above other elements */
-}
-
-/* ===== Federal Budget Section Styles ===== */
 .federal-budget-section {
-  padding: 20px;
-  margin: 20px auto;
-  justify-content: center;
-  align-items: center;
-  position: relative; /* For tooltip positioning */
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  animation: fadeIn 0.6s ease-out forwards;
 }
 
-.allocation-description {
-  margin-bottom: 20px;
-  padding: 0 10px;
-  text-align: center;
-}
-
-.budget-explanation {
-  margin-bottom: 20px;
-  padding: 0 10px;
-  text-align: center;
-}
-
-/* ===== Allocation Table Section Styles ===== */
-.allocation-table-section.total-federal-tax-allocated {
-  padding: 20px;
-  margin: 30px auto 20px; /* Increased top margin to provide space for tooltips */
-  background-color: #fff;
-  border: 1px solid #ccc;
-  overflow: auto;
+.section-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
   position: relative;
-  z-index: 1;
-  max-width: 900px;
+  padding-left: 1rem;
+  background: linear-gradient(135deg, #2c3e50, #3498db);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.allocation-insulated {
-  padding: 10px;
+.section-title::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 70%;
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  border-radius: 2px;
 }
 
-.allocation-table-section.total-federal-tax-allocated h2.section-title {
-  margin-bottom: 15px;
-}
-
-.allocation-total {
-  margin-bottom: 15px;
-  font-weight: bold;
-}
-
-.sort-button {
-  padding: 10px 20px;
-  background-color: #153bb8;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  display: inline-block;  /* Button width fits its content */
-  margin-bottom: 15px;
-}
-
-.allocation-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.allocation-table th,
-.allocation-table td {
-  padding: 8px;
-  border: 1px solid #ccc;
-  text-align: left;
+.allocation-description, .budget-explanation {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #4a5568;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 12px;
+  border: 1px solid rgba(226, 232, 240, 0.8);
 }
 
 .charts-section {
-  margin-bottom: 40px; /* Increased from 30px to provide more space for tooltips */
-  position: relative; /* For tooltip positioning */
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 16px;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.charts-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 1.5rem;
 }
 
 .no-federal-taxes {
   text-align: center;
-  padding: 20px;
-  background-color: #f8f9fa;
-  border-radius: 10px;
-  color: #7f8c8d;
+  padding: 2rem;
+  color: #718096;
+  font-style: italic;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 12px;
+  border: 1px solid rgba(226, 232, 240, 0.8);
 }
 
-/* Ensure tooltips are visible */
-:deep(.chartjs-tooltip) {
-  z-index: 100;
-  pointer-events: none;
-  position: absolute;
+.allocation-table-section {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 2rem;
+  margin-top: 2rem;
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  animation: fadeIn 0.6s ease-out forwards;
 }
 
-/* Responsive adjustments */
-@media (max-width: 600px) {
-  .charts-wrapper {
-    flex-direction: column;
-    gap: 20px; /* Increased from 15px for better spacing */
+.allocation-insulated {
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 16px;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.allocation-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  margin: 1rem 0;
+  background: rgba(52, 152, 219, 0.1);
+  border-radius: 12px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.sort-button {
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 6px rgba(52, 152, 219, 0.2);
+}
+
+.sort-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(52, 152, 219, 0.3);
+}
+
+.allocation-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-top: 1rem;
+}
+
+.allocation-table th,
+.allocation-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.allocation-table th {
+  background: rgba(52, 152, 219, 0.1);
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.allocation-table tr:hover {
+  background: rgba(52, 152, 219, 0.05);
+}
+
+.allocation-table tr:last-child td {
+  border-bottom: none;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
   }
-  
-  .allocation-table-section.total-federal-tax-allocated {
-    padding: 15px;
-    margin: 30px auto 20px; /* Increased top margin */
-    overflow-x: auto; /* Allow horizontal scrolling for table */
-  }
-  
-  .allocation-table {
-    font-size: 12px; /* Smaller font for mobile */
-  }
-  
-  .sort-button {
-    padding: 8px 16px;
-    font-size: 12px;
-  }
-  
-  .allocation-description {
-    font-size: 14px;
-    padding: 0 5px;
-  }
-  
-  .budget-explanation {
-    font-size: 14px;
-    padding: 0 5px;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 </style>

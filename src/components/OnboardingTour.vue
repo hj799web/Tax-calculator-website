@@ -21,8 +21,11 @@ export default {
   setup() {
     const tour = ref(null)
     const isTourActive = ref(false)
+    const isInitialized = ref(false)
 
     const initTour = () => {
+      if (isInitialized.value) return
+
       tour.value = new Shepherd.Tour({
         useModalOverlay: true,
         defaultStepOptions: {
@@ -77,6 +80,7 @@ export default {
       tour.value.addStep({
         id: 'welcome',
         text: 'Welcome to the Budget Simulator! Let\'s take a quick tour of the key features.',
+        classes: 'shepherd-welcome-step',
         attachTo: {
           element: '.finance-minister-simulator',
           on: 'bottom'
@@ -233,14 +237,18 @@ export default {
           })
         }
       })
+
+      isInitialized.value = true
     }
 
     const startTour = () => {
-      if (!tour.value) {
+      if (!isInitialized.value) {
         initTour()
       }
-      isTourActive.value = true
-      tour.value.start()
+      if (tour.value) {
+        isTourActive.value = true
+        tour.value.start()
+      }
     }
 
     onMounted(() => {
@@ -285,7 +293,39 @@ export default {
         }
 
         .shepherd-modal-overlay-container.shepherd-modal-is-visible {
-          opacity: 0.7;
+          opacity: 0.9;
+          background-color: rgba(0, 0, 0, 0.9);
+        }
+
+        /* Welcome step specific styles */
+        .shepherd-welcome-step .shepherd-element {
+          background: rgba(255, 255, 255, 0.95);
+          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          backdrop-filter: blur(8px);
+          z-index: 10000;
+        }
+
+        .shepherd-welcome-step .shepherd-text {
+          font-size: 1rem;
+          line-height: 1.5;
+          max-width: 300px;
+          color: #1a1a1a;
+          font-weight: 500;
+        }
+
+        .shepherd-welcome-step .shepherd-button {
+          font-size: 0.875rem;
+          padding: 0.5rem 1rem;
+          background: #1a1a1a;
+          color: white;
+          border-radius: 4px;
+          transition: all 0.2s ease;
+        }
+
+        .shepherd-welcome-step .shepherd-button:hover {
+          background: #2d2d2d;
+          transform: translateY(-1px);
         }
 
         .shepherd-element {
@@ -359,7 +399,14 @@ export default {
 
     onUnmounted(() => {
       if (tour.value) {
-        tour.value.destroy()
+        try {
+          tour.value.complete()
+          tour.value.destroy()
+          tour.value = null
+          isInitialized.value = false
+        } catch (error) {
+          console.error('Error cleaning up tour:', error)
+        }
       }
     })
 

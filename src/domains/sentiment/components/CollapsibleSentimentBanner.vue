@@ -452,38 +452,61 @@ const selectionSummary = computed(() => {
 @media (max-width: 600px) {
   .sentiment-banner {
     top: 8px;
+    right: 16px;
     min-width: 44px;
     min-height: 32px;
-    font-size: 0.96em;
+    font-size: 0.85em;
     padding: 0 10px;
+    border-radius: 20px;
   }
+  
   .sentiment-banner.expanded {
     min-width: 120px;
+    max-width: calc(100vw - 32px);
   }
-  .card-title, .card-content, .summary-card, .main-category-header, .other-category-header, .subcategory-header, .gov-ops-header, .tax-expenditure-header, .tile-title, .tile-amount, .slider-labels {
-    writing-mode: initial !important;
-    text-orientation: initial !important;
-    transform: none !important;
-    display: block !important;
-    white-space: normal !important;
-    word-break: break-word !important;
+  
+  .sentiment-banner .pill-content {
+    gap: 0.5em;
   }
-}
-.sentiment-banner.collapsed {
-  min-width: 48px;
-  min-height: 40px;
-  max-width: 60px;
-  padding: 0 8px;
-  overflow: hidden;
-  justify-content: center;
-  cursor: pointer;
-}
-.collapsed-indicator {
-  font-size: 0.95em;
-  color: #c00;
-  font-weight: 600;
-  margin-left: 0.5em;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  
+  .sentiment-banner .score {
+    font-size: 1.1em;
+  }
+  
+  .sentiment-banner .label {
+    font-size: 0.9em;
+  }
+  
+  .sentiment-banner .hint {
+    font-size: 0.8em;
+    margin-left: 0.5em;
+  }
+  
+  .sentiment-banner .expanded-content {
+    margin-top: 0.5em;
+    padding-top: 0.5em;
+  }
+  
+  .sentiment-banner .selection-summary {
+    font-size: 0.8em;
+  }
+  
+  .sentiment-banner .emoji {
+    font-size: 1.3em;
+  }
+  
+  .sentiment-banner .fiscal-warning-text {
+    font-size: 0.8em;
+  }
+  
+  .sentiment-banner.collapsed {
+    min-width: 40px;
+    max-width: 50px;
+    padding: 0 6px;
+  }
+  
+  .collapsed-indicator {
+    font-size: 0.8em;
+  }
 }
 </style>

@@ -251,44 +251,79 @@ const setOtherIncome = ($event) => {
 <style scoped>
 .input-group {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
   margin-bottom: 2rem;
+  animation: fadeIn 0.6s ease-out forwards;
 }
 
 .input-subgroup {
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  animation: fadeIn 0.6s ease-out forwards;
 }
 
 .input-label {
   display: block;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
   font-weight: 500;
-  color: #4a5568;
+  color: #2c3e50;
+  font-size: 1.1rem;
 }
 
 .input-field {
   width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #e2e8f0;
-  border-radius: 0.375rem;
+  padding: 0.875rem;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  border-radius: 0.75rem;
   font-size: 1rem;
-  transition: border-color 0.2s;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  color: #2c3e50;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
 .input-field:focus {
   outline: none;
-  border-color: #4299e1;
-  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+  transform: translateY(-1px);
+}
+
+.input-field:hover {
+  border-color: #3498db;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
 }
 
 .input-error-field {
   border-color: #e53e3e;
+  background: rgba(229, 62, 62, 0.05);
 }
 
 .input-error {
-  margin-top: 0.25rem;
+  margin-top: 0.5rem;
   color: #e53e3e;
   font-size: 0.875rem;
+  padding: 0.5rem;
+  background: rgba(229, 62, 62, 0.1);
+  border-radius: 0.5rem;
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style> 

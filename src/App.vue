@@ -32,6 +32,7 @@
             <router-link
               to="/simulator"
               class="nav-link simulator-link"
+              style="background-color: #3498db; color: white;"
             >
               Try the Budget Simulator
             </router-link>
@@ -1089,20 +1090,118 @@ footer p:hover {
   justify-content: center;
   gap: 20px;
   margin: 15px 0;
+  perspective: 1000px;
+  transform-style: preserve-3d;
 }
 
 .nav-link {
   color: #3498db;
   text-decoration: none;
   font-weight: 600;
-  padding: 5px 10px;
-  border-radius: 4px;
-  transition: all 0.3s ease;
+  padding: 10px 20px;
+  border-radius: 8px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transform-style: preserve-3d;
+  transform: translateZ(0);
+  position: relative;
+  overflow: hidden;
+  min-width: 120px;
+  text-align: center;
+}
+
+.nav-link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: 0.5s;
 }
 
 .nav-link:hover {
-  background-color: #3498db;
+  transform: translateY(-2px) translateZ(20px) rotateX(5deg);
+  background: linear-gradient(135deg, #3498db, #2980b9);
   color: white;
+  box-shadow: 0 8px 20px rgba(52, 152, 219, 0.4);
+}
+
+.nav-link:hover::before {
+  left: 100%;
+}
+
+.nav-link.router-link-active {
+  background: linear-gradient(135deg, #27ae60, #2ecc71);
+  color: white;
+  transform: translateY(-2px) translateZ(30px);
+  box-shadow: 0 8px 20px rgba(39, 174, 96, 0.4);
+  border: none;
+}
+
+.simulator-link {
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  color: white;
+  box-shadow: 0 4px 6px rgba(52, 152, 219, 0.2);
+}
+
+.simulator-link:hover {
+  background: linear-gradient(135deg, #2980b9, #2471a3);
+  box-shadow: 0 8px 20px rgba(52, 152, 219, 0.4);
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) {
+  .nav-link:hover {
+    transform: none;
+  }
+  
+  .nav-link:active {
+    transform: translateY(-2px) translateZ(10px) rotateX(2deg);
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .nav-link,
+  .nav-link::before {
+    transition: none;
+    transform: none !important;
+  }
+}
+
+/* High Contrast Mode */
+@media (forced-colors: active) {
+  .nav-link {
+    border: 2px solid CanvasText;
+  }
+  
+  .nav-link.router-link-active {
+    border: 2px solid CanvasText;
+  }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .main-navigation {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .nav-link {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    min-width: 100px;
+  }
 }
 
 .resources-description {
@@ -1184,6 +1283,254 @@ footer p:hover {
   
   .beta-subtext {
     font-size: 10px;
+  }
+}
+
+/* Global Button Styles */
+button, .button {
+  padding: 0.75rem 1.5rem;
+  background: #3498db;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+button:hover, .button:hover {
+  background: #2980b9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Secondary Button Style */
+button.secondary, .button.secondary {
+  background: #718096;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+button.secondary:hover, .button.secondary:hover {
+  background: #4a5568;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Success Button Style */
+button.success, .button.success {
+  background: #38a169;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+button.success:hover, .button.success:hover {
+  background: #2f855a;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Danger Button Style */
+button.danger, .button.danger {
+  background: #e53e3e;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+button.danger:hover, .button.danger:hover {
+  background: #c53030;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Small Button Style */
+button.small, .button.small {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+}
+
+/* Large Button Style */
+button.large, .button.large {
+  padding: 1rem 2rem;
+  font-size: 1.125rem;
+}
+
+/* Disabled Button Style */
+button:disabled, .button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: #cbd5e0;
+  box-shadow: none;
+}
+
+/* Remove 3D effects and complex transitions */
+button::before, .button::before {
+  display: none;
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) {
+  button:hover, .button:hover {
+    transform: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  button:active, .button:active {
+    background: #2980b9;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  button, .button {
+    transition: none;
+  }
+}
+
+/* High Contrast Mode */
+@media (forced-colors: active) {
+  button, .button {
+    border: 2px solid CanvasText;
+  }
+}
+
+.year-selector-section {
+  margin: 2rem 0;
+  perspective: 1000px;
+}
+
+.year-selector-container {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  animation: fadeIn 0.6s ease-out forwards;
+  transform-style: preserve-3d;
+}
+
+.year-selector-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  background: linear-gradient(135deg, #2c3e50, #3498db);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.year-selector-title:hover {
+  transform: scale(1.02) translateZ(20px);
+}
+
+.year-selector {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  perspective: 1000px;
+}
+
+.year-button {
+  padding: 0.75rem 1.5rem;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+  font-weight: 500;
+  color: #2c3e50;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+  transform: translateZ(0);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+  min-width: 120px;
+  text-align: center;
+}
+
+.year-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: 0.5s;
+}
+
+.year-button:hover {
+  transform: translateY(-2px) translateZ(20px) rotateX(5deg);
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  color: white;
+  box-shadow: 0 8px 20px rgba(52, 152, 219, 0.4);
+}
+
+.year-button:hover::before {
+  left: 100%;
+}
+
+.year-button.active {
+  background: linear-gradient(135deg, #27ae60, #2ecc71);
+  color: white;
+  transform: translateY(-2px) translateZ(30px);
+  box-shadow: 0 8px 20px rgba(39, 174, 96, 0.4);
+  border: none;
+}
+
+.year-selector-note {
+  text-align: center;
+  color: #4a5568;
+  font-size: 0.9rem;
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.year-selector-note:hover {
+  background: rgba(255, 255, 255, 0.7);
+  transform: translateY(-1px);
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) {
+  .year-button:hover {
+    transform: none;
+  }
+  
+  .year-button:active {
+    transform: translateY(-2px) translateZ(10px) rotateX(2deg);
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .year-button,
+  .year-button::before,
+  .year-selector-title,
+  .year-selector-note {
+    transition: none;
+    transform: none !important;
+  }
+}
+
+/* High Contrast Mode */
+@media (forced-colors: active) {
+  .year-button {
+    border: 2px solid CanvasText;
+  }
+  
+  .year-button.active {
+    border: 2px solid CanvasText;
   }
 }
 </style>

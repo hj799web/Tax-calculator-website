@@ -3,10 +3,6 @@
     class="simulator-card spending-card w-full"
     style="min-height: 1440px; display: flex; flex-direction: column;"
   >
-    <h2 class="card-title">
-      <span class="material-icons icon">payments</span>
-      Spending Controls
-    </h2>
     <div
       class="card-content w-full"
       style="flex-grow: 1;"
@@ -127,7 +123,10 @@
                       title="Reset to baseline"
                       @click="updateCategoryAdjustment(group.id, 100)"
                     >
-                      Reset
+                      <span
+                        class="material-icons"
+                        style="font-size: 14px;"
+                      >restart_alt</span>
                     </button>
                   </div>
                   <div class="other-category-impact">
@@ -190,7 +189,10 @@
                             title="Reset to baseline"
                             @click="updateCategoryAdjustment(child.id, 100)"
                           >
-                            Reset
+                            <span
+                              class="material-icons"
+                              style="font-size: 14px;"
+                            >restart_alt</span>
                           </button>
                         </div>
                         <div class="subcategory-impact">
@@ -779,30 +781,44 @@ function getTotalImpactPrefix() {
 
 .action-button {
   padding: 0.5rem 1rem;
+  background: #3498db;
+  color: white;
   border: none;
   border-radius: 0.375rem;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.action-button:hover {
+  background: #2980b9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .reset-button {
-  background-color: #e9ecef;
-  color: #495057;
+  padding: 0.35rem 0.7rem;
+  background-color: #edf2f7;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.23rem;
+  font-size: 0.81rem;
+  color: #4a5568;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
 .reset-button:hover {
-  background-color: #dee2e6;
+  background-color: #e2e8f0;
 }
 
 .tax-expenditures-info,
 .main-categories-info,
 .other-categories-info {
-  margin-bottom: 1.5rem;
-  padding: 0.75rem;
+  margin-bottom: 1.3rem;
+  padding: 0.65rem;
   background-color: #f8fafc;
-  border-radius: 0.25rem;
-  font-size: 0.9rem;
+  border-radius: 0.21rem;
+  font-size: 0.78rem;
   color: #4a5568;
 }
 
@@ -811,9 +827,9 @@ function getTotalImpactPrefix() {
 .other-categories-grid,
 .subcategories-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(259px, 1fr));
+  gap: 1.3rem;
+  margin-bottom: 1.3rem;
 }
 
 .tax-expenditure-item,
@@ -822,7 +838,7 @@ function getTotalImpactPrefix() {
 .subcategory-item,
 .gov-ops-item {
   border: 1px solid #e2e8f0;
-  border-radius: 0.375rem;
+  border-radius: 0.33rem;
   overflow: hidden;
   transform: translateZ(0);
   transition: all 0.3s ease;
@@ -846,7 +862,7 @@ function getTotalImpactPrefix() {
 .subcategory-header,
 .gov-ops-header {
   background-color: #f8fafc;
-  padding: 0.75rem 1rem;
+  padding: 0.65rem 0.86rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -915,7 +931,7 @@ function getTotalImpactPrefix() {
 .other-category-content,
 .subcategory-content,
 .gov-ops-content {
-  padding: 1rem;
+  padding: 0.86rem;
   transform: translateZ(10px);
   transition: transform 0.3s ease;
 }
@@ -925,10 +941,10 @@ function getTotalImpactPrefix() {
 .other-category-description,
 .subcategory-description,
 .gov-ops-description {
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   color: #4a5568;
-  margin-bottom: 1rem;
-  min-height: 4rem;
+  margin-bottom: 0.86rem;
+  min-height: 3.46rem;
 }
 
 .tax-expenditure-controls,
@@ -938,19 +954,19 @@ function getTotalImpactPrefix() {
 .gov-ops-controls {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
+  gap: 0.44rem;
+  margin-bottom: 0.86rem;
 }
 
 .reset-button {
-  padding: 0.375rem 0.75rem;
+  padding: 0.35rem 0.7rem;
   background-color: #edf2f7;
   border: 1px solid #e2e8f0;
-  border-radius: 0.25rem;
-  font-size: 0.875rem;
+  border-radius: 0.23rem;
+  font-size: 0.81rem;
   color: #4a5568;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s ease;
 }
 
 .reset-button:hover {
@@ -965,7 +981,7 @@ function getTotalImpactPrefix() {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   color: #4a5568;
 }
 
@@ -999,19 +1015,19 @@ function getTotalImpactPrefix() {
 
 .gov-ops-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(234px, 1fr)); /* 10% smaller than 260px */
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(202px, 1fr));
+  gap: 0.86rem;
 }
 
 .gov-ops-item {
   border: 1px solid #e2e8f0;
-  border-radius: 0.375rem;
+  border-radius: 0.35rem;
   overflow: hidden;
 }
 
 .gov-ops-header {
   background-color: #f8fafc;
-  padding: 0.75rem 1rem;
+  padding: 0.65rem 0.86rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1019,7 +1035,7 @@ function getTotalImpactPrefix() {
 
 .gov-ops-header h4 {
   margin: 0;
-  font-size: 0.95rem;
+  font-size: 0.82rem;
   font-weight: 600;
   color: #2d3748;
   max-width: 70%;
@@ -1029,12 +1045,12 @@ function getTotalImpactPrefix() {
 }
 
 .gov-ops-base {
-  font-size: 0.85rem;
+  font-size: 0.73rem;
   color: #4a5568;
   white-space: nowrap;
   display: flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.21rem;
 }
 
 .gov-ops-content {
@@ -1042,20 +1058,21 @@ function getTotalImpactPrefix() {
 }
 
 .gov-ops-description {
-  font-size: 0.85rem;
+  font-size: 0.73rem;
   color: #4a5568;
-  margin-bottom: 1rem;
-  max-height: 4.5rem;
+  margin-bottom: 0.86rem;
+  max-height: 3.9rem;
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
 }
 
 .gov-ops-controls {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.47rem;
   margin-bottom: 0.75rem;
 }
 
@@ -1064,12 +1081,22 @@ function getTotalImpactPrefix() {
 }
 
 .gov-ops-reset {
-  padding: 0.25rem;
-  min-width: 28px;
-  height: 28px;
+  padding: 0.21rem;
+  min-width: 24px;
+  height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: #edf2f7;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.23rem;
+  color: #4a5568;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.gov-ops-reset:hover {
+  background-color: #e2e8f0;
 }
 
 .gov-ops-impact {
@@ -1101,11 +1128,11 @@ function getTotalImpactPrefix() {
 }
 
 .reset-all-button {
-  padding: 0.375rem 0.75rem;
+  padding: 0.35rem 0.7rem;
   background-color: #edf2f7;
   border: 1px solid #e2e8f0;
-  border-radius: 0.25rem;
-  font-size: 0.875rem;
+  border-radius: 0.23rem;
+  font-size: 0.81rem;
   color: #4a5568;
   cursor: pointer;
   transition: background-color 0.2s;
@@ -1346,55 +1373,31 @@ function getTotalImpactPrefix() {
 
 /* Touch Device Optimizations */
 @media (hover: none) {
-  .simulator-card:hover {
+  .action-button:hover,
+  .reset-button:hover {
     transform: none;
-    box-shadow: 
-      0 10px 20px rgba(0, 0, 0, 0.19),
-      0 6px 6px rgba(0, 0, 0, 0.23);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
   
-  .simulator-card:active {
-    transform: translateY(-2px) translateZ(10px) rotateX(1deg);
-    box-shadow: 
-      0 12px 24px rgba(0, 0, 0, 0.2),
-      0 8px 8px rgba(0, 0, 0, 0.15);
-  }
-  
-  .amount-input:hover {
-    border-color: #e2e8f0;
-  }
-  
-  .amount-input:focus {
-    border-color: #4299e1;
+  .action-button:active,
+  .reset-button:active {
+    background: #2980b9;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   }
 }
 
 /* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
-  .simulator-card,
-  .card-title,
-  .card-content {
+  .action-button,
+  .reset-button {
     transition: none;
-    transform: none !important;
   }
 }
 
 /* High Contrast Mode */
 @media (forced-colors: active) {
-  .spending-controls,
-  .spending-group {
-    border: 2px solid CanvasText;
-  }
-  
-  .group-title .material-icons {
-    border: 2px solid CanvasText;
-  }
-  
-  .spending-item {
-    border: 2px solid CanvasText;
-  }
-  
-  .amount-input {
+  .action-button,
+  .reset-button {
     border: 2px solid CanvasText;
   }
 }

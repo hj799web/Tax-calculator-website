@@ -39,12 +39,12 @@
 }
 
 .simulator-link {
-  background-color: #27ae60;
+  background-color: #3498db;
   color: white;
 }
 
 .simulator-link:hover {
-  background-color: #219a52;
+  background-color: #2980b9;
   color: white;
 }
 

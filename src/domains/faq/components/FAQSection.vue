@@ -175,35 +175,91 @@ export default {
   
 <style scoped>
 .faq-section {
-  margin: 40px auto;
-  padding: 20px;
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19);
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 2rem;
+  margin: 2rem 0;
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  animation: fadeIn 0.6s ease-out forwards;
 }
 
 .section-title {
-  text-align: center;
-  color: #000000; /* Dark text for maximum readability */
-  margin-bottom: 20px;
-  font-size: 20px;
-  font-weight: 600;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 2rem;
+  position: relative;
+  padding-left: 1rem;
+  background: linear-gradient(135deg, #2c3e50, #3498db);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.section-title::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 70%;
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  border-radius: 2px;
 }
 
 .faq-item {
-  margin-bottom: 15px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  transition: all 0.3s ease;
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+.faq-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.7);
 }
 
 .faq-question {
+  font-size: 1.2rem;
   font-weight: 600;
-  color: #000000; /* Dark text for questions */
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid rgba(52, 152, 219, 0.2);
 }
 
 .faq-answer {
-  padding: 10px 20px;
-  color: #222222; /* Dark gray text for readability */
-  border-left: 3px solid #bdc3c7;
-  margin-top: 5px;
-  white-space: pre-line; /* Preserve line breaks */
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #4a5568;
+  padding: 0.5rem 0;
+}
+
+.faq-answer strong {
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.faq-answer br {
+  margin: 0.5rem 0;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>
