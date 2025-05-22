@@ -5,7 +5,7 @@
       class="btn btn-primary mt-4"
       @click="downloadBudgetPDF(includeFullBreakdown)"
     >
-      📄 Download as PDF
+       Download as PDF
     </button>
 
     <!-- Toggle for Full Breakdown -->
@@ -22,15 +22,19 @@
       <ExportCard 
         id="export-summary"
         :budget-title="budgetTitle"
-        :badge="currentBadge"
+        :badges="budgetStore.badges || []"
         :narrative="narrative"
         :total-revenue="budgetStore.totalRevenue"
         :total-spending="budgetStore.totalSpending"
         :surplus="budgetStore.surplus"
         :sentiment-scores="sentimentScores"
         :include-full-breakdown="includeFullBreakdown"
-        :budget="budgetStore"
+        :budget="{
+          revenueSources: budgetStore.revenueSources,
+          spendingCategories: budgetStore.spendingCategories
+        }"
         :format-currency="formatCurrency"
+        :format-percentage-change="formatPercentageChange"
       />
     </div>
   </div>
@@ -44,7 +48,7 @@ import { computeSentimentScores } from '@/domains/sentiment/utils/computeSentime
 import ExportCard from './ExportCard.vue'
 
 const budgetStore = useBudgetSimulatorStore()
-const includeFullBreakdown = ref(false)
+const includeFullBreakdown = ref(true)
 
 // Format currency for display
 const formatCurrency = (value) => {
@@ -53,19 +57,18 @@ const formatCurrency = (value) => {
   return `${prefix}${absValue.toFixed(1)}B`
 }
 
+// Format percentage change with plus/minus sign
+const formatPercentageChange = (value) => {
+  const prefix = value > 0 ? '+' : ''
+  return `${prefix}${value.toFixed(1)}%`
+}
+
 // Get budget title
 const budgetTitle = computed(() => {
   if (budgetStore.activePreset && budgetStore.activePreset.name) {
     return `${budgetStore.activePreset.name} Budget`
   }
   return 'Federal Budget Summary'
-})
-
-// Get current badge
-const currentBadge = computed(() => {
-  return budgetStore.badges && budgetStore.badges.length > 0 
-    ? budgetStore.badges[0] 
-    : { title: 'No Achievements Yet', description: 'Make budget adjustments to earn achievements', icon: '🏆' }
 })
 
 // Calculate accurate sentiment scores directly using the computeSentimentScores function

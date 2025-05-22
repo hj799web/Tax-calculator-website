@@ -246,8 +246,8 @@ export default {
         initTour()
       }
       if (tour.value) {
-        isTourActive.value = true
-        tour.value.start()
+      isTourActive.value = true
+      tour.value.start()
       }
     }
 
@@ -395,7 +395,7 @@ export default {
       if (tour.value) {
         try {
           tour.value.complete()
-          tour.value.destroy()
+        tour.value.destroy()
           tour.value = null
           isInitialized.value = false
         } catch (error) {

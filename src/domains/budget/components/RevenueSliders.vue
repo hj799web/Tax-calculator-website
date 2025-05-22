@@ -54,15 +54,19 @@
                   <div class="tile-amount">
                     <div class="total-amount">
                       ${{ formatCurrency(budgetStore.revenueSources.personalIncomeTax?.adjustedAmount || budgetStore.revenueSources.personalIncomeTax?.amount, 1) }}B
+                      <span
+                      v-if="getAdditionalRevenue('personalIncomeTax') !== 0"
+                      :class="{
+                        'positive': getAdditionalRevenue('personalIncomeTax') > 0,
+                        'negative': getAdditionalRevenue('personalIncomeTax') < 0
+                      }"
+                        style="font-size: 0.9em; margin-left: 4px;"
+                      >
+                        ({{ getAdditionalRevenue('personalIncomeTax') > 0 ? '+' : '' }}${{ formatCurrency(getAdditionalRevenue('personalIncomeTax'), 1) }}B)
+                      </span>
                     </div>
                     <div class="base-amount">
                       Base: ${{ formatCurrency(budgetStore.revenueSources.personalIncomeTax?.base * budgetStore.revenueSources.personalIncomeTax?.rateByYear[budgetStore.currentYear], 1) }}B
-                    </div>
-                    <div
-                      v-if="getAdditionalRevenue('personalIncomeTax') !== 0"
-                      class="additional-revenue"
-                    >
-                      {{ getAdditionalRevenue('personalIncomeTax') > 0 ? '+' : '' }}${{ formatCurrency(getAdditionalRevenue('personalIncomeTax'), 1) }}B
                     </div>
                     <div
                       v-if="budgetStore.revenueSources.personalIncomeTax?.expenditureImpact !== 0"
@@ -143,15 +147,19 @@
                   <div class="tile-amount">
                     <div class="total-amount">
                       ${{ formatCurrency(budgetStore.revenueSources.corporateIncomeTax?.adjustedAmount || budgetStore.revenueSources.corporateIncomeTax?.amount, 1) }}B
+                      <span
+                      v-if="getAdditionalRevenue('corporateIncomeTax') !== 0"
+                      :class="{
+                        'positive': getAdditionalRevenue('corporateIncomeTax') > 0,
+                        'negative': getAdditionalRevenue('corporateIncomeTax') < 0
+                      }"
+                        style="font-size: 0.9em; margin-left: 4px;"
+                      >
+                        ({{ getAdditionalRevenue('corporateIncomeTax') > 0 ? '+' : '' }}${{ formatCurrency(getAdditionalRevenue('corporateIncomeTax'), 1) }}B)
+                      </span>
                     </div>
                     <div class="base-amount">
                       Base: ${{ formatCurrency(budgetStore.revenueSources.corporateIncomeTax?.base * budgetStore.revenueSources.corporateIncomeTax?.rateByYear[budgetStore.currentYear], 1) }}B
-                    </div>
-                    <div
-                      v-if="getAdditionalRevenue('corporateIncomeTax') !== 0"
-                      class="additional-revenue"
-                    >
-                      {{ getAdditionalRevenue('corporateIncomeTax') > 0 ? '+' : '' }}${{ formatCurrency(getAdditionalRevenue('corporateIncomeTax'), 1) }}B
                     </div>
                     <div
                       v-if="budgetStore.revenueSources.corporateIncomeTax?.expenditureImpact !== 0"
@@ -275,15 +283,19 @@
                   <div class="tile-amount">
                     <div class="total-amount">
                       ${{ formatCurrency(budgetStore.revenueSources.gst?.adjustedAmount || budgetStore.revenueSources.gst?.amount, 1) }}B
+                      <span
+                      v-if="getAdditionalRevenue('gst') !== 0"
+                      :class="{
+                        'positive': getAdditionalRevenue('gst') > 0,
+                        'negative': getAdditionalRevenue('gst') < 0
+                      }"
+                        style="font-size: 0.9em; margin-left: 4px;"
+                      >
+                        ({{ getAdditionalRevenue('gst') > 0 ? '+' : '' }}${{ formatCurrency(getAdditionalRevenue('gst'), 1) }}B)
+                      </span>
                     </div>
                     <div class="base-amount">
                       Base: ${{ formatCurrency(budgetStore.revenueSources.gst?.base * budgetStore.revenueSources.gst?.rateByYear[budgetStore.currentYear], 1) }}B
-                    </div>
-                    <div
-                      v-if="getAdditionalRevenue('gst') !== 0"
-                      class="additional-revenue"
-                    >
-                      {{ getAdditionalRevenue('gst') > 0 ? '+' : '' }}${{ formatCurrency(getAdditionalRevenue('gst'), 1) }}B
                     </div>
                     <div
                       v-if="budgetStore.revenueSources.gst?.expenditureImpact !== 0"
@@ -365,15 +377,19 @@
                   <div class="tile-amount">
                     <div class="total-amount">
                       ${{ formatCurrency(budgetStore.revenueSources.customsDuties?.adjustedAmount || budgetStore.revenueSources.customsDuties?.amount, 1) }}B
+                      <span
+                      v-if="getAdditionalRevenue('customsDuties') !== 0"
+                      :class="{
+                        'positive': getAdditionalRevenue('customsDuties') > 0,
+                        'negative': getAdditionalRevenue('customsDuties') < 0
+                      }"
+                        style="font-size: 0.9em; margin-left: 4px;"
+                      >
+                        ({{ getAdditionalRevenue('customsDuties') > 0 ? '+' : '' }}${{ formatCurrency(getAdditionalRevenue('customsDuties'), 1) }}B)
+                      </span>
                     </div>
                     <div class="base-amount">
                       Base: ${{ formatCurrency(budgetStore.revenueSources.customsDuties?.base * budgetStore.revenueSources.customsDuties?.rateByYear[budgetStore.currentYear], 1) }}B
-                    </div>
-                    <div
-                      v-if="getAdditionalRevenue('customsDuties') !== 0"
-                      class="additional-revenue"
-                    >
-                      {{ getAdditionalRevenue('customsDuties') > 0 ? '+' : '' }}${{ formatCurrency(getAdditionalRevenue('customsDuties'), 1) }}B
                     </div>
                     <div
                       v-if="budgetStore.revenueSources.customsDuties?.expenditureImpact !== 0"
@@ -456,15 +472,19 @@
                   <div class="tile-amount">
                     <div class="total-amount">
                       ${{ formatCurrency(budgetStore.revenueSources.carbonPricing?.adjustedAmount || budgetStore.revenueSources.carbonPricing?.amount, 1) }}B
+                      <span
+                      v-if="getAdditionalRevenue('carbonPricing') !== 0"
+                      :class="{
+                        'positive': getAdditionalRevenue('carbonPricing') > 0,
+                        'negative': getAdditionalRevenue('carbonPricing') < 0
+                      }"
+                        style="font-size: 0.9em; margin-left: 4px;"
+                      >
+                        ({{ getAdditionalRevenue('carbonPricing') > 0 ? '+' : '' }}${{ formatCurrency(getAdditionalRevenue('carbonPricing'), 1) }}B)
+                      </span>
                     </div>
                     <div class="base-amount">
                       Base: ${{ formatCurrency(budgetStore.revenueSources.carbonPricing?.base * budgetStore.revenueSources.carbonPricing?.rateByYear[budgetStore.currentYear], 1) }}B
-                    </div>
-                    <div
-                      v-if="getAdditionalRevenue('carbonPricing') !== 0"
-                      class="additional-revenue"
-                    >
-                      {{ getAdditionalRevenue('carbonPricing') > 0 ? '+' : '' }}${{ formatCurrency(getAdditionalRevenue('carbonPricing'), 1) }}B
                     </div>
                     <div
                       v-if="budgetStore.revenueSources.carbonPricing?.expenditureImpact !== 0"
@@ -545,15 +565,19 @@
                   <div class="tile-amount">
                     <div class="total-amount">
                       ${{ formatCurrency(budgetStore.revenueSources.exciseTaxes?.adjustedAmount || budgetStore.revenueSources.exciseTaxes?.amount, 1) }}B
+                      <span
+                      v-if="getAdditionalRevenue('exciseTaxes') !== 0"
+                      :class="{
+                        'positive': getAdditionalRevenue('exciseTaxes') > 0,
+                        'negative': getAdditionalRevenue('exciseTaxes') < 0
+                      }"
+                        style="font-size: 0.9em; margin-left: 4px;"
+                      >
+                        ({{ getAdditionalRevenue('exciseTaxes') > 0 ? '+' : '' }}${{ formatCurrency(getAdditionalRevenue('exciseTaxes'), 1) }}B)
+                      </span>
                     </div>
                     <div class="base-amount">
                       Base: ${{ formatCurrency(budgetStore.revenueSources.exciseTaxes?.base * budgetStore.revenueSources.exciseTaxes?.rateByYear[budgetStore.currentYear], 1) }}B
-                    </div>
-                    <div
-                      v-if="getAdditionalRevenue('exciseTaxes') !== 0"
-                      class="additional-revenue"
-                    >
-                      {{ getAdditionalRevenue('exciseTaxes') > 0 ? '+' : '' }}${{ formatCurrency(getAdditionalRevenue('exciseTaxes'), 1) }}B
                     </div>
                     <div
                       v-if="budgetStore.revenueSources.exciseTaxes?.expenditureImpact !== 0"
@@ -677,15 +701,19 @@
                   <div class="tile-amount">
                     <div class="total-amount">
                       ${{ formatCurrency(budgetStore.revenueSources.eiPremiums?.adjustedAmount || budgetStore.revenueSources.eiPremiums?.amount, 1) }}B
+                      <span
+                      v-if="getAdditionalRevenue('eiPremiums') !== 0"
+                      :class="{
+                        'positive': getAdditionalRevenue('eiPremiums') > 0,
+                        'negative': getAdditionalRevenue('eiPremiums') < 0
+                      }"
+                        style="font-size: 0.9em; margin-left: 4px;"
+                      >
+                        ({{ getAdditionalRevenue('eiPremiums') > 0 ? '+' : '' }}${{ formatCurrency(getAdditionalRevenue('eiPremiums'), 1) }}B)
+                      </span>
                     </div>
                     <div class="base-amount">
                       Base: ${{ formatCurrency(budgetStore.revenueSources.eiPremiums?.base * budgetStore.revenueSources.eiPremiums?.rateByYear[budgetStore.currentYear], 1) }}B
-                    </div>
-                    <div
-                      v-if="getAdditionalRevenue('eiPremiums') !== 0"
-                      class="additional-revenue"
-                    >
-                      {{ getAdditionalRevenue('eiPremiums') > 0 ? '+' : '' }}${{ formatCurrency(getAdditionalRevenue('eiPremiums'), 1) }}B
                     </div>
                     <div
                       v-if="budgetStore.revenueSources.eiPremiums?.expenditureImpact !== 0"
@@ -766,6 +794,16 @@
                   <div class="tile-amount">
                     <div class="total-amount">
                       ${{ formatCurrency(budgetStore.revenueSources.crownProfits?.adjustedAmount || budgetStore.revenueSources.crownProfits?.amount, 1) }}B
+                      <span
+                        v-if="getAdditionalRevenue('crownProfits') !== 0"
+                        :class="{
+                          'positive': getAdditionalRevenue('crownProfits') > 0,
+                          'negative': getAdditionalRevenue('crownProfits') < 0
+                        }"
+                        style="font-size: 0.9em; margin-left: 4px;"
+                      >
+                        ({{ getAdditionalRevenue('crownProfits') > 0 ? '+' : '' }}${{ formatCurrency(getAdditionalRevenue('crownProfits'), 1) }}B)
+                      </span>
                     </div>
                     <div class="base-amount">
                       Base: ${{ formatCurrency(budgetStore.revenueSources.crownProfits?.base * budgetStore.revenueSources.crownProfits?.rateByYear[budgetStore.currentYear], 1) }}B
@@ -773,6 +811,10 @@
                     <div
                       v-if="getAdditionalRevenue('crownProfits') !== 0"
                       class="additional-revenue"
+                      :class="{
+                        'positive': getAdditionalRevenue('crownProfits') > 0,
+                        'negative': getAdditionalRevenue('crownProfits') < 0
+                      }"
                     >
                       {{ getAdditionalRevenue('crownProfits') > 0 ? '+' : '' }}${{ formatCurrency(getAdditionalRevenue('crownProfits'), 1) }}B
                     </div>
@@ -857,15 +899,19 @@
                   <div class="tile-amount">
                     <div class="total-amount">
                       ${{ formatCurrency(budgetStore.revenueSources.resourceRoyalties?.adjustedAmount || budgetStore.revenueSources.resourceRoyalties?.amount, 1) }}B
+                      <span
+                      v-if="getAdditionalRevenue('resourceRoyalties') !== 0"
+                      :class="{
+                        'positive': getAdditionalRevenue('resourceRoyalties') > 0,
+                        'negative': getAdditionalRevenue('resourceRoyalties') < 0
+                      }"
+                        style="font-size: 0.9em; margin-left: 4px;"
+                      >
+                        ({{ getAdditionalRevenue('resourceRoyalties') > 0 ? '+' : '' }}${{ formatCurrency(getAdditionalRevenue('resourceRoyalties'), 1) }}B)
+                      </span>
                     </div>
                     <div class="base-amount">
                       Base: ${{ formatCurrency(budgetStore.revenueSources.resourceRoyalties?.base * budgetStore.revenueSources.resourceRoyalties?.rateByYear[budgetStore.currentYear], 1) }}B
-                    </div>
-                    <div
-                      v-if="getAdditionalRevenue('resourceRoyalties') !== 0"
-                      class="additional-revenue"
-                    >
-                      {{ getAdditionalRevenue('resourceRoyalties') > 0 ? '+' : '' }}${{ formatCurrency(getAdditionalRevenue('resourceRoyalties'), 1) }}B
                     </div>
                     <div
                       v-if="budgetStore.revenueSources.resourceRoyalties?.expenditureImpact !== 0"
@@ -946,15 +992,19 @@
                   <div class="tile-amount">
                     <div class="total-amount">
                       ${{ formatCurrency(budgetStore.revenueSources.nonTaxRevenue?.adjustedAmount || budgetStore.revenueSources.nonTaxRevenue?.amount, 1) }}B
+                      <span
+                      v-if="getAdditionalRevenue('nonTaxRevenue') !== 0"
+                      :class="{
+                        'positive': getAdditionalRevenue('nonTaxRevenue') > 0,
+                        'negative': getAdditionalRevenue('nonTaxRevenue') < 0
+                      }"
+                        style="font-size: 0.9em; margin-left: 4px;"
+                      >
+                        ({{ getAdditionalRevenue('nonTaxRevenue') > 0 ? '+' : '' }}${{ formatCurrency(getAdditionalRevenue('nonTaxRevenue'), 1) }}B)
+                      </span>
                     </div>
                     <div class="base-amount">
                       Base: ${{ formatCurrency(budgetStore.revenueSources.nonTaxRevenue?.base * budgetStore.revenueSources.nonTaxRevenue?.rateByYear[budgetStore.currentYear], 1) }}B
-                    </div>
-                    <div
-                      v-if="getAdditionalRevenue('nonTaxRevenue') !== 0"
-                      class="additional-revenue"
-                    >
-                      {{ getAdditionalRevenue('nonTaxRevenue') > 0 ? '+' : '' }}${{ formatCurrency(getAdditionalRevenue('nonTaxRevenue'), 1) }}B
                     </div>
                     <div
                       v-if="budgetStore.revenueSources.nonTaxRevenue?.expenditureImpact !== 0"
@@ -1682,5 +1732,50 @@ onMounted(() => {
     white-space: normal !important;
     word-break: break-word !important;
   }
+}
+
+.additional-revenue {
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.additional-revenue.positive {
+  color: #059669; /* green-600 */
+}
+
+.additional-revenue.negative {
+  color: #DC2626; /* red-600 */
+}
+
+.tax-expenditure-impact {
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.impact-value.positive {
+  color: #059669; /* green-600 */
+}
+
+.impact-value.negative {
+  color: #DC2626; /* red-600 */
+}
+
+.tooltip-text {
+  visibility: hidden;
+  width: 250px;
+  background-color: #2d3748;
+  color: #fff;
+  text-align: left;
+  border-radius: 6px;
+  padding: 8px 12px;
+  position: fixed;
+  z-index: 1000;
+  bottom: 20px;
+  left: 20px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-size: 0.85rem;
+  pointer-events: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 </style>

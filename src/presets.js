@@ -213,14 +213,14 @@ export const budgetPresets = {
       "A pro-business approach that reduces corporate taxes and regulations to stimulate economic growth and job creation. This preset is designed to earn the 'Corporate Catalyst' and 'Business Friendly' badges.",
     revenue: {
       personalIncomeTax: 20,
-      corporateIncomeTax: 13.5, // Increased from 13 (+0.5)
+      corporateIncomeTax: 11.5, // Reduced from 13.5 to be more business-friendly
       gst: 5,
       exciseTaxes: 2.5,
       carbonPricing: 0, // Eliminated carbon tax to be truly business-friendly
       eiPremiums: 1.4,
       customsDuties: 0.9,
       crownProfits: 2.5,
-      nonTaxRevenue: 3.4, // Optionally increase to 3.5 if needed
+      nonTaxRevenue: 3.4,
       resourceRoyalties: 1.3
     },
     spending: {
@@ -239,7 +239,7 @@ export const budgetPresets = {
       internationalDevelopment: 0.8,
       culturalPrograms: 0.9,
       transit: 0.9,
-      economicDevelopment: 1.1, // Reduced from 1.2 (-0.1)
+      economicDevelopment: 1.1,
       indigenousOperations: 0.9,
       diplomaticRepresentation: 1,
       loansInvestments: {
@@ -267,7 +267,7 @@ export const budgetPresets = {
     },
     taxExpenditures: {
       personalTaxCredits: -10,
-      corporateTaxExpenditures: -15,
+      corporateTaxExpenditures: 15, // Changed from -15 to +15 to increase tax credits
       gstExpenditures: 0,
       taxDeferrals: 20
     }

@@ -37,6 +37,8 @@
                     :description="category.description || ''"
                     :base-amount="category.baseAmount"
                     :current-setting="validSpendingFactors[category.id]"
+                    @show-tooltip="showTooltip"
+                    @hide-tooltip="hideTooltip"
                   />
                 </div>
               </div>
@@ -105,6 +107,8 @@
                       :description="group.description || ''"
                       :base-amount="group.baseAmount"
                       :current-setting="validSpendingFactors[group.id]"
+                      @show-tooltip="showTooltip"
+                      @hide-tooltip="hideTooltip"
                     />
                   </div>
                 </div>
@@ -171,6 +175,8 @@
                             :description="child.description || ''"
                             :base-amount="child.baseAmount"
                             :current-setting="validSpendingFactors[child.id]"
+                            @show-tooltip="showTooltip"
+                            @hide-tooltip="hideTooltip"
                           />
                         </div>
                       </div>
@@ -261,6 +267,8 @@
                       :description="''"
                       :base-amount="child.baseAmount"
                       :current-setting="validSpendingFactors[child.id]"
+                      @show-tooltip="showTooltip"
+                      @hide-tooltip="hideTooltip"
                     />
                   </div>
                 </div>
@@ -345,6 +353,8 @@
                     :description="expenditure.description || 'No description available.'"
                     :base-amount="expenditure.netAmount"
                     :current-setting="expenditure.adjustmentFactor"
+                    @show-tooltip="showTooltip"
+                    @hide-tooltip="hideTooltip"
                   />
                 </div>
               </div>
@@ -424,10 +434,22 @@
       </div>
     </div>
   </section>
+  <Teleport to="body">
+    <div 
+      v-if="activeTooltip"
+      class="tooltip-text"
+      :style="{ 
+        visibility: activeTooltip ? 'visible' : 'hidden',
+        opacity: activeTooltip ? 1 : 0
+      }"
+    >
+      {{ activeTooltip }}
+    </div>
+  </Teleport>
 </template>
 
 <script setup>
-import { computed, defineEmits, defineProps } from 'vue';
+import { computed, defineEmits, defineProps, ref } from 'vue';
 import { useBudgetSimulatorStore } from '@/domains/budget/store/budgetSimulator';
 import CategoryGroup from './CategoryGroup.vue';
 // eslint-disable-next-line no-unused-vars
@@ -712,6 +734,16 @@ function getTotalImpactPrefix() {
   // For total impact, positive value means increased revenue (positive impact)
   return budgetStore.taxExpenditureRevenueImpact >= 0 ? '+' : '-';
 }
+
+const activeTooltip = ref('');
+
+function showTooltip(text) {
+  activeTooltip.value = text;
+}
+
+function hideTooltip() {
+  activeTooltip.value = '';
+}
 </script>
 
 <style scoped>
@@ -893,17 +925,13 @@ function getTotalImpactPrefix() {
 .tooltip-container {
   position: relative;
   display: inline-block;
-  margin-left: 0.25rem;
 }
 
-.tooltip-icon {
+.tooltip-container:hover {
   cursor: help;
-  color: #718096;
-  font-size: 0.8rem;
 }
 
 .tooltip-text {
-  visibility: hidden;
   width: 250px;
   background-color: #2d3748;
   color: #fff;
@@ -911,19 +939,25 @@ function getTotalImpactPrefix() {
   border-radius: 6px;
   padding: 8px 12px;
   position: fixed;
-  z-index: 1000;
-  top: 20px;
-  right: 20px;
-  opacity: 0;
+  z-index: 9999;
+  bottom: 20px;
+  left: 20px;
   transition: opacity 0.3s;
   font-size: 0.85rem;
   pointer-events: none;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  white-space: pre-line;
+  word-wrap: break-word;
 }
 
-.tooltip-container:hover .tooltip-text {
-  visibility: visible;
-  opacity: 1;
+.tooltip-text::after {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 20px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent #2d3748 transparent;
 }
 
 .tax-expenditure-content,

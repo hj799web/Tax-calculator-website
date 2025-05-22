@@ -16,6 +16,8 @@ export function downloadBudgetPDF(includeFullBreakdown = false) {
   // Apply class for full breakdown toggle
   if (!includeFullBreakdown) {
     exportElement.classList.add('summary-only')
+  } else {
+    exportElement.classList.remove('summary-only')
   }
   
   // Simple options for better compatibility

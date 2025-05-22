@@ -1,20 +1,17 @@
 <template>
   <div class="ml-1 relative category-info">
-    <span class="info-icon">ⓘ</span>
-    <div class="info-tooltip">
-      <strong>{{ name }}</strong>
-      <p>{{ description }}</p>
-      <p class="mt-1">
-        <strong>Base Amount:</strong> ${{ baseAmount ? baseAmount.toFixed(1) : '0.0' }}B
-      </p>
-      <p><strong>Current Setting:</strong> {{ currentSetting || 0 }}%</p>
-      <p><strong>Adjusted Amount:</strong> ${{ baseAmount && currentSetting ? (baseAmount * currentSetting / 100).toFixed(1) : '0.0' }}B</p>
-    </div>
+    <span 
+      class="info-icon"
+      @mouseenter="showTooltip"
+      @mouseleave="hideTooltip"
+    >ⓘ</span>
   </div>
 </template>
 
 <script setup>
-defineProps({
+import { computed } from 'vue';
+
+const props = defineProps({
   name: {
     type: String,
     required: true
@@ -32,6 +29,20 @@ defineProps({
     required: true
   }
 });
+
+const emit = defineEmits(['show-tooltip', 'hide-tooltip']);
+
+const tooltipContent = computed(() => {
+  return `${props.name}\n\n${props.description}\n\nBase Amount: $${props.baseAmount ? props.baseAmount.toFixed(1) : '0.0'}B\nCurrent Setting: ${props.currentSetting || 0}%\nAdjusted Amount: $${props.baseAmount && props.currentSetting ? (props.baseAmount * props.currentSetting / 100).toFixed(1) : '0.0'}B`;
+});
+
+function showTooltip() {
+  emit('show-tooltip', tooltipContent.value);
+}
+
+function hideTooltip() {
+  emit('hide-tooltip');
+}
 </script>
 
 <style scoped>
@@ -48,8 +59,8 @@ defineProps({
 
 .category-info .info-tooltip {
   position: fixed;
-  top: 20px;
-  right: 20px;
+  bottom: 20px;
+  left: 20px;
   width: 250px;
   padding: 0.75rem;
   background-color: #343a40;
@@ -59,16 +70,28 @@ defineProps({
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.2s ease, visibility 0.2s ease;
-  z-index: 1000;
+  z-index: 9999;
   text-align: left;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   max-height: 300px;
   overflow-y: auto;
+  transform: translateZ(0);
+}
+
+.category-info .info-tooltip::after {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 20px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent #343a40 transparent;
 }
 
 .category-info .info-icon:hover + .info-tooltip {
   opacity: 1;
   visibility: visible;
+  transform: translateZ(0);
 }
 
 @media (max-width: 600px) {

@@ -113,18 +113,31 @@
           </div>
           <div class="entity-score">
             <span :style="{ color: getSentimentColor(score) }">
-  {{ score.toFixed(1) }}
-</span>
-<span
-  v-if="entityDeltas && Math.abs(entityDeltas[name]) > 0.01"
-  :class="['score-delta', entityDeltas[name] > 0 ? 'delta-up' : 'delta-down']"
-  :title="entityDeltas[name] > 0 ? 'Increased' : 'Decreased'"
->
-  <span v-if="entityDeltas[name] > 0">▲</span>
-  <span v-else>▼</span>
-  {{ Math.abs(entityDeltas[name]).toFixed(2) }}
-</span>
-<span class="entity-emoji">{{ getSentimentEmoji(score) }}</span>
+              {{ score.toFixed(1) }}
+            </span>
+            <span
+              v-if="entityDeltas && Math.abs(entityDeltas[name]) > 0.01"
+              :class="['score-delta', entityDeltas[name] > 0 ? 'delta-up' : 'delta-down']"
+              :title="entityDeltas[name] > 0 ? 'Increased' : 'Decreased'"
+            >
+              <span v-if="entityDeltas[name] > 0">▲</span>
+              <span v-else>▼</span>
+              {{ Math.abs(entityDeltas[name]).toFixed(2) }}
+            </span>
+            <span class="entity-emoji">{{ getSentimentEmoji(score) }}</span>
+          </div>
+          <!-- Add impact banner with hover -->
+          <div v-if="getEntityImpacts(name)" class="impact-banner">
+            <div v-for="(data, category) in getEntityImpacts(name)" :key="category" 
+                 class="impact-item">
+              <div class="impact-header">
+                <span class="impact-category">{{ formatCategoryName(category) }}:</span>
+                <span :class="['impact-value', data.impact > 0 ? 'positive' : 'negative']">
+                  {{ data.impact > 0 ? '+' : '' }}{{ formatPercentageChange(data.impact * 100) }}
+                </span>
+              </div>
+              <div class="impact-description">{{ data.description }}</div>
+            </div>
           </div>
         </div>
       </div>
@@ -157,18 +170,31 @@
           </div>
           <div class="entity-score">
             <span :style="{ color: getSentimentColor(score) }">
-  {{ score.toFixed(1) }}
-</span>
-<span
-  v-if="entityDeltas && Math.abs(entityDeltas[name]) > 0.01"
-  :class="['score-delta', entityDeltas[name] > 0 ? 'delta-up' : 'delta-down']"
-  :title="entityDeltas[name] > 0 ? 'Increased' : 'Decreased'"
->
-  <span v-if="entityDeltas[name] > 0">▲</span>
-  <span v-else>▼</span>
-  {{ Math.abs(entityDeltas[name]).toFixed(2) }}
-</span>
-<span class="entity-emoji">{{ getSentimentEmoji(score) }}</span>
+              {{ score.toFixed(1) }}
+            </span>
+            <span
+              v-if="entityDeltas && Math.abs(entityDeltas[name]) > 0.01"
+              :class="['score-delta', entityDeltas[name] > 0 ? 'delta-up' : 'delta-down']"
+              :title="entityDeltas[name] > 0 ? 'Increased' : 'Decreased'"
+            >
+              <span v-if="entityDeltas[name] > 0">▲</span>
+              <span v-else>▼</span>
+              {{ Math.abs(entityDeltas[name]).toFixed(2) }}
+            </span>
+            <span class="entity-emoji">{{ getSentimentEmoji(score) }}</span>
+          </div>
+          <!-- Add impact banner with hover -->
+          <div v-if="getEntityImpacts(name)" class="impact-banner">
+            <div v-for="(data, category) in getEntityImpacts(name)" :key="category" 
+                 class="impact-item">
+              <div class="impact-header">
+                <span class="impact-category">{{ formatCategoryName(category) }}:</span>
+                <span :class="['impact-value', data.impact > 0 ? 'positive' : 'negative']">
+                  {{ data.impact > 0 ? '+' : '' }}{{ formatPercentageChange(data.impact * 100) }}
+                </span>
+              </div>
+              <div class="impact-description">{{ data.description }}</div>
+            </div>
           </div>
         </div>
       </div>
@@ -184,6 +210,7 @@ import { useSentimentSettingsStore } from '@/domains/sentiment/store/sentimentSe
 import { budgetScenarioModifiers } from '@/domains/budget/config/budgetScenarioModifiers';
 import { computeSentimentScores, getSentimentLabel, getSentimentEmoji, getSentimentColor } from '@/domains/sentiment/utils/computeSentimentScores';
 import Chart from 'chart.js/auto';
+import { entityImpactFactors } from '@/domains/sentiment/config/entityImpactFactors.js';
 
 // Component props
 const props = defineProps({
@@ -407,8 +434,8 @@ const currentTabEntities = computed(() => {
       'British Columbia': ['British Columbia', 'BritishColumbia'],
       'Manitoba': ['Manitoba'],
       'New Brunswick': ['New Brunswick', 'NewBrunswick'],
-      'Newfoundland and Labrador': ['Newfoundland and Labrador'],
-      'Northwest Territories': ['Northwest Territories'],
+      'Newfoundland and Labrador': ['Newfoundland and Labrador', 'NewfoundlandAndLabrador'],
+      'Northwest Territories': ['Northwest Territories', 'NorthwestTerritories'],
       'Nova Scotia': ['Nova Scotia', 'NovaScotia'],
       'Nunavut': ['Nunavut'],
       'Ontario': ['Ontario'],
@@ -494,6 +521,62 @@ function formatName(name) {
     .replace(/_/g, ' ')         // Replace underscores with spaces
     .replace(/^\w/, c => c.toUpperCase()) // Capitalize first letter
     .trim();
+}
+
+// Helper function to get the correct entity key
+function getEntityKey(displayName, tab) {
+  // Special case for Newfoundland and Labrador
+  if (displayName === 'Newfoundland and Labrador') {
+    return '"Newfoundland and Labrador"';
+  }
+
+  // For provinces, we need to handle both spaced and camelCase names
+  if (tab === 'provinces') {
+    const provinceMapping = {
+      'Alberta': ['Alberta'],
+      'British Columbia': ['British Columbia', 'BritishColumbia'],
+      'Manitoba': ['Manitoba'],
+      'New Brunswick': ['New Brunswick', 'NewBrunswick'],
+      'Newfoundland and Labrador': ['Newfoundland and Labrador', 'NewfoundlandAndLabrador'],
+      'Northwest Territories': ['Northwest Territories', 'NorthwestTerritories'],
+      'Nova Scotia': ['Nova Scotia', 'NovaScotia'],
+      'Nunavut': ['Nunavut'],
+      'Ontario': ['Ontario'],
+      'Prince Edward Island': ['Prince Edward Island'],
+      'Quebec': ['Quebec'],
+      'Saskatchewan': ['Saskatchewan'],
+      'Yukon': ['Yukon']
+    };
+    
+    const possibleKeys = provinceMapping[displayName] || [displayName];
+    for (const key of possibleKeys) {
+      if (entityImpactFactors[tab]?.[key]?.factors) {
+        return key;
+      }
+    }
+  }
+  
+  // For sectors and demographics, try different naming conventions
+  const possibleKeys = [
+    // Try the original display name
+    displayName,
+    // Try camelCase version
+    displayName.toLowerCase().replace(/\s+(.)/g, (match, group1) => group1.toUpperCase()),
+    // Try removing spaces
+    displayName.replace(/\s+/g, ''),
+    // Try removing spaces and making first letter lowercase
+    displayName.replace(/\s+/g, '').replace(/^./, str => str.toLowerCase())
+  ];
+  
+  // Check each possible key format
+  for (const key of possibleKeys) {
+    if (entityImpactFactors[tab]?.[key]?.factors) {
+      return key;
+    }
+  }
+  
+  // If no match found, return the original display name
+  return displayName;
 }
 
 // 🆕 PERFORMANCE NOTE: Optimized Chart.js update logic: mutate data, do not recreate chart
@@ -598,15 +681,64 @@ function updateChart() {
       legend: { display: false },
       tooltip: {
         enabled: true,
+        mode: 'nearest',
+        intersect: true,
+        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+        titleColor: '#2d3748',
+        bodyColor: '#4a5568',
+        borderColor: '#e2e8f0',
+        borderWidth: 1,
+        padding: 12,
+        boxPadding: 6,
+        usePointStyle: true,
         callbacks: {
+          title: (items) => {
+            return items[0].label;
+          },
           label: (context) => {
             const score = context.raw;
+            const entityName = context.label;
             if (score === undefined || score === null) {
               return 'No data';
             }
             try {
-              return `Score: ${score.toFixed(1)} - ${getSentimentLabel(score)}`;
+              const entityKey = getEntityKey(entityName, activeTab.value);
+              const factors = entityImpactFactors[activeTab.value]?.[entityKey]?.factors;
+              if (!factors) {
+                return `Score: ${score.toFixed(1)} - ${getSentimentLabel(score)}`;
+              }
+
+              // Create tooltip content
+              const tooltipContent = [
+                `Score: ${score.toFixed(1)} - ${getSentimentLabel(score)}`,
+                '',
+                'Impact Factors:'
+              ];
+
+              // Add each factor to the tooltip
+              factors.forEach(factor => {
+                const budgetData = props.budgetData || store.budgetData;
+                let value = 0;
+                let impact = 0;
+
+                if (factor.category === 'revenue') {
+                  value = budgetData?.revenueSources?.[factor.name]?.adjustmentFactor || 1;
+                  impact = (value - 1) * 100;
+                } else if (factor.category === 'spending') {
+                  value = budgetData?.spendingCategories?.[factor.name]?.adjustmentFactor || 1;
+                  impact = (value - 1) * 100;
+                }
+
+                const impactText = Math.abs(impact) > 0.1 
+                  ? ` (${impact > 0 ? '+' : ''}${impact.toFixed(1)}%)`
+                  : '';
+                
+                tooltipContent.push(`• ${factor.name}: ${factor.description}${impactText}`);
+              });
+
+              return tooltipContent;
             } catch (e) {
+              console.error('Error generating tooltip:', e);
               return `Score: ${score}`;
             }
           }
@@ -633,10 +765,101 @@ function updateChart() {
               pointBackgroundColor: colors,
               pointBorderColor: '#fff',
               pointHoverBackgroundColor: '#fff',
-              pointHoverBorderColor: colors
+              pointHoverBorderColor: colors,
+              pointRadius: 4,
+              pointHoverRadius: 6
             }]
           },
-          options: chartOptions
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            events: ['mousemove', 'mouseout', 'click', 'touchstart', 'touchmove'],
+            animation: {
+              duration: 0
+            },
+            hover: {
+              animationDuration: 0,
+              mode: 'nearest',
+              intersect: true
+            },
+            responsiveAnimationDuration: 0,
+            scales: {
+              r: {
+                beginAtZero: true,
+                suggestedMin: 1,
+                suggestedMax: 5,
+                ticks: { stepSize: 1 }
+              }
+            },
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                enabled: true,
+                mode: 'nearest',
+                intersect: true,
+                backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                titleColor: '#2d3748',
+                bodyColor: '#4a5568',
+                borderColor: '#e2e8f0',
+                borderWidth: 1,
+                padding: 12,
+                boxPadding: 6,
+                usePointStyle: true,
+                callbacks: {
+                  title: (items) => {
+                    return items[0].label;
+                  },
+                  label: (context) => {
+                    const score = context.raw;
+                    const entityName = context.label;
+                    if (score === undefined || score === null) {
+                      return 'No data';
+                    }
+                    try {
+                      const entityKey = getEntityKey(entityName, activeTab.value);
+                      const factors = entityImpactFactors[activeTab.value]?.[entityKey]?.factors;
+                      if (!factors) {
+                        return `Score: ${score.toFixed(1)} - ${getSentimentLabel(score)}`;
+                      }
+
+                      // Create tooltip content
+                      const tooltipContent = [
+                        `Score: ${score.toFixed(1)} - ${getSentimentLabel(score)}`,
+                        '',
+                        'Impact Factors:'
+                      ];
+
+                      // Add each factor to the tooltip
+                      factors.forEach(factor => {
+                        const budgetData = props.budgetData || store.budgetData;
+                        let value = 0;
+                        let impact = 0;
+
+                        if (factor.category === 'revenue') {
+                          value = budgetData?.revenueSources?.[factor.name]?.adjustmentFactor || 1;
+                          impact = (value - 1) * 100;
+                        } else if (factor.category === 'spending') {
+                          value = budgetData?.spendingCategories?.[factor.name]?.adjustmentFactor || 1;
+                          impact = (value - 1) * 100;
+                        }
+
+                        const impactText = Math.abs(impact) > 0.1 
+                          ? ` (${impact > 0 ? '+' : ''}${impact.toFixed(1)}%)`
+                          : '';
+                        
+                        tooltipContent.push(`• ${factor.name}: ${factor.description}${impactText}`);
+                      });
+
+                      return tooltipContent;
+                    } catch (e) {
+                      console.error('Error generating tooltip:', e);
+                      return `Score: ${score}`;
+                    }
+                  }
+                }
+              }
+            }
+          }
         });
       } else {
         // If we have an existing chart, update its data instead of recreating it
@@ -720,17 +943,26 @@ import debounce from 'lodash/debounce';
 let prevSentiment = null;
 const debouncedUpdateChart = debounce(updateChart, 200);
 
-watch([activeTab, sentimentScores], ([, newSentiment]) => {
+// Watch for tab changes and sentiment updates
+watch([activeTab, sentimentScores], ([newTab, newSentiment], [oldTab]) => {
   if (!isMounted.value) {
     prevSentiment = null;
     return;
   }
+  
+  // Force update when tab changes
+  if (newTab !== oldTab) {
+    console.log('[SENTIMENT] Tab changed from', oldTab, 'to', newTab);
+    updateChart();
+    return;
+  }
+  
   // Only update if sentiment actually changes
   if (!prevSentiment || !isEqual(prevSentiment, newSentiment)) {
     debouncedUpdateChart();
     prevSentiment = JSON.parse(JSON.stringify(newSentiment));
   }
-});
+}, { deep: true });
 
 // Initialize the chart when the component is mounted
 onMounted(() => {
@@ -769,6 +1001,55 @@ onUnmounted(() => {
     chartInstance.value = null;
   }
 });
+
+// Helper function to get impacts for an entity
+function getEntityImpacts(entityName) {
+  const factors = entityImpactFactors[activeTab.value]?.[entityName]?.factors;
+  if (!factors) return null;
+
+  const impacts = {};
+  const budgetData = props.budgetData || store.budgetData;
+
+  // Get all revenue sources and spending categories
+  const revenueSources = budgetData?.revenueSources || {};
+  const spendingCategories = budgetData?.spendingCategories || {};
+
+  // Check each factor against current budget values
+  for (const factor of factors) {
+    let value = 0;
+    let impact = 0;
+
+    if (factor.category === 'revenue') {
+      value = revenueSources[factor.name]?.adjustmentFactor || 1;
+      impact = (value - 1) * 100; // Convert to percentage
+    } else if (factor.category === 'spending') {
+      value = spendingCategories[factor.name]?.adjustmentFactor || 1;
+      impact = (value - 1) * 100; // Convert to percentage
+    }
+
+    if (Math.abs(impact) > 0.1) { // Only show significant impacts
+      impacts[factor.name] = {
+        impact: impact / 100, // Convert back to decimal for display
+        description: factor.description
+      };
+    }
+  }
+  
+  return Object.keys(impacts).length > 0 ? impacts : null;
+}
+
+// Helper function to format category names
+function formatCategoryName(name) {
+  return name
+    .replace(/([A-Z])/g, ' $1')
+    .replace(/^./, str => str.toUpperCase())
+    .trim();
+}
+
+// Helper function to format percentage changes
+function formatPercentageChange(value) {
+  return `${value.toFixed(1)}%`;
+}
 </script>
 
 <style scoped>
@@ -964,6 +1245,7 @@ input:checked + .toggle-slider:before {
   border-radius: 4px;
   transition: background-color 0.2s ease;
   font-size: 0.85rem;
+  position: relative;
 }
 
 .entity-row:hover {
@@ -1064,5 +1346,67 @@ input:checked + .toggle-slider:before {
     white-space: normal !important;
     word-break: break-word !important;
   }
+}
+
+.impact-banner {
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-left: 8px;
+  padding: 8px;
+  background-color: #f8fafc;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+  white-space: nowrap;
+  min-width: 200px;
+}
+
+.entity-row:hover .impact-banner {
+  opacity: 1;
+  visibility: visible;
+}
+
+.impact-item {
+  margin-bottom: 6px;
+}
+
+.impact-item:last-child {
+  margin-bottom: 0;
+}
+
+.impact-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2px;
+}
+
+.impact-category {
+  color: #4a5568;
+  font-weight: 500;
+}
+
+.impact-value {
+  font-weight: 600;
+}
+
+.impact-value.positive {
+  color: #059669;
+}
+
+.impact-value.negative {
+  color: #dc2626;
+}
+
+.impact-description {
+  color: #718096;
+  font-size: 0.7rem;
+  line-height: 1.2;
 }
 </style>

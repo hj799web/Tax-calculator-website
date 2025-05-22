@@ -248,8 +248,8 @@ const { sortOrder } = storeToRefs(configStore)
 
 .allocation-table tr:hover {
   background: rgba(52, 152, 219, 0.05);
-}
-
+  }
+  
 .allocation-table tr:last-child td {
   border-bottom: none;
 }

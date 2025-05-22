@@ -128,11 +128,10 @@
               <span class="material-icons text-red-500 mr-1 text-xs">trending_down</span>
               Total Spending:
             </span>
-            <span class="font-medium text-red-600 text-sm tooltip-container">
+            <span class="font-medium text-red-600 text-sm tooltip-container"
+              @mouseenter="showTooltip(formatPercentage(totalSpendingValue, totalRevenueValue) + ' of total revenue')"
+              @mouseleave="hideTooltip()">
               {{ formatCurrency(totalSpendingValue) }}
-              <div class="tooltip-text">
-                {{ formatPercentage(totalSpendingValue, totalRevenueValue) }} of total revenue
-              </div>
             </span>
           </div>
           
@@ -153,6 +152,8 @@
             </span>
             <span
               class="font-medium text-sm tooltip-container"
+              @mouseenter="showTooltip(formatPercentage(Math.abs(surplusValue), totalRevenueValue) + ' of total revenue')"
+              @mouseleave="hideTooltip()"
               :class="{
                 'text-green-600': surplusValue > 0,
                 'text-red-600': surplusValue < 0,
@@ -161,9 +162,6 @@
             >
               {{ surplusValue > 0 ? 'Surplus: +' : surplusValue < 0 ? 'Deficit: ' : '' }}
               {{ formatCurrency(Math.abs(surplusValue)) }}
-              <div class="tooltip-text">
-                {{ formatPercentage(Math.abs(surplusValue), totalRevenueValue) }} of total revenue
-              </div>
             </span>
           </div>
 
@@ -172,11 +170,11 @@
             <span class="result-label">
               <span class="material-icons text-gray-500 mr-1 text-xs">account_balance</span>
               Debt-to-GDP Ratio:
-              <span class="info-icon tooltip-container" style="margin-left: 4px; cursor: pointer;">
+              <span class="info-icon tooltip-container" 
+                @mouseenter="showTooltip('The ratio of total federal debt to the size of the Canadian economy (GDP). Lower is generally better for fiscal health.')"
+                @mouseleave="hideTooltip()"
+                style="margin-left: 4px; cursor: pointer;">
                 ⓘ
-                <div class="tooltip-text">
-                  The ratio of total federal debt to the size of the Canadian economy (GDP). Lower is generally better for fiscal health.
-                </div>
               </span>
             </span>
             <span class="font-medium text-gray-700 text-sm">
@@ -229,10 +227,11 @@
               <span class="auto-balance-text">Auto-Balance Budget</span>
             </label>
             <div class="auto-balance-info">
-              <span class="info-icon">ⓘ</span>
-              <div class="info-tooltip">
-                When enabled, the system will automatically adjust revenue sources to balance the budget based on your spending choices.
-              </div>
+              <span 
+                class="info-icon"
+                @mouseenter="showTooltip('When enabled, the system will automatically adjust revenue sources to balance the budget based on your spending choices.')"
+                @mouseleave="hideTooltip()"
+              >ⓘ</span>
             </div>
           </div>
           <button
@@ -291,6 +290,18 @@
     <!-- Export Budget PDF Panel -->
     <ExportPanel />
   </section>
+  <Teleport to="body">
+    <div 
+      v-if="activeTooltip"
+      class="tooltip-text"
+      :style="{ 
+        visibility: activeTooltip ? 'visible' : 'hidden',
+        opacity: activeTooltip ? 1 : 0
+      }"
+    >
+      {{ activeTooltip }}
+    </div>
+  </Teleport>
 </template>
 
 <script setup>
@@ -482,6 +493,16 @@ function formatCurrency(value) {
     maximumFractionDigits: 1,
   }).format(value) + 'B';
 }
+
+const activeTooltip = ref('');
+
+function showTooltip(text) {
+  activeTooltip.value = text;
+}
+
+function hideTooltip() {
+  activeTooltip.value = '';
+}
 </script>
 
 <style scoped>
@@ -588,26 +609,36 @@ function formatCurrency(value) {
 }
 
 .tooltip-text {
-  visibility: hidden;
-  width: 120px;
+  width: 250px;
   background-color: #2d3748;
   color: #fff;
-  text-align: center;
+  text-align: left;
   border-radius: 6px;
-  padding: 5px;
-  position: absolute;
-  z-index: 10;
-  bottom: 125%;
-  left: 50%;
-  margin-left: -60px;
-  opacity: 0;
+  padding: 8px 12px;
+  position: fixed;
+  z-index: 9999;
+  bottom: 20px;
+  left: 20px;
   transition: opacity 0.3s;
-  font-size: 0.75rem;
+  font-size: 0.85rem;
+  pointer-events: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  white-space: pre-line;
+  word-wrap: break-word;
 }
 
-.tooltip-container:hover .tooltip-text {
-  visibility: visible;
-  opacity: 1;
+.tooltip-text::after {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 20px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent #2d3748 transparent;
+}
+
+.tooltip-container:hover {
+  cursor: help;
 }
 
 /* Download Button */

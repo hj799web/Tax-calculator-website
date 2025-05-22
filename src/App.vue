@@ -184,61 +184,61 @@
         </section>
       </div>
     </main>
-    
-    <!-- Footer - Now visible on all pages -->
-    <footer class="site-footer">
-      <div class="footer-content">
-        <div class="footer-section">
-          <h3>About Us</h3>
-          <p>Fiscal Insights provides free tax calculators and financial tools to help Canadians understand their taxes and government spending.</p>
-        </div>
-        <div class="footer-section">
-          <h3>Connect With Us</h3>
-          <div class="social-links">
-            <a
-              href="mailto:fiscal-insights@outlook.com"
-              class="social-link"
-            >
-              <img
-                src="@/assets/email-icon.svg"
-                alt="Email"
-                class="social-icon"
-              >
-              Contact Us
-            </a>
-            <a
-              href="https://www.instagram.com/fiscal_insights1/"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="social-link"
-            >
-              <img
-                src="https://cdn-icons-png.flaticon.com/512/87/87390.png"
-                alt="Instagram"
-                class="social-icon"
-              >
-              @fiscal_insights1
-            </a>
-          </div>
-        </div>
-        <div class="footer-section">
-          <h3>Legal</h3>
-          <div class="legal-links">
-            <router-link
-              to="/terms-of-service"
-              class="legal-link"
-            >
-              Terms of Service
-            </router-link>
-          </div>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p>Contact us: <a href="mailto:fiscal-insights@outlook.com" class="text-blue-600 hover:text-blue-800">fiscal-insights@outlook.com</a></p>
-        <p>&copy; {{ new Date().getFullYear() }} Fiscal Insights. All rights reserved.</p>
-      </div>
-    </footer>
 
+    <!-- Footer - Now visible on all pages -->
+        <footer class="site-footer">
+          <div class="footer-content">
+            <div class="footer-section">
+              <h3>About Us</h3>
+              <p>Fiscal Insights provides free tax calculators and financial tools to help Canadians understand their taxes and government spending.</p>
+            </div>
+            <div class="footer-section">
+              <h3>Connect With Us</h3>
+              <div class="social-links">
+                <a
+                  href="mailto:fiscal-insights@outlook.com"
+                  class="social-link"
+                >
+                  <img
+                    src="@/assets/email-icon.svg"
+                    alt="Email"
+                    class="social-icon"
+                  >
+                  Contact Us
+                </a>
+                <a
+                  href="https://www.instagram.com/fiscal_insights1/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="social-link"
+                >
+                  <img
+                    src="https://cdn-icons-png.flaticon.com/512/87/87390.png"
+                    alt="Instagram"
+                    class="social-icon"
+                  >
+                  @fiscal_insights1
+                </a>
+              </div>
+            </div>
+            <div class="footer-section">
+              <h3>Legal</h3>
+              <div class="legal-links">
+                <router-link
+                  to="/terms-of-service"
+                  class="legal-link"
+                >
+                  Terms of Service
+                </router-link>
+              </div>
+            </div>
+          </div>
+          <div class="footer-bottom">
+            <p>Contact us: <a href="mailto:fiscal-insights@outlook.com" class="text-blue-600 hover:text-blue-800">fiscal-insights@outlook.com</a></p>
+            <p>&copy; {{ new Date().getFullYear() }} Fiscal Insights. All rights reserved.</p>
+          </div>
+        </footer>
+    
     <!-- Beta Testing Button - Visible on all pages -->
     <a
       href="https://forms.gle/Yofdxnr1iLZ5fRJ8A"
