@@ -31,6 +31,9 @@
       <h1 class="main-title">
         How It Works
       </h1>
+
+      <!-- Main Navigation -->
+      <MainNavigation />
       
       <div class="toc animate-in">
         <h2>Table of Contents</h2>
@@ -76,6 +79,12 @@
               href="#data-sources-and-accuracy"
               @click.prevent="scrollToSection('data-sources-and-accuracy')"
             >Data Sources and Accuracy</a>
+          </li>
+          <li>
+            <a
+              href="#budget-simulator"
+              @click.prevent="scrollToSection('budget-simulator')"
+            >Budget Simulator</a>
           </li>
           <li>
             <a
@@ -279,7 +288,7 @@
         class="section animate-in"
       >
         <h2>Technical Implementation</h2>
-        <p>The Canada Tax Calculator is built using modern web technologies:</p>
+        <p>The Canada Tax Calculator and Budget Simulator are built using modern web technologies:</p>
         <ul>
           <li>Frontend Framework: Vue.js for reactive, component-based UI</li>
           <li>State Management: Pinia for efficient state management</li>
@@ -287,6 +296,10 @@
           <li>Styling: CSS with responsive design principles</li>
           <li>Validation: Form validation to ensure accurate inputs</li>
           <li>PDF Export: Capability to export results as PDF documents</li>
+          <li>Real-time Calculations: Efficient algorithms for instant budget updates</li>
+          <li>Interactive Controls: Custom slider components for budget adjustments</li>
+          <li>Tooltip System: Dynamic tooltips for detailed information display</li>
+          <li>Auto-balance Feature: Smart algorithms for budget optimization</li>
         </ul>
       </div>
       
@@ -302,6 +315,102 @@
           <li>Budget 2024: Official Budget 2024 documentation</li>
         </ul>
         <p>While the calculator provides accurate estimates based on the information provided, it is designed for educational and planning purposes. Individual tax situations may vary, and users should consult with a tax professional for personalized advice.</p>
+      </div>
+      
+      <div
+        id="budget-simulator"
+        class="section animate-in"
+      >
+        <h2>Budget Simulator</h2>
+        <p>The Budget Simulator is an interactive tool that allows you to explore and understand how federal budget allocations work. Here's how it functions:</p>
+
+        <h3>Key Features</h3>
+        <ul>
+          <li>Interactive spending controls for major budget categories</li>
+          <li>Real-time deficit/surplus calculations</li>
+          <li>Visual representation of budget impacts</li>
+          <li>Auto-balance functionality for budget optimization</li>
+          <li>Detailed tooltips explaining each category</li>
+        </ul>
+
+        <h3>Main Categories</h3>
+        <ul>
+          <li>Social Programs: Healthcare, education, and social services</li>
+          <li>Economic Development: Infrastructure, business support, and innovation</li>
+          <li>Defense and Security: Military, policing, and border security</li>
+          <li>Environmental Protection: Climate action and conservation</li>
+          <li>International Affairs: Foreign aid and diplomatic relations</li>
+        </ul>
+
+        <h3>How to Use the Simulator</h3>
+        <ol>
+          <li>Adjust spending percentages for different categories using the sliders</li>
+          <li>Monitor the real-time impact on total spending and deficit/surplus</li>
+          <li>Use the auto-balance feature to automatically adjust revenue sources</li>
+          <li>View detailed information about each category by hovering over the info icons</li>
+          <li>Export your budget plan or share it with others</li>
+        </ol>
+
+        <h3>Understanding the Results</h3>
+        <ul>
+          <li>Total Revenue: Shows the sum of all revenue sources</li>
+          <li>Total Spending: Displays the combined spending across all categories</li>
+          <li>Surplus/Deficit: Indicates whether your budget is balanced</li>
+          <li>Debt-to-GDP Ratio: Shows the impact on national debt levels</li>
+          <li>Category Impacts: Displays how changes affect individual programs</li>
+        </ul>
+
+        <h3>Tips for Effective Use</h3>
+        <ul>
+          <li>Start with small adjustments to understand the impact</li>
+          <li>Use the auto-balance feature to maintain fiscal responsibility</li>
+          <li>Pay attention to the deficit warnings for sustainable budgeting</li>
+          <li>Consider the interconnected nature of different spending categories</li>
+          <li>Review the tooltips for detailed information about each category</li>
+        </ul>
+
+        <h3>Understanding Tax Calculations</h3>
+        <p>The Budget Simulator uses a simplified approach to tax calculations to help users understand the broad fiscal impact of tax changes:</p>
+        
+        <h4>Personal Income Tax</h4>
+        <ul>
+          <li>Uses an average effective tax rate approach rather than detailed tax brackets</li>
+          <li>Base rate: 21% (2024)</li>
+          <li>Base amount: $10 billion per 1% change</li>
+          <li>Total revenue: $210 billion</li>
+          <li>Adjustable range: 0% to 50%</li>
+          <li>Includes tax credits and deferrals that can be adjusted separately</li>
+        </ul>
+
+        <h4>Corporate Income Tax</h4>
+        <ul>
+          <li>Uses a simplified rate structure rather than detailed brackets</li>
+          <li>Base rate: 15% (2024)</li>
+          <li>Base amount: $5.33 billion per 1% change</li>
+          <li>Total revenue: $80 billion</li>
+          <li>Adjustable range: 0% to 40%</li>
+          <li>Includes corporate tax expenditures that can be adjusted separately</li>
+        </ul>
+
+        <h4>Tax Expenditures and Credits</h4>
+        <ul>
+          <li><strong>Personal Tax Credits:</strong>
+            <ul>
+              <li>Base amount: $120 billion gross</li>
+              <li>Net amount: $102 billion (adjusted for interactions)</li>
+              <li>Can be adjusted to impact personal income tax revenue</li>
+            </ul>
+          </li>
+          <li><strong>Corporate Tax Expenditures:</strong>
+            <ul>
+              <li>Base amount: $25 billion gross</li>
+              <li>Net amount: $23.75 billion (adjusted for interactions)</li>
+              <li>Can be adjusted to impact corporate income tax revenue</li>
+            </ul>
+          </li>
+        </ul>
+
+        <p>This simplified approach allows users to understand the broad fiscal impact of tax changes without getting lost in the complexity of detailed tax brackets and calculations. The simulator focuses on the overall revenue impact rather than individual taxpayer scenarios.</p>
       </div>
       
       <div
@@ -327,10 +436,28 @@
         
         <h3>Does the calculator account for all possible tax credits?</h3>
         <p>The calculator includes major credits like the basic personal amount and simplified child credits, but doesn't account for all possible credits like medical expenses, tuition, or charitable donations.</p>
+
+        <h3>How does the Budget Simulator work?</h3>
+        <p>The Budget Simulator uses approximate federal budget data from Public Accounts of Canada and Budget 2024 documents to allow you to experiment with different spending allocations. It calculates the impact of your changes on the overall budget, including effects on deficit/surplus and debt-to-GDP ratio.</p>
+
+        <h3>What is the auto-balance feature?</h3>
+        <p>The auto-balance feature automatically adjusts revenue sources to maintain a balanced budget when you make spending changes. It helps you understand the trade-offs between different fiscal policies.</p>
+
+        <h3>Can I save my budget simulations?</h3>
+        <p>Yes, you can export your budget plan as a PDF document, which includes all your spending allocations and their impacts. This allows you to save and share your budget scenarios.</p>
+
+        <h3>How accurate are the budget impact calculations?</h3>
+        <p>The budget impact calculations are based on current federal budget data and economic models. While they provide a good approximation of the effects of spending changes, they are simplified models and don't account for all possible economic interactions.</p>
+
+        <h3>What do the tooltips show?</h3>
+        <p>The tooltips provide detailed information about each budget category, including current spending levels, program descriptions, and potential impacts of changes. They help you make informed decisions about budget allocations.</p>
+
+        <h3>How are tax rates and revenue calculated in the Budget Simulator?</h3>
+        <p>The Budget Simulator uses a simplified approach to tax calculations to make it easier to understand the fiscal impact of tax changes. Instead of detailed tax brackets, it uses average effective rates. For Personal Income Tax, the base rate is 21% (2024) with $10 billion in revenue per percentage point. Corporate Income Tax uses a base rate of 15% (2024) with $5.33 billion in revenue per percentage point. Tax credits and expenditures can be adjusted separately to see their impact on revenue. The simulator focuses on overall revenue impact rather than individual taxpayer scenarios, helping users understand the broad fiscal implications of tax changes while maintaining a manageable level of complexity.</p>
       </div>
       
       <div class="footer">
-        <p>This documentation was last updated: March 2024</p>
+        <p>This documentation was last updated: May 2025</p>
         <p>For questions or feedback, please contact: <a href="mailto:fiscal-insights@outlook.com">fiscal-insights@outlook.com</a></p>
         <router-link
           to="/"
@@ -346,9 +473,13 @@
 <script>
 import initAllAnimations from '../assets/howItWorksAnimations.js';
 import '../assets/decorativeElements.css'; // Import decorative elements CSS file
+import MainNavigation from '@/components/MainNavigation.vue';
 
 export default {
   name: 'HowItWorksView',
+  components: {
+    MainNavigation
+  },
   metaInfo: {
     title: 'How It Works | Canada Tax Calculator Methodology and Features',
     meta: [
@@ -372,13 +503,14 @@ export default {
 </script>
 
 <style scoped>
+/* Remove the custom navigation styles and adjust the container padding */
 .how-it-works-container {
   max-width: 1000px;
   margin: 0 auto;
   padding: 20px;
   line-height: 1.6;
   color: #333;
-  perspective: 1000px; /* Add perspective for 3D effects */
+  perspective: 1000px;
   background-image: linear-gradient(rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.95)), 
                     url('data:image/svg+xml;utf8,<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><rect width="1" height="1" fill="%23f0f4f8"/></svg>');
   background-size: 20px 20px;
@@ -388,7 +520,7 @@ export default {
 .main-title {
   color: #34495e;
   font-size: 32px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   text-align: center;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
   animation: float 3s ease-in-out infinite;
@@ -470,6 +602,7 @@ ul, ol {
   background-color: #f0f4f8;
   padding: 20px;
   border-radius: 10px;
+  margin-top: 20px;
   margin-bottom: 30px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
   transform: perspective(1000px) rotateX(2deg);

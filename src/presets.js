@@ -14,8 +14,8 @@ export const budgetPresets = {
     description:
       "A fiscally responsible approach that balances revenues and expenditures while maintaining essential services. This preset is designed to earn the 'Fiscal Hawk' and 'Centrist Pragmatist' badges.",
     revenue: {
-      personalIncomeTax: 21, // Optionally adjust to 21.5 if needed
-      corporateIncomeTax: 15,
+      personalIncomeTax: 21.5,    // Increased from 21 to ensure sufficient revenue
+      corporateIncomeTax: 15.5,   // Increased from 15 to ensure sufficient revenue
       gst: 5,
       exciseTaxes: 2.7,
       carbonPricing: 1.2,
@@ -26,52 +26,52 @@ export const budgetPresets = {
       resourceRoyalties: 1.1
     },
     spending: {
-      healthcare: 1, // Optionally reduce to 0.95 if a slight deficit is detected
-      education: 1,
-      childrenAndFamilies: 1,
-      supportForSeniors: 1,
-      indigenousServices: 1,
-      defense: 1,
-      scienceAndInnovation: 1,
-      infrastructure: 1,
-      digitalGovernment: 1,
-      environmentAndClimateChange: 1,
-      carbonPricing: 1,
-      agriculture: 1,
-      internationalDevelopment: 1,
-      culturalPrograms: 1,
-      transit: 1,
-      economicDevelopment: 1,
-      indigenousOperations: 1,
-      diplomaticRepresentation: 1,
+      healthcare: 0.95,           // Slightly reduced to help balance
+      education: 0.95,            // Slightly reduced to help balance
+      childrenAndFamilies: 0.95,  // Slightly reduced to help balance
+      supportForSeniors: 0.95,    // Slightly reduced to help balance
+      indigenousServices: 0.95,   // Slightly reduced to help balance
+      defense: 0.95,              // Slightly reduced to help balance
+      scienceAndInnovation: 0.95, // Slightly reduced to help balance
+      infrastructure: 0.95,       // Slightly reduced to help balance
+      digitalGovernment: 0.95,    // Slightly reduced to help balance
+      environmentAndClimateChange: 0.95, // Slightly reduced to help balance
+      carbonPricing: 0.95,        // Slightly reduced to help balance
+      agriculture: 0.95,          // Slightly reduced to help balance
+      internationalDevelopment: 0.95, // Slightly reduced to help balance
+      culturalPrograms: 0.95,     // Slightly reduced to help balance
+      transit: 0.95,              // Slightly reduced to help balance
+      economicDevelopment: 0.95,  // Slightly reduced to help balance
+      indigenousOperations: 0.95, // Slightly reduced to help balance
+      diplomaticRepresentation: 0.95, // Slightly reduced to help balance
       loansInvestments: {
-        studentLoans: 1,
-        agricultureLoans: 1,
-        internationalDevelopment: 1,
-        businessInnovation: 1,
-        defenseSector: 1,
-        economicDevelopment: 1
+        studentLoans: 0.95,
+        agricultureLoans: 0.95,
+        internationalDevelopment: 0.95,
+        businessInnovation: 0.95,
+        defenseSector: 0.95,
+        economicDevelopment: 0.95
       },
       governmentOperations: {
-        transportationInfrastructure: 1,
-        environmentalPrograms: 1,
-        publicSafetyEmergency: 1,
+        transportationInfrastructure: 0.95,
+        environmentalPrograms: 0.95,
+        publicSafetyEmergency: 0.95,
         governmentBuildings: 0.95,
-        researchInnovation: 1,
-        digitalGovernment: 1,
+        researchInnovation: 0.95,
+        digitalGovernment: 0.95,
         federalEmployeeSalaries: 0.95,
-        legalJusticeSystem: 1,
-        indigenousServicesOps: 1,
+        legalJusticeSystem: 0.95,
+        indigenousServicesOps: 0.95,
         culturalPrograms: 0.95,
-        scientificResearch: 1,
+        scientificResearch: 0.95,
         diplomaticRepresentation: 0.95
       }
     },
     taxExpenditures: {
-      personalTaxCredits: 0,
-      corporateTaxExpenditures: 0,
-      gstExpenditures: 0,
-      taxDeferrals: 0
+      personalTaxCredits: -5,     // Reduced tax credits to help balance
+      corporateTaxExpenditures: -5, // Reduced tax credits to help balance
+      gstExpenditures: -5,        // Reduced tax credits to help balance
+      taxDeferrals: -5            // Reduced tax deferrals to help balance
     }
   },
 
@@ -511,56 +511,184 @@ export function setPreset(presetKey, store) {
       badges: store.badges.map((b) => b.title)
     });
 
-    // Apply dramatic changes based on preset type to make sentiment more reactive
-    // Adjusted (lower) multipliers for a less dramatic impact.
-    const presetMultipliers = {
-      austerityPlan: 1.5,
-      businessFriendly: 1.3,
-      balancedBudget: 1.2,
-      progressiveExpansion: 1.5,
-      socialSafetyNet: 1.2,
-      infrastructureBuilder: 1.3,
-      stimulusPackage: 1.4
+    // Demographic-specific multipliers for different presets
+    const demographicMultipliers = {
+      austerityPlan: {
+        seniors: 1.2,      // Seniors more sensitive to austerity
+        families: 1.3,     // Families strongly affected by cuts
+        youth: 1.4,        // Youth most affected by austerity
+        workers: 1.2,      // Workers affected by job cuts
+        students: 1.3,     // Students affected by education cuts
+        indigenousPeoples: 1.3, // Indigenous services often cut
+        veterans: 1.2      // Veterans services often cut
+      },
+      businessFriendly: {
+        smallBusinessOwners: 1.4, // Strong positive for small business
+        techWorkers: 1.3,         // Good for tech sector
+        workers: 1.2,             // Generally positive for workers
+        renters: 1.1,             // Slightly positive for renters
+        youth: 1.2                // Good for job creation
+      },
+      progressiveExpansion: {
+        families: 1.4,            // Strong support for families
+        youth: 1.3,               // Good for youth programs
+        seniors: 1.2,             // Support for seniors
+        indigenousPeoples: 1.3,    // Support for indigenous services
+        renters: 1.3,             // Housing support
+        workers: 1.2              // Worker support
+      },
+      greenGrowthStimulus: {
+        youth: 1.4,               // Strong climate action
+        urban: 1.3,               // Urban environmental programs
+        rural: 1.2,               // Rural environmental programs
+        indigenousPeoples: 1.3,    // Indigenous environmental stewardship
+        workers: 1.2              // Green jobs
+      },
+      securityFirst: {
+        veterans: 1.4,            // Strong support for veterans
+        seniors: 1.2,             // Security concerns
+        families: 1.2,            // Family security
+        workers: 1.1              // Defense jobs
+      }
     };
 
-    // Get the multiplier for this preset (default to 1.8 if not specified)
-    const presetMultiplier = presetMultipliers[presetKey] || 1.8;
-    console.log(
-      `%c[PRESET DEBUG] Using preset multiplier: ${presetMultiplier}`,
-      'color: #f1c40f;'
-    );
+    // Get the demographic multipliers for this preset
+    const demoMultipliers = demographicMultipliers[presetKey] || {};
+
+    // Province-specific multipliers for different presets
+    const provinceMultipliers = {
+      austerityPlan: {
+        Ontario: 1.2,      // Sensitive to economic competitiveness
+        Quebec: 1.3,       // Strong reaction to social program cuts
+        BritishColumbia: 1.2, // Environmental concerns
+        Alberta: 1.4,      // Strong reaction to carbon pricing
+        Manitoba: 1.1,     // Moderate reaction
+        Saskatchewan: 1.3,  // Resource sector sensitivity
+        NovaScotia: 1.2,   // Healthcare sensitivity
+        NewBrunswick: 1.1,  // Moderate reaction
+        Nunavut: 1.3,      // Indigenous services sensitivity
+        "Prince Edward Island": 1.1, // Moderate reaction
+        "Newfoundland and Labrador": 1.2, // Resource sensitivity
+        "Northwest Territories": 1.2, // Indigenous services
+        Yukon: 1.1         // Moderate reaction
+      },
+      businessFriendly: {
+        Ontario: 1.4,      // Strong positive for business
+        Quebec: 1.2,       // Moderate business support
+        BritishColumbia: 1.3, // Tech sector boost
+        Alberta: 1.5,      // Strong resource sector support
+        Manitoba: 1.2,     // Moderate support
+        Saskatchewan: 1.3,  // Resource sector support
+        NovaScotia: 1.1,   // Moderate support
+        NewBrunswick: 1.2,  // Moderate support
+        Nunavut: 1.1,      // Limited impact
+        "Prince Edward Island": 1.1, // Limited impact
+        "Newfoundland and Labrador": 1.2, // Resource support
+        "Northwest Territories": 1.2, // Resource support
+        Yukon: 1.1         // Limited impact
+      },
+      progressiveExpansion: {
+        Ontario: 1.3,      // Urban support
+        Quebec: 1.4,       // Strong social program support
+        BritishColumbia: 1.3, // Environmental support
+        Alberta: 1.1,      // Limited support
+        Manitoba: 1.2,     // Moderate support
+        Saskatchewan: 1.1,  // Limited support
+        NovaScotia: 1.3,   // Healthcare support
+        NewBrunswick: 1.2,  // Moderate support
+        Nunavut: 1.4,      // Indigenous support
+        "Prince Edward Island": 1.2, // Moderate support
+        "Newfoundland and Labrador": 1.2, // Moderate support
+        "Northwest Territories": 1.3, // Indigenous support
+        Yukon: 1.3         // Environmental support
+      },
+      greenGrowthStimulus: {
+        Ontario: 1.3,      // Urban environmental support
+        Quebec: 1.4,       // Strong climate action
+        BritishColumbia: 1.5, // Environmental leadership
+        Alberta: 1.1,      // Limited support
+        Manitoba: 1.2,     // Moderate support
+        Saskatchewan: 1.1,  // Limited support
+        NovaScotia: 1.3,   // Coastal climate action
+        NewBrunswick: 1.2,  // Moderate support
+        Nunavut: 1.3,      // Indigenous stewardship
+        "Prince Edward Island": 1.2, // Moderate support
+        "Newfoundland and Labrador": 1.2, // Moderate support
+        "Northwest Territories": 1.3, // Indigenous stewardship
+        Yukon: 1.4         // Environmental leadership
+      },
+      securityFirst: {
+        Ontario: 1.2,      // Urban security
+        Quebec: 1.2,       // Moderate support
+        BritishColumbia: 1.2, // Coastal security
+        Alberta: 1.3,      // Resource security
+        Manitoba: 1.1,     // Moderate support
+        Saskatchewan: 1.1,  // Moderate support
+        NovaScotia: 1.3,   // Maritime security
+        NewBrunswick: 1.2,  // Moderate support
+        Nunavut: 1.4,      // Arctic security
+        "Prince Edward Island": 1.1, // Limited impact
+        "Newfoundland and Labrador": 1.3, // Maritime security
+        "Northwest Territories": 1.4, // Arctic security
+        Yukon: 1.3         // Arctic security
+      }
+    };
+
+    // Get the province multipliers for this preset
+    const provMultipliers = provinceMultipliers[presetKey] || {};
+
+    // Sector-specific multipliers for different presets
+    const sectorMultipliers = {
+      businessFriendly: {
+        business: 1.4,        // General business sector
+        realEstate: 1.5,      // Increased from 1.3 to 1.5 for stronger real estate response
+        finance: 1.5,         // Increased from 1.3 to 1.5 for stronger finance response
+        technology: 1.3,      // Tech sector
+        manufacturing: 1.3,   // Manufacturing sector
+        energy: 1.4,         // Energy sector
+        agriculture: 1.2,     // Agriculture sector
+        tourism: 1.2,        // Tourism sector
+        creativeIndustries: 1.2, // Creative industries
+        publicSector: 1.1     // Public sector
+      }
+    };
+
+    // Get the sector multipliers for this preset
+    const activeSectorMultipliers = sectorMultipliers[presetKey] || {};
 
     // Apply revenue settings with enhanced reactivity
     console.log('%c[PRESET DEBUG] Applying revenue settings:', 'color: #3498db;');
     Object.entries(preset.revenue).forEach(([sourceId, rate]) => {
       let adjustedRate = rate;
 
-      if (
-        presetKey === "austerityPlan" &&
-        (sourceId === "personalIncomeTax" || sourceId === "corporateIncomeTax")
-      ) {
-        adjustedRate = Math.max(rate * 0.85, rate - 3);
-      } else if (
-        presetKey === "progressiveExpansion" &&
-        sourceId === "corporateIncomeTax"
-      ) {
-        adjustedRate = Math.min(rate * 1.15, rate + 3);
-      }
-
-      // Special logging for carbon tax to help diagnose the issue
-      if (sourceId === "carbonPricing") {
-        console.log(`%c[PRESET][CARBON TAX] Setting carbon tax to ${adjustedRate}% from preset ${presetKey}`, 
-                  'background: #e74c3c; color: white; padding: 2px 5px; border-radius: 3px;');
+      // Apply sector-specific adjustments to revenue rates
+      if (sourceId === "corporateIncomeTax") {
+        if (presetKey === "businessFriendly") {
+          // Stronger reduction for business-friendly sectors
+          const sectorFactor = Math.max(
+            ...Object.entries(activeSectorMultipliers)
+              .filter(([sector]) => ['business', 'realEstate', 'finance'].includes(sector))
+              .map(([, factor]) => factor)
+          );
+          adjustedRate = Math.max(rate * 0.75, rate - (2.5 * sectorFactor));
+        }
+      } else if (sourceId === "carbonPricing") {
+        if (presetKey === "greenGrowthStimulus") {
+          // Stronger increase for environmentally conscious sectors
+          const sectorFactor = Math.max(
+            ...Object.entries(activeSectorMultipliers)
+              .filter(([sector]) => ['energy', 'agriculture', 'tourism'].includes(sector))
+              .map(([, factor]) => factor)
+          );
+          adjustedRate = Math.min(rate * 1.2, rate + (1 * sectorFactor));
+        }
       }
 
       store.updateRevenueRate(sourceId, adjustedRate);
     });
 
-    // Apply spending settings for main categories and nested groups with enhanced reactivity
-    console.log(
-      '%c[PRESET DEBUG] Applying spending factors:',
-      'color: #2ecc71;'
-    );
+    // Apply spending settings with sector-specific adjustments
+    console.log('%c[PRESET DEBUG] Applying spending factors:', 'color: #2ecc71;');
     Object.entries(preset.spending).forEach(([categoryId, value]) => {
       if (typeof value === "object") {
         Object.entries(value).forEach(([subCategoryId, factor]) => {
@@ -568,7 +696,9 @@ export function setPreset(presetKey, store) {
             subCategoryId,
             factor,
             presetKey,
-            presetMultiplier
+            demoMultipliers,
+            provMultipliers,
+            activeSectorMultipliers
           );
           store.updateSpendingFactor(subCategoryId, enhancedFactor);
         });
@@ -577,7 +707,9 @@ export function setPreset(presetKey, store) {
           categoryId,
           value,
           presetKey,
-          presetMultiplier
+          demoMultipliers,
+          provMultipliers,
+          activeSectorMultipliers
         );
         store.updateSpendingFactor(categoryId, enhancedFactor);
       }
@@ -589,7 +721,15 @@ export function setPreset(presetKey, store) {
       'color: #9b59b6;'
     );
     Object.entries(preset.taxExpenditures).forEach(([expenditureId, adjustment]) => {
-      const enhancedAdjustment = adjustment * presetMultiplier;
+      // Apply demographic-specific adjustments to tax expenditures
+      let enhancedAdjustment = adjustment;
+      if (expenditureId === "personalTaxCredits") {
+        if (presetKey === "progressiveExpansion") {
+          enhancedAdjustment = Math.max(adjustment * 1.2, adjustment + 5);
+        } else if (presetKey === "austerityPlan") {
+          enhancedAdjustment = Math.min(adjustment * 0.8, adjustment - 5);
+        }
+      }
       store.updateTaxExpenditureAdjustment(expenditureId, enhancedAdjustment);
     });
 
@@ -620,46 +760,124 @@ export function setPreset(presetKey, store) {
 }
 
 /**
- * Helper function to enhance spending factors based on category and preset type.
- * Uses a dampened multiplier (via Math.sqrt) for increased categories.
+ * Helper function to enhance spending factors based on category, demographic, province, and sector multipliers.
  */
-function enhanceFactorForCategory(categoryId, factor, presetKey, multiplier) {
-  const presetEmphasis = {
-    austerityPlan: {
-      reduce: ["healthcare", "education", "childrenAndFamilies", "supportForSeniors", "environmentAndClimateChange"],
-      increase: ["defense"]
-    },
-    businessFriendly: {
-      reduce: ["environmentAndClimateChange"],
-      increase: ["economicDevelopment", "infrastructure"]
-    },
-    progressiveExpansion: {
-      reduce: [],
-      increase: ["healthcare", "education", "childrenAndFamilies", "supportForSeniors", "environmentAndClimateChange"]
-    },
-    socialSafetyNet: {
-      reduce: [],
-      increase: ["childrenAndFamilies", "supportForSeniors", "healthcare"]
-    },
-    infrastructureBuilder: {
-      reduce: [],
-      increase: ["infrastructure", "transit", "digitalGovernment"]
-    },
-    stimulusPackage: {
-      reduce: [],
-      increase: ["economicDevelopment", "infrastructure", "research"]
-    }
+function enhanceFactorForCategory(categoryId, factor, presetKey, demoMultipliers, provMultipliers, sectorMultipliers) {
+  // Map categories to relevant sectors
+  const categorySectors = {
+    infrastructure: ['realEstate', 'business', 'finance'],
+    economicDevelopment: ['business', 'finance', 'realEstate'],
+    digitalGovernment: ['technology', 'finance', 'business'],
+    housing: ['realEstate', 'finance', 'business'],
+    transit: ['realEstate', 'business'],
+    environmentAndClimateChange: ['realEstate', 'business'],
+    publicSafety: ['realEstate', 'business'],
+    loansInvestments: ['finance', 'business', 'realEstate'],
+    businessInnovation: ['business', 'finance', 'technology'],
+    defenseSector: ['business', 'finance']
   };
 
-  const emphasis = presetEmphasis[presetKey];
-  if (!emphasis) return factor;
-
-  if (emphasis.reduce.includes(categoryId)) {
-    return Math.max(0.1, factor * 0.7);
-  } else if (emphasis.increase.includes(categoryId)) {
-    // Apply a dampened multiplier using the square root for less dramatic changes
-    return factor * Math.sqrt(multiplier);
-  }
+  // Get relevant sectors for this category
+  const relevantSectors = categorySectors[categoryId] || [];
   
-  return factor * (multiplier > 1 ? Math.sqrt(multiplier) : 1);
+  // Calculate the average multiplier from relevant sectors
+  let totalSectorMultiplier = 1.0;
+  let sectorCount = 0;
+  
+  relevantSectors.forEach(sector => {
+    if (sectorMultipliers[sector]) {
+      totalSectorMultiplier *= sectorMultipliers[sector];
+      sectorCount++;
+    }
+  });
+
+  // Apply the geometric mean of relevant sector multipliers
+  const finalSectorMultiplier = sectorCount > 0 ? Math.pow(totalSectorMultiplier, 1/sectorCount) : 1.0;
+  
+  // Map categories to relevant provinces
+  const categoryProvinces = {
+    healthcare: ['Ontario', 'Quebec', 'NovaScotia', 'NewBrunswick'],
+    education: ['Ontario', 'Quebec', 'BritishColumbia'],
+    childrenAndFamilies: ['Quebec', 'Ontario', 'BritishColumbia'],
+    supportForSeniors: ['NovaScotia', 'NewBrunswick', 'Ontario'],
+    indigenousServices: ['Nunavut', 'NorthwestTerritories', 'Yukon'],
+    defense: ['NovaScotia', 'Newfoundland and Labrador', 'NorthwestTerritories'],
+    scienceAndInnovation: ['Ontario', 'BritishColumbia', 'Quebec'],
+    infrastructure: ['Ontario', 'Alberta', 'BritishColumbia'],
+    digitalGovernment: ['Ontario', 'BritishColumbia', 'Quebec'],
+    environmentAndClimateChange: ['BritishColumbia', 'Quebec', 'Yukon'],
+    carbonPricing: ['Alberta', 'Saskatchewan', 'BritishColumbia'],
+    agriculture: ['Saskatchewan', 'Manitoba', 'Alberta'],
+    internationalDevelopment: ['Ontario', 'Quebec', 'BritishColumbia'],
+    culturalPrograms: ['Quebec', 'Ontario', 'BritishColumbia'],
+    transit: ['Ontario', 'Quebec', 'BritishColumbia'],
+    economicDevelopment: ['Ontario', 'Alberta', 'BritishColumbia']
+  };
+
+  // Get relevant provinces for this category
+  const relevantProvinces = categoryProvinces[categoryId] || [];
+  
+  // Calculate the average multiplier from relevant provinces
+  let totalProvMultiplier = 1.0;
+  let provCount = 0;
+  
+  relevantProvinces.forEach(province => {
+    if (provMultipliers[province]) {
+      totalProvMultiplier *= provMultipliers[province];
+      provCount++;
+    }
+  });
+
+  // Apply the geometric mean of relevant province multipliers
+  const finalProvMultiplier = provCount > 0 ? Math.pow(totalProvMultiplier, 1/provCount) : 1.0;
+  
+  // Map categories to relevant demographics
+  const categoryDemographics = {
+    healthcare: ['seniors', 'families', 'indigenousPeoples', 'veterans'],
+    education: ['youth', 'students', 'families'],
+    childrenAndFamilies: ['families', 'youth'],
+    supportForSeniors: ['seniors', 'veterans'],
+    indigenousServices: ['indigenousPeoples'],
+    defense: ['veterans', 'workers'],
+    scienceAndInnovation: ['techWorkers', 'students'],
+    infrastructure: ['workers', 'urban', 'rural'],
+    digitalGovernment: ['techWorkers', 'urban'],
+    environmentAndClimateChange: ['youth', 'urban', 'rural'],
+    housing: ['renters', 'families', 'youth'],
+    transit: ['urban', 'workers', 'students'],
+    economicDevelopment: ['workers', 'smallBusinessOwners'],
+    mentalHealth: ['youth', 'veterans', 'seniors'],
+    culturalPrograms: ['indigenousPeoples', 'urban'],
+    skillsDevelopment: ['workers', 'youth', 'students']
+  };
+
+  // Get relevant demographics for this category
+  const relevantDemos = categoryDemographics[categoryId] || [];
+  
+  // Calculate the average multiplier from relevant demographics
+  let totalDemoMultiplier = 1.0;
+  let demoCount = 0;
+  
+  relevantDemos.forEach(demo => {
+    if (demoMultipliers[demo]) {
+      totalDemoMultiplier *= demoMultipliers[demo];
+      demoCount++;
+    }
+  });
+
+  const finalDemoMultiplier = demoCount > 0 ? Math.pow(totalDemoMultiplier, 1/demoCount) : 1.0;
+  
+  // Combine all multipliers (sector, province, and demographic)
+  const finalMultiplier = Math.pow(
+    finalSectorMultiplier * finalProvMultiplier * finalDemoMultiplier,
+    1/3
+  );
+  
+  // Apply the multiplier with dampening for increases
+  if (factor > 1) {
+    return factor * Math.sqrt(finalMultiplier);
+  } else if (factor < 1) {
+    return factor * finalMultiplier;
+  }
+  return factor;
 }

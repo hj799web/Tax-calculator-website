@@ -1,5 +1,14 @@
 <template>
   <div class="revenue-sliders">
+    <div class="revenue-explanation mb-4 p-4 bg-gray-50 rounded-lg">
+      <p class="text-sm text-gray-700 mb-2">The Budget Simulator uses a simplified approach to tax calculations to help you understand the fiscal impact of tax changes. Instead of detailed tax brackets, it uses average effective rates:</p>
+      <ul class="text-sm text-gray-600 list-disc pl-5 mb-2">
+        <li>Personal Income Tax: Base rate of 21% (2024) with $10 billion in revenue per percentage point</li>
+        <li>Corporate Income Tax: Base rate of 15% (2024) with $5.33 billion in revenue per percentage point</li>
+        <li>Tax credits and expenditures can be adjusted separately to see their impact on revenue</li>
+      </ul>
+      <p class="text-sm text-gray-700">This approach focuses on overall revenue impact rather than individual taxpayer scenarios.</p>
+    </div>
     <div class="revenue-controls">
       <div class="overflow-y-auto pr-2 max-h-[60vh]">
         <!-- Income Taxes Group -->
@@ -84,7 +93,7 @@
                 </div>
                 <div class="tile-note">
                   <span>
-                    Personal Income Tax represents federal income tax collected from individuals and households. This is 'personalIncomeTax' in all calculations and documentation.
+                    Personal Income Tax represents the federal income tax collected from individuals and households, including employment income, investment income, and other taxable sources. This is the largest source of federal revenue and is represented as 'personalIncomeTax' in all calculations.
                   </span>
                 </div>
                 <div
@@ -177,7 +186,7 @@
                 </div>
                 <div class="tile-note">
                   <span>
-                    Corporate Income Tax represents federal tax collected from corporations. This is shown as 'corporateIncomeTax' in the store and as 'corporateTax' in the sentiment system and badges.
+                    Corporate Income Tax is a federal tax levied on the taxable income of corporations operating in Canada. It includes both the general corporate tax rate (15%) and the small business rate (9%), with various deductions and credits available.
                   </span>
                 </div>
                 <div
@@ -312,9 +321,8 @@
                   </div>
                 </div>
                 <div class="tile-note">
-                  <!-- GST/HST clarification for user -->
                   <span>
-                    The GST/HST slider controls the combined Goods and Services Tax (GST) and Harmonized Sales Tax (HST) rate. This is represented as 'gst' in all calculations and documentation.
+                    The Goods and Services Tax (GST) and Harmonized Sales Tax (HST) is a 5% federal value-added tax applied to most goods and services in Canada. The HST combines the GST with provincial sales tax in participating provinces. This tax is a significant source of federal revenue.
                   </span>
                 </div>
                 <div
@@ -407,7 +415,7 @@
                 </div>
                 <div class="tile-note">
                   <span>
-                    Customs Duties are taxes on imported goods. This is 'customsDuties' in all calculations and documentation.
+                    Customs Duties are federal taxes and charges imposed on goods imported into Canada. These include tariffs based on international trade agreements, anti-dumping duties, and countervailing duties. The rates vary by product category and country of origin.
                   </span>
                 </div>
                 <div
@@ -502,7 +510,7 @@
                 </div>
                 <div class="tile-note">
                   <span>
-                    Carbon Pricing includes revenue from carbon taxes and cap-and-trade systems. This is 'carbonPricing' in the store and 'carbonTax' in the sentiment system and badges.
+                    Carbon Pricing includes revenue from both carbon taxes and cap-and-trade systems, designed to reduce greenhouse gas emissions.
                   </span>
                 </div>
                 <div
@@ -595,7 +603,7 @@
                 </div>
                 <div class="tile-note">
                   <span>
-                    Excise Taxes include federal taxes on specific goods such as alcohol, tobacco, and fuel. This is 'exciseTaxes' in all calculations and documentation.
+                    Excise Taxes include federal taxes on specific goods such as alcohol, tobacco, and fuel, designed to discourage consumption of these products.
                   </span>
                 </div>
                 <div
@@ -731,7 +739,7 @@
                 </div>
                 <div class="tile-note">
                   <span>
-                    Employment Insurance (EI) Premiums are mandatory payroll contributions collected from employees and employers. This is 'eiPremiums' in all calculations and documentation.
+                    Employment Insurance (EI) Premiums are mandatory payroll contributions collected from employees and employers to fund the EI program, which provides temporary financial assistance to unemployed workers.
                   </span>
                 </div>
                 <div
@@ -834,7 +842,7 @@
                 </div>
                 <div class="tile-note">
                   <span>
-                    Crown Corporation Profits are net profits from government-owned businesses. This is 'crownProfits' in all calculations and documentation.
+                    Crown Corporation Profits are net profits from government-owned businesses, including enterprises like Canada Post, VIA Rail, and other federal Crown corporations.
                   </span>
                 </div>
                 <div
@@ -929,7 +937,7 @@
                 </div>
                 <div class="tile-note">
                   <span>
-                    Resource Royalties are payments for the extraction of natural resources such as oil, gas, and minerals. This is 'resourceRoyalties' in all calculations and documentation.
+                    Resource Royalties are payments received by the federal government for the extraction of natural resources such as oil, gas, and minerals from federal lands and offshore areas.
                   </span>
                 </div>
                 <div
@@ -1022,7 +1030,7 @@
                 </div>
                 <div class="tile-note">
                   <span>
-                    Non-Tax Revenue includes government income from fees, licenses, and investments not classified as taxes. This is 'nonTaxRevenue' in all calculations and documentation.
+                    Non-Tax Revenue includes government income from various sources such as fees, licenses, permits, fines, and returns on investments that are not classified as taxes.
                   </span>
                 </div>
                 <div
