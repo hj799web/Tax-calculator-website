@@ -28,10 +28,35 @@
     
     body {
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #f6f8fc 0%, #e9f0f7 100%);
-      color: #2c3e50;
+      background: none;
+      color: #222831;
       line-height: 1.6;
       min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+    
+    .background-image {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      background: url('./img/parliament.jpg') center center/cover no-repeat;
+      filter: brightness(0.4) blur(1px);
+      pointer-events: none;
+    }
+    
+    .background-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.4);
+      z-index: 1;
+      pointer-events: none;
     }
     
     .container {
@@ -39,12 +64,13 @@
       margin: 0 auto;
       padding: 40px 20px;
       position: relative;
+      z-index: 2;
     }
     
     header {
       text-align: center;
       margin-bottom: 50px;
-      background: rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.82);
       backdrop-filter: blur(10px);
       border-radius: 20px;
       padding: 40px;
@@ -73,21 +99,18 @@
       filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.2));
     }
     
-    h1 {
-      font-size: 2.5rem;
-      color: #34495e;
-      margin-bottom: 15px;
-      font-weight: 600;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      background: linear-gradient(135deg, #2c3e50, #3498db);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
+    h1, h2, h3, h4, h5, h6, p, .subtitle, .feature-title, .feature-description, .faq-question, .faq-answer, .tax-info-card h3, .tax-info-card p, .footer-link, .copyright, .nav-link {
+      color: #181c22 !important;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.10);
+    }
+    
+    .cta-button {
+      color: #fff !important;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.18);
     }
     
     .subtitle {
       font-size: 1.2rem;
-      color: #7f8c8d;
       max-width: 800px;
       margin: 0 auto 30px;
       line-height: 1.8;
@@ -96,7 +119,6 @@
     .cta-button {
       display: inline-block;
       background: linear-gradient(135deg, #3498db, #2980b9);
-      color: white;
       padding: 15px 30px;
       text-decoration: none;
       border-radius: 30px;
@@ -147,7 +169,7 @@
     }
     
     .feature-card {
-      background: rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.82);
       backdrop-filter: blur(10px);
       border-radius: 20px;
       padding: 30px;
@@ -191,13 +213,10 @@
     .feature-title {
       font-size: 1.3rem;
       margin-bottom: 15px;
-      color: #34495e;
       font-weight: 600;
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     }
     
     .feature-description {
-      color: #7f8c8d;
       line-height: 1.8;
     }
     
@@ -211,7 +230,7 @@
     }
     
     .faq-item {
-      background: rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.82);
       backdrop-filter: blur(10px);
       border-radius: 15px;
       padding: 25px;
@@ -230,8 +249,6 @@
     .faq-question {
       font-size: 1.2rem;
       font-weight: 600;
-      color: #34495e;
-      margin-bottom: 10px;
       cursor: pointer;
       transform-style: preserve-3d;
       perspective: 1000px;
@@ -245,11 +262,11 @@
     }
     
     .faq-answer {
-      color: #7f8c8d;
+      line-height: 1.8;
     }
 
     .about-section {
-      background: rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.82);
       backdrop-filter: blur(10px);
       border-radius: 20px;
       padding: 40px;
@@ -269,7 +286,6 @@
     }
 
     .about-section h2 {
-      color: #34495e;
       margin-bottom: 20px;
       text-align: center;
     }
@@ -286,7 +302,7 @@
     }
 
     .tax-info-card {
-      background: rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.82);
       backdrop-filter: blur(10px);
       border-radius: 15px;
       padding: 25px;
@@ -303,18 +319,16 @@
     }
 
     .tax-info-card h3 {
-      color: #34495e;
       margin-bottom: 10px;
       font-size: 1.1rem;
     }
 
     .tax-info-card p {
-      color: #7f8c8d;
       font-size: 0.95rem;
     }
     
     footer {
-      background: rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.82);
       backdrop-filter: blur(10px);
       border-radius: 20px;
       padding: 40px;
@@ -350,7 +364,6 @@
     }
     
     .copyright {
-      color: #7f8c8d;
       font-size: 0.9rem;
     }
 
@@ -558,6 +571,8 @@
   </style>
 </head>
 <body>
+  <div class="background-image"></div>
+  <div class="background-overlay"></div>
   <div class="container">
     <header>
       <div class="logo">

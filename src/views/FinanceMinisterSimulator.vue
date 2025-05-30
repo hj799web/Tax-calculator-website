@@ -37,6 +37,9 @@
           View All Badges
         </button>
       </div>
+      <div v-show="badgePanelExpanded && budgetStore.badges.length === 0" class="no-badges-message">
+        Make budget decisions to earn badges!
+      </div>
       <div
         v-show="badgePanelExpanded"
         class="badges-display"
@@ -48,12 +51,6 @@
           size="medium"
           :show-tooltip="true"
         />
-        <div
-          v-if="budgetStore.badges.length === 0"
-          class="no-badges-message"
-        >
-          Make budget decisions to earn badges!
-        </div>
       </div>
     </div>
     
@@ -670,125 +667,232 @@ const toggleSection = (section) => {
 </script>
 
 <style scoped>
-.budget-chaos-warning {
-  background: #fff3cd;
-  color: #856404;
-  border: 2px solid #ffeeba;
-  padding: 14px 24px;
-  margin-bottom: 18px;
-  border-radius: 8px;
-  font-size: 1.13em;
-  text-align: center;
-  font-weight: bold;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+/* 1. Modern Typography */
+.finance-minister-simulator, .simulator-card, .sentiment-card {
+  font-family: 'Inter', 'Poppins', 'Roboto', Arial, sans-serif;
+  color: #1a202c;
 }
-.finance-minister-simulator {
-  padding: 1rem;
-  background-color: #f8f9fa;
-  min-height: 100vh;
-  position: relative;
+.main-title, .card-title {
+  font-family: 'Poppins', 'Inter', Arial, sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #222;
+  margin-bottom: 0.5rem;
 }
-
-/* Badge Container Styles */
-.fixed-badge-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 100;
-  width: 250px; /* Limit width to left side instead of full width */
-  padding: 1rem;
-  background: linear-gradient(145deg, #ffffff, #f0f0f0);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border-right: 1px solid #e9ecef;
-  border-bottom: 1px solid #e9ecef;
-  border-bottom-right-radius: 8px;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  transition: all 0.3s ease;
-}
-
-/* Collapsed state */
-.fixed-badge-container.collapsed {
-  padding: 0.5rem 1rem;
-  width: 200px; /* Even narrower when collapsed */
-}
-
-.badges-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.badges-title-container {
+.card-title {
+  font-size: 1.35rem;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 10px;
+  border-left: 4px solid #27ae60;
+  padding-left: 12px;
 }
 
-.badges-title {
+/* 2. Glassmorphism Cards */
+.simulator-card, .sentiment-card {
+  background: rgba(255, 255, 255, 0.28) !important;
+  border-radius: 22px;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+  border: 1.5px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  overflow: hidden;
+  padding: 2rem 1.5rem;
+  margin-bottom: 2rem;
+  transition: box-shadow 0.3s, transform 0.3s;
+}
+.simulator-card:hover, .sentiment-card:hover {
+  box-shadow: 0 16px 40px 0 rgba(31, 38, 135, 0.22);
+  transform: translateY(-4px) scale(1.01);
+}
+
+/* 3. Gradient Buttons */
+.button, button, .view-all-badges-btn, .toggle-badge-panel-btn {
+  background: linear-gradient(135deg, #3498db, #27ae60);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 0.75rem 1.5rem;
   font-weight: 600;
-  font-size: 1.1rem;
-  color: #2d3748;
+  font-size: 1rem;
+  box-shadow: 0 2px 8px rgba(52, 152, 219, 0.12);
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+.button:hover, button:hover, .view-all-badges-btn:hover, .toggle-badge-panel-btn:hover {
+  background: linear-gradient(135deg, #27ae60, #3498db);
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 4px 16px rgba(39, 174, 96, 0.18);
 }
 
-.toggle-badge-panel-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
+/* 4. Sticky/Floating Sub-Navigation */
+.sub-navigation {
+  position: sticky;
+  top: 0.5rem;
+  z-index: 10;
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(6px);
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(52, 152, 219, 0.08);
+  padding: 0.5rem 1rem;
+  margin-bottom: 1.5rem;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #4a5568;
-  padding: 0.25rem;
-  border-radius: 50%;
-  transition: background-color 0.2s ease;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
-
-.toggle-badge-panel-btn:hover {
-  background-color: rgba(0, 0, 0, 0.05);
-}
-
-.view-all-badges-btn {
+.sub-nav-link {
+  color: #3498db;
+  font-weight: 600;
+  padding: 0.5rem 1.2rem;
+  border-radius: 6px;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  background: linear-gradient(145deg, #4263eb, #3b82f6);
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 5px rgba(59, 130, 246, 0.3);
+  font-size: 1rem;
+}
+.sub-nav-link:hover {
+  background: linear-gradient(135deg, #27ae60, #3498db);
+  color: #fff;
+  transform: translateY(-2px) scale(1.04);
 }
 
-.view-all-badges-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(59, 130, 246, 0.4);
+/* 5. Modern Inputs & Sliders */
+input[type="range"], .slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  background: linear-gradient(90deg, #27ae60 0%, #3498db 100%);
+  border-radius: 6px;
+  outline: none;
+  transition: background 0.2s;
+  margin: 0.5rem 0;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3498db, #27ae60);
+  box-shadow: 0 2px 8px rgba(52, 152, 219, 0.18);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+input[type="range"]:focus::-webkit-slider-thumb {
+  background: linear-gradient(135deg, #27ae60, #3498db);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3498db, #27ae60);
+  box-shadow: 0 2px 8px rgba(52, 152, 219, 0.18);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+input[type="range"]:focus::-moz-range-thumb {
+  background: linear-gradient(135deg, #27ae60, #3498db);
+}
+input[type="range"]::-ms-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3498db, #27ae60);
+  box-shadow: 0 2px 8px rgba(52, 152, 219, 0.18);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+input[type="range"]:focus::-ms-thumb {
+  background: linear-gradient(135deg, #27ae60, #3498db);
+}
+input[type="range"]:focus {
+  outline: none;
 }
 
-.badges-display {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  padding-bottom: 0.5rem;
+input, select, textarea {
+  border-radius: 8px;
+  border: 1.5px solid #e0e7ef;
+  padding: 0.7rem 1rem;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  background: rgba(255,255,255,0.7);
+  transition: border 0.2s, box-shadow 0.2s;
+}
+input:focus, select:focus, textarea:focus {
+  border: 1.5px solid #3498db;
+  box-shadow: 0 2px 8px rgba(52, 152, 219, 0.12);
+  outline: none;
 }
 
-.no-badges-message {
-  font-style: italic;
-  color: #718096;
-  padding: 0.5rem;
+/* 6. Section Spacing & Animations */
+.simulator-card, .sentiment-card {
+  animation: fadeInUp 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+}
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(30px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* 7. Responsive Design */
+@media (max-width: 900px) {
+  .simulator-card, .sentiment-card {
+    padding: 1.2rem 0.7rem;
+    margin-bottom: 1.2rem;
+  }
+  .main-title {
+    font-size: 1.3rem;
+  }
+  .card-title {
+    font-size: 1.1rem;
+  }
+  .sub-navigation {
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .simulator-card, .sentiment-card {
+    padding: 0.7rem 0.3rem;
+    margin-bottom: 0.7rem;
+  }
+  .main-title {
+    font-size: 1.1rem;
+  }
+  .card-title {
+    font-size: 1rem;
+  }
+}
+
+.finance-minister-simulator,
+.simulator-grid,
+.main-container {
+  background: transparent !important;
+}
+
+.simulator-grid > * {
+  background: rgba(255,255,255,0.5) !important;
+}
+
+.finance-minister-simulator .calculator-container,
+.finance-minister-simulator .result-box,
+.finance-minister-simulator .calculator-section,
+.finance-minister-simulator .faq-section,
+.finance-minister-simulator .budget-categories-section,
+.finance-minister-simulator .resources-section,
+.finance-minister-simulator .year-selector-container {
+  background: rgba(255,255,255,0.5) !important;
 }
 
 .finance-minister-simulator {
-  padding: 1rem;
-  padding-left: 270px; /* Add space for the badge panel */
-  background-color: #f8f9fa;
-  min-height: 100vh;
+  background: rgba(255,255,255,0.2);
   position: relative;
+  z-index: 1;
+  padding: 1rem;
+  min-height: 100vh;
   transition: padding-left 0.3s ease;
 }
 
@@ -806,12 +910,19 @@ const toggleSection = (section) => {
 }
 
 .main-title {
+  background: rgba(255,255,255,0.92);
+  border-radius: 12px;
+  padding: 0.7rem 2rem;
+  box-shadow: 0 2px 8px rgba(52, 152, 219, 0.08);
+  color: #222;
   font-size: 1.75rem;
   font-weight: 700;
-  color: #2d3748;
   text-align: center;
   margin-bottom: 1rem;
-  padding-bottom: 0;
+  margin-top: 0.5rem;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .simulator-grid {
@@ -821,8 +932,9 @@ const toggleSection = (section) => {
   gap: 1.5rem;
 }
 
-.simulator-card {
-  background-color: white;
+.simulator-card,
+.sentiment-card {
+  background: rgba(255,255,255,0.75);
   border-radius: 0.5rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   overflow: hidden;
@@ -1132,12 +1244,13 @@ const toggleSection = (section) => {
 }
 
 .description {
-  text-align: center;
-  color: #4a5568;
-  font-size: 0.95rem;
+  background: rgba(255,255,255,0.85);
+  border-radius: 14px;
+  padding: 1rem 1.5rem;
+  box-shadow: 0 2px 8px rgba(52, 152, 219, 0.08);
   margin: 1rem auto 1.5rem;
   max-width: 800px;
-  line-height: 1.5;
+  color: #222;
 }
 
 .main-navigation {
@@ -1212,5 +1325,42 @@ const toggleSection = (section) => {
     font-size: 0.8rem;
     padding: 6px 12px;
   }
+}
+
+/* Add solid background to 'Your Achievements' title */
+.badges-title {
+  background: rgba(255,255,255,0.92);
+  border-radius: 8px;
+  padding: 0.4rem 1rem;
+  box-shadow: 0 1px 4px rgba(52, 152, 219, 0.08);
+  color: #27ae60;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+/* Improved badge panel and no-badges-message styling */
+.fixed-badge-container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  min-width: 220px;
+  max-width: 300px;
+  background: rgba(255,255,255,0.85);
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(52, 152, 219, 0.08);
+  padding-bottom: 1rem;
+}
+.no-badges-message {
+  margin: 0.75rem 1rem 0.5rem 1rem;
+  background: rgba(255,255,255,0.92);
+  border-radius: 8px;
+  padding: 0.7rem 1.2rem;
+  box-shadow: 0 1px 4px rgba(52, 152, 219, 0.08);
+  color: #718096;
+  font-style: italic;
+  text-align: center;
+  width: auto;
+  max-width: 95%;
+  align-self: center;
 }
 </style>

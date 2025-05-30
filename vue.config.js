@@ -6,11 +6,11 @@ module.exports = {
     : '/',
   outputDir: process.env.DEPLOY_ENV === 'GH_PAGES' ? 'docs' : 'dist',
   devServer: {
-    port: 3000,
+    port: 3001,
     host: '0.0.0.0',
     allowedHosts: 'all',
     client: {
-      webSocketURL: 'wss://sturdy-giggle-v6qj67gjqwf6qxv-3000.app.github.dev/ws',
+      webSocketURL: 'wss://sturdy-giggle-v6qj67gjqwf6qxv-3001.app.github.dev/ws',
     },
   },
   configureWebpack: {

@@ -1,5 +1,7 @@
 <template>
   <div id="app">
+    <div v-if="$route.path === '/simulator'" class="global-bg-image"></div>
+    <div v-if="$route.path === '/simulator'" class="global-bg-overlay"></div>
     <!-- Router View - This is where route components will be rendered -->
     <router-view v-if="$route.path !== '/'" />
 
@@ -15,7 +17,7 @@
               class="site-logo"
             >
           </div>
-          <h1 class="main-title">
+          <h1 class="main-title main-title--highlight">
             Canada Tax Calculator
           </h1>
           <nav class="main-navigation">
@@ -43,7 +45,7 @@
               class="nav-link"
             >CRA</a>
           </nav>
-          <p class="subtitle">
+          <p class="subtitle subtitle--highlight">
             Get an accurate breakdown of your taxes and see where your money goes with our free calculator.
           </p>
         </header>
@@ -87,10 +89,10 @@
 
         <!-- Understanding Your Tax Breakdown Section -->
         <section id="how-it-works" class="income-section">
-          <h2 class="section-title">
+          <h2 class="section-title section-title--highlight">
             Understanding Your Tax Breakdown
           </h2>
-          <p class="section-description">
+          <p class="section-description section-description--highlight">
             See how your tax dollars are allocated across different government spending categories. This visualization helps you 
             understand exactly where your money goes and how it contributes to various public services.
           </p>
@@ -293,7 +295,7 @@ function toggleFAQs() {
 
 body {
   font-family: 'Poppins', sans-serif;
-  background-color: #f7f9fa;
+  background-color: transparent;
   margin: 0;
   padding: 0;
 }
@@ -321,11 +323,11 @@ body {
 
 .main-title {
   font-size: 36px;
-  color: #34495e;
+  color: #fff;
   margin-bottom: 5px;
-  font-weight: 600;
+  font-weight: 700;
   text-align: center;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  text-shadow: 0 4px 18px rgba(0,0,0,0.45), 0 1px 0 #222;
   transition: transform 0.3s ease;
 }
 
@@ -349,11 +351,12 @@ body {
 }
 
 .subtitle {
-  font-size: 18px;
-  color: #7f8c8d;
+  font-size: 20px;
+  color: #f3f6fa;
   text-align: center;
   max-width: 800px;
   margin: 0 auto 30px;
+  text-shadow: 0 3px 12px rgba(0,0,0,0.45), 0 1px 0 #222;
 }
 
 .section-title {
@@ -442,13 +445,17 @@ body {
 }
 
 .calculator-container,
-.result-box {
-  background: #ffffff;
-  padding: 40px;
-  border-radius: 12px;
-  box-shadow:
-    0 10px 20px rgba(0, 0, 0, 0.19),
-    0 6px 6px rgba(0, 0, 0, 0.23);
+.result-box,
+.calculator-section,
+.faq-section,
+.budget-categories-section,
+.resources-section,
+.year-selector-container {
+  background: rgba(255,255,255,0.65) !important;
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   flex: 1;
   min-width: 300px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -1532,5 +1539,50 @@ button::before, .button::before {
   .year-button.active {
     border: 2px solid CanvasText;
   }
+}
+
+/* 1. Add new highlight classes */
+.main-title--highlight {
+  color: #fff;
+  font-weight: 700;
+  text-shadow: 0 4px 18px rgba(0,0,0,0.45), 0 1px 0 #222;
+}
+.subtitle--highlight {
+  color: #f3f6fa;
+  text-shadow: 0 3px 12px rgba(0,0,0,0.45), 0 1px 0 #222;
+}
+.section-title--highlight {
+  color: #fff;
+  font-weight: 700;
+  text-shadow: 0 4px 18px rgba(0,0,0,0.45), 0 1px 0 #222;
+}
+.section-description--highlight {
+  color: #f3f6fa;
+  text-shadow: 0 3px 12px rgba(0,0,0,0.45), 0 1px 0 #222;
+}
+
+.global-bg-image {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  background-image: url('@/assets/budget-simulator-bg.jpg');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  filter: brightness(0.45) blur(0.5px);
+  pointer-events: none;
+}
+.global-bg-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.15);
+  z-index: 0;
+  pointer-events: none;
 }
 </style>
