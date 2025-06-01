@@ -106,7 +106,7 @@
         <h2>Calculator Methodology</h2>
         
         <h3>Tax Rates and Brackets</h3>
-        <p>The Canada Tax Calculator uses the latest 2024 federal and provincial tax rates and brackets to provide accurate tax estimates. The calculator includes:</p>
+        <p>The Canada Tax Calculator uses the latest 2025 federal and provincial tax rates and brackets to provide accurate tax estimates. The calculator includes:</p>
         <ul>
           <li>Federal Tax Brackets: Five progressive tax brackets ranging from 15% to 33%</li>
           <li>Provincial/Territorial Tax Brackets: Specific brackets for all 13 provinces and territories</li>
@@ -117,7 +117,7 @@
         <h3>Basic Personal Amounts</h3>
         <p>The calculator accounts for both federal and provincial basic personal amounts (BPA), which are non-refundable tax credits that reduce the amount of tax you pay:</p>
         <ul>
-          <li>Federal Basic Personal Amount: $15,000 (2024)</li>
+          <li>Federal Basic Personal Amount: $15,705 (2025)</li>
           <li>Provincial Basic Personal Amounts: Vary by province/territory</li>
           <li>Adjusted BPA for Marital Status: Increased BPA for individuals who are married or in common-law relationships</li>
         </ul>
@@ -219,7 +219,7 @@
         <p>A unique feature of our calculator is the visualization of how your tax dollars are allocated across different government spending categories:</p>
         
         <h3>Federal Budget Allocation</h3>
-        <p>The calculator shows the breakdown of the 2022-2023 federal budget, including:</p>
+        <p>The calculator shows the breakdown of federal spending, including:</p>
         <ul>
           <li>Healthcare</li>
           <li>Support for Seniors</li>
@@ -233,11 +233,16 @@
           <li>Other categories</li>
         </ul>
         
-        <h3>Budget 2024 Visualization</h3>
-        <p>The calculator also shows the proposed spending allocations from Budget 2024, allowing users to compare historical spending with future plans.</p>
+        <h3>Budget Visualization</h3>
+        <p>The calculator provides three different budget views:</p>
+        <ul>
+          <li>2022-2023: Historical spending data from the Public Accounts of Canada</li>
+          <li>2023-2024: Proposed spending allocations from Budget 2024</li>
+          <li>2025-2026: Projected spending estimates based on current economic forecasts and government projections</li>
+        </ul>
         
         <h3>Personal Tax Allocation</h3>
-        <p>Based on your federal tax amount, the calculator shows exactly how much of your personal tax contribution goes to each spending category.</p>
+        <p>Based on your federal tax amount, the calculator shows exactly how much of your personal tax contribution goes to each spending category, helping you understand the direct impact of your tax dollars.</p>
       </div>
       
       <div
