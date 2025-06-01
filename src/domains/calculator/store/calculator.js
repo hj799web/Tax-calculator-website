@@ -14,15 +14,19 @@ import {
   federalBasicPersonalAmount2022,
   federalBasicPersonalAmount2023,
   federalBasicPersonalAmount2024,
+  federalBasicPersonalAmount2025,
   provincialBasicPersonalAmounts2022,
   provincialBasicPersonalAmounts2023,
   provincialBasicPersonalAmounts2024,
+  provincialBasicPersonalAmounts2025,
   federalTaxBrackets2022,
   federalTaxBrackets2023,
   federalTaxBrackets2024,
+  federalTaxBrackets2025,
   provincialTaxBrackets2022,
   provincialTaxBrackets2023,
   provincialTaxBrackets2024,
+  provincialTaxBrackets2025,
   budgetCategories2022,
   budgetCategories2024
 } from "../constants/taxData.js";
@@ -107,6 +111,7 @@ export const useCalculatorStore = defineStore('calculator', () => {
       case '2022': return federalTaxBrackets2022;
       case '2023': return federalTaxBrackets2023;
       case '2024': return federalTaxBrackets2024;
+      case '2025': return federalTaxBrackets2025;
       default: return federalTaxBrackets2023;
     }
   });
@@ -116,6 +121,7 @@ export const useCalculatorStore = defineStore('calculator', () => {
       case '2022': return federalBasicPersonalAmount2022;
       case '2023': return federalBasicPersonalAmount2023;
       case '2024': return federalBasicPersonalAmount2024;
+      case '2025': return federalBasicPersonalAmount2025;
       default: return federalBasicPersonalAmount2023;
     }
   });
@@ -125,6 +131,7 @@ export const useCalculatorStore = defineStore('calculator', () => {
       case '2022': return provincialBasicPersonalAmounts2022;
       case '2023': return provincialBasicPersonalAmounts2023;
       case '2024': return provincialBasicPersonalAmounts2024;
+      case '2025': return provincialBasicPersonalAmounts2025;
       default: return provincialBasicPersonalAmounts2023;
     }
   });
@@ -134,6 +141,7 @@ export const useCalculatorStore = defineStore('calculator', () => {
       case '2022': return provincialTaxBrackets2022;
       case '2023': return provincialTaxBrackets2023;
       case '2024': return provincialTaxBrackets2024;
+      case '2025': return provincialTaxBrackets2025;
       default: return provincialTaxBrackets2023;
     }
   });

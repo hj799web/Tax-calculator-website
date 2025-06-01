@@ -5,7 +5,8 @@ export const useYearStore = defineStore('year', () => {
   // Available tax years
   const taxYears = [
     { id: '2023', label: '2022-2023' },
-    { id: '2024', label: '2023-2024' }
+    { id: '2024', label: '2023-2024' },
+    { id: '2025', label: '2024-2025' }
   ];
   
   // Default to 2023

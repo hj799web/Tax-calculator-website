@@ -76,7 +76,9 @@
       },
       title: {
         display: true,
-        text: `${yearStore.selectedTaxYear} Canada Federal Budget Allocation Chart`,
+        text: yearStore.selectedTaxYear === '2025' ? 
+          '2025-2026 Federal Estimates Allocation Chart' :
+          `${yearStore.selectedTaxYear} Canada Federal Budget Allocation Chart`,
         font: {
           size: 14
         }

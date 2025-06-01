@@ -69,6 +69,8 @@
             <p class="year-selector-note">
               {{ yearStore.selectedTaxYear === '2024' ? 
                 'Using 2024 tax rates and budget projections' : 
+                yearStore.selectedTaxYear === '2025' ?
+                'Using 2025 tax rates with 2025-2026 spending projections' :
                 `Using ${yearStore.selectedTaxYear} tax rates with 2022-2023 budget data` }}
             </p>
           </div>
@@ -115,7 +117,18 @@
           <transition name="fade">
             <div v-if="showBudgetCategories">
               <p class="section-description">
-                These budget categories are for the 2022–2023 fiscal year. Data is sourced from the Public Accounts of Canada offering a view of how federal funds are allocated across key sectors such as healthcare, defense, infrastructure, and more.
+                <template v-if="yearStore.selectedTaxYear === '2023'">
+                  These budget categories are for the 2022–2023 fiscal year. Data is sourced from the Public Accounts of Canada offering a view of how federal funds are allocated across key sectors such as healthcare, defense, infrastructure, and more.
+                </template>
+                <template v-else-if="yearStore.selectedTaxYear === '2024'">
+                  These budget categories are for the 2023–2024 fiscal year. The allocations reflect the proposed spending outlined in the 2023–2024 federal budget.
+                </template>
+                <template v-else-if="yearStore.selectedTaxYear === '2025'">
+                  These budget categories are for the 2025–2026 fiscal year. The allocations reflect projected federal spending estimates for 2025–2026.
+                </template>
+                <template v-else>
+                  These budget categories are based on the most recent available data.
+                </template>
               </p>
               <BudgetCategoriesView />
             </div>

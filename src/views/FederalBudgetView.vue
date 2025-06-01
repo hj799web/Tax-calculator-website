@@ -11,6 +11,12 @@
       The <strong>Budget 2023-2024 Allocation Chart</strong> represents the proposed spending allocations presented by the Canadian federal government for the 2023-2024 fiscal year.
     </p>
     <p
+      v-else-if="yearStore.selectedTaxYear === '2025'"
+      class="allocation-description"
+    >
+      The <strong>2025-2026 Federal Estimates Allocation Chart</strong> represents the projected spending allocations for the 2025-2026 fiscal year.
+    </p>
+    <p
       v-else
       class="allocation-description"
     >
@@ -21,6 +27,12 @@
       class="budget-explanation"
     >
       The <strong>2023-2024 Canada Federal Budget Allocation Chart</strong> shows the comprehensive breakdown of major allocations in the 2023-2024 federal budget. In contrast, the <strong>Budget 2023-2024 Pie Chart</strong> represents the proposed spending allocations presented by the Canadian federal government for 2023-2024.
+    </p>
+    <p
+      v-else-if="yearStore.selectedTaxYear === '2025'"
+      class="budget-explanation"
+    >
+      The <strong>2025-2026 Federal Estimates Allocation Chart</strong> shows the projected breakdown of major allocations for the 2025-2026 fiscal year, based on current economic forecasts and government projections.
     </p>
 
     <!-- Charts Section -->

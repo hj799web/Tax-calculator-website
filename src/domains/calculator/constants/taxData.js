@@ -8,6 +8,37 @@ export const salaryOptions = [
   { label: 'Hourly', value: 'Hourly', periodMultiplier: 2080 },
 ]
 
+// 2025 Tax Credits and Deductions
+export const taxCredits2025 = {
+  basicPersonalAmount: 16129,
+  spouseAmount: 16129,
+  ageAmount: 8396,
+  disabilityAmount: 9428,
+  caregiverAmount: 7999,
+  pensionIncomeAmount: 2000,
+  employmentAmount: 1368,
+  homeBuyersAmount: 5000,
+  digitalNewsSubscriptionMax: 500,
+  volunteerFirefightersAmount: 3000,
+  adoptionExpensesMax: 17131,
+  medicalExpensesThreshold: 2479,
+  charitableDonationsThreshold: 200,
+  charitableDonationsHighIncomeThreshold: 253214
+};
+
+export const taxDeductions2025 = {
+  rrspMaxContribution: 31560,
+  fhsaAnnualLimit: 8000,
+  fhsaLifetimeLimit: 40000,
+  movingExpensesMinDistance: 40, // kilometers
+  unionDues: true,
+  disabilitySupports: true,
+  northernResidents: true,
+  pensionIncomeSplitting: true,
+  carryingCharges: true,
+  clergyResidence: true
+};
+
 // Region options
 export const regions = [
   'Alberta',
@@ -49,6 +80,7 @@ export const allocationCategories = [
 export const federalBasicPersonalAmount2022 = 14398;
 export const federalBasicPersonalAmount2023 = 15000;
 export const federalBasicPersonalAmount2024 = 15705;
+export const federalBasicPersonalAmount2025 = 16129;
 
 // For backward compatibility
 export const federalBasicPersonalAmount = federalBasicPersonalAmount2023;
@@ -102,6 +134,22 @@ export const provincialBasicPersonalAmounts2024 = {
   'YT': 15705
 };
 
+export const provincialBasicPersonalAmounts2025 = {
+  'AB': 21885,
+  'BC': 11302,
+  'MB': 15000,
+  'NB': 12458,
+  'NL': 10382,
+  'NS': 8481,
+  'NT': 16593,
+  'NU': 16862,
+  'ON': 12747,
+  'PE': 14250,
+  'QC': 17183,
+  'SK': 17661,
+  'YT': 16129
+};
+
 // For backward compatibility
 export const provincialBasicPersonalAmounts = provincialBasicPersonalAmounts2023;
 
@@ -127,6 +175,14 @@ export const federalTaxBrackets2024 = [
   { rate: 0.205, upTo: 110398 },
   { rate: 0.26, upTo: 171090 },
   { rate: 0.29, upTo: 243902 },
+  { rate: 0.33, upTo: Infinity },
+];
+
+export const federalTaxBrackets2025 = [
+  { rate: 0.15, upTo: 57375 },
+  { rate: 0.205, upTo: 114750 },
+  { rate: 0.26, upTo: 177882 },
+  { rate: 0.29, upTo: 253414 },
   { rate: 0.33, upTo: Infinity },
 ];
 
@@ -394,6 +450,97 @@ export const provincialTaxBrackets2024 = {
     { rate: 0.064, upTo: 49020 },
     { rate: 0.09, upTo: 98040 },
     { rate: 0.109, upTo: 151978 },
+    { rate: 0.128, upTo: 500000 },
+    { rate: 0.15, upTo: Infinity },
+  ],
+};
+
+export const provincialTaxBrackets2025 = {
+  'AB': [
+    { rate: 0.10, upTo: 151234 },
+    { rate: 0.12, upTo: 181481 },
+    { rate: 0.13, upTo: 241974 },
+    { rate: 0.14, upTo: 362961 },
+    { rate: 0.15, upTo: Infinity },
+  ],
+  'BC': [
+    { rate: 0.0506, upTo: 49279 },
+    { rate: 0.077, upTo: 98560 },
+    { rate: 0.105, upTo: 113158 },
+    { rate: 0.1229, upTo: 137407 },
+    { rate: 0.147, upTo: 186306 },
+    { rate: 0.168, upTo: 259829 },
+    { rate: 0.205, upTo: Infinity },
+  ],
+  'MB': [
+    { rate: 0.108, upTo: 47564 },
+    { rate: 0.1275, upTo: 101200 },
+    { rate: 0.174, upTo: Infinity },
+  ],
+  'NB': [
+    { rate: 0.094, upTo: 51306 },
+    { rate: 0.14, upTo: 102614 },
+    { rate: 0.16, upTo: 190060 },
+    { rate: 0.195, upTo: Infinity },
+  ],
+  'NL': [
+    { rate: 0.087, upTo: 44192 },
+    { rate: 0.145, upTo: 88382 },
+    { rate: 0.158, upTo: 157792 },
+    { rate: 0.178, upTo: 220910 },
+    { rate: 0.198, upTo: 282214 },
+    { rate: 0.208, upTo: 564429 },
+    { rate: 0.213, upTo: 1128858 },
+    { rate: 0.218, upTo: Infinity },
+  ],
+  'NS': [
+    { rate: 0.0879, upTo: 30507 },
+    { rate: 0.1495, upTo: 61015 },
+    { rate: 0.1667, upTo: 95883 },
+    { rate: 0.175, upTo: 154650 },
+    { rate: 0.21, upTo: Infinity },
+  ],
+  'ON': [
+    { rate: 0.0505, upTo: 52886 },
+    { rate: 0.0915, upTo: 105775 },
+    { rate: 0.1116, upTo: 150000 },
+    { rate: 0.1216, upTo: 220000 },
+    { rate: 0.1316, upTo: Infinity },
+  ],
+  'PE': [
+    { rate: 0.095, upTo: 33328 },
+    { rate: 0.1347, upTo: 64656 },
+    { rate: 0.166, upTo: 105000 },
+    { rate: 0.1762, upTo: 140000 },
+    { rate: 0.19, upTo: Infinity },
+  ],
+  'QC': [
+    { rate: 0.14, upTo: 53255 },
+    { rate: 0.19, upTo: 106495 },
+    { rate: 0.24, upTo: 129590 },
+    { rate: 0.2575, upTo: Infinity },
+  ],
+  'SK': [
+    { rate: 0.105, upTo: 53463 },
+    { rate: 0.125, upTo: 152750 },
+    { rate: 0.145, upTo: Infinity },
+  ],
+  'NT': [
+    { rate: 0.059, upTo: 51964 },
+    { rate: 0.086, upTo: 103930 },
+    { rate: 0.122, upTo: 168967 },
+    { rate: 0.1405, upTo: Infinity },
+  ],
+  'NU': [
+    { rate: 0.04, upTo: 54707 },
+    { rate: 0.07, upTo: 109413 },
+    { rate: 0.09, upTo: 177881 },
+    { rate: 0.115, upTo: Infinity },
+  ],
+  'YT': [
+    { rate: 0.064, upTo: 57375 },
+    { rate: 0.09, upTo: 114750 },
+    { rate: 0.109, upTo: 177882 },
     { rate: 0.128, upTo: 500000 },
     { rate: 0.15, upTo: Infinity },
   ],
