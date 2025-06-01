@@ -849,7 +849,7 @@ input:focus, select:focus, textarea:focus {
   }
   .sub-navigation {
     flex-direction: column;
-    gap: 0.5rem;
+  gap: 0.5rem;
     padding: 0.5rem;
   }
 }

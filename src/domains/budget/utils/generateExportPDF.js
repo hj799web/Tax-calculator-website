@@ -20,13 +20,30 @@ export function downloadBudgetPDF(includeFullBreakdown = false) {
     exportElement.classList.remove('summary-only')
   }
   
-  // Simple options for better compatibility
+  // Enhanced options for better quality and professional output
   const options = {
-    margin: 10,
-    filename: 'Budget-Summary.pdf',
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2 },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    margin: [15, 15, 15, 15],
+    filename: 'Federal-Budget-Summary.pdf',
+    image: { type: 'jpeg', quality: 1 },
+    html2canvas: { 
+      scale: 2,
+      useCORS: true,
+      letterRendering: true,
+      allowTaint: true,
+      logging: false
+    },
+    jsPDF: { 
+      unit: 'mm', 
+      format: 'a4', 
+      orientation: 'portrait',
+      compress: true
+    },
+    pagebreak: { 
+      mode: ['avoid-all', 'css', 'legacy'],
+      before: '.page-break-before',
+      after: '.page-break-after',
+      avoid: ['h2', 'h3', 'table']
+    }
   }
 
   // Show loading message

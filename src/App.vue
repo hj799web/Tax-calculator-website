@@ -118,7 +118,7 @@
             <div v-if="showBudgetCategories">
               <p class="section-description">
                 <template v-if="yearStore.selectedTaxYear === '2023'">
-                  These budget categories are for the 2022–2023 fiscal year. Data is sourced from the Public Accounts of Canada offering a view of how federal funds are allocated across key sectors such as healthcare, defense, infrastructure, and more.
+                These budget categories are for the 2022–2023 fiscal year. Data is sourced from the Public Accounts of Canada offering a view of how federal funds are allocated across key sectors such as healthcare, defense, infrastructure, and more.
                 </template>
                 <template v-else-if="yearStore.selectedTaxYear === '2024'">
                   These budget categories are for the 2023–2024 fiscal year. The allocations reflect the proposed spending outlined in the 2023–2024 federal budget.
@@ -233,6 +233,19 @@
                     class="social-icon"
                   >
                   @fiscal_insights1
+                </a>
+                <a
+                  href="https://www.linkedin.com/company/fiscal-insights-canada/?viewAsMember=true"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="social-link"
+                >
+                  <img
+                    src="https://cdn-icons-png.flaticon.com/512/174/174857.png"
+                    alt="LinkedIn"
+                    class="social-icon"
+                  >
+                  Fiscal Insights Canada
                 </a>
               </div>
             </div>
