@@ -14,7 +14,7 @@
       v-else-if="yearStore.selectedTaxYear === '2025'"
       class="allocation-description"
     >
-      The <strong>2025-2026 Federal Estimates Allocation Chart</strong> represents the projected spending allocations for the 2025-2026 fiscal year.
+      The <strong>2025-2026 Federal Estimates Allocation Chart</strong> shows the projected breakdown of major allocations for the 2025-2026 fiscal year, based on current economic forecasts and government projections.
     </p>
     <p
       v-else
@@ -32,7 +32,7 @@
       v-else-if="yearStore.selectedTaxYear === '2025'"
       class="budget-explanation"
     >
-      The <strong>2025-2026 Federal Estimates Allocation Chart</strong> shows the projected breakdown of major allocations for the 2025-2026 fiscal year, based on current economic forecasts and government projections.
+      <!-- Removed duplicate description -->
     </p>
 
     <!-- Charts Section -->
