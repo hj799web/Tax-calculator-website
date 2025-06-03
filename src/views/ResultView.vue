@@ -52,7 +52,7 @@
       <button
         class="export-button"
         aria-label="Export tax breakdown as PDF"
-        @click="exportToPDF"
+        @click="throttledExportToPDF"
       >
         Export as PDF
       </button>
@@ -68,6 +68,7 @@
         the tax breakdown.
       </p>
     </div>
+    <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
   </div>
   <!-- End of result-box -->
 </template>
@@ -79,6 +80,9 @@ import { useCalculatorStore } from '@/domains/calculator/store/calculator.js'
 import { useCalculator } from '@/domains/calculator/composables/calculator.js'
 import { usePdfGenerator } from '@/domains/calculator/composables/pdfGenerator.js'
 import TaxPieChart from '@/domains/calculator/components/TaxPieChart.vue'
+import throttle from 'lodash.throttle'
+import { handleError } from '@/utils/errorHandler.js'
+import { ref } from 'vue'
 
 const {
   netFederalTaxPerPeriod,
@@ -101,6 +105,16 @@ const {
   exportToPDF
 } = usePdfGenerator()
 
+const errorMessage = ref('')
+
+// Throttle the exportToPDF function
+const throttledExportToPDF = throttle(async () => {
+  try {
+    await exportToPDF()
+  } catch (err) {
+    handleError(err, (msg) => errorMessage.value = msg)
+  }
+}, 2000)
 </script>
 
 <style scoped>

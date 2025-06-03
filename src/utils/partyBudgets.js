@@ -1,6 +1,11 @@
 // Party Budgets Data & Sharing Functionality
 // This file contains data for the 2025 party budgets and functions to generate shareable links
 
+import { handleError } from '@/utils/errorHandler.js';
+import { ref } from 'vue';
+
+export const partyBudgetErrorMessage = ref('');
+
 /**
  * Budget data for Canadian political parties (2025 projections)
  */
@@ -141,7 +146,7 @@ export const partyBudgets = {
 export function applyPartyBudget(partyId, budgetStore) {
   const partyData = partyBudgets[partyId];
   if (!partyData) {
-    console.error(`Party budget data not found for: ${partyId}`);
+    handleError(new Error(`Party budget data not found for: ${partyId}`), (msg) => partyBudgetErrorMessage.value = msg);
     return false;
   }
 
@@ -150,7 +155,7 @@ export function applyPartyBudget(partyId, budgetStore) {
   // Start batch update to prevent partial sentiment updates
   if (budgetStore.beginBatchUpdate && typeof budgetStore.beginBatchUpdate === 'function') {
     if (!budgetStore.beginBatchUpdate()) {
-      console.error(`Cannot apply party budget "${partyId}" - another batch update is in progress`);
+      handleError(new Error(`Cannot apply party budget "${partyId}" - another batch update is in progress`), (msg) => partyBudgetErrorMessage.value = msg);
       return false;
     }
   }
@@ -181,7 +186,7 @@ export function applyPartyBudget(partyId, budgetStore) {
 
     return true;
   } catch (error) {
-    console.error(`Error applying party budget: ${error.message || error}`);
+    handleError(error, (msg) => partyBudgetErrorMessage.value = msg);
     return false;
   } finally {
     // Complete batch update

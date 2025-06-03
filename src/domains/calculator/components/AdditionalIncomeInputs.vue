@@ -10,19 +10,34 @@
       <input
         id="selfEmploymentIncome"
         :value="selfEmploymentIncome"
-        type="number"
+        type="text"
+        inputmode="decimal"
+        pattern="[0-9]*\.?[0-9]*"
         class="input-field"
         :class="{ 'input-error-field': v$.selfEmploymentIncome.$invalid }"
         placeholder="Enter your self-employment income"
         aria-label="Self-Employment Income"
-        autocomplete="on"
+        autocomplete="off"
         @input="setSelfEmploymentIncome"
+        @keypress="preventInvalidInput"
+        @paste="handlePaste"
       >
       <div
         v-if="v$.selfEmploymentIncome.$invalid"
         class="input-error"
       >
-        Value must be a number greater than 0
+        <template v-if="v$.selfEmploymentIncome.minValue.$invalid">
+          Value must be greater than 0
+        </template>
+        <template v-else-if="v$.selfEmploymentIncome.maxValue.$invalid">
+          Value cannot exceed $1 billion
+        </template>
+        <template v-else-if="v$.selfEmploymentIncome.maxDecimalPlaces.$invalid">
+          Maximum 2 decimal places allowed
+        </template>
+        <template v-else>
+          Please enter a valid number
+        </template>
       </div>
     </div>
 
@@ -36,19 +51,34 @@
       <input
         id="capitalGainsBeforeJune25"
         :value="capitalGainsBeforeJune25"
-        type="number"
+        type="text"
+        inputmode="decimal"
+        pattern="[0-9]*\.?[0-9]*"
         class="input-field"
         :class="{ 'input-error-field': v$.capitalGainsBeforeJune25.$invalid }"
         placeholder="Enter your capital gains before June 25, 2024"
         aria-label="Capital Gains Before June 25, 2024"
-        autocomplete="on"
+        autocomplete="off"
         @input="setCapitalGainsBeforeJune25"
+        @keypress="preventInvalidInput"
+        @paste="handlePaste"
       >
       <div
         v-if="v$.capitalGainsBeforeJune25.$invalid"
         class="input-error"
       >
-        Value must be a number greater than 0
+        <template v-if="v$.capitalGainsBeforeJune25.minValue.$invalid">
+          Value must be greater than 0
+        </template>
+        <template v-else-if="v$.capitalGainsBeforeJune25.maxValue.$invalid">
+          Value cannot exceed $1 billion
+        </template>
+        <template v-else-if="v$.capitalGainsBeforeJune25.maxDecimalPlaces.$invalid">
+          Maximum 2 decimal places allowed
+        </template>
+        <template v-else>
+          Please enter a valid number
+        </template>
       </div>
     </div>
 
@@ -62,19 +92,34 @@
       <input
         id="capitalGainsAfterJune25"
         :value="capitalGainsAfterJune25"
-        type="number"
+        type="text"
+        inputmode="decimal"
+        pattern="[0-9]*\.?[0-9]*"
         class="input-field"
         :class="{ 'input-error-field': v$.capitalGainsAfterJune25.$invalid }"
         placeholder="Enter your capital gains on/after June 25, 2024"
         aria-label="Capital Gains On/After June 25, 2024"
-        autocomplete="on"
+        autocomplete="off"
         @input="setCapitalGainsAfterJune25"
+        @keypress="preventInvalidInput"
+        @paste="handlePaste"
       >
       <div
         v-if="v$.capitalGainsAfterJune25.$invalid"
         class="input-error"
       >
-        Value must be a number greater than 0
+        <template v-if="v$.capitalGainsAfterJune25.minValue.$invalid">
+          Value must be greater than 0
+        </template>
+        <template v-else-if="v$.capitalGainsAfterJune25.maxValue.$invalid">
+          Value cannot exceed $1 billion
+        </template>
+        <template v-else-if="v$.capitalGainsAfterJune25.maxDecimalPlaces.$invalid">
+          Maximum 2 decimal places allowed
+        </template>
+        <template v-else>
+          Please enter a valid number
+        </template>
       </div>
     </div>
 
@@ -88,19 +133,34 @@
       <input
         id="eligibleDividends"
         :value="eligibleDividends"
-        type="number"
+        type="text"
+        inputmode="decimal"
+        pattern="[0-9]*\.?[0-9]*"
         class="input-field"
         :class="{ 'input-error-field': v$.eligibleDividends.$invalid }"
         placeholder="Enter your eligible dividends"
         aria-label="Eligible Dividends"
-        autocomplete="on"
+        autocomplete="off"
         @input="setEligibleDividends"
+        @keypress="preventInvalidInput"
+        @paste="handlePaste"
       >
       <div
         v-if="v$.eligibleDividends.$invalid"
         class="input-error"
       >
-        Value must be a number greater than 0
+        <template v-if="v$.eligibleDividends.minValue.$invalid">
+          Value must be greater than 0
+        </template>
+        <template v-else-if="v$.eligibleDividends.maxValue.$invalid">
+          Value cannot exceed $1 billion
+        </template>
+        <template v-else-if="v$.eligibleDividends.maxDecimalPlaces.$invalid">
+          Maximum 2 decimal places allowed
+        </template>
+        <template v-else>
+          Please enter a valid number
+        </template>
       </div>
     </div>
 
@@ -114,19 +174,34 @@
       <input
         id="ineligibleDividends"
         :value="ineligibleDividends"
-        type="number"
+        type="text"
+        inputmode="decimal"
+        pattern="[0-9]*\.?[0-9]*"
         class="input-field"
         :class="{ 'input-error-field': v$.ineligibleDividends.$invalid }"
         placeholder="Enter your ineligible dividends"
         aria-label="Ineligible Dividends"
-        autocomplete="on"
+        autocomplete="off"
         @input="setIneligibleDividends"
+        @keypress="preventInvalidInput"
+        @paste="handlePaste"
       >
       <div
         v-if="v$.ineligibleDividends.$invalid"
         class="input-error"
       >
-        Value must be a number greater than 0
+        <template v-if="v$.ineligibleDividends.minValue.$invalid">
+          Value must be greater than 0
+        </template>
+        <template v-else-if="v$.ineligibleDividends.maxValue.$invalid">
+          Value cannot exceed $1 billion
+        </template>
+        <template v-else-if="v$.ineligibleDividends.maxDecimalPlaces.$invalid">
+          Maximum 2 decimal places allowed
+        </template>
+        <template v-else>
+          Please enter a valid number
+        </template>
       </div>
     </div>
 
@@ -140,19 +215,34 @@
       <input
         id="otherIncome"
         :value="otherIncome"
-        type="number"
+        type="text"
+        inputmode="decimal"
+        pattern="[0-9]*\.?[0-9]*"
         class="input-field"
         :class="{ 'input-error-field': v$.otherIncome.$invalid }"
         placeholder="Enter your other income"
         aria-label="Other Income"
-        autocomplete="on"
+        autocomplete="off"
         @input="setOtherIncome"
+        @keypress="preventInvalidInput"
+        @paste="handlePaste"
       >
       <div
         v-if="v$.otherIncome.$invalid"
         class="input-error"
       >
-        Value must be a number greater than 0
+        <template v-if="v$.otherIncome.minValue.$invalid">
+          Value must be greater than 0
+        </template>
+        <template v-else-if="v$.otherIncome.maxValue.$invalid">
+          Value cannot exceed $1 billion
+        </template>
+        <template v-else-if="v$.otherIncome.maxDecimalPlaces.$invalid">
+          Maximum 2 decimal places allowed
+        </template>
+        <template v-else>
+          Please enter a valid number
+        </template>
       </div>
     </div>
   </div>
@@ -164,7 +254,7 @@ import { storeToRefs } from 'pinia'
 import { useCalculator } from '@/domains/calculator/composables/calculator.js'
 
 const calculatorStore = useCalculatorStore()
-const { v$ } = useCalculator()
+const { v$, sanitizeNumericInput } = useCalculator()
 
 const {
   selfEmploymentIncome,
@@ -175,75 +265,78 @@ const {
   otherIncome
 } = storeToRefs(calculatorStore)
 
+const preventInvalidInput = (event) => {
+  const char = String.fromCharCode(event.keyCode);
+  const pattern = /[0-9.]/;
+  if (!pattern.test(char)) {
+    event.preventDefault();
+  }
+  // Prevent multiple decimal points
+  if (char === '.' && event.target.value.includes('.')) {
+    event.preventDefault();
+  }
+}
+
+const handlePaste = (event, target) => {
+  event.preventDefault();
+  const pastedText = event.clipboardData.getData('text');
+  const sanitizedValue = sanitizeNumericInput(pastedText);
+  if (sanitizedValue !== undefined) {
+    target.value = sanitizedValue;
+  }
+}
+
 const setSelfEmploymentIncome = ($event) => {
-  if ($event.target.validity.valid) {
-    if ($event.target.value.length === 0) {
-      selfEmploymentIncome.value = undefined
-    } else {
-      selfEmploymentIncome.value = parseFloat($event.target.value)
-    }
+  const sanitizedValue = sanitizeNumericInput($event.target.value);
+  if (sanitizedValue !== undefined) {
+    selfEmploymentIncome.value = sanitizedValue;
   } else {
-    selfEmploymentIncome.value = $event.target.value
+    selfEmploymentIncome.value = undefined;
   }
 }
 
 const setCapitalGainsBeforeJune25 = ($event) => {
-  if ($event.target.validity.valid) {
-    if ($event.target.value.length === 0) {
-      capitalGainsBeforeJune25.value = undefined
-    } else {
-      capitalGainsBeforeJune25.value = parseFloat($event.target.value)
-    }
+  const sanitizedValue = sanitizeNumericInput($event.target.value);
+  if (sanitizedValue !== undefined) {
+    capitalGainsBeforeJune25.value = sanitizedValue;
   } else {
-    capitalGainsBeforeJune25.value = $event.target.value
+    capitalGainsBeforeJune25.value = undefined;
   }
 }
 
 const setCapitalGainsAfterJune25 = ($event) => {
-  if ($event.target.validity.valid) {
-    if ($event.target.value.length === 0) {
-      capitalGainsAfterJune25.value = undefined
-    } else {
-      capitalGainsAfterJune25.value = parseFloat($event.target.value)
-    }
+  const sanitizedValue = sanitizeNumericInput($event.target.value);
+  if (sanitizedValue !== undefined) {
+    capitalGainsAfterJune25.value = sanitizedValue;
   } else {
-    capitalGainsAfterJune25.value = $event.target.value
+    capitalGainsAfterJune25.value = undefined;
   }
 }
 
 const setEligibleDividends = ($event) => {
-  if ($event.target.validity.valid) {
-    if ($event.target.value.length === 0) {
-      eligibleDividends.value = undefined
-    } else {
-      eligibleDividends.value = parseFloat($event.target.value)
-    }
+  const sanitizedValue = sanitizeNumericInput($event.target.value);
+  if (sanitizedValue !== undefined) {
+    eligibleDividends.value = sanitizedValue;
   } else {
-    eligibleDividends.value = $event.target.value
+    eligibleDividends.value = undefined;
   }
 }
 
 const setIneligibleDividends = ($event) => {
-  if ($event.target.validity.valid) {
-    if ($event.target.value.length === 0) {
-      ineligibleDividends.value = undefined
-    } else {
-      ineligibleDividends.value = parseFloat($event.target.value)
-    }
+  const sanitizedValue = sanitizeNumericInput($event.target.value);
+  if (sanitizedValue !== undefined) {
+    ineligibleDividends.value = sanitizedValue;
   } else {
-    ineligibleDividends.value = $event.target.value
+    ineligibleDividends.value = undefined;
   }
 }
 
 const setOtherIncome = ($event) => {
-  if ($event.target.validity.valid) {
-    if ($event.target.value.length === 0) {
-      otherIncome.value = undefined
-    } else {
-      otherIncome.value = parseFloat($event.target.value)
-    }
+  const sanitizedValue = sanitizeNumericInput($event.target.value);
+  if (sanitizedValue !== undefined) {
+    otherIncome.value = sanitizedValue;
   } else {
-    otherIncome.value = $event.target.value
+    otherIncome.value = undefined;
   }
 }
 </script>

@@ -8,6 +8,7 @@
       <span class="material-icons">lightbulb</span>
       Interactive Tour
     </button>
+    <div v-if="onboardingTourErrorMessage" class="error-message">{{ onboardingTourErrorMessage }}</div>
   </div>
 </template>
 
@@ -15,6 +16,7 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import Shepherd from 'shepherd.js'
 import 'shepherd.js/dist/css/shepherd.css'
+import { handleError } from '@/utils/errorHandler.js';
 
 export default {
   name: 'OnboardingTour',
@@ -22,6 +24,7 @@ export default {
     const tour = ref(null)
     const isTourActive = ref(false)
     const isInitialized = ref(false)
+    const onboardingTourErrorMessage = ref('');
 
     const initTour = () => {
       if (isInitialized.value) return
@@ -395,18 +398,19 @@ export default {
       if (tour.value) {
         try {
           tour.value.complete()
-        tour.value.destroy()
+          tour.value.destroy()
           tour.value = null
           isInitialized.value = false
         } catch (error) {
-          console.error('Error cleaning up tour:', error)
+          handleError(error, (msg) => onboardingTourErrorMessage.value = msg)
         }
       }
     })
 
     return {
       startTour,
-      isTourActive
+      isTourActive,
+      onboardingTourErrorMessage
     }
   }
 }

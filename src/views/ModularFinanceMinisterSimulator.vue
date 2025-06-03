@@ -96,6 +96,7 @@ import RevenueSliders from '@/domains/budget/components/RevenueSliders.vue';
 import SpendingControls from '@/domains/budget/components/SpendingControls.vue';
 import ChartsPanel from '@/domains/budget/components/ChartsPanel.vue';
 import { debounce } from 'lodash-es';
+import { handleError } from '@/utils/errorHandler.js';
 
 const budgetStore = useBudgetSimulatorStore();
 const currentYear = ref(2023);
@@ -107,8 +108,7 @@ onMounted(() => {
   try {
     budgetStore.initializeBudget();
   } catch (err) {
-    error.value = 'Failed to initialize budget. Please try again.';
-    console.error('Budget initialization error:', err);
+    handleError(err, (msg) => error.value = msg);
   }
 });
 
@@ -131,8 +131,7 @@ const updateBudgetForYear = () => {
   try {
     budgetStore.updateBudgetForYear(currentYear.value);
   } catch (err) {
-    error.value = 'Failed to update budget for the selected year.';
-    console.error('Budget update error:', err);
+    handleError(err, (msg) => error.value = msg);
   }
 };
 
@@ -142,8 +141,7 @@ const resetError = () => {
   try {
     budgetStore.initializeBudget();
   } catch (err) {
-    error.value = 'Failed to reset budget. Please refresh the page.';
-    console.error('Budget reset error:', err);
+    handleError(err, (msg) => error.value = msg);
   }
 };
 

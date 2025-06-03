@@ -10,19 +10,34 @@
       <input
         id="rrspDeduction"
         :value="rrspDeduction"
-        type="number"
+        type="text"
+        inputmode="decimal"
+        pattern="[0-9]*\.?[0-9]*"
         class="input-field"
         :class="{ 'input-error-field': v$.rrspDeduction.$invalid }"
         placeholder="Enter your RRSP deduction"
         aria-label="RRSP Deduction"
-        autocomplete="on"
+        autocomplete="off"
         @input="setRrspDeduction"
+        @keypress="preventInvalidInput"
+        @paste="handlePaste"
       >
       <div
         v-if="v$.rrspDeduction.$invalid"
         class="input-error"
       >
-        Value must be a number greater than 0
+        <template v-if="v$.rrspDeduction.minValue.$invalid">
+          Value must be greater than 0
+        </template>
+        <template v-else-if="v$.rrspDeduction.maxValue.$invalid">
+          Value cannot exceed $29,210 (2024 RRSP limit)
+        </template>
+        <template v-else-if="v$.rrspDeduction.maxDecimalPlaces.$invalid">
+          Maximum 2 decimal places allowed
+        </template>
+        <template v-else>
+          Please enter a valid number
+        </template>
       </div>
     </div>
 
@@ -64,19 +79,34 @@
       <input
         id="numberOfDependents"
         :value="numberOfDependents"
-        type="number"
+        type="text"
+        inputmode="numeric"
+        pattern="[0-9]*"
         class="input-field"
         :class="{ 'input-error-field': v$.numberOfDependents.$invalid }"
         placeholder="Enter number of dependents"
         aria-label="Number of Dependents"
-        autocomplete="on"
+        autocomplete="off"
         @input="setNumberOfDependents"
+        @keypress="preventWholeNumberInput"
+        @paste="handlePaste"
       >
       <div
         v-if="v$.numberOfDependents.$invalid"
         class="input-error"
       >
-        Value must be a number greater than 0
+        <template v-if="v$.numberOfDependents.minValue.$invalid">
+          Value must be greater than 0
+        </template>
+        <template v-else-if="v$.numberOfDependents.maxValue.$invalid">
+          Value cannot exceed 20
+        </template>
+        <template v-else-if="v$.numberOfDependents.maxDecimalPlaces.$invalid">
+          Must be a whole number
+        </template>
+        <template v-else>
+          Please enter a valid number
+        </template>
       </div>
     </div>
 
@@ -90,19 +120,34 @@
       <input
         id="numberOfChildrenUnder18"
         :value="numberOfChildrenUnder18"
-        type="number"
+        type="text"
+        inputmode="numeric"
+        pattern="[0-9]*"
         class="input-field"
         :class="{ 'input-error-field': v$.numberOfChildrenUnder18.$invalid }"
         placeholder="Enter number of children under 18"
         aria-label="Number of Children Under 18"
-        autocomplete="on"
+        autocomplete="off"
         @input="setNumberOfChildrenUnder18"
+        @keypress="preventWholeNumberInput"
+        @paste="handlePaste"
       >
       <div
         v-if="v$.numberOfChildrenUnder18.$invalid"
         class="input-error"
       >
-        Value must be a number greater than 0
+        <template v-if="v$.numberOfChildrenUnder18.minValue.$invalid">
+          Value must be greater than 0
+        </template>
+        <template v-else-if="v$.numberOfChildrenUnder18.maxValue.$invalid">
+          Value cannot exceed 20
+        </template>
+        <template v-else-if="v$.numberOfChildrenUnder18.maxDecimalPlaces.$invalid">
+          Must be a whole number
+        </template>
+        <template v-else>
+          Please enter a valid number
+        </template>
       </div>
     </div>
 
@@ -116,19 +161,34 @@
       <input
         id="numberOfDependentsWithDisabilities"
         :value="numberOfDependentsWithDisabilities"
-        type="number"
+        type="text"
+        inputmode="numeric"
+        pattern="[0-9]*"
         class="input-field"
         :class="{ 'input-error-field': v$.numberOfDependentsWithDisabilities.$invalid }"
         placeholder="Enter number of dependents with disabilities"
         aria-label="Dependents with Disabilities"
-        autocomplete="on"
+        autocomplete="off"
         @input="setNumberOfDependentsWithDisabilities"
+        @keypress="preventWholeNumberInput"
+        @paste="handlePaste"
       >
       <div
         v-if="v$.numberOfDependentsWithDisabilities.$invalid"
         class="input-error"
       >
-        Value must be a number greater than 0
+        <template v-if="v$.numberOfDependentsWithDisabilities.minValue.$invalid">
+          Value must be greater than 0
+        </template>
+        <template v-else-if="v$.numberOfDependentsWithDisabilities.maxValue.$invalid">
+          Value cannot exceed 20
+        </template>
+        <template v-else-if="v$.numberOfDependentsWithDisabilities.maxDecimalPlaces.$invalid">
+          Must be a whole number
+        </template>
+        <template v-else>
+          Please enter a valid number
+        </template>
       </div>
     </div>
   </div>
@@ -140,7 +200,7 @@ import { storeToRefs } from 'pinia'
 import { useCalculator } from '@/domains/calculator/composables/calculator.js'
 
 const calculatorStore = useCalculatorStore()
-const { v$ } = useCalculator()
+const { v$, sanitizeNumericInput } = useCalculator()
 
 const {
   maritalStatus,
@@ -150,51 +210,68 @@ const {
   numberOfDependentsWithDisabilities
 } = storeToRefs(calculatorStore)
 
+const preventInvalidInput = (event) => {
+  const char = String.fromCharCode(event.keyCode);
+  const pattern = /[0-9.]/;
+  if (!pattern.test(char)) {
+    event.preventDefault();
+  }
+  // Prevent multiple decimal points
+  if (char === '.' && event.target.value.includes('.')) {
+    event.preventDefault();
+  }
+}
+
+const preventWholeNumberInput = (event) => {
+  const char = String.fromCharCode(event.keyCode);
+  const pattern = /[0-9]/;
+  if (!pattern.test(char)) {
+    event.preventDefault();
+  }
+}
+
+const handlePaste = (event, target) => {
+  event.preventDefault();
+  const pastedText = event.clipboardData.getData('text');
+  const sanitizedValue = sanitizeNumericInput(pastedText);
+  if (sanitizedValue !== undefined) {
+    target.value = sanitizedValue;
+  }
+}
+
 const setRrspDeduction = ($event) => {
-  if ($event.target.validity.valid) {
-    if ($event.target.value.length === 0) {
-      rrspDeduction.value = undefined
-    } else {
-      rrspDeduction.value = parseFloat($event.target.value)
-    }
+  const sanitizedValue = sanitizeNumericInput($event.target.value);
+  if (sanitizedValue !== undefined) {
+    rrspDeduction.value = sanitizedValue;
   } else {
-    rrspDeduction.value = $event.target.value
+    rrspDeduction.value = undefined;
   }
 }
 
 const setNumberOfDependents = ($event) => {
-  if ($event.target.validity.valid) {
-    if ($event.target.value.length === 0) {
-      numberOfDependents.value = undefined
-    } else {
-      numberOfDependents.value = parseFloat($event.target.value)
-    }
+  const sanitizedValue = sanitizeNumericInput($event.target.value);
+  if (sanitizedValue !== undefined) {
+    numberOfDependents.value = sanitizedValue;
   } else {
-    numberOfDependents.value = $event.target.value
+    numberOfDependents.value = undefined;
   }
 }
 
 const setNumberOfChildrenUnder18 = ($event) => {
-  if ($event.target.validity.valid) {
-    if ($event.target.value.length === 0) {
-      numberOfChildrenUnder18.value = undefined
-    } else {
-      numberOfChildrenUnder18.value = parseFloat($event.target.value)
-    }
+  const sanitizedValue = sanitizeNumericInput($event.target.value);
+  if (sanitizedValue !== undefined) {
+    numberOfChildrenUnder18.value = sanitizedValue;
   } else {
-    numberOfChildrenUnder18.value = $event.target.value
+    numberOfChildrenUnder18.value = undefined;
   }
 }
 
 const setNumberOfDependentsWithDisabilities = ($event) => {
-  if ($event.target.validity.valid) {
-    if ($event.target.value.length === 0) {
-      numberOfDependentsWithDisabilities.value = undefined
-    } else {
-      numberOfDependentsWithDisabilities.value = parseFloat($event.target.value)
-    }
+  const sanitizedValue = sanitizeNumericInput($event.target.value);
+  if (sanitizedValue !== undefined) {
+    numberOfDependentsWithDisabilities.value = sanitizedValue;
   } else {
-    numberOfDependentsWithDisabilities.value = $event.target.value
+    numberOfDependentsWithDisabilities.value = undefined;
   }
 }
 </script>

@@ -326,6 +326,16 @@ body {
   padding: 0;
 }
 
+/* Mobile scaling */
+@media (max-width: 768px) {
+  #app {
+    transform: scale(0.9);
+    transform-origin: top center;
+    width: 111.11%; /* Compensate for the 10% scale down (100/0.9) */
+    margin-left: -5.55%; /* Center the scaled content */
+  }
+}
+
 .main-container {
   max-width: 1000px;
   margin: 40px auto;
@@ -1250,72 +1260,96 @@ footer p:hover {
 @media (max-width: 768px) {
   .main-title {
     font-size: 1.8rem;
+    margin-bottom: 1.5rem;
   }
   
   .subtitle {
     font-size: 0.9rem;
+    margin-bottom: 1.5rem;
   }
   
   .main-navigation {
     flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1rem;
   }
   
   .nav-link {
     font-size: 0.9rem;
-    padding: 4px 8px;
+    padding: 0.75rem 1rem;
+    margin: 0.25rem;
   }
   
   .calculator-section, .faq-section, .budget-categories-section, .resources-section {
-    padding: 15px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
   }
   
   .section-title {
     font-size: 1.4rem;
+    margin-bottom: 1.25rem;
   }
   
   .section-description {
     font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
   }
   
   .resources-description {
     font-size: 0.9rem;
+    margin: 1.5rem auto;
+    padding: 0 1rem;
   }
   
   .resource-link {
-    padding: 8px 16px;
+    padding: 0.75rem 1.25rem;
     font-size: 0.9rem;
+    margin: 0.5rem 0;
   }
   
   .site-logo {
     max-width: 140px;
+    margin: 1rem auto;
+  }
+  
+  .footer-section {
+    padding: 1.5rem;
+    margin: 1rem 0;
   }
   
   .footer-section h3 {
     font-size: 1.1rem;
+    margin-bottom: 1rem;
   }
   
   .footer-section p, .footer-bottom p {
     font-size: 0.85rem;
+    margin: 0.75rem 0;
   }
   
   .social-link {
     font-size: 0.85rem;
+    padding: 0.5rem;
+    margin: 0.25rem;
   }
   
   .social-icon {
     width: 16px;
     height: 16px;
+    margin: 0 0.25rem;
   }
   
   .beta-button {
-    padding: 10px 20px;
+    padding: 0.75rem 1.25rem;
     font-size: 14px;
-    bottom: 15px;
-    right: 15px;
+    bottom: 1.5rem;
+    right: 1.5rem;
   }
   
   .beta-subtext {
     font-size: 10px;
+    margin-top: 0.25rem;
   }
 }
 

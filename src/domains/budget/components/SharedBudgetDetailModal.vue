@@ -142,6 +142,7 @@
             </div>
             
             <!-- Action Buttons -->
+            <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
             <div class="action-buttons">
               <button @click="applyBudget" class="apply-button">
                 <span class="material-icons">play_arrow</span>
@@ -157,7 +158,8 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
+import { handleError } from '@/utils/errorHandler.js';
 import BudgetSentimentBadgeCard from '@/domains/badges/components/BudgetSentimentBadgeCard.vue';
 
 const props = defineProps({
@@ -217,13 +219,18 @@ const emit = defineEmits(['update:modelValue', 'apply-budget']);
 
 // Removed unused budgetStore variable
 
+const errorMessage = ref('');
 
 // Apply the shared budget to the simulator
 const applyBudget = () => {
-  // Emit event to parent component to handle the budget application
-  emit('apply-budget', props.budgetData);
-  // Close the modal
-  emit('update:modelValue', false);
+  try {
+    // Emit event to parent component to handle the budget application
+    emit('apply-budget', props.budgetData);
+    // Close the modal
+    emit('update:modelValue', false);
+  } catch (error) {
+    handleError(error, (msg) => errorMessage.value = msg);
+  }
 };
 </script>
 

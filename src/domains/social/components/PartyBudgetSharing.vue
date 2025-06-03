@@ -46,6 +46,8 @@
       </svg>
       Link copied to clipboard!
     </div>
+
+    <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
   </div>
 </template>
 
@@ -53,6 +55,7 @@
 import { ref } from 'vue';
 import { getAvailablePartyBudgets, generatePartyBudgetUrl, applyPartyBudget } from '@/utils/partyBudgets';
 import { useBudgetSimulatorStore } from '@/domains/budget/store/budgetSimulator';
+import { handleError } from '@/utils/errorHandler.js';
 
 // Get party budgets from the utility
 const partyBudgets = getAvailablePartyBudgets();
@@ -63,6 +66,7 @@ const budgetStore = useBudgetSimulatorStore();
 // State tracking
 const copySuccess = ref(false);
 const activeParty = ref(null);
+const errorMessage = ref('');
 
 /**
  * Apply a party budget to the simulator, updating all sliders
@@ -70,17 +74,25 @@ const activeParty = ref(null);
  */
 function applyBudget(partyId) {
   if (!partyId || !partyBudgets.find(p => p.id === partyId)) {
-    console.error('Invalid party ID:', partyId);
+    handleError(new Error('Invalid party ID'), (msg) => {
+      errorMessage.value = msg;
+    });
     return;
   }
   
-  const result = applyPartyBudget(partyId, budgetStore);
-  
-  if (result) {
-    activeParty.value = partyId;
-    // Show success message
-    const partyName = partyBudgets.find(p => p.id === partyId)?.name || partyId;
-    console.log(`Successfully applied ${partyName}`);
+  try {
+    const result = applyPartyBudget(partyId, budgetStore);
+    
+    if (result) {
+      activeParty.value = partyId;
+      // Show success message
+      const partyName = partyBudgets.find(p => p.id === partyId)?.name || partyId;
+      console.log(`Successfully applied ${partyName}`);
+    }
+  } catch (error) {
+    handleError(error, (msg) => {
+      errorMessage.value = msg;
+    });
   }
 }
 
@@ -89,26 +101,36 @@ function applyBudget(partyId) {
  * @param {string} partyId - ID of the party budget to share
  */
 function sharePartyBudget(partyId) {
-  const url = generatePartyBudgetUrl(partyId);
-  
-  if (!url) {
-    console.error('Failed to generate party budget URL');
-    return;
-  }
-  
-  // If Web Share API is available (mobile devices)
-  if (navigator.share) {
-    navigator.share({
-      title: `${partyId.charAt(0).toUpperCase() + partyId.slice(1)} Party Budget 2025`,
-      text: 'Check out this budget simulation for the 2025 fiscal year',
-      url: url
-    }).catch(err => {
-      console.error('Error sharing:', err);
+  try {
+    const url = generatePartyBudgetUrl(partyId);
+    
+    if (!url) {
+      handleError(new Error('Failed to generate party budget URL'), (msg) => {
+        errorMessage.value = msg;
+      });
+      return;
+    }
+    
+    // If Web Share API is available (mobile devices)
+    if (navigator.share) {
+      navigator.share({
+        title: `${partyId.charAt(0).toUpperCase() + partyId.slice(1)} Party Budget 2025`,
+        text: 'Check out this budget simulation for the 2025 fiscal year',
+        url: url
+      }).catch(err => {
+        handleError(err, (msg) => {
+          errorMessage.value = msg;
+        });
+        copyToClipboard(url);
+      });
+    } else {
+      // Otherwise use clipboard
       copyToClipboard(url);
+    }
+  } catch (error) {
+    handleError(error, (msg) => {
+      errorMessage.value = msg;
     });
-  } else {
-    // Otherwise use clipboard
-    copyToClipboard(url);
   }
 }
 
@@ -124,18 +146,26 @@ function copyToClipboard(text) {
       }, 3000);
     })
     .catch(err => {
-      console.error('Failed to copy link: ', err);
+      handleError(err, (msg) => {
+        errorMessage.value = msg;
+      });
       // Fallback for older browsers
-      const textarea = document.createElement('textarea');
-      textarea.value = text;
-      document.body.appendChild(textarea);
-      textarea.select();
-      document.execCommand('copy');
-      document.body.removeChild(textarea);
-      copySuccess.value = true;
-      setTimeout(() => {
-        copySuccess.value = false;
-      }, 3000);
+      try {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        copySuccess.value = true;
+        setTimeout(() => {
+          copySuccess.value = false;
+        }, 3000);
+      } catch (fallbackError) {
+        handleError(fallbackError, (msg) => {
+          errorMessage.value = msg;
+        });
+      }
     });
 }
 </script>

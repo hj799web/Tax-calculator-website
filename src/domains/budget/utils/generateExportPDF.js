@@ -1,4 +1,5 @@
 import html2pdf from 'html2pdf.js'
+import { handleError } from '@/utils/errorHandler.js';
 
 export function downloadBudgetPDF(includeFullBreakdown = false) {
   console.log('Starting PDF generation...')
@@ -6,8 +7,7 @@ export function downloadBudgetPDF(includeFullBreakdown = false) {
   // Find the export element
   const exportElement = document.getElementById('export-summary')
   if (!exportElement) {
-    console.error('Export element not found')
-    alert('Could not generate PDF: Export template not found')
+    handleError(new Error('Export element not found'), (msg) => alert(msg));
     return
   }
   
@@ -62,9 +62,7 @@ export function downloadBudgetPDF(includeFullBreakdown = false) {
     
     alert('PDF generated successfully!')
   }).catch(error => {
-    console.error('PDF generation error:', error)
-    alert('Error generating PDF: ' + error.message)
-    
+    handleError(error, (msg) => alert(msg));
     // Remove class if added
     if (!includeFullBreakdown) {
       exportElement.classList.remove('summary-only')

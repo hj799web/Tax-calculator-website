@@ -2,6 +2,7 @@
 // Store for managing public sentiment sensitivity settings
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
+import { handleError } from '@/utils/errorHandler.js';
 
 export const useSentimentSettingsStore = defineStore('sentimentSettings', () => {
   // Sensitivity settings
@@ -39,24 +40,46 @@ export const useSentimentSettingsStore = defineStore('sentimentSettings', () => 
   const setSensitivity = (category, value) => {
     if (Object.prototype.hasOwnProperty.call(sensitivity.value, category)) {
       sensitivity.value[category] = Math.max(0, Math.min(2, value));
-      saveToLocalStorage();
+      try {
+        saveToLocalStorage();
+      } catch (error) {
+        handleError(error, (msg) => {
+          console.warn(`[SENTIMENT SETTINGS] Failed to save sensitivity settings: ${msg}`);
+        });
+      }
     } else {
-      console.warn(`[SENTIMENT SETTINGS] Attempted to update non-existent setting: ${category}`);
+      handleError(new Error(`Invalid sensitivity category: ${category}`), (msg) => {
+        console.warn(`[SENTIMENT SETTINGS] ${msg}`);
+      });
     }
   };
 
   const setThreshold = (level, value) => {
     if (Object.prototype.hasOwnProperty.call(thresholds.value, level)) {
       thresholds.value[level] = Math.max(0, Math.min(1, value));
-      saveToLocalStorage();
+      try {
+        saveToLocalStorage();
+      } catch (error) {
+        handleError(error, (msg) => {
+          console.warn(`[SENTIMENT SETTINGS] Failed to save threshold settings: ${msg}`);
+        });
+      }
     } else {
-      console.warn(`[SENTIMENT SETTINGS] Attempted to update non-existent setting: ${level}`);
+      handleError(new Error(`Invalid threshold level: ${level}`), (msg) => {
+        console.warn(`[SENTIMENT SETTINGS] ${msg}`);
+      });
     }
   };
 
   const setUpdateFrequency = (frequency) => {
     updateFrequency.value = Math.max(100, Math.min(5000, frequency));
-    saveToLocalStorage();
+    try {
+      saveToLocalStorage();
+    } catch (error) {
+      handleError(error, (msg) => {
+        console.warn(`[SENTIMENT SETTINGS] Failed to save update frequency: ${msg}`);
+      });
+    }
   };
 
   const resetAll = () => {
@@ -71,32 +94,53 @@ export const useSentimentSettingsStore = defineStore('sentimentSettings', () => 
       critical: 0.7
     };
     updateFrequency.value = 1000;
-    saveToLocalStorage();
+    try {
+      saveToLocalStorage();
+    } catch (error) {
+      handleError(error, (msg) => {
+        console.warn(`[SENTIMENT SETTINGS] Failed to save reset settings: ${msg}`);
+      });
+    }
   };
 
   const loadFromLocalStorage = () => {
     if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('sentimentSettings');
-      if (saved) {
-        try {
-          const parsed = JSON.parse(saved);
-          sensitivity.value = parsed.sensitivity || sensitivity.value;
-          thresholds.value = parsed.thresholds || thresholds.value;
-          updateFrequency.value = parsed.updateFrequency || updateFrequency.value;
-        } catch (e) {
-          console.error('Error loading sentiment settings:', e);
+      try {
+        const saved = localStorage.getItem('sentimentSettings');
+        if (saved) {
+          try {
+            const parsed = JSON.parse(saved);
+            sensitivity.value = parsed.sensitivity || sensitivity.value;
+            thresholds.value = parsed.thresholds || thresholds.value;
+            updateFrequency.value = parsed.updateFrequency || updateFrequency.value;
+          } catch (parseError) {
+            handleError(parseError, (msg) => {
+              console.warn(`[SENTIMENT SETTINGS] Failed to parse saved settings: ${msg}`);
+            });
+          }
         }
+      } catch (storageError) {
+        handleError(storageError, (msg) => {
+          console.warn(`[SENTIMENT SETTINGS] Failed to access localStorage: ${msg}`);
+        });
       }
     }
   };
 
   const saveToLocalStorage = () => {
     if (typeof window !== 'undefined') {
-      localStorage.setItem('sentimentSettings', JSON.stringify({
-        sensitivity: sensitivity.value,
-        thresholds: thresholds.value,
-        updateFrequency: updateFrequency.value
-      }));
+      try {
+        const settings = {
+          sensitivity: sensitivity.value,
+          thresholds: thresholds.value,
+          updateFrequency: updateFrequency.value
+        };
+        localStorage.setItem('sentimentSettings', JSON.stringify(settings));
+      } catch (error) {
+        handleError(error, (msg) => {
+          throw new Error(`Failed to save sentiment settings: ${msg}`);
+        });
+      }
     }
   };
 

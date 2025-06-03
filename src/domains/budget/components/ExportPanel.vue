@@ -3,7 +3,7 @@
     <!-- Main Export Button -->
     <button
       class="btn btn-primary mt-4"
-      @click="downloadBudgetPDF(includeFullBreakdown)"
+      @click="throttledDownloadBudgetPDF(includeFullBreakdown)"
     >
        Download as PDF
     </button>
@@ -46,6 +46,7 @@ import { useBudgetSimulatorStore } from '@/domains/budget/store/budgetSimulator.
 import { downloadBudgetPDF } from '@/domains/budget/utils/generateExportPDF'
 import { computeSentimentScores } from '@/domains/sentiment/utils/computeSentimentScores'
 import ExportCard from './ExportCard.vue'
+import throttle from 'lodash.throttle'
 
 const budgetStore = useBudgetSimulatorStore()
 const includeFullBreakdown = ref(true)
@@ -126,6 +127,9 @@ const narrative = computed(() => {
     return `This budget is balanced at ${formatCurrency(totalRevenue)} by ${spendingDescription}.`;
   }
 })
+
+// Throttle the downloadBudgetPDF function
+const throttledDownloadBudgetPDF = throttle(downloadBudgetPDF, 2000);
 </script>
 
 <style scoped>

@@ -1109,6 +1109,7 @@
 <script setup>
 import { ref, onMounted, watch, computed } from 'vue';
 import debounce from 'lodash.debounce'; // 🆕 PERFORMANCE NOTE: Debounce slider commits to avoid excessive store updates
+import throttle from 'lodash.throttle'; // Add this import
 import { useBudgetSimulatorStore } from '../store/budgetSimulator';
 
 // Initialize the budget simulator store
@@ -1255,9 +1256,14 @@ const commitSliderChange = debounce((sourceId, value) => {
   budgetStore.updateRevenueRate(sourceId, value);
 }, 200);
 
-// 🆕 PERFORMANCE NOTE: Only commit to store after debounce
-function onSliderInput(sourceId, value) {
+// Throttle the slider input handler
+const throttledOnSliderInput = throttle((sourceId, value) => {
   commitSliderChange(sourceId, value);
+}, 200);
+
+// Replace onSliderInput to use the throttled version
+function onSliderInput(sourceId, value) {
+  throttledOnSliderInput(sourceId, value);
 }
 
 // Update revenue rate in the store.

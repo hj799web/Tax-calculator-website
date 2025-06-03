@@ -208,6 +208,8 @@
         </div>
       </div>
     </div>
+
+    <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
   </div>
 </template>
 
@@ -218,6 +220,7 @@ import { Bar } from 'vue-chartjs';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import SpendingPieChart from '@/domains/budget/components/SpendingPieChart.vue';
 import { debounce } from 'lodash-es';
+import { handleError } from '@/utils/errorHandler.js';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -231,6 +234,7 @@ const chartUpdateKey = ref(0);
 const isMobile = ref(window.innerWidth < 768);
 const chartHeight = computed(() => (isMobile.value ? '300px' : '350px'));
 const chartWidth = computed(() => '100%');
+const errorMessage = ref('');
 
 // Watch for changes in revenue sources to update chart
 watch(() => budgetStore.revenueSources, () => {
@@ -263,7 +267,7 @@ function getIncomeTaxTotal() {
     const total = personal + corporate;
     return isNaN(total) ? 0 : total;
   } catch (e) {
-    console.error('Error calculating income tax total:', e);
+    handleError(e, (msg) => errorMessage.value = msg);
     return 0;
   }
 }
@@ -275,7 +279,7 @@ function getConsumptionTaxTotal() {
     const total = gst + excise;
     return isNaN(total) ? 0 : total;
   } catch (e) {
-    console.error('Error calculating consumption tax total:', e);
+    handleError(e, (msg) => errorMessage.value = msg);
     return 0;
   }
 }
@@ -290,7 +294,7 @@ function getOtherRevenueTotal() {
     }, 0);
     return isNaN(total) ? 0 : total;
   } catch (e) {
-    console.error('Error calculating other revenue total:', e);
+    handleError(e, (msg) => errorMessage.value = msg);
     return 0;
   }
 }
@@ -300,7 +304,7 @@ function getTotalRevenue() {
     const total = Number(budgetStore.totalRevenue) || 0;
     return total > 0 ? total : 1;
   } catch (e) {
-    console.error('Error getting total revenue:', e);
+    handleError(e, (msg) => errorMessage.value = msg);
     return 1;
   }
 }

@@ -1349,59 +1349,101 @@ function hideTooltip() {
 }
 
 /* Responsive Design */
-@container (max-width: 768px) {
+@media (max-width: 768px) {
   .spending-controls {
-    padding: 1rem;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
   }
   
   .spending-group {
-    padding: 1rem;
+    padding: 1.25rem;
+    margin-bottom: 1.25rem;
   }
   
   .group-title {
-    font-size: 1rem;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
   }
   
   .group-total {
-    font-size: 1.125rem;
+    font-size: 1.2rem;
+    margin: 0.5rem 0;
+  }
+  
+  .spending-items {
+    gap: 1.25rem;
+  }
+  
+  .spending-item {
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+  }
+  
+  .item-title {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .item-description {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    line-height: 1.5;
   }
   
   .amount-input {
-    width: 100px;
+    width: 120px;
+    padding: 0.75rem;
+    margin: 0.5rem 0;
+  }
+  
+  .percentage-display {
+    font-size: 0.9rem;
+    margin: 0.5rem 0;
   }
 }
 
-@container (max-width: 480px) {
+@media (max-width: 480px) {
   .spending-controls {
-    padding: 0.75rem;
+    padding: 1.25rem;
+    margin: 1.25rem 0;
   }
   
   .spending-group {
-    padding: 0.75rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
   }
   
   .group-header {
     flex-direction: column;
     align-items: flex-start;
+    gap: 0.75rem;
   }
   
   .group-total {
     text-align: left;
+    margin: 0.5rem 0;
   }
   
   .spending-item {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
+    padding: 1rem;
   }
   
   .item-controls {
     width: 100%;
     justify-content: space-between;
+    gap: 0.75rem;
   }
   
   .amount-input {
     width: 100%;
+    margin: 0.5rem 0;
+  }
+  
+  .percentage-display {
+    margin: 0.5rem 0;
   }
 }
 

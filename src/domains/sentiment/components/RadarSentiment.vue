@@ -199,6 +199,7 @@
         </div>
       </div>
     </div>
+    <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
   </div>
 </template>
 
@@ -211,6 +212,7 @@ import { budgetScenarioModifiers } from '@/domains/budget/config/budgetScenarioM
 import { computeSentimentScores, getSentimentLabel, getSentimentEmoji, getSentimentColor } from '@/domains/sentiment/utils/computeSentimentScores';
 import Chart from 'chart.js/auto';
 import { entityImpactFactors } from '@/domains/sentiment/config/entityImpactFactors.js';
+import { handleError } from '@/utils/errorHandler.js';
 
 // Component props
 const props = defineProps({
@@ -229,6 +231,7 @@ const chartInstance = ref(null);
 const isMounted = ref(false);
 const isUpdatingChart = ref(false);
 const activeTab = ref('provinces');
+const errorMessage = ref('');
 
 // Chart lifecycle state
 let destroyed = false; // Single source of truth for unmount
@@ -634,7 +637,7 @@ function updateChart() {
       return;
     }
   } catch (error) {
-    console.error('[SENTIMENT][updateChart] Error getting canvas context:', error);
+    handleError(error, (msg) => errorMessage.value = msg);
     return;
   }
   
@@ -738,7 +741,7 @@ function updateChart() {
 
               return tooltipContent;
             } catch (e) {
-              console.error('Error generating tooltip:', e);
+              handleError(e, (msg) => errorMessage.value = msg);
               return `Score: ${score}`;
             }
           }
@@ -852,7 +855,7 @@ function updateChart() {
 
                       return tooltipContent;
                     } catch (e) {
-                      console.error('Error generating tooltip:', e);
+                      handleError(e, (msg) => errorMessage.value = msg);
                       return `Score: ${score}`;
                     }
                   }
@@ -877,13 +880,13 @@ function updateChart() {
           chartInstance.value.update('none'); // Use 'none' animation mode for faster updates
           console.log('[SENTIMENT][updateChart] Updated existing chart');
         } catch (error) {
-          console.error('[SENTIMENT][updateChart] Error updating chart:', error);
+          handleError(error, (msg) => errorMessage.value = msg);
           // If we encounter an error updating the chart, destroy it and recreate it
           safeDestroyChart('error-during-update');
         }
       }
     } catch (error) {
-      console.error('[SENTIMENT][updateChart] Error during chart update:', error);
+      handleError(error, (msg) => errorMessage.value = msg);
       // If we encounter an error, destroy the chart to prevent future errors
       safeDestroyChart('error-during-update');
     } finally {
@@ -996,7 +999,7 @@ onUnmounted(() => {
         console.warn('[SENTIMENT] Chart destroy skipped: canvas not in DOM');
       }
     } catch (error) {
-      console.error('[SENTIMENT] Error destroying chart on unmount:', error);
+      handleError(error, (msg) => errorMessage.value = msg);
     }
     chartInstance.value = null;
   }
@@ -1408,5 +1411,11 @@ input:checked + .toggle-slider:before {
   color: #718096;
   font-size: 0.7rem;
   line-height: 1.2;
+}
+
+.error-message {
+  color: #dc2626;
+  font-size: 0.875rem;
+  margin-top: 1rem;
 }
 </style>

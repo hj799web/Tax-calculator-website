@@ -109,7 +109,7 @@
             <button
               class="download-button"
               title="Download as Image"
-              @click="downloadChart('revenue')"
+              @click="throttledDownloadChart('revenue')"
             >
               <span class="material-icons">download</span>
             </button>
@@ -186,7 +186,7 @@
             <button
               class="download-button"
               title="Download as Image"
-              @click="downloadChart('spending')"
+              @click="throttledDownloadChart('spending')"
             >
               <span class="material-icons">download</span>
             </button>
@@ -202,7 +202,7 @@
           </h3>
           <button
             class="share-budget-button"
-            @click="$emit('share-budget')"
+            @click="throttledShareBudget"
             aria-label="Share your budget on social media"
             style="display: flex; align-items: center; gap: 4px; background: #4263eb; color: #fff; border: none; border-radius: 4px; padding: 6px 14px; font-weight: 500; cursor: pointer; transition: background 0.2s;"
           >
@@ -213,7 +213,7 @@
         <div class="action-buttons mt-2">
           <button
             class="action-button reset-button"
-            @click="$emit('reset-budget')"
+            @click="throttledResetBudget"
           >
             Reset Budget
           </button>
@@ -236,7 +236,7 @@
           </div>
           <button
             class="action-button save-button"
-            @click="$emit('save-budget')"
+            @click="throttledSaveBudget"
           >
             Save Budget
           </button>
@@ -311,6 +311,7 @@ import ExportPanel from './ExportPanel.vue';
 import { useBudgetSimulatorStore } from '@/domains/budget/store/budgetSimulator.js';
 import AchievementBadge from '@/domains/badges/components/AchievementBadge.vue';
 import html2canvas from 'html2canvas';
+import throttle from 'lodash.throttle';
 
 // State for collapsible sections
 const showBadges = ref(true);
@@ -479,7 +480,19 @@ const props = defineProps({
 });
 
 // eslint-disable-next-line no-unused-vars
-const emit = defineEmits(['reset-budget', 'toggle-auto-balance', 'save-budget']);
+const emit = defineEmits(['share-budget', 'reset-budget', 'save-budget', 'toggle-auto-balance']);
+
+const throttledShareBudget = throttle(() => {
+  emit('share-budget');
+}, 2000);
+
+const throttledResetBudget = throttle(() => {
+  emit('reset-budget');
+}, 2000);
+
+const throttledSaveBudget = throttle(() => {
+  emit('save-budget');
+}, 2000);
 
 // Format currency for display
 function formatCurrency(value) {
@@ -503,6 +516,9 @@ function showTooltip(text) {
 function hideTooltip() {
   activeTooltip.value = '';
 }
+
+// Throttle the downloadChart function
+const throttledDownloadChart = throttle(downloadChart, 2000);
 </script>
 
 <style scoped>

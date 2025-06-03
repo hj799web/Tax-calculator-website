@@ -1,4 +1,8 @@
 import { badgeConfig } from '@/domains/badges/config/badgeConfig';
+import { handleError } from '@/utils/errorHandler.js';
+import { ref } from 'vue';
+
+export const badgeErrorMessage = ref('');
 
 /**
  * Sensitivity factor: 60% more sensitive (i.e., multiplier of 1.6)
@@ -101,7 +105,7 @@ export function getBudgetBadges(budget, activePreset = null, maxBadges = 5) {
             try {
               return condition(sensitiveBudget);
             } catch (err) {
-              console.error(`  - Error in condition:`, err);
+              handleError(err, (msg) => badgeErrorMessage.value = msg);
               return false;
             }
           });
@@ -114,7 +118,7 @@ export function getBudgetBadges(budget, activePreset = null, maxBadges = 5) {
             try {
               return condition(sensitiveBudget);
             } catch (err) {
-              console.error(`  - Error in condition:`, err);
+              handleError(err, (msg) => badgeErrorMessage.value = msg);
               return false;
             }
           });
@@ -129,7 +133,7 @@ export function getBudgetBadges(budget, activePreset = null, maxBadges = 5) {
       console.log(`  - Condition result:`, result);
       return result;
     } catch (error) {
-      console.error(`Error evaluating badge ${b.title}:`, error);
+      handleError(error, (msg) => badgeErrorMessage.value = msg);
       return false;
     }
   });

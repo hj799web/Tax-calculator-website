@@ -258,6 +258,7 @@ import { ref, computed, onMounted, onUnmounted } from 'vue';
 import html2canvas from 'html2canvas';
 import BudgetSentimentBadgeCard from '@/domains/badges/components/BudgetSentimentBadgeCard.vue';
 import { useBudgetSimulatorStore } from '@/domains/budget';
+import { handleError } from '@/utils/errorHandler.js';
 
 // Build previewBudgetData from current store/computed values
 const previewBudgetData = computed(() => ({
@@ -495,7 +496,7 @@ const handleInstagramShare = () => {
       sharedPlatform.value = 'instagram';
       setTimeout(() => sharedPlatform.value = null, 2000);
     }).catch(error => {
-      console.log('Web Share API failed, falling back to URL opening', error);
+      handleError(error, (msg) => errorMessage.value = msg);
       // Fallback to opening Instagram
       openInstagramWithUrl(shareUrl.toString(), shareText);
     });
@@ -578,7 +579,7 @@ const copyLink = async () => {
     linkCopied.value = true;
     setTimeout(() => linkCopied.value = false, 2000);
   } catch (err) {
-    console.error('Failed to copy link:', err);
+    handleError(err, (msg) => errorMessage.value = msg);
     // Fallback for browsers that don't support clipboard API
     const textArea = document.createElement('textarea');
     textArea.value = props.shareUrl || window.location.href;
@@ -638,7 +639,7 @@ const generateImage = async () => {
     });
     return canvas;
   } catch (error) {
-    console.error('Error generating image:', error);
+    handleError(error, (msg) => errorMessage.value = msg);
     return null;
   } finally {
     isGenerating.value = false;
@@ -669,12 +670,12 @@ const copyImage = async () => {
         await navigator.clipboard.write([clipboardData]);
         alert('Image copied to clipboard!'); 
       } catch (error) {
-        console.error('Error copying to clipboard:', error);
+        handleError(error, (msg) => errorMessage.value = msg);
         alert('Failed to copy image to clipboard. Your browser may not support this feature.');
       }
     }, 'image/png');
   } catch (error) {
-    console.error('Error copying image:', error);
+    handleError(error, (msg) => errorMessage.value = msg);
     alert('Failed to copy image to clipboard. Your browser may not support this feature.');
   }
 };
@@ -780,6 +781,8 @@ function getFallbackSources() {
     { id: 'fallbackOther', name: 'Other Revenue', adjustedAmount: 40, color: '#9F7AEA' }
   ];
 }
+
+const errorMessage = ref('');
 </script>
 
 <style scoped>

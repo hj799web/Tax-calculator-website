@@ -2,7 +2,7 @@ import { computed } from 'vue'
 import { useCalculatorStore } from '@/domains/calculator/store/calculator.js'
 import { storeToRefs } from 'pinia';
 import { useVuelidate } from '@vuelidate/core'
-import { numeric, minValue } from '@vuelidate/validators'
+import { numeric, minValue, maxValue, helpers } from '@vuelidate/validators'
 
 export const useCalculator = () => {
 
@@ -24,65 +24,146 @@ export const useCalculator = () => {
     numberOfDependentsWithDisabilities
   } = storeToRefs(calculatorStore);
 
+  // Helper function to sanitize numeric input
+  const sanitizeNumericInput = (value) => {
+    if (value === undefined || value === '') return undefined;
+    // Remove any non-numeric characters except decimal point
+    const sanitized = String(value).replace(/[^0-9.]/g, '');
+    // Ensure only one decimal point
+    const parts = sanitized.split('.');
+    if (parts.length > 2) {
+      return parseFloat(parts[0] + '.' + parts.slice(1).join(''));
+    }
+    return parseFloat(sanitized);
+  };
+
+  // Helper function to validate decimal places
+  const maxDecimalPlaces = (maxPlaces) => (value) => {
+    if (value === undefined || value === '') return true;
+    const decimalStr = String(value).split('.')[1];
+    return !decimalStr || decimalStr.length <= maxPlaces;
+  };
+
+  // Helper function to check correct type
   const checkCorrectType = (value) => {
-    return value === undefined || typeof value === 'number'
-  }
+    return value === undefined || typeof value === 'number';
+  };
+
+  // Maximum values for different inputs
+  const MAX_INCOME = 1000000000; // $1 billion
+  const MAX_DEPENDENTS = 20;
+  const MAX_RRSP = 29210; // 2024 RRSP limit
 
   const rules = computed(() => ({
     income: {
       numeric,
       checkCorrectType,
       minValue: minValue(0),
+      maxValue: maxValue(MAX_INCOME),
+      maxDecimalPlaces: helpers.withMessage(
+        'Maximum 2 decimal places allowed',
+        maxDecimalPlaces(2)
+      )
     },
     selfEmploymentIncome: {
       numeric,
       checkCorrectType,
-      minValue: minValue(0)
+      minValue: minValue(0),
+      maxValue: maxValue(MAX_INCOME),
+      maxDecimalPlaces: helpers.withMessage(
+        'Maximum 2 decimal places allowed',
+        maxDecimalPlaces(2)
+      )
     },
     capitalGainsBeforeJune25: {
       numeric,
       checkCorrectType,
-      minValue: minValue(0)
+      minValue: minValue(0),
+      maxValue: maxValue(MAX_INCOME),
+      maxDecimalPlaces: helpers.withMessage(
+        'Maximum 2 decimal places allowed',
+        maxDecimalPlaces(2)
+      )
     },
     capitalGainsAfterJune25: {
       numeric,
       checkCorrectType,
-      minValue: minValue(0)
+      minValue: minValue(0),
+      maxValue: maxValue(MAX_INCOME),
+      maxDecimalPlaces: helpers.withMessage(
+        'Maximum 2 decimal places allowed',
+        maxDecimalPlaces(2)
+      )
     },
     eligibleDividends: {
       numeric,
       checkCorrectType,
-      minValue: minValue(0)
+      minValue: minValue(0),
+      maxValue: maxValue(MAX_INCOME),
+      maxDecimalPlaces: helpers.withMessage(
+        'Maximum 2 decimal places allowed',
+        maxDecimalPlaces(2)
+      )
     },
     ineligibleDividends: {
       numeric,
       checkCorrectType,
-      minValue: minValue(0)
+      minValue: minValue(0),
+      maxValue: maxValue(MAX_INCOME),
+      maxDecimalPlaces: helpers.withMessage(
+        'Maximum 2 decimal places allowed',
+        maxDecimalPlaces(2)
+      )
     },
     otherIncome: {
       numeric,
       checkCorrectType,
-      minValue: minValue(0)
+      minValue: minValue(0),
+      maxValue: maxValue(MAX_INCOME),
+      maxDecimalPlaces: helpers.withMessage(
+        'Maximum 2 decimal places allowed',
+        maxDecimalPlaces(2)
+      )
     },
     rrspDeduction: {
       numeric,
       checkCorrectType,
-      minValue: minValue(0)
+      minValue: minValue(0),
+      maxValue: maxValue(MAX_RRSP),
+      maxDecimalPlaces: helpers.withMessage(
+        'Maximum 2 decimal places allowed',
+        maxDecimalPlaces(2)
+      )
     },
     numberOfDependents: {
       numeric,
       checkCorrectType,
-      minValue: minValue(0)
+      minValue: minValue(0),
+      maxValue: maxValue(MAX_DEPENDENTS),
+      maxDecimalPlaces: helpers.withMessage(
+        'Must be a whole number',
+        maxDecimalPlaces(0)
+      )
     },
     numberOfChildrenUnder18: {
       numeric,
       checkCorrectType,
-      minValue: minValue(0)
+      minValue: minValue(0),
+      maxValue: maxValue(MAX_DEPENDENTS),
+      maxDecimalPlaces: helpers.withMessage(
+        'Must be a whole number',
+        maxDecimalPlaces(0)
+      )
     },
     numberOfDependentsWithDisabilities: {
       numeric,
       checkCorrectType,
-      minValue: minValue(0)
+      minValue: minValue(0),
+      maxValue: maxValue(MAX_DEPENDENTS),
+      maxDecimalPlaces: helpers.withMessage(
+        'Must be a whole number',
+        maxDecimalPlaces(0)
+      )
     }
   }))
 
@@ -114,5 +195,9 @@ export const useCalculator = () => {
       )*/
   });
 
-  return { v$, canCalculate }
+  return {
+    v$,
+    sanitizeNumericInput,
+    canCalculate
+  }
 }

@@ -244,6 +244,8 @@
     :budget-data="sharedBudgetData"
     @apply-budget="handleApplySharedBudget"
   />
+
+  <div v-if="financeMinisterErrorMessage" class="error-message">{{ financeMinisterErrorMessage }}</div>
 </template>
 
 <script setup>
@@ -273,6 +275,7 @@ import RadarSentiment from '@/domains/sentiment/components/RadarSentiment.vue'
 import { setPreset } from '@/presets'
 
 import { parseSharedBudgetParams, applySharedBudgetToStore } from '@/domains/budget/utils/sharedBudget.js'
+import { handleError } from '@/utils/errorHandler.js'
 
 const budgetStore = useBudgetSimulatorStore();
 const currentYear = ref(budgetStore.currentYear);
@@ -498,6 +501,7 @@ const isModalDataLoading = ref(false);
 const showSharedBudgetModal = ref(false);
 const sharedBudgetData = ref({}); // will hold the parsed shared budget data
 const isSharedBudget = ref(false);
+const financeMinisterErrorMessage = ref('');
 
 import { useRoute } from 'vue-router';
 
@@ -615,8 +619,7 @@ async function openSocialShareModal() {
     // Then open the modal
     showSocialShareModal.value = true;
   } catch (error) {
-    console.error("Error preparing budget data for social share:", error);
-    alert("There was a problem preparing your budget data. Please try again.");
+    handleError(error, (msg) => financeMinisterErrorMessage.value = msg);
   } finally {
     // Clear loading state whether successful or not
     isModalDataLoading.value = false;
@@ -761,6 +764,7 @@ const toggleSection = (section) => {
 /* 5. Modern Inputs & Sliders */
 input[type="range"], .slider {
   -webkit-appearance: none;
+  appearance: none;
   width: 100%;
   height: 6px;
   background: linear-gradient(90deg, #27ae60 0%, #3498db 100%);
@@ -849,8 +853,17 @@ input:focus, select:focus, textarea:focus {
   }
   .sub-navigation {
     flex-direction: column;
-  gap: 0.5rem;
+    gap: 0.5rem;
     padding: 0.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .finance-minister-simulator {
+    transform: scale(0.9);
+    transform-origin: top center;
+    width: 111.11%; /* Compensate for the 10% scale down (100/0.9) */
+    margin-left: -5.55%; /* Center the scaled content */
   }
 }
 
@@ -1107,126 +1120,108 @@ input:focus, select:focus, textarea:focus {
 }
 
 @media (max-width: 768px) {
-  .simulator-grid {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
-    gap: 1rem;
-  }
-  .simulator-card {
-    width: 100%;
-    min-width: 0;
-    margin: 0 auto 1rem auto;
-    box-sizing: border-box;
-  }
-}
-
-/* Sentiment Controls Styling */
-.sentiment-controls-container {
-  max-width: 800px;
-  margin: 20px auto;
-  padding: 15px 20px;
-  background-color: #f8f9fa;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.sentiment-controls-container h2 {
-  font-size: 1.4rem;
-  margin-bottom: 15px;
-  color: #2c3e50;
-  text-align: center;
-}
-
-/* Responsive Design */
-@media (max-width: 1200px) {
-  .simulator-grid {
-    grid-template-columns: 1fr 1.4fr;
-    gap: 1.25rem;
-  }
-  
-  .main-container {
-    padding: 20px;
-  }
-}
-
-@media (max-width: 992px) {
-  .simulator-grid {
-    grid-template-columns: 1fr 1.2fr;
-    gap: 1rem;
-  }
-  
-  .main-container {
-    padding: 15px;
-  }
-}
-
-@media (max-width: 768px) {
   .finance-minister-simulator {
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding: 1.5rem;
   }
   
   .simulator-grid {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
+    gap: 1.5rem;
   }
   
   .simulator-card {
     width: 100%;
     max-width: 800px;
-    margin: 0 auto 1rem auto;
+    margin: 0 auto 1.5rem auto;
     box-sizing: border-box;
+    padding: 1.5rem;
   }
   
   .spending-card {
     min-height: auto;
     height: fit-content;
+    margin-bottom: 1.5rem;
   }
   
   .card-title {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+  }
+  
+  .card-content {
+    padding: 1.25rem;
   }
   
   .fixed-badge-container {
     position: relative;
     width: 100%;
     max-width: 800px;
-    margin: 0 auto 1rem auto;
-    border-radius: 8px;
+    margin: 0 auto 1.5rem auto;
+    border-radius: 12px;
+    padding: 1rem;
   }
   
   .finance-minister-simulator.panel-collapsed {
-    padding-left: 1rem;
+    padding: 1.5rem;
+  }
+  
+  .main-container {
+    padding: 1.5rem;
+  }
+  
+  .main-title {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .description {
+    margin: 1.5rem auto;
+    padding: 1.25rem;
   }
 }
 
 @media (max-width: 576px) {
   .simulator-grid {
-    gap: 0.75rem;
+    gap: 1.25rem;
   }
   
   .simulator-card {
     max-width: 100%;
-    padding: 0.75rem;
+    padding: 1.25rem;
+    margin-bottom: 1.25rem;
   }
   
   .card-title {
-    font-size: 1rem;
+    font-size: 1.1rem;
+    padding: 1rem;
+  }
+  
+  .card-content {
+    padding: 1rem;
   }
   
   .main-container {
-    padding: 10px;
+    padding: 1.25rem;
   }
   
   .main-title {
     font-size: 1.5rem;
-    padding: 0 10px;
+    padding: 0 1rem;
+    margin-bottom: 1.25rem;
   }
   
   .fixed-badge-container {
     max-width: 100%;
+    padding: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+  
+  .description {
+    padding: 1rem;
+    margin: 1.25rem auto;
   }
   
   /* Prevent vertical stretching of content */
@@ -1240,6 +1235,7 @@ input:focus, select:focus, textarea:focus {
   .sentiment-card {
     aspect-ratio: auto;
     height: fit-content;
+    margin-bottom: 1.25rem;
   }
 }
 

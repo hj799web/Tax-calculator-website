@@ -9,19 +9,34 @@
     <input
       id="employmentIncome"
       :value="income"
-      type="number"
+      type="text"
+      inputmode="decimal"
+      pattern="[0-9]*\.?[0-9]*"
       class="input-field"
       :class="{ 'input-error-field': v$.income.$invalid }"
       :placeholder="'Enter your ' + selectedSalaryRate.toLowerCase() + ' employment income'"
       aria-label="Employment Income"
-      autocomplete="on"
+      autocomplete="off"
       @input="setIncome"
+      @keypress="preventInvalidInput"
+      @paste="handlePaste"
     >
     <div
       v-if="v$.income.$invalid"
       class="input-error"
     >
-      Value must be a number greater than 0
+      <template v-if="v$.income.minValue.$invalid">
+        Value must be greater than 0
+      </template>
+      <template v-else-if="v$.income.maxValue.$invalid">
+        Value cannot exceed $1 billion
+      </template>
+      <template v-else-if="v$.income.maxDecimalPlaces.$invalid">
+        Maximum 2 decimal places allowed
+      </template>
+      <template v-else>
+        Please enter a valid number
+      </template>
     </div>
   </div>
 </template>
@@ -36,17 +51,35 @@ const calculatorStore = useCalculatorStore()
 const salaryStore = useSalaryStore()
 const { selectedSalaryRate } = storeToRefs(salaryStore)
 const { income } = storeToRefs(calculatorStore)
-const { v$ } = useCalculator()
+const { v$, sanitizeNumericInput } = useCalculator()
+
+const preventInvalidInput = (event) => {
+  const char = String.fromCharCode(event.keyCode);
+  const pattern = /[0-9.]/;
+  if (!pattern.test(char)) {
+    event.preventDefault();
+  }
+  // Prevent multiple decimal points
+  if (char === '.' && event.target.value.includes('.')) {
+    event.preventDefault();
+  }
+}
+
+const handlePaste = (event) => {
+  event.preventDefault();
+  const pastedText = event.clipboardData.getData('text');
+  const sanitizedValue = sanitizeNumericInput(pastedText);
+  if (sanitizedValue !== undefined) {
+    income.value = sanitizedValue;
+  }
+}
 
 const setIncome = ($event) => {
-  if ($event.target.validity.valid) {
-    if ($event.target.value.length === 0) {
-      income.value = undefined
-    } else {
-      income.value = parseFloat($event.target.value)
-    }
+  const sanitizedValue = sanitizeNumericInput($event.target.value);
+  if (sanitizedValue !== undefined) {
+    income.value = sanitizedValue;
   } else {
-    income.value = $event.target.value
+    income.value = undefined;
   }
 }
 </script>

@@ -47,6 +47,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import throttle from 'lodash.throttle';
 
 const props = defineProps({
   modelValue: {
@@ -81,12 +82,15 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue']);
 
+// Throttle the emit for update:modelValue
+const throttledEmitUpdate = throttle((numValue) => {
+  emit('update:modelValue', numValue);
+}, 200);
+
 function updateValue(value) {
-  console.log('PercentageInput: updateValue called with', value);
   const numValue = Number(value);
   if (numValue >= props.min && numValue <= props.max) {
-    console.log('PercentageInput: emitting update:modelValue with', numValue);
-    emit('update:modelValue', numValue);
+    throttledEmitUpdate(numValue);
   }
 }
 
@@ -95,15 +99,13 @@ const amountValue = computed(() => {
   return (props.baseAmount * props.modelValue / 100).toFixed(1);
 });
 
-// Update the percentage based on the amount input
+// Throttle the emit for update:modelValue from amount input as well
 function updateAmountValue(value) {
-  console.log('PercentageInput: updateAmountValue called with', value);
   const numValue = Number(value);
   if (props.baseAmount > 0) {
     const newPercentage = (numValue / props.baseAmount) * 100;
     if (newPercentage >= props.min && newPercentage <= props.max) {
-      console.log('PercentageInput: emitting update:modelValue with', newPercentage);
-      emit('update:modelValue', newPercentage);
+      throttledEmitUpdate(newPercentage);
     }
   }
 }

@@ -1,5 +1,7 @@
 import { defineStore } from "pinia";
 import { getBudgetBadges } from "@/domains/badges/utils/generateBadgesFromBudget";
+import { handleError } from '@/utils/errorHandler.js';
+import { ref } from 'vue';
 
 // Helper for conditional logging in development environment only
 const devLog = (message, ...args) => {
@@ -15,6 +17,8 @@ const devWarn = (message, ...args) => {
   }
 };
 
+// Add a user-facing error message ref for use in components
+export const budgetErrorMessage = ref('');
 
 export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
   state: () => ({
@@ -650,7 +654,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
         // Access the budgetDataForBadges getter, not calling it as a function
         return this.budgetDataForBadges;
       } catch (e) {
-        console.error('[budgetData] Error in budgetDataForBadges:', e);
+        handleError(e, (msg) => budgetErrorMessage.value = msg);
         // Fallback: return a minimal valid object if something goes wrong
         // Include default revenue mix values to prevent fiscal chaos warnings
         return {
