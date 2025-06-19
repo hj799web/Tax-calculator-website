@@ -308,12 +308,22 @@ function toggleFAQs() {
 </script>
 
 <style>
+/* Global crisp rendering improvements */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
 /* Base styles */
 #app {
   font-family: 'Poppins', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
+  text-rendering: optimizeLegibility;
 }
 
 /* Import fonts */
@@ -324,6 +334,48 @@ body {
   background-color: transparent;
   margin: 0;
   padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Improve crispness for all text elements */
+h1, h2, h3, h4, h5, h6, p, span, div, label, input, button, select, textarea {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Improve crispness for icons */
+.material-icons, .icon {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: 'liga' 1;
+}
+
+/* Optimize for high DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  * {
+    border-width: 0.5px;
+  }
+}
+
+/* Ensure crisp rendering on all browsers */
+@supports (-webkit-appearance: none) {
+  .calculator-container,
+  .result-box,
+  .calculator-section,
+  .faq-section,
+  .budget-categories-section,
+  .resources-section,
+  .year-selector-container,
+  .simulator-card {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
 }
 
 /* Mobile scaling */

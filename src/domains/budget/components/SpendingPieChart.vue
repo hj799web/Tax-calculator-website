@@ -105,7 +105,17 @@ const categories = computed(() => {
       id: 'governmentOperations',
       name: 'Government Operations',
       amount: budgetStore.governmentOperationsSpending,
-      color: '#805AD5' // purple-600
+      color: '#ED64A6' // pink-500
+    });
+  }
+  
+  // Add Debt Servicing as a separate fixed cost category
+  if (budgetStore.fixedCosts.debtServicing) {
+    result.push({
+      id: 'debtServicing',
+      name: 'Debt Servicing (Fixed)',
+      amount: budgetStore.debtServicing,
+      color: '#667EEA' // indigo-500
     });
   }
   

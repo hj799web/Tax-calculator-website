@@ -747,6 +747,15 @@ function hideTooltip() {
 </script>
 
 <style scoped>
+/* Global crisp rendering improvements */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
 .simulator-card {
   background-color: white;
   border-radius: 0.5rem;
@@ -762,6 +771,9 @@ function hideTooltip() {
   display: flex;
   flex-direction: column;
   min-height: 1440px;
+  /* Improve crispness */
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .simulator-card:hover {
@@ -774,6 +786,10 @@ function hideTooltip() {
 .card-title, .card-content, .main-category-header, .main-category-item, .other-category-header, .other-category-item, .subcategory-header, .subcategory-item, .gov-ops-header, .gov-ops-item, .tax-expenditure-header, .tax-expenditure-item, .impact-value, .reset-button {
   word-break: break-word;
   white-space: normal;
+  /* Improve text crispness */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 .card-title {
@@ -794,6 +810,10 @@ function hideTooltip() {
   border-top-left-radius: 0.5rem;
   border-top-right-radius: 0.5rem;
   box-shadow: none;
+  /* Improve crispness */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 .card-title .icon {
@@ -821,6 +841,10 @@ function hideTooltip() {
   cursor: pointer;
   transition: background-color 0.2s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  /* Improve crispness */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 .action-button:hover {
@@ -837,6 +861,10 @@ function hideTooltip() {
   color: #4a5568;
   cursor: pointer;
   transition: background-color 0.2s ease;
+  /* Improve crispness */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 .reset-button:hover {
@@ -852,6 +880,10 @@ function hideTooltip() {
   border-radius: 0.21rem;
   font-size: 0.78rem;
   color: #4a5568;
+  /* Improve crispness */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 .tax-expenditures-grid,
@@ -875,6 +907,10 @@ function hideTooltip() {
   transform: translateZ(0);
   transition: all 0.3s ease;
   will-change: transform, box-shadow;
+  /* Improve crispness */
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  background-color: white;
 }
 
 .tax-expenditure-item:hover,
@@ -900,6 +936,10 @@ function hideTooltip() {
   align-items: center;
   transform: translateZ(20px);
   transition: transform 0.3s ease;
+  /* Improve crispness */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 .tax-expenditure-header h4,
@@ -911,6 +951,10 @@ function hideTooltip() {
   font-size: 1rem;
   font-weight: 600;
   color: #2d3748;
+  /* Improve crispness */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 .tax-expenditure-base,
@@ -920,6 +964,10 @@ function hideTooltip() {
 .gov-ops-base {
   font-size: 0.875rem;
   color: #4a5568;
+  /* Improve crispness */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 .tooltip-container {
@@ -948,6 +996,10 @@ function hideTooltip() {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   white-space: pre-line;
   word-wrap: break-word;
+  /* Improve crispness */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 .tooltip-text::after {
@@ -968,6 +1020,10 @@ function hideTooltip() {
   padding: 0.86rem;
   transform: translateZ(10px);
   transition: transform 0.3s ease;
+  /* Improve crispness */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 .tax-expenditure-description,
@@ -979,6 +1035,10 @@ function hideTooltip() {
   color: #4a5568;
   margin-bottom: 0.86rem;
   min-height: 3.46rem;
+  /* Improve crispness */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 .tax-expenditure-controls,
@@ -1001,6 +1061,10 @@ function hideTooltip() {
   color: #4a5568;
   cursor: pointer;
   transition: background-color 0.2s ease;
+  /* Improve crispness */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 .reset-button:hover {
@@ -1017,20 +1081,36 @@ function hideTooltip() {
   align-items: center;
   font-size: 0.75rem;
   color: #4a5568;
+  /* Improve crispness */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 .impact-label {
   color: #4a5568;
+  /* Improve crispness */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 .positive-impact {
   color: #38a169;
   font-weight: 600;
+  /* Improve crispness */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 .negative-impact {
   color: #e53e3e;
   font-weight: 600;
+  /* Improve crispness */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 /* Government Operations Styles */
@@ -1039,12 +1119,20 @@ function hideTooltip() {
   border-radius: 0.375rem;
   padding: 0.75rem 1rem;
   margin-bottom: 1rem;
+  /* Improve crispness */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 .gov-ops-info p {
   margin: 0;
   font-size: 0.875rem;
   color: #4a5568;
+  /* Improve crispness */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 .gov-ops-grid {
@@ -1057,6 +1145,10 @@ function hideTooltip() {
   border: 1px solid #e2e8f0;
   border-radius: 0.35rem;
   overflow: hidden;
+  /* Improve crispness */
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  background-color: white;
 }
 
 .gov-ops-header {
@@ -1065,6 +1157,10 @@ function hideTooltip() {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  /* Improve crispness */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 .gov-ops-header h4 {
@@ -1076,6 +1172,10 @@ function hideTooltip() {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  /* Improve crispness */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 .gov-ops-base {
@@ -1085,10 +1185,18 @@ function hideTooltip() {
   display: flex;
   align-items: center;
   gap: 0.21rem;
+  /* Improve crispness */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 .gov-ops-content {
   padding: 1rem;
+  /* Improve crispness */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 .gov-ops-description {
@@ -1101,6 +1209,10 @@ function hideTooltip() {
   -webkit-line-clamp: 3;
   line-clamp: 3;
   -webkit-box-orient: vertical;
+  /* Improve crispness */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 .gov-ops-controls {
@@ -1127,6 +1239,10 @@ function hideTooltip() {
   color: #4a5568;
   cursor: pointer;
   transition: background-color 0.2s;
+  /* Improve crispness */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 .gov-ops-reset:hover {
@@ -1138,6 +1254,10 @@ function hideTooltip() {
   justify-content: space-between;
   align-items: center;
   font-size: 0.85rem;
+  /* Improve crispness */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 .tax-expenditures-summary {
@@ -1145,6 +1265,10 @@ function hideTooltip() {
   border-radius: 0.375rem;
   padding: 1rem;
   margin-top: 1rem;
+  /* Improve crispness */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 .summary-header {
@@ -1159,6 +1283,10 @@ function hideTooltip() {
   font-size: 1rem;
   font-weight: 600;
   color: #2d3748;
+  /* Improve crispness */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 .reset-all-button {
@@ -1170,6 +1298,10 @@ function hideTooltip() {
   color: #4a5568;
   cursor: pointer;
   transition: background-color 0.2s;
+  /* Improve crispness */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 .reset-all-button:hover {
@@ -1197,6 +1329,10 @@ function hideTooltip() {
   justify-content: space-between;
   align-items: center;
   font-weight: 600;
+  /* Improve crispness */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 .spending-controls {
@@ -1214,6 +1350,9 @@ function hideTooltip() {
   transition: all 0.3s ease;
   will-change: transform, box-shadow;
   contain: content;
+  /* Improve crispness */
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .spending-controls:hover {
@@ -1236,6 +1375,9 @@ function hideTooltip() {
   transform: translateZ(0);
   transition: all 0.3s ease;
   will-change: transform, box-shadow;
+  /* Improve crispness */
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .spending-group:hover {
@@ -1259,6 +1401,10 @@ function hideTooltip() {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  /* Improve crispness */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 .group-title .material-icons {
@@ -1269,6 +1415,10 @@ function hideTooltip() {
   font-size: 1.25rem;
   font-weight: 700;
   color: #2d3748;
+  /* Improve crispness */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 .spending-items {
@@ -1287,6 +1437,9 @@ function hideTooltip() {
   transform: translateZ(0);
   transition: all 0.3s ease;
   will-change: transform, background-color;
+  /* Improve crispness */
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .spending-item:hover {
@@ -1304,11 +1457,19 @@ function hideTooltip() {
   font-size: 1rem;
   font-weight: 600;
   color: #2d3748;
+  /* Improve crispness */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 .item-description {
   font-size: 0.875rem;
   color: #4a5568;
+  /* Improve crispness */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 .item-controls {
@@ -1328,6 +1489,10 @@ function hideTooltip() {
   transform: translateZ(0);
   transition: all 0.3s ease;
   will-change: transform, border-color, box-shadow;
+  /* Improve crispness */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 .amount-input:focus {
@@ -1346,172 +1511,71 @@ function hideTooltip() {
   color: #4a5568;
   min-width: 4rem;
   text-align: right;
+  /* Improve crispness */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  .spending-controls {
-    padding: 1.5rem;
-    margin: 1.5rem 0;
-  }
-  
-  .spending-group {
-    padding: 1.25rem;
-    margin-bottom: 1.25rem;
-  }
-  
-  .group-title {
-    font-size: 1.1rem;
-    margin-bottom: 1rem;
-  }
-  
-  .group-total {
-    font-size: 1.2rem;
-    margin: 0.5rem 0;
-  }
-  
-  .spending-items {
-    gap: 1.25rem;
-  }
-  
-  .spending-item {
-    padding: 1.25rem;
-    margin-bottom: 1rem;
-  }
-  
-  .item-title {
-    font-size: 1rem;
-    margin-bottom: 0.5rem;
-  }
-  
-  .item-description {
-    font-size: 0.9rem;
-    margin-bottom: 1rem;
-    line-height: 1.5;
-  }
-  
-  .amount-input {
-    width: 120px;
-    padding: 0.75rem;
-    margin: 0.5rem 0;
-  }
-  
-  .percentage-display {
-    font-size: 0.9rem;
-    margin: 0.5rem 0;
-  }
+/* Additional crispness improvements */
+.main-category-percentage-input,
+.other-category-percentage-input,
+.subcategory-percentage-input,
+.gov-ops-percentage-input {
+  /* Improve crispness for percentage inputs */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
-@media (max-width: 480px) {
-  .spending-controls {
-    padding: 1.25rem;
-    margin: 1.25rem 0;
-  }
-  
-  .spending-group {
-    padding: 1rem;
-    margin-bottom: 1rem;
-  }
-  
-  .group-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.75rem;
-  }
-  
-  .group-total {
-    text-align: left;
-    margin: 0.5rem 0;
-  }
-  
-  .spending-item {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-    padding: 1rem;
-  }
-  
-  .item-controls {
-    width: 100%;
-    justify-content: space-between;
-    gap: 0.75rem;
-  }
-  
-  .amount-input {
-    width: 100%;
-    margin: 0.5rem 0;
-  }
-  
-  .percentage-display {
-    margin: 0.5rem 0;
+/* Improve crispness for all text elements */
+h1, h2, h3, h4, h5, h6, p, span, div, label, input, button, select, textarea {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Reduce blur effects that might cause graininess */
+.simulator-card,
+.tax-expenditure-item,
+.main-category-item,
+.other-category-item,
+.subcategory-item,
+.gov-ops-item {
+  filter: none;
+  -webkit-filter: none;
+}
+
+/* Improve crispness for icons */
+.material-icons {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: 'liga' 1;
+}
+
+/* Optimize for high DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .simulator-card,
+  .tax-expenditure-item,
+  .main-category-item,
+  .other-category-item,
+  .subcategory-item,
+  .gov-ops-item {
+    border-width: 0.5px;
   }
 }
 
-/* Touch Device Optimizations */
-@media (hover: none) {
-  .action-button:hover,
-  .reset-button:hover {
-    transform: none;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .action-button:active,
-  .reset-button:active {
-    background: #2980b9;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-  }
-}
-
-/* Reduced Motion */
-@media (prefers-reduced-motion: reduce) {
-  .action-button,
-  .reset-button {
-    transition: none;
-  }
-}
-
-/* High Contrast Mode */
-@media (forced-colors: active) {
-  .action-button,
-  .reset-button {
-    border: 2px solid CanvasText;
-  }
-}
-
-/* Print Styles */
-@media print {
-  .spending-controls {
-    box-shadow: none;
-    border: 1px solid #000;
-  }
-  
-  .spending-group {
-    break-inside: avoid;
-    box-shadow: none;
-    border: 1px solid #000;
-  }
-  
-  .spending-item {
-    break-inside: avoid;
-    border: 1px solid #000;
-  }
-  
-  .amount-input {
-    border: 1px solid #000;
-  }
-}
-
-@media (max-width: 600px) {
-  .card-title, .card-content {
-    font-size: 0.95rem;
-    padding: 0.5rem 0.5rem;
-  }
-  .main-category-header, .other-category-header, .subcategory-header, .gov-ops-header, .tax-expenditure-header {
-    font-size: 0.9rem;
-    padding: 0.5rem 0.5rem;
-  }
-  .main-category-item, .other-category-item, .subcategory-item, .gov-ops-item, .tax-expenditure-item {
-    padding: 0.5rem 0.5rem;
+/* Ensure crisp rendering on all browsers */
+@supports (-webkit-appearance: none) {
+  .simulator-card,
+  .tax-expenditure-item,
+  .main-category-item,
+  .other-category-item,
+  .subcategory-item,
+  .gov-ops-item {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
   }
 }
 </style>

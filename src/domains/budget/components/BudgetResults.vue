@@ -135,6 +135,23 @@
             </span>
           </div>
           
+          <!-- Debt Servicing (Fixed Cost) -->
+          <div class="result-item">
+            <span class="result-label">
+              <span class="material-icons text-gray-500 mr-1 text-xs">account_balance</span>
+              Debt Servicing:
+              <span class="info-icon tooltip-container" 
+                @mouseenter="showTooltip('Interest payments on the federal debt (fixed cost that cannot be adjusted)')"
+                @mouseleave="hideTooltip()"
+                style="margin-left: 4px; cursor: pointer;">
+                ⓘ
+              </span>
+            </span>
+            <span class="font-medium text-gray-600 text-sm">
+              {{ formatCurrency(budgetStore.debtServicing) }}
+            </span>
+          </div>
+          
           <!-- Surplus/Deficit -->
           <div class="result-item">
             <span class="result-label">
