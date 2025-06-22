@@ -730,310 +730,35 @@ const toggleSection = (section) => {
 
 /* 4. Sticky/Floating Sub-Navigation */
 .sub-navigation {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  margin: 15px 0;
-  padding: 10px;
-  background-color: rgba(248, 249, 250, 0.95);
-  border-radius: 8px;
-  border: 1px solid #e9ecef;
-  flex-wrap: wrap;
   position: sticky;
-  top: 0;
-  z-index: 100;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.sub-nav-link {
-  color: #3498db;
-  text-decoration: none;
-  font-weight: 500;
-  padding: 8px 16px;
-  border-radius: 4px;
-  transition: all 0.2s ease;
-  font-size: 0.9rem;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.sub-nav-link:hover {
-  background-color: #3498db;
-  color: white;
-}
-
-.sub-nav-link .material-icons {
-  font-size: 1.1rem;
-}
-
-@media (max-width: 768px) {
-  .finance-minister-simulator {
-    padding: 1.5rem;
-  }
-  
-  .simulator-grid {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.5rem;
-  }
-  
-  .simulator-card {
-    width: 100%;
-    max-width: 800px;
-    margin: 0 auto 1.5rem auto;
-    box-sizing: border-box;
-    padding: 1.5rem;
-  }
-  
-  .spending-card {
-    min-height: auto;
-    height: fit-content;
-    margin-bottom: 1.5rem;
-  }
-  
-  .card-title {
-    font-size: 1.2rem;
-    padding: 1.25rem;
-    margin-bottom: 1rem;
-  }
-  
-  .card-content {
-    padding: 1.25rem;
-  }
-  
-  .fixed-badge-container {
-    position: relative;
-    width: 100%;
-    max-width: 800px;
-    margin: 0 auto 1.5rem auto;
-    border-radius: 12px;
-    padding: 1rem;
-  }
-  
-  .finance-minister-simulator.panel-collapsed {
-    padding: 1.5rem;
-  }
-  
-  .main-container {
-    padding: 1.5rem;
-  }
-  
-  .main-title {
-    font-size: 1.8rem;
-    margin-bottom: 1.5rem;
-  }
-  
-  .description {
-    margin: 1.5rem auto;
-    padding: 1.25rem;
-  }
-}
-
-@media (max-width: 576px) {
-  .simulator-grid {
-    gap: 1.25rem;
-  }
-  
-  .simulator-card {
-    max-width: 100%;
-    padding: 1.25rem;
-    margin-bottom: 1.25rem;
-  }
-  
-  .card-title {
-    font-size: 1.1rem;
-    padding: 1rem;
-  }
-  
-  .card-content {
-    padding: 1rem;
-  }
-  
-  .main-container {
-    padding: 1.25rem;
-  }
-  
-  .main-title {
-    font-size: 1.5rem;
-    padding: 0 1rem;
-    margin-bottom: 1.25rem;
-  }
-  
-  .fixed-badge-container {
-    max-width: 100%;
-    padding: 0.75rem;
-    margin-bottom: 1.25rem;
-  }
-  
-  .description {
-    padding: 1rem;
-    margin: 1.25rem auto;
-  }
-  
-  /* Prevent vertical stretching of content */
-  .card-content {
-    min-height: auto;
-    height: fit-content;
-  }
-  
-  /* Maintain aspect ratios for charts and visual elements */
-  .charts-card,
-  .sentiment-card {
-    aspect-ratio: auto;
-    height: fit-content;
-    margin-bottom: 1.25rem;
-  }
-}
-
-.description {
-  background: rgba(255,255,255,0.85);
-  border-radius: 14px;
-  padding: 1rem 1.5rem;
-  box-shadow: 0 2px 8px rgba(52, 152, 219, 0.08);
-  margin: 1rem auto 1.5rem;
-  max-width: 800px;
-  color: #222;
-}
-
-.main-navigation {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  margin: 0;
-  padding: 0;
-  background-color: #f8f9fa;
-  border-radius: 8px;
-  border: 1px solid #e9ecef;
-}
-
-.logo-container {
-  text-align: center;
-  margin-bottom: 15px;
-}
-
-.site-logo {
-  max-width: 180px;
-  height: auto;
-  transition: transform 0.3s ease;
-}
-
-.site-logo:hover {
-  transform: scale(1.05);
-}
-
-/* Sub Navigation Styles */
-.sub-navigation {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  margin: 15px 0;
-  padding: 10px;
-  background-color: rgba(248, 249, 250, 0.95);
-  border-radius: 8px;
-  border: 1px solid #e9ecef;
-  flex-wrap: wrap;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.sub-nav-link {
-  color: #3498db;
-  text-decoration: none;
-  font-weight: 500;
-  padding: 8px 16px;
-  border-radius: 4px;
-  transition: all 0.2s ease;
-  font-size: 0.9rem;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.sub-nav-link:hover {
-  background-color: #3498db;
-  color: white;
-}
-
-.sub-nav-link .material-icons {
-  font-size: 1.1rem;
-}
-
-@media (max-width: 768px) {
-  .sub-navigation {
-    gap: 8px;
-    padding: 8px;
-  }
-  
-  .sub-nav-link {
-    font-size: 0.8rem;
-    padding: 6px 12px;
-  }
-  
-  .sub-nav-link .material-icons {
-    font-size: 1rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .sub-navigation {
-    padding: 10px 6px;
-  }
-  
-  .sub-nav-link {
-    font-size: 0.75rem;
-    padding: 5px 8px;
-  }
-  
-  .sub-nav-link .material-icons {
-    font-size: 0.9rem;
-  }
-}
-
-/* Add solid background to 'Your Achievements' title */
-.badges-title {
-  background: rgba(255,255,255,0.92);
-  border-radius: 8px;
-  padding: 0.4rem 1rem;
-  box-shadow: 0 1px 4px rgba(52, 152, 219, 0.08);
-  color: #27ae60;
-  font-weight: 700;
-  font-size: 1.1rem;
-}
-
-/* Improved badge panel and no-badges-message styling */
-.fixed-badge-container {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  min-width: 220px;
-  max-width: 300px;
-  background: rgba(255,255,255,0.85);
+  top: 0.5rem;
+  z-index: 10;
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(6px);
   border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(52, 152, 219, 0.08);
-  padding-bottom: 1rem;
+  box-shadow: 0 2px 12px rgba(52, 152, 219, 0.08);
+  padding: 0.5rem 1rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
-.no-badges-message {
-  margin: 0.75rem 1rem 0.5rem 1rem;
-  background: rgba(255,255,255,0.92);
-  border-radius: 8px;
-  padding: 0.7rem 1.2rem;
-  box-shadow: 0 1px 4px rgba(52, 152, 219, 0.08);
-  color: #718096;
-  font-style: italic;
-  text-align: center;
-  width: auto;
-  max-width: 95%;
-  align-self: center;
+.sub-nav-link {
+  color: #3498db;
+  font-weight: 600;
+  padding: 0.5rem 1.2rem;
+  border-radius: 6px;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-size: 1rem;
+}
+.sub-nav-link:hover {
+  background: linear-gradient(135deg, #27ae60, #3498db);
+  color: #fff;
+  transform: translateY(-2px) scale(1.04);
 }
 
 /* 5. Modern Inputs & Sliders */
@@ -1133,6 +858,15 @@ input:focus, select:focus, textarea:focus {
   }
 }
 
+@media (max-width: 768px) {
+  .finance-minister-simulator {
+    transform: scale(0.9);
+    transform-origin: top center;
+    width: 111.11%; /* Compensate for the 10% scale down (100/0.9) */
+    margin-left: -5.55%; /* Center the scaled content */
+  }
+}
+
 @media (max-width: 600px) {
   .simulator-card, .sentiment-card {
     padding: 0.7rem 0.3rem;
@@ -1167,8 +901,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .finance-minister-simulator {
-  /* Remove conflicting background - global background handled by App.vue */
-  background: none;
+  background: rgba(255,255,255,0.2);
   position: relative;
   z-index: 1;
   padding: 1rem;
@@ -1387,6 +1120,198 @@ input:focus, select:focus, textarea:focus {
 }
 
 @media (max-width: 768px) {
+  .finance-minister-simulator {
+    padding: 1.5rem;
+  }
+  
+  .simulator-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  
+  .simulator-card {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto 1.5rem auto;
+    box-sizing: border-box;
+    padding: 1.5rem;
+  }
+  
+  .spending-card {
+    min-height: auto;
+    height: fit-content;
+    margin-bottom: 1.5rem;
+  }
+  
+  .card-title {
+    font-size: 1.2rem;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+  }
+  
+  .card-content {
+    padding: 1.25rem;
+  }
+  
+  .fixed-badge-container {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto 1.5rem auto;
+    border-radius: 12px;
+    padding: 1rem;
+  }
+  
+  .finance-minister-simulator.panel-collapsed {
+    padding: 1.5rem;
+  }
+  
+  .main-container {
+    padding: 1.5rem;
+  }
+  
+  .main-title {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .description {
+    margin: 1.5rem auto;
+    padding: 1.25rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .simulator-grid {
+    gap: 1.25rem;
+  }
+  
+  .simulator-card {
+    max-width: 100%;
+    padding: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+  
+  .card-title {
+    font-size: 1.1rem;
+    padding: 1rem;
+  }
+  
+  .card-content {
+    padding: 1rem;
+  }
+  
+  .main-container {
+    padding: 1.25rem;
+  }
+  
+  .main-title {
+    font-size: 1.5rem;
+    padding: 0 1rem;
+    margin-bottom: 1.25rem;
+  }
+  
+  .fixed-badge-container {
+    max-width: 100%;
+    padding: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+  
+  .description {
+    padding: 1rem;
+    margin: 1.25rem auto;
+  }
+  
+  /* Prevent vertical stretching of content */
+  .card-content {
+    min-height: auto;
+    height: fit-content;
+  }
+  
+  /* Maintain aspect ratios for charts and visual elements */
+  .charts-card,
+  .sentiment-card {
+    aspect-ratio: auto;
+    height: fit-content;
+    margin-bottom: 1.25rem;
+  }
+}
+
+.description {
+  background: rgba(255,255,255,0.85);
+  border-radius: 14px;
+  padding: 1rem 1.5rem;
+  box-shadow: 0 2px 8px rgba(52, 152, 219, 0.08);
+  margin: 1rem auto 1.5rem;
+  max-width: 800px;
+  color: #222;
+}
+
+.main-navigation {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin: 0;
+  padding: 0;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.logo-container {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.site-logo {
+  max-width: 180px;
+  height: auto;
+  transition: transform 0.3s ease;
+}
+
+.site-logo:hover {
+  transform: scale(1.05);
+}
+
+/* Sub Navigation Styles */
+.sub-navigation {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin: 15px 0;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+  flex-wrap: wrap;
+}
+
+.sub-nav-link {
+  color: #3498db;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer; /* Add cursor pointer to show it's clickable */
+}
+
+.sub-nav-link:hover {
+  background-color: #3498db;
+  color: white;
+}
+
+.sub-nav-link .material-icons {
+  font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
   .sub-navigation {
     gap: 8px;
     padding: 8px;
@@ -1396,24 +1321,42 @@ input:focus, select:focus, textarea:focus {
     font-size: 0.8rem;
     padding: 6px 12px;
   }
-  
-  .sub-nav-link .material-icons {
-    font-size: 1rem;
-  }
 }
 
-@media (max-width: 480px) {
-  .sub-navigation {
-    padding: 10px 6px;
-  }
-  
-  .sub-nav-link {
-    font-size: 0.75rem;
-    padding: 5px 8px;
-  }
-  
-  .sub-nav-link .material-icons {
-    font-size: 0.9rem;
-  }
+/* Add solid background to 'Your Achievements' title */
+.badges-title {
+  background: rgba(255,255,255,0.92);
+  border-radius: 8px;
+  padding: 0.4rem 1rem;
+  box-shadow: 0 1px 4px rgba(52, 152, 219, 0.08);
+  color: #27ae60;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+/* Improved badge panel and no-badges-message styling */
+.fixed-badge-container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  min-width: 220px;
+  max-width: 300px;
+  background: rgba(255,255,255,0.85);
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(52, 152, 219, 0.08);
+  padding-bottom: 1rem;
+}
+.no-badges-message {
+  margin: 0.75rem 1rem 0.5rem 1rem;
+  background: rgba(255,255,255,0.92);
+  border-radius: 8px;
+  padding: 0.7rem 1.2rem;
+  box-shadow: 0 1px 4px rgba(52, 152, 219, 0.08);
+  color: #718096;
+  font-style: italic;
+  text-align: center;
+  width: auto;
+  max-width: 95%;
+  align-self: center;
 }
 </style>

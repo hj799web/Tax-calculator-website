@@ -1718,13 +1718,21 @@ button::before, .button::before {
   width: 100vw;
   height: 100vh;
   z-index: -1;
-  background-image: url('@/assets/budget-simulator-bg.jpg');
+  background-image: url('@/assets/budget-simulator-bg.jpg'); /* Desktop background */
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
   filter: brightness(0.45) blur(0.5px);
   pointer-events: none;
 }
+
+/* Mobile-only: Use calculator background */
+@media (max-width: 768px) {
+  .global-bg-image {
+    background-image: url('@/assets/calculator-bg.jpg'); /* Mobile background - same as tax calculator */
+  }
+}
+
 .global-bg-overlay {
   position: fixed;
   top: 0;
