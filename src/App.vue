@@ -362,6 +362,9 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
   text-rendering: optimizeLegibility;
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
 }
 
 /* Import fonts */
@@ -375,6 +378,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
 /* Improve crispness for all text elements */
