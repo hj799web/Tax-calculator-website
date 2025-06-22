@@ -39,19 +39,68 @@
       </template>
     </div>
   </div>
+
+  <!-- Tax Breakdown Popup -->
+  <TaxBreakdownPopup
+    v-model="showTaxBreakdownPopup"
+    @navigate="handleNavigateToBreakdown"
+  />
 </template>
 
 <script setup>
+import { ref, watch } from 'vue'
 import { useCalculatorStore } from '@/domains/calculator/store/calculator.js'
 import { useSalaryStore } from '@/domains/calculator/store/salary.js'
 import { storeToRefs } from 'pinia'
 import { useCalculator } from '@/domains/calculator/composables/calculator.js'
+import { useTaxBreakdownPopup } from '@/utils/taxBreakdownPopup.js'
+import TaxBreakdownPopup from '@/components/TaxBreakdownPopup.vue'
 
 const calculatorStore = useCalculatorStore()
 const salaryStore = useSalaryStore()
 const { selectedSalaryRate } = storeToRefs(salaryStore)
 const { income } = storeToRefs(calculatorStore)
 const { v$, sanitizeNumericInput } = useCalculator()
+
+// Popup state
+const showTaxBreakdownPopup = ref(false)
+const hasShownPopup = ref(false)
+
+const popupUtils = useTaxBreakdownPopup()
+
+// Watch for income changes to trigger popup
+watch(income, (newIncome, oldIncome) => {
+  console.log('Income changed:', { newIncome, oldIncome, hasShownPopup: hasShownPopup.value })
+  console.log('Should show popup:', popupUtils.shouldShowPopup())
+  
+  // TEMPORARY: Force show notification for testing
+  if (newIncome && newIncome > 0) {
+    console.log('Forcing notification to show for testing')
+    setTimeout(() => {
+      showTaxBreakdownPopup.value = true
+      console.log('Notification should be visible now')
+    }, 1000)
+    return
+  }
+  
+  // Only show popup if:
+  // 1. User hasn't seen it yet in this session
+  // 2. Income changed from empty/undefined to a valid number
+  // 3. Popup should be shown according to storage preferences
+  if (
+    !hasShownPopup.value &&
+    popupUtils.shouldShowPopup() &&
+    (!oldIncome || oldIncome === 0) &&
+    newIncome && newIncome > 0
+  ) {
+    // Small delay to ensure the input is processed
+    setTimeout(() => {
+      showTaxBreakdownPopup.value = true
+      hasShownPopup.value = true
+      popupUtils.markPopupShown()
+    }, 500)
+  }
+})
 
 const preventInvalidInput = (event) => {
   const char = String.fromCharCode(event.keyCode);
@@ -70,17 +119,21 @@ const handlePaste = (event) => {
   const pastedText = event.clipboardData.getData('text');
   const sanitizedValue = sanitizeNumericInput(pastedText);
   if (sanitizedValue !== undefined) {
-    income.value = sanitizedValue;
+    calculatorStore.setIncome(sanitizedValue);
   }
 }
 
 const setIncome = ($event) => {
   const sanitizedValue = sanitizeNumericInput($event.target.value);
   if (sanitizedValue !== undefined) {
-    income.value = sanitizedValue;
+    calculatorStore.setIncome(sanitizedValue);
   } else {
-    income.value = undefined;
+    calculatorStore.setIncome(undefined);
   }
+}
+
+const handleNavigateToBreakdown = () => {
+  popupUtils.navigateToTaxBreakdown()
 }
 </script>
 

@@ -322,13 +322,14 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted, computed } from 'vue';
-import { onUnmounted } from 'vue';
+import { ref, watch, onMounted, computed, onUnmounted } from 'vue';
 import ExportPanel from './ExportPanel.vue';
 import { useBudgetSimulatorStore } from '@/domains/budget/store/budgetSimulator.js';
 import AchievementBadge from '@/domains/badges/components/AchievementBadge.vue';
 import html2canvas from 'html2canvas';
 import throttle from 'lodash.throttle';
+import { performanceMonitor } from '@/utils/performanceMonitor.js';
+import { handleComponentError } from '@/utils/errorHandler.js';
 
 // State for collapsible sections
 const showBadges = ref(true);
@@ -341,43 +342,67 @@ const budgetStore = useBudgetSimulatorStore();
 // Use computed properties instead of refs for better reactivity
 // These will automatically update when the store changes
 const totalRevenueValue = computed(() => {
-  // eslint-disable-next-line no-unused-vars
-  const _ = budgetStore.lastRevenueSourceUpdate;
-  // eslint-disable-next-line no-unused-vars
-  const __ = budgetStore.lastTaxExpenditureUpdate;
-  // eslint-disable-next-line no-unused-vars
-  const ___ = budgetStore.lastUpdate;
-  return budgetStore.totalRevenue;
+  return performanceMonitor.measureComponent('BudgetResults_totalRevenue', () => {
+    try {
+      // eslint-disable-next-line no-unused-vars
+      const _ = budgetStore.lastRevenueSourceUpdate;
+      // eslint-disable-next-line no-unused-vars
+      const __ = budgetStore.lastTaxExpenditureUpdate;
+      // eslint-disable-next-line no-unused-vars
+      const ___ = budgetStore.lastUpdate;
+      return budgetStore.totalRevenue;
+    } catch (error) {
+      handleComponentError(error, 'BudgetResults.totalRevenue');
+      return 0;
+    }
+  });
 });
 
 const totalSpendingValue = computed(() => {
-  // eslint-disable-next-line no-unused-vars
-  const _ = budgetStore.lastUpdate;
-  return budgetStore.totalSpending;
+  return performanceMonitor.measureComponent('BudgetResults_totalSpending', () => {
+    try {
+      // eslint-disable-next-line no-unused-vars
+      const _ = budgetStore.lastUpdate;
+      return budgetStore.totalSpending;
+    } catch (error) {
+      handleComponentError(error, 'BudgetResults.totalSpending');
+      return 0;
+    }
+  });
 });
 
 const surplusValue = computed(() => {
-  // eslint-disable-next-line no-unused-vars
-  const _ = budgetStore.lastRevenueSourceUpdate;
-  // eslint-disable-next-line no-unused-vars
-  const __ = budgetStore.lastTaxExpenditureUpdate;
-  // eslint-disable-next-line no-unused-vars
-  const ___ = budgetStore.lastUpdate;
-  return budgetStore.surplus;
+  return performanceMonitor.measureComponent('BudgetResults_surplus', () => {
+    try {
+      // eslint-disable-next-line no-unused-vars
+      const _ = budgetStore.lastRevenueSourceUpdate;
+      // eslint-disable-next-line no-unused-vars
+      const __ = budgetStore.lastTaxExpenditureUpdate;
+      // eslint-disable-next-line no-unused-vars
+      const ___ = budgetStore.lastUpdate;
+      return budgetStore.surplus;
+    } catch (error) {
+      handleComponentError(error, 'BudgetResults.surplus');
+      return 0;
+    }
+  });
 });
 
 // Get earned badges from the store with reactive dependency on lastBadgeUpdate
 const earnedBadges = computed(() => {
-  // eslint-disable-next-line no-unused-vars
-  const _ = budgetStore.lastBadgeUpdate;
-  // eslint-disable-next-line no-unused-vars
-  const __ = budgetStore.lastUpdate;
-  return budgetStore.earnedBadges || [];
+  return performanceMonitor.measureComponent('BudgetResults_earnedBadges', () => {
+    try {
+      // eslint-disable-next-line no-unused-vars
+      const _ = budgetStore.lastBadgeUpdate;
+      // eslint-disable-next-line no-unused-vars
+      const __ = budgetStore.lastUpdate;
+      return budgetStore.earnedBadges || [];
+    } catch (error) {
+      handleComponentError(error, 'BudgetResults.earnedBadges');
+      return [];
+    }
+  });
 });
-
-
-
-
 
 // Mobile view state
 const isMobileView = ref(window.innerWidth < 768);
@@ -410,10 +435,16 @@ onMounted(() => {
   
   // Initial check for mobile view
   handleResize();
+  
+  // Monitor component performance
+  performanceMonitor.observeComponent('BudgetResults', (entry) => {
+    console.log(`[PERFORMANCE] BudgetResults update took ${entry.duration}ms`);
+  });
 });
 
 onUnmounted(() => {
   window.removeEventListener('resize', handleResize);
+  performanceMonitor.cleanup();
 });
 
 // Computed properties for deficit warning

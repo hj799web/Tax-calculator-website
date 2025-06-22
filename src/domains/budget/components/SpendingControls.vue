@@ -3,6 +3,14 @@
     class="simulator-card spending-card w-full"
     style="min-height: 1440px; display: flex; flex-direction: column;"
   >
+    <!-- Add loading indicator -->
+    <LoadingIndicator 
+      :show="isUpdating" 
+      message="Updating budget calculations..."
+      size="medium"
+      variant="overlay"
+    />
+    
     <div
       class="card-content w-full"
       style="flex-grow: 1;"
@@ -456,6 +464,8 @@ import CategoryGroup from './CategoryGroup.vue';
 import SpendingCategory from './SpendingCategory.vue';
 import PercentageInput from './PercentageInput.vue';
 import CategoryInfo from './CategoryInfo.vue';
+import { createDebouncedFunction } from '@/utils/debounceUtils';
+import LoadingIndicator from '@/components/LoadingIndicator.vue';
 
 // Define props
 const props = defineProps({
@@ -535,6 +545,23 @@ const emit = defineEmits([
 
 // Use store for additional data if needed
 const budgetStore = useBudgetSimulatorStore();
+
+// Add loading state
+const isUpdating = ref(false);
+
+// Create debounced update function
+const debouncedUpdateCategory = createDebouncedFunction((categoryId, value) => {
+  isUpdating.value = true;
+  try {
+    const factor = value / 100;
+    budgetStore.updateSpendingFactor(categoryId, factor);
+    
+    // Emit the event for backward compatibility
+    emit('update-spending-factor', categoryId, value);
+  } finally {
+    isUpdating.value = false;
+  }
+}, 200);
 
 // Ensure we have valid spending factors for all categories
 const validSpendingFactors = computed(() => {
@@ -617,18 +644,15 @@ function toggleGroup(groupId) {
   emit('toggle-group-expansion', groupId);
 }
 
+// Enhanced update function with loading state and debouncing
 function updateCategoryAdjustment(categoryId, value) {
-  // Directly update the store like the Tax Expenditures section
   console.log('SpendingControls: updateCategoryAdjustment called with', categoryId, value);
   
-  // Add a reactivity trigger similar to what was done in BudgetResults
+  // Add a reactivity trigger
   budgetStore.lastUpdate = Date.now();
   
-  const factor = value / 100;
-  budgetStore.updateSpendingFactor(categoryId, factor);
-  
-  // Also emit the event for backward compatibility
-  emit('update-spending-factor', categoryId, value);
+  // Use debounced update
+  debouncedUpdateCategory(categoryId, value);
 }
 
 function resetOtherCategories() {
@@ -651,7 +675,7 @@ function resetOtherCategories() {
       }
     });
   
-  // Also emit the event for backward compatibility
+  // Emit the event for backward compatibility
   emit('reset-other-categories');
 }
 

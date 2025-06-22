@@ -1107,12 +1107,12 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch, computed } from 'vue';
-import debounce from 'lodash.debounce'; // 🆕 PERFORMANCE NOTE: Debounce slider commits to avoid excessive store updates
-import throttle from 'lodash.throttle'; // Add this import
+import { ref, onMounted, watch, computed, shallowRef, nextTick } from 'vue';
+import debounce from 'lodash.debounce';
+import throttle from 'lodash.throttle';
 import { useBudgetSimulatorStore } from '../store/budgetSimulator';
+import { performanceMonitor } from '@/utils/performanceMonitor.js';
 
-// Initialize the budget simulator store
 const budgetStore = useBudgetSimulatorStore();
 
 // Local reactive state
@@ -1122,22 +1122,9 @@ const expandedGroups = ref({
   otherRevenues: true
 });
 
-// Local reactive object storing each revenue category's effective rate.
-// This is kept in sync with the store but allows for smoother UI updates.
-const revenueRates = ref({});
-
-// 🆕 PERFORMANCE NOTE: Separate visual slider state from store for smooth UX
-const localSliderValues = ref({});
-
-function initializeLocalSliderValues() {
-  localSliderValues.value = Object.fromEntries(
-    Object.entries(budgetStore.revenueSources).map(([key, src]) => [key, src.rate])
-  );
-}
-onMounted(() => {
-  initializeLocalSliderValues();
-});
-watch(() => budgetStore.revenueSources, initializeLocalSliderValues, { deep: true });
+// Use shallowRef for better performance with large objects
+const revenueRates = shallowRef({});
+const localSliderValues = shallowRef({});
 
 // Local reactive object for amount inputs
 const amountInputs = ref({
@@ -1153,13 +1140,14 @@ const amountInputs = ref({
   resourceRoyalties: 0
 });
 
-// Computed properties for revenue totals
-const additionalRevenue = computed(() => {
-  return budgetStore.additionalRevenue;
+// Memoized computed properties
+const totalRevenue = computed(() => {
+  // Only depend on the specific values we need
+  return budgetStore.totalRevenue;
 });
 
-const totalRevenue = computed(() => {
-  return budgetStore.totalRevenue;
+const additionalRevenue = computed(() => {
+  return budgetStore.additionalRevenue;
 });
 
 // Computed properties for category totals
@@ -1234,36 +1222,43 @@ function toggleGroupExpansion(groupName) {
 
 // Initialize local slider values from the store.
 function initializeLocalValues() {
-  revenueRates.value = {
-    personalIncomeTax: budgetStore.revenueSources.personalIncomeTax?.rate || 21,
-    corporateIncomeTax: budgetStore.revenueSources.corporateIncomeTax?.rate || 15,
-    gst: budgetStore.revenueSources.gst?.rate || 5,
-    exciseTaxes: budgetStore.revenueSources.exciseTaxes?.rate || 2.5,
-    carbonPricing: budgetStore.revenueSources.carbonPricing?.rate || 1,
-    eiPremiums: budgetStore.revenueSources.eiPremiums?.rate || 1.35,
-    customsDuties: budgetStore.revenueSources.customsDuties?.rate || 1,
-    crownProfits: budgetStore.revenueSources.crownProfits?.rate || 2.5,
-    nonTaxRevenue: budgetStore.revenueSources.nonTaxRevenue?.rate || 3,
-    resourceRoyalties: budgetStore.revenueSources.resourceRoyalties?.rate || 1
-  };
+  const sources = budgetStore.revenueSources;
+  const newRates = {};
+  const newSliderValues = {};
   
-  // Initialize amount inputs
+  Object.keys(sources).forEach(sourceId => {
+    const source = sources[sourceId];
+    if (source) {
+      newRates[sourceId] = source.rate || 0;
+      newSliderValues[sourceId] = source.rate || 0;
+    }
+  });
+  
+  // Batch update reactive refs
+  revenueRates.value = newRates;
+  localSliderValues.value = newSliderValues;
+  
+  // Update amount inputs
   updateAmountInputs();
 }
 
-// 🆕 PERFORMANCE NOTE: Debounced store commit for slider changes
-const commitSliderChange = debounce((sourceId, value) => {
+// Debounced store updates
+const debouncedStoreUpdate = debounce((sourceId, value) => {
   budgetStore.updateRevenueRate(sourceId, value);
-}, 200);
+}, 150);
 
-// Throttle the slider input handler
-const throttledOnSliderInput = throttle((sourceId, value) => {
-  commitSliderChange(sourceId, value);
-}, 200);
+// Throttled UI updates
+const throttledUIUpdate = throttle((sourceId, value) => {
+  localSliderValues.value[sourceId] = value;
+}, 16); // ~60fps
 
-// Replace onSliderInput to use the throttled version
+// Optimized slider input handler
 function onSliderInput(sourceId, value) {
-  throttledOnSliderInput(sourceId, value);
+  // Update UI immediately for responsiveness
+  throttledUIUpdate(sourceId, value);
+  
+  // Debounce store update to prevent excessive calculations
+  debouncedStoreUpdate(sourceId, value);
 }
 
 // Update revenue rate in the store.
@@ -1315,6 +1310,17 @@ const getAdditionalRevenue = (sourceId) => {
 const formatCurrency = (value, decimals = 1) => {
   return (Math.round(value * Math.pow(10, decimals)) / Math.pow(10, decimals)).toFixed(decimals);
 };
+
+// Optimized watchers with proper dependencies
+watch(
+  () => budgetStore.stateVersion,
+  () => {
+    console.log('[REVENUE SLIDERS] State version changed, refreshing values');
+    nextTick(() => {
+      initializeLocalValues();
+    });
+  }
+);
 
 // Watch for changes in the store's revenue sources and reinitialize if necessary.
 watch(() => budgetStore.revenueSources, () => {
@@ -1368,8 +1374,11 @@ watch(() => revenueRates.value, () => {
   updateAmountInputs();
 }, { deep: true });
 
+// Initialize on component mount
 onMounted(() => {
-  initializeLocalValues();
+  performanceMonitor.measureComponent('RevenueSliders', () => {
+    initializeLocalValues();
+  });
 });
 </script>
 

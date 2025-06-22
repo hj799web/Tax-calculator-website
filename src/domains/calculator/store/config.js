@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import { budgetCategories2022, budgetCategories2024 } from "@/domains/calculator/constants/taxData.js";
+import { createValidatedAction } from '@/utils/storeActionWrapper.js';
 
 export const useConfigStore = defineStore('config', () => {
   const allExpanded = ref(false);
@@ -8,7 +9,7 @@ export const useConfigStore = defineStore('config', () => {
   const selectedAllocationCategories = ref([]);
   const visibleDescriptions = ref([])
 
-  function toggleDescription(categoryId) {
+  const toggleDescription = function(categoryId) {
     const cat = budgetCategories2022.find((c) => c.id === categoryId) || budgetCategories2024.find((c) => c.id === categoryId);
     if (cat) {
       const idIndex = visibleDescriptions.value.indexOf(cat.id)
@@ -20,7 +21,7 @@ export const useConfigStore = defineStore('config', () => {
     }
   }
 
-  function toggleAll() {
+  const toggleAll = function() {
     visibleDescriptions.value = []
     if (!allExpanded.value) {
       budgetCategories2022.forEach((cat) => {
@@ -33,10 +34,14 @@ export const useConfigStore = defineStore('config', () => {
     allExpanded.value = !allExpanded.value;
   }
 
-  function toggleSortAmount() {
+  const toggleSortAmount = createValidatedAction('config', 'sortOrder', function() {
     sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc';
     localStorage.setItem('sortOrder', sortOrder.value);
-  }
+  });
+
+  const setAllExpanded = createValidatedAction('config', 'allExpanded', function(value) {
+    allExpanded.value = value;
+  });
 
   return {
     allExpanded,
@@ -45,6 +50,7 @@ export const useConfigStore = defineStore('config', () => {
     toggleDescription,
     toggleAll,
     toggleSortAmount,
+    setAllExpanded,
     visibleDescriptions
   }
 }) 

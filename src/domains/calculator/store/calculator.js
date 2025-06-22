@@ -3,6 +3,7 @@ import { ref, computed } from "vue";
 import { useSalaryStore } from '@/domains/calculator/store/salary.js'
 import { useYearStore } from '@/domains/calculator/store/year.js'
 import { useConfigStore } from "@/domains/calculator/store/config.js";
+import { createValidatedAction } from '@/utils/storeActionWrapper.js';
 import {
   calculateBracketTax,
   calculateDividendTaxCredit,
@@ -332,7 +333,80 @@ export const useCalculatorStore = defineStore('calculator', () => {
     );
   });
 
+  // Validated actions
+  const actions = {
+    setIncome: createValidatedAction('calculator', 'income', function(value) {
+      income.value = value;
+    }),
+
+    setSelectedRegion: createValidatedAction('calculator', 'selectedRegion', function(region) {
+      selectedRegion.value = region;
+    }),
+
+    setSelfEmploymentIncome: createValidatedAction('calculator', 'selfEmploymentIncome', function(value) {
+      selfEmploymentIncome.value = value;
+    }),
+
+    setCapitalGainsBeforeJune25: createValidatedAction('calculator', 'capitalGainsBeforeJune25', function(value) {
+      capitalGainsBeforeJune25.value = value;
+    }),
+
+    setCapitalGainsAfterJune25: createValidatedAction('calculator', 'capitalGainsAfterJune25', function(value) {
+      capitalGainsAfterJune25.value = value;
+    }),
+
+    setEligibleDividends: createValidatedAction('calculator', 'eligibleDividends', function(value) {
+      eligibleDividends.value = value;
+    }),
+
+    setIneligibleDividends: createValidatedAction('calculator', 'ineligibleDividends', function(value) {
+      ineligibleDividends.value = value;
+    }),
+
+    setOtherIncome: createValidatedAction('calculator', 'otherIncome', function(value) {
+      otherIncome.value = value;
+    }),
+
+    setRrspDeduction: createValidatedAction('calculator', 'rrspDeduction', function(value) {
+      rrspDeduction.value = value;
+    }),
+
+    setMaritalStatus: createValidatedAction('calculator', 'maritalStatus', function(status) {
+      maritalStatus.value = status;
+    }),
+
+    setNumberOfDependents: createValidatedAction('calculator', 'numberOfDependents', function(value) {
+      numberOfDependents.value = value;
+    }),
+
+    setNumberOfChildrenUnder18: createValidatedAction('calculator', 'numberOfChildrenUnder18', function(value) {
+      numberOfChildrenUnder18.value = value;
+    }),
+
+    setNumberOfDependentsWithDisabilities: createValidatedAction('calculator', 'numberOfDependentsWithDisabilities', function(value) {
+      numberOfDependentsWithDisabilities.value = value;
+    }),
+
+    // Reset all calculator data
+    resetCalculator: function() {
+      selectedRegion.value = '';
+      income.value = undefined;
+      selfEmploymentIncome.value = undefined;
+      capitalGainsBeforeJune25.value = undefined;
+      capitalGainsAfterJune25.value = undefined;
+      eligibleDividends.value = undefined;
+      ineligibleDividends.value = undefined;
+      otherIncome.value = undefined;
+      rrspDeduction.value = undefined;
+      maritalStatus.value = '';
+      numberOfDependents.value = undefined;
+      numberOfChildrenUnder18.value = undefined;
+      numberOfDependentsWithDisabilities.value = undefined;
+    }
+  };
+
   return {
+    // State
     selectedRegion,
     income,
     selfEmploymentIncome,
@@ -346,6 +420,8 @@ export const useCalculatorStore = defineStore('calculator', () => {
     numberOfDependents,
     numberOfChildrenUnder18,
     numberOfDependentsWithDisabilities,
+    
+    // Computed values
     regularIncome,
     totalCapitalGains,
     grossedUpEligibleDividends,
@@ -363,6 +439,9 @@ export const useCalculatorStore = defineStore('calculator', () => {
     totalBudget,
     federalBudgetData,
     sortedBudgetData,
-    sortedBudgetCategories
+    sortedBudgetCategories,
+    
+    // Actions
+    ...actions
   }
 })

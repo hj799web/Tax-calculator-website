@@ -1,19 +1,22 @@
 import { defineStore } from "pinia";
-import { getBudgetBadges } from "@/domains/badges/utils/generateBadgesFromBudget";
+import { getBudgetBadges } from "@/domains/badges/utils/generateBadgesFromBudget.js";
+import { budgetPersistence } from "@/utils/statePersistence.js";
 import { handleError } from '@/utils/errorHandler.js';
-import { ref } from 'vue';
+import { ref, markRaw } from 'vue';
+import { budgetValidationSchemas } from '@/utils/storeValidation.js';
+import { wrapStoreAction } from '@/utils/storeActionWrapper.js';
+import debounce from 'lodash.debounce';
 
-// Helper for conditional logging in development environment only
+// Development logging utilities
 const devLog = (message, ...args) => {
   if (process.env.NODE_ENV === 'development') {
-    console.log(message, ...args);
+    console.log(`%c[STORE] ${message}`, 'color: #4299e1; font-weight: bold;', ...args);
   }
 };
 
-// Helper for conditional warning in development environment only
 const devWarn = (message, ...args) => {
   if (process.env.NODE_ENV === 'development') {
-    console.warn(message, ...args);
+    console.warn(`%c[STORE] ${message}`, 'color: #ed8936; font-weight: bold;', ...args);
   }
 };
 
@@ -25,6 +28,21 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
     // State management and batch processing
     isBatchUpdateInProgress: false,
     stateVersion: 0, // Incremented after each batch update to trigger reactivity
+
+    // Performance optimization flags
+    _reactiveUpdates: true,
+    _batchUpdateDepth: 0,
+    _pendingUpdates: new Set(),
+    
+    // Memoization cache for expensive computations
+    _computedCache: new Map(),
+    _cacheVersion: 0,
+
+    // Loading states
+    isUpdating: false,
+    isCalculating: false,
+    isSaving: false,
+    isLoading: false,
 
     // Badge system state
     sentimentUpdateRequired: false, // Flag for debounced sentiment update
@@ -42,6 +60,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
       prioritizePIT: true,         // Whether to prioritize Personal Income Tax adjustments
     },
     _isRecalculating: false, // Reentrancy guard
+
     // Revenue sources with base values, rates, and year-specific rates
     revenueSources: {
       personalIncomeTax: {
@@ -652,15 +671,22 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
 
     // Unified getter for all consumers (sentiment, badges, export, etc.)
     budgetData() {
+      const cacheKey = `budgetData_${this.stateVersion}_${this.lastUpdate}_${this._cacheVersion}`;
+      
+      if (this._computedCache.has(cacheKey)) {
+        return this._computedCache.get(cacheKey);
+      }
+      
       // Always return a valid structure
       try {
-        // Access the budgetDataForBadges getter, not calling it as a function
-        return this.budgetDataForBadges;
+        const result = this.budgetDataForBadges;
+        this._computedCache.set(cacheKey, markRaw(result));
+        return result;
       } catch (e) {
         handleError(e, (msg) => budgetErrorMessage.value = msg);
         // Fallback: return a minimal valid object if something goes wrong
         // Include default revenue mix values to prevent fiscal chaos warnings
-        return {
+        const fallback = {
           totalRevenue: 0,
           totalSpending: 0,
           surplus: 0,
@@ -698,6 +724,8 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
           taxExpenditures: {},
           budgetItems: {}
         };
+        this._computedCache.set(cacheKey, markRaw(fallback));
+        return fallback;
       }  
     },
 
@@ -964,6 +992,14 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
     earnedBadges() {
       return this.badges;
     },
+
+    // Optimized revenue sources with shallow reactivity
+    optimizedRevenueSources() {
+      if (!this._reactiveUpdates) {
+        return markRaw(this.revenueSources);
+      }
+      return this.revenueSources;
+    },
   },
 
   actions: {
@@ -984,10 +1020,14 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
         return false;
       }
       
+      this._batchUpdateDepth++;
+      this.isBatchUpdateInProgress = true;
+      this._reactiveUpdates = false; // Disable reactive updates during batch
+      this._pendingUpdates.clear();
+      
       console.log('[STORE] Beginning batch update');
       // Disable sentiment updates during batch operations
       this.setSentimentUpdateRequired(false);
-      this.isBatchUpdateInProgress = true;
       return true;
     },
     completeBatchUpdate() {
@@ -996,23 +1036,35 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
         return false;
       }
       
-      console.log('[STORE] Completing batch update');
-      // Perform all recalculations once
-      this.recalculateTotals();
+      this._batchUpdateDepth--;
       
-      // Update state version to trigger reactivity
-      this.stateVersion++;
-      console.log(`[STORE] State version updated to ${this.stateVersion}`);
+      if (this._batchUpdateDepth === 0) {
+        console.log('[STORE] Completing batch update');
+        
+        // Perform all recalculations once
+        this.recalculateTotals();
+        
+        // Clear cache to force recomputation
+        this._computedCache.clear();
+        this._cacheVersion++;
+        
+        // Update state version to trigger reactivity
+        this.stateVersion++;
+        console.log(`[STORE] State version updated to ${this.stateVersion}`);
+        
+        // Re-enable reactive updates
+        this._reactiveUpdates = true;
+        
+        // Enable sentiment updates and trigger a calculation
+        this.setSentimentUpdateRequired(true);
+        this.triggerSentimentUpdate();
+        
+        // Sync to localStorage to ensure UI components can refresh
+        this.syncToLocalStorage();
+        
+        this.isBatchUpdateInProgress = false;
+      }
       
-      // Enable sentiment updates and trigger a calculation
-      this.setSentimentUpdateRequired(true);
-      this.triggerSentimentUpdate();
-      
-      // Sync to localStorage to ensure UI components can refresh
-      this.syncToLocalStorage();
-      
-      // Mark batch update as complete
-      this.isBatchUpdateInProgress = false;
       return true;
     },
     initializeStore() {
@@ -1200,7 +1252,39 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
      * @deprecated Use setRevenueRate instead
      */
     updateRevenueRate(sourceId, newRate) {
-      return this.setRevenueRate(sourceId, newRate);
+      const currentRate = this.revenueSources[sourceId]?.rate;
+      
+      // Only update if value actually changed
+      if (currentRate === newRate) {
+        return true;
+      }
+      
+      if (this.isBatchUpdateInProgress) {
+        this._pendingUpdates.add(`revenue_${sourceId}`);
+      }
+      
+      this.isUpdating = true;
+      try {
+        const result = this.setRevenueRate(sourceId, newRate);
+        
+        // Auto-save state after successful update
+        this.autoSaveState();
+        
+        return result;
+      } finally {
+        this.isUpdating = false;
+      }
+    },
+
+    // Debounced update method for frequent changes
+    debouncedUpdateRevenueRate: debounce(function(sourceId, newRate) {
+      this.updateRevenueRate(sourceId, newRate);
+    }, 100),
+
+    // Clear cache when needed
+    clearCache() {
+      this._computedCache.clear();
+      this._cacheVersion++;
     },
 
     recalculateTotals() {
@@ -2045,6 +2129,8 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
 
     syncToLocalStorage() {
       try {
+        this.isSaving = true;
+        
         const budgetData = {
           revenueSources: {},
           spendingCategories: {},
@@ -2077,10 +2163,133 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
           };
         }
 
-        localStorage.setItem("budgetSimulator", JSON.stringify(budgetData));
+        // Use the enhanced state persistence utility
+        budgetPersistence.save(budgetData);
+        
+        console.log("Successfully saved budget to localStorage using enhanced persistence");
       } catch (error) {
         console.error("Error saving budget to localStorage:", error);
+      } finally {
+        this.isSaving = false;
       }
+    },
+
+    // Enhanced state persistence methods
+    autoSaveState() {
+      try {
+        const stateToSave = {
+          revenueSources: this.revenueSources,
+          spendingCategories: this.spendingCategories,
+          taxExpenditures: this.taxExpenditures,
+          currentYear: this.currentYear,
+          expandedGroups: this.expandedGroups,
+          badges: this.badges,
+          activePreset: this.activePreset,
+          lastUpdate: Date.now()
+        };
+        
+        budgetPersistence.autoSave(stateToSave);
+      } catch (error) {
+        console.error('[BudgetStore] Failed to auto-save state:', error);
+      }
+    },
+
+    // Enhanced initialization with loading state
+    async initializeBudget() {
+      this.isLoading = true;
+      try {
+        // Try to load from localStorage first
+        const savedState = budgetPersistence.load();
+        
+        if (savedState) {
+          // Restore state
+          this.restoreFromSavedState(savedState);
+        } else {
+          // Initialize with defaults
+          this.initializeWithDefaults();
+        }
+        
+        // Ensure calculations are up to date
+        this.recalculateTotals();
+        
+      } catch (error) {
+        console.error('[BudgetStore] Failed to initialize budget:', error);
+        // Fallback to defaults
+        this.initializeWithDefaults();
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
+    // Restore state from saved data
+    restoreFromSavedState(savedState) {
+      if (savedState.revenueSources) {
+        Object.keys(savedState.revenueSources).forEach(sourceId => {
+          if (this.revenueSources[sourceId]) {
+            this.revenueSources[sourceId].rate = savedState.revenueSources[sourceId].rate;
+          }
+        });
+      }
+      
+      if (savedState.spendingCategories) {
+        Object.keys(savedState.spendingCategories).forEach(categoryId => {
+          if (this.spendingCategories[categoryId]) {
+            this.spendingCategories[categoryId].adjustmentFactor = savedState.spendingCategories[categoryId].adjustmentFactor;
+          }
+        });
+      }
+      
+      if (savedState.currentYear) {
+        this.currentYear = savedState.currentYear;
+      }
+      
+      if (savedState.expandedGroups) {
+        this.expandedGroups = { ...this.expandedGroups, ...savedState.expandedGroups };
+      }
+      
+      if (savedState.badges) {
+        this.badges = savedState.badges;
+      }
+      
+      if (savedState.activePreset) {
+        this.activePreset = savedState.activePreset;
+      }
+    },
+
+    // Initialize with default values
+    initializeWithDefaults() {
+      // Initialize revenue sources immutably
+      const initialRevenueSources = {};
+      for (const sourceId in this.revenueSources) {
+        const source = this.revenueSources[sourceId];
+        initialRevenueSources[sourceId] = {
+          ...source,
+          amount: source.base * source.rate,
+          adjustedAmount: source.base * source.rate,
+          expenditureImpact: 0
+        };
+      }
+      this.revenueSources = initialRevenueSources;
+
+      // Initialize tax expenditures immutably
+      const initialExpenditures = {};
+      for (const expId in this.taxExpenditures) {
+        const exp = this.taxExpenditures[expId];
+        initialExpenditures[expId] = {
+          ...exp,
+          adjustment: exp.baseAdjustment || 0,
+          revenueImpact: 0
+        };
+      }
+      this.taxExpenditures = initialExpenditures;
+
+      // Update all revenue sources to account for tax expenditure impacts
+      for (const sourceId in this.revenueSources) {
+        this.updateRevenueSourceAdjustedAmount(sourceId);
+      }
+
+      // Save initial state
+      this.syncToLocalStorage();
     },
 
     getDefaultRate(sourceId) {
@@ -2115,51 +2324,55 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
       }
     },
 
-    updateTaxExpenditureAdjustment(expenditureId, adjustment) {
-      try {
-        const expenditure = this.taxExpenditures[expenditureId];
-        if (!expenditure) return;
+    updateTaxExpenditureAdjustment: wrapStoreAction(
+      function(expenditureId, adjustment) {
+        try {
+          const expenditure = this.taxExpenditures[expenditureId];
+          if (!expenditure) return;
 
-        const numAdjustment = Number(adjustment) || 0;
-        const clampedAdjustment = Math.max(-100, Math.min(100, numAdjustment));
+          const numAdjustment = Number(adjustment) || 0;
+          const clampedAdjustment = Math.max(-100, Math.min(100, numAdjustment));
 
-        // Calculate the revenue impact with explicit number conversion
-        const netAmount = Number(expenditure.netAmount) || 0;
-        const revenueImpact = -1 * netAmount * (clampedAdjustment / 100);
+          // Calculate the revenue impact with explicit number conversion
+          const netAmount = Number(expenditure.netAmount) || 0;
+          const revenueImpact = -1 * netAmount * (clampedAdjustment / 100);
 
-        console.log(`Updating tax expenditure ${expenditureId} to ${clampedAdjustment}%, impact: ${revenueImpact}B, batch mode: ${this.isBatchUpdateInProgress}`);
+          console.log(`Updating tax expenditure ${expenditureId} to ${clampedAdjustment}%, impact: ${revenueImpact}B, batch mode: ${this.isBatchUpdateInProgress}`);
 
-        // Update the tax expenditure immutably
-        this.taxExpenditures = {
-          ...this.taxExpenditures,
-          [expenditureId]: {
-            ...expenditure,
-            adjustmentFactor: clampedAdjustment,
-            revenueImpact: isNaN(revenueImpact) ? 0 : revenueImpact
+          // Update the tax expenditure immutably
+          this.taxExpenditures = {
+            ...this.taxExpenditures,
+            [expenditureId]: {
+              ...expenditure,
+              adjustmentFactor: clampedAdjustment,
+              revenueImpact: isNaN(revenueImpact) ? 0 : revenueImpact
+            }
+          };
+
+          // Update the linked revenue source
+          if (expenditure.linkedRevenueSource) {
+            this.updateRevenueSourceAdjustedAmount(expenditure.linkedRevenueSource);
           }
-        };
 
-        // Update the linked revenue source
-        if (expenditure.linkedRevenueSource) {
-          this.updateRevenueSourceAdjustedAmount(expenditure.linkedRevenueSource);
+          // Only update timestamps if not in batch mode
+          if (!this.isBatchUpdateInProgress) {
+            // Signal update
+            this.lastUpdate = Date.now();
+            this.lastTaxExpenditureUpdate = Date.now();
+            
+            // Signal that sentiment update is needed
+            this.setSentimentUpdateRequired(true);
+            
+            // Sync to localStorage
+            this.syncToLocalStorage();
+          }
+        } catch (e) {
+          console.error(`Error updating tax expenditure ${expenditureId}:`, e);
         }
-
-        // Only update timestamps if not in batch mode
-        if (!this.isBatchUpdateInProgress) {
-          // Signal update
-          this.lastUpdate = Date.now();
-          this.lastTaxExpenditureUpdate = Date.now();
-          
-          // Signal that sentiment update is needed
-          this.setSentimentUpdateRequired(true);
-          
-          // Sync to localStorage
-          this.syncToLocalStorage();
-        }
-      } catch (e) {
-        console.error(`Error updating tax expenditure ${expenditureId}:`, e);
-      }
-    },
+      },
+      budgetValidationSchemas.taxExpenditureAdjustment,
+      'updateTaxExpenditureAdjustment'
+    ),
 
     updateLinkedRevenueSource(expenditureId) {
       try {
@@ -2219,54 +2432,58 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
       }
     },
 
-    updateRevenueSourceAmount(sourceId, newAmount) {
-      try {
-        const source = this.revenueSources[sourceId];
-        if (!source) {
-          console.error(`Revenue source not found: ${sourceId}`);
-          return;
+    updateRevenueSourceAmount: wrapStoreAction(
+      function(sourceId, newAmount) {
+        try {
+          const source = this.revenueSources[sourceId];
+          if (!source) {
+            console.error(`Revenue source not found: ${sourceId}`);
+            return;
+          }
+          
+          // Convert to number explicitly and handle invalid values
+          const numAmount = Number(newAmount);
+          if (isNaN(numAmount)) {
+            console.error(`Invalid amount provided for ${sourceId}: ${newAmount}`);
+            return;
+          }
+          
+          // Create a new revenue source object with updated values
+          const updatedSource = {
+            ...source,
+            amount: numAmount,
+            adjustedAmount: numAmount
+          };
+          
+          // Calculate the new rate based on the base value
+          if (source.base) {
+            const baseValue = Number(source.base) || 1; // Prevent division by zero
+            updatedSource.rate = numAmount / baseValue;
+          }
+          
+          // Update the revenue source immutably
+          this.revenueSources = {
+            ...this.revenueSources,
+            [sourceId]: updatedSource
+          };
+          
+          // Update adjusted amount to account for tax expenditures
+          this.updateRevenueSourceAdjustedAmount(sourceId);
+          
+          // Signal update
+          this.lastUpdate = Date.now();
+          
+          // Sync to localStorage
+          this.syncToLocalStorage();
+          
+          console.log(`Updated revenue source ${sourceId} amount to ${numAmount}B`);
+        } catch (e) {
+          console.error(`Error updating revenue source amount for ${sourceId}:`, e);
         }
-        
-        // Convert to number explicitly and handle invalid values
-        const numAmount = Number(newAmount);
-        if (isNaN(numAmount)) {
-          console.error(`Invalid amount provided for ${sourceId}: ${newAmount}`);
-          return;
-        }
-        
-        // Create a new revenue source object with updated values
-        const updatedSource = {
-          ...source,
-          amount: numAmount,
-          adjustedAmount: numAmount
-        };
-        
-        // Calculate the new rate based on the base value
-        if (source.base) {
-          const baseValue = Number(source.base) || 1; // Prevent division by zero
-          updatedSource.rate = numAmount / baseValue;
-        }
-        
-        // Update the revenue source immutably
-        this.revenueSources = {
-          ...this.revenueSources,
-          [sourceId]: updatedSource
-        };
-        
-        // Update adjusted amount to account for tax expenditures
-        this.updateRevenueSourceAdjustedAmount(sourceId);
-        
-        // Signal update
-        this.lastUpdate = Date.now();
-        
-        // Sync to localStorage
-        this.syncToLocalStorage();
-        
-        console.log(`Updated revenue source ${sourceId} amount to ${numAmount}B`);
-      } catch (e) {
-        console.error(`Error updating revenue source amount for ${sourceId}:`, e);
-      }
-    },
+      },
+      budgetValidationSchemas.revenueSourceAmount,
+      'updateRevenueSourceAmount'
+    ),
     
     /**
      * Alternative method name for backward compatibility - delegates to setRevenueRate

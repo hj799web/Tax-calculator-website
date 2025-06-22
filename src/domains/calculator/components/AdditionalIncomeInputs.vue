@@ -289,54 +289,54 @@ const handlePaste = (event, target) => {
 const setSelfEmploymentIncome = ($event) => {
   const sanitizedValue = sanitizeNumericInput($event.target.value);
   if (sanitizedValue !== undefined) {
-    selfEmploymentIncome.value = sanitizedValue;
+    calculatorStore.setSelfEmploymentIncome(sanitizedValue);
   } else {
-    selfEmploymentIncome.value = undefined;
+    calculatorStore.setSelfEmploymentIncome(undefined);
   }
 }
 
 const setCapitalGainsBeforeJune25 = ($event) => {
   const sanitizedValue = sanitizeNumericInput($event.target.value);
   if (sanitizedValue !== undefined) {
-    capitalGainsBeforeJune25.value = sanitizedValue;
+    calculatorStore.setCapitalGainsBeforeJune25(sanitizedValue);
   } else {
-    capitalGainsBeforeJune25.value = undefined;
+    calculatorStore.setCapitalGainsBeforeJune25(undefined);
   }
 }
 
 const setCapitalGainsAfterJune25 = ($event) => {
   const sanitizedValue = sanitizeNumericInput($event.target.value);
   if (sanitizedValue !== undefined) {
-    capitalGainsAfterJune25.value = sanitizedValue;
+    calculatorStore.setCapitalGainsAfterJune25(sanitizedValue);
   } else {
-    capitalGainsAfterJune25.value = undefined;
+    calculatorStore.setCapitalGainsAfterJune25(undefined);
   }
 }
 
 const setEligibleDividends = ($event) => {
   const sanitizedValue = sanitizeNumericInput($event.target.value);
   if (sanitizedValue !== undefined) {
-    eligibleDividends.value = sanitizedValue;
+    calculatorStore.setEligibleDividends(sanitizedValue);
   } else {
-    eligibleDividends.value = undefined;
+    calculatorStore.setEligibleDividends(undefined);
   }
 }
 
 const setIneligibleDividends = ($event) => {
   const sanitizedValue = sanitizeNumericInput($event.target.value);
   if (sanitizedValue !== undefined) {
-    ineligibleDividends.value = sanitizedValue;
+    calculatorStore.setIneligibleDividends(sanitizedValue);
   } else {
-    ineligibleDividends.value = undefined;
+    calculatorStore.setIneligibleDividends(undefined);
   }
 }
 
 const setOtherIncome = ($event) => {
   const sanitizedValue = sanitizeNumericInput($event.target.value);
   if (sanitizedValue !== undefined) {
-    otherIncome.value = sanitizedValue;
+    calculatorStore.setOtherIncome(sanitizedValue);
   } else {
-    otherIncome.value = undefined;
+    calculatorStore.setOtherIncome(undefined);
   }
 }
 </script>

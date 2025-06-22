@@ -1,95 +1,93 @@
 <template>
-  <div class="simulator-container">
-    <div class="simulator-header">
-      <h1 class="simulator-title">Finance Minister Simulator</h1>
-      <div class="year-selector">
-        <button 
-          class="year-button"
-          @click="decrementYear"
-          :disabled="currentYear <= 2020"
-          aria-label="Previous year"
-        >
-          <span class="material-icons">chevron_left</span>
-        </button>
-        <span class="year-display">{{ currentYear }}</span>
-        <button 
-          class="year-button"
-          @click="incrementYear"
-          :disabled="currentYear >= 2025"
-          aria-label="Next year"
-        >
-          <span class="material-icons">chevron_right</span>
-        </button>
+  <ErrorBoundary component-name="FinanceMinisterSimulator">
+    <div class="simulator-container">
+      <div class="simulator-header">
+        <h1 class="simulator-title">Finance Minister Simulator</h1>
+        <div class="year-selector">
+          <button 
+            class="year-button"
+            @click="decrementYear"
+            :disabled="currentYear <= 2020"
+            aria-label="Previous year"
+          >
+            <span class="material-icons">chevron_left</span>
+          </button>
+          <span class="year-display">{{ currentYear }}</span>
+          <button 
+            class="year-button"
+            @click="incrementYear"
+            :disabled="currentYear >= 2025"
+            aria-label="Next year"
+          >
+            <span class="material-icons">chevron_right</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="simulator-grid">
+        <ErrorBoundary component-name="GoalTracker">
+          <div class="simulator-card goals-card">
+            <div class="card-header">
+              <h2 class="card-title">Budget Goals</h2>
+            </div>
+            <div class="card-content">
+              <GoalTracker />
+            </div>
+          </div>
+        </ErrorBoundary>
+
+        <ErrorBoundary component-name="BudgetResults">
+          <div class="simulator-card results-card">
+            <div class="card-header">
+              <h2 class="card-title">Budget Results</h2>
+            </div>
+            <div class="card-content">
+              <BudgetResults />
+            </div>
+          </div>
+        </ErrorBoundary>
+
+        <ErrorBoundary component-name="RevenueSliders">
+          <div class="simulator-card revenue-card">
+            <div class="card-header">
+              <h2 class="card-title">Revenue Sources</h2>
+            </div>
+            <div class="card-content">
+              <RevenueSliders />
+            </div>
+          </div>
+        </ErrorBoundary>
+
+        <ErrorBoundary component-name="SpendingControls">
+          <div class="simulator-card spending-card">
+            <div class="card-header">
+              <h2 class="card-title">Spending Controls</h2>
+            </div>
+            <div class="card-content">
+              <SpendingControls />
+            </div>
+          </div>
+        </ErrorBoundary>
+
+        <ErrorBoundary component-name="ChartsPanel">
+          <div class="simulator-card charts-card">
+            <div class="card-header">
+              <h2 class="card-title">Budget Analysis</h2>
+            </div>
+            <div class="card-content">
+              <ChartsPanel />
+            </div>
+          </div>
+        </ErrorBoundary>
       </div>
     </div>
-
-    <div class="simulator-grid">
-      <!-- Goals Card -->
-      <div class="simulator-card goals-card">
-        <div class="card-header">
-          <h2 class="card-title">Budget Goals</h2>
-        </div>
-        <div class="card-content">
-          <GoalTracker />
-        </div>
-      </div>
-
-      <!-- Results Card -->
-      <div class="simulator-card results-card">
-        <div class="card-header">
-          <h2 class="card-title">Budget Results</h2>
-        </div>
-        <div class="card-content">
-          <BudgetResults />
-        </div>
-      </div>
-
-      <!-- Revenue Card -->
-      <div class="simulator-card revenue-card">
-        <div class="card-header">
-          <h2 class="card-title">Revenue Sources</h2>
-        </div>
-        <div class="card-content">
-          <RevenueSliders />
-        </div>
-      </div>
-
-      <!-- Spending Card -->
-      <div class="simulator-card spending-card">
-        <div class="card-header">
-          <h2 class="card-title">Spending Controls</h2>
-        </div>
-        <div class="card-content">
-          <SpendingControls />
-        </div>
-      </div>
-
-      <!-- Charts Card -->
-      <div class="simulator-card charts-card">
-        <div class="card-header">
-          <h2 class="card-title">Budget Analysis</h2>
-        </div>
-        <div class="card-content">
-          <ChartsPanel />
-        </div>
-      </div>
-    </div>
-
-    <!-- Error Boundary -->
-    <div v-if="error" class="error-boundary">
-      <div class="error-content">
-        <span class="material-icons error-icon">error_outline</span>
-        <h3 class="error-title">Something went wrong</h3>
-        <p class="error-message">{{ error }}</p>
-        <button class="error-button" @click="resetError">Try Again</button>
-      </div>
-    </div>
-  </div>
+  </ErrorBoundary>
 </template>
 
 <script setup>
 import { ref, onMounted, onUnmounted, watch } from 'vue';
 import { useBudgetSimulatorStore } from '@/domains/budget/store/budgetSimulator';
+import ErrorBoundary from '@/components/ErrorBoundary.vue';
 import GoalTracker from '@/domains/budget/components/GoalTracker.vue';
 import BudgetResults from '@/domains/budget/components/BudgetResults.vue';
 import RevenueSliders from '@/domains/budget/components/RevenueSliders.vue';

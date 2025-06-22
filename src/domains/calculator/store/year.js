@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
+import { createValidatedAction } from '@/utils/storeActionWrapper.js';
 
 export const useYearStore = defineStore('year', () => {
   // Available tax years
@@ -19,9 +20,9 @@ export const useYearStore = defineStore('year', () => {
   });
   
   // Function to change the selected year
-  function setSelectedTaxYear(year) {
+  const setSelectedTaxYear = createValidatedAction('year', 'selectedTaxYear', function(year) {
     selectedTaxYear.value = year;
-  }
+  });
   
   return {
     taxYears,

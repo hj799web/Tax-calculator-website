@@ -242,36 +242,36 @@ const handlePaste = (event, target) => {
 const setRrspDeduction = ($event) => {
   const sanitizedValue = sanitizeNumericInput($event.target.value);
   if (sanitizedValue !== undefined) {
-    rrspDeduction.value = sanitizedValue;
+    calculatorStore.setRrspDeduction(sanitizedValue);
   } else {
-    rrspDeduction.value = undefined;
+    calculatorStore.setRrspDeduction(undefined);
   }
 }
 
 const setNumberOfDependents = ($event) => {
   const sanitizedValue = sanitizeNumericInput($event.target.value);
   if (sanitizedValue !== undefined) {
-    numberOfDependents.value = sanitizedValue;
+    calculatorStore.setNumberOfDependents(sanitizedValue);
   } else {
-    numberOfDependents.value = undefined;
+    calculatorStore.setNumberOfDependents(undefined);
   }
 }
 
 const setNumberOfChildrenUnder18 = ($event) => {
   const sanitizedValue = sanitizeNumericInput($event.target.value);
   if (sanitizedValue !== undefined) {
-    numberOfChildrenUnder18.value = sanitizedValue;
+    calculatorStore.setNumberOfChildrenUnder18(sanitizedValue);
   } else {
-    numberOfChildrenUnder18.value = undefined;
+    calculatorStore.setNumberOfChildrenUnder18(undefined);
   }
 }
 
 const setNumberOfDependentsWithDisabilities = ($event) => {
   const sanitizedValue = sanitizeNumericInput($event.target.value);
   if (sanitizedValue !== undefined) {
-    numberOfDependentsWithDisabilities.value = sanitizedValue;
+    calculatorStore.setNumberOfDependentsWithDisabilities(sanitizedValue);
   } else {
-    numberOfDependentsWithDisabilities.value = undefined;
+    calculatorStore.setNumberOfDependentsWithDisabilities(undefined);
   }
 }
 </script>

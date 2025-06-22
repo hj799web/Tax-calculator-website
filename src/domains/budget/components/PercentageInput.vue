@@ -47,7 +47,7 @@
 
 <script setup>
 import { computed } from 'vue';
-import throttle from 'lodash.throttle';
+import { createDebouncedFunction } from '@/utils/debounceUtils';
 
 const props = defineProps({
   modelValue: {
@@ -82,15 +82,15 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue']);
 
-// Throttle the emit for update:modelValue
-const throttledEmitUpdate = throttle((numValue) => {
+// Use the new debouncing utility
+const debouncedEmitUpdate = createDebouncedFunction((numValue) => {
   emit('update:modelValue', numValue);
 }, 200);
 
 function updateValue(value) {
   const numValue = Number(value);
   if (numValue >= props.min && numValue <= props.max) {
-    throttledEmitUpdate(numValue);
+    debouncedEmitUpdate(numValue);
   }
 }
 
@@ -99,13 +99,13 @@ const amountValue = computed(() => {
   return (props.baseAmount * props.modelValue / 100).toFixed(1);
 });
 
-// Throttle the emit for update:modelValue from amount input as well
+// Use the same debounced function for amount input updates
 function updateAmountValue(value) {
   const numValue = Number(value);
   if (props.baseAmount > 0) {
     const newPercentage = (numValue / props.baseAmount) * 100;
     if (newPercentage >= props.min && newPercentage <= props.max) {
-      throttledEmitUpdate(newPercentage);
+      debouncedEmitUpdate(newPercentage);
     }
   }
 }
@@ -179,34 +179,21 @@ function updateAmountValue(value) {
   padding: 4px 24px 4px 8px;
   border: 1px solid #e2e8f0;
   border-radius: 4px;
-  font-size: 0.85rem;
-  color: #2d3748;
-  background-color: white;
+  font-size: 0.875rem;
+  outline: none;
   transition: border-color 0.2s ease;
-  -webkit-appearance: textfield; /* For WebKit browsers */
-  -moz-appearance: textfield; /* For Mozilla browsers */
-  appearance: textfield; /* Standard property for compatibility */
-}
-
-.percentage-input::-webkit-inner-spin-button, 
-.percentage-input::-webkit-outer-spin-button,
-.amount-input::-webkit-inner-spin-button,
-.amount-input::-webkit-outer-spin-button { 
-  -webkit-appearance: none;
-  margin: 0;
 }
 
 .percentage-input:focus, .amount-input:focus {
-  border-color: var(--tile-color, #4299E1);
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.2);
+  border-color: #4299e1;
+  box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.1);
 }
 
 .input-suffix {
   position: absolute;
   right: 8px;
   color: #718096;
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   pointer-events: none;
 }
 

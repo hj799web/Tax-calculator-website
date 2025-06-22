@@ -3,6 +3,7 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import { handleError } from '@/utils/errorHandler.js';
+import { createValidatedAction } from '@/utils/storeActionWrapper.js';
 
 export const useSentimentSettingsStore = defineStore('sentimentSettings', () => {
   // Sensitivity settings
@@ -37,7 +38,7 @@ export const useSentimentSettingsStore = defineStore('sentimentSettings', () => 
   });
 
   // Actions
-  const setSensitivity = (category, value) => {
+  const setSensitivity = createValidatedAction('sentiment', 'sensitivity', function(category, value) {
     if (Object.prototype.hasOwnProperty.call(sensitivity.value, category)) {
       sensitivity.value[category] = Math.max(0, Math.min(2, value));
       try {
@@ -52,9 +53,9 @@ export const useSentimentSettingsStore = defineStore('sentimentSettings', () => 
         console.warn(`[SENTIMENT SETTINGS] ${msg}`);
       });
     }
-  };
+  });
 
-  const setThreshold = (level, value) => {
+  const setThreshold = createValidatedAction('sentiment', 'thresholds', function(level, value) {
     if (Object.prototype.hasOwnProperty.call(thresholds.value, level)) {
       thresholds.value[level] = Math.max(0, Math.min(1, value));
       try {
@@ -69,9 +70,9 @@ export const useSentimentSettingsStore = defineStore('sentimentSettings', () => 
         console.warn(`[SENTIMENT SETTINGS] ${msg}`);
       });
     }
-  };
+  });
 
-  const setUpdateFrequency = (frequency) => {
+  const setUpdateFrequency = createValidatedAction('sentiment', 'updateFrequency', function(frequency) {
     updateFrequency.value = Math.max(100, Math.min(5000, frequency));
     try {
       saveToLocalStorage();
@@ -80,7 +81,7 @@ export const useSentimentSettingsStore = defineStore('sentimentSettings', () => 
         console.warn(`[SENTIMENT SETTINGS] Failed to save update frequency: ${msg}`);
       });
     }
-  };
+  });
 
   const resetAll = () => {
     sensitivity.value = {

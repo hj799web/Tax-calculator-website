@@ -1,5 +1,12 @@
 <template>
   <div class="sentiment-sensitivity-control">
+    <LoadingIndicator 
+      :show="isUpdating" 
+      message="Updating sentiment calculations..."
+      size="small"
+      variant="inline"
+    />
+    
     <h3>Public Sentiment Sensitivity</h3>
     <div class="slider-group">
       <label for="overall-sensitivity">Overall Sensitivity</label>
@@ -62,10 +69,49 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useSentimentSettingsStore } from '@/domains/sentiment/store/sentimentSettings';
+import { createDebouncedFunction } from '@/utils/debounceUtils';
+import LoadingIndicator from '@/components/LoadingIndicator.vue';
 
 const sentimentSettings = useSentimentSettingsStore();
+const isUpdating = ref(false);
+
+const debouncedUpdateOverall = createDebouncedFunction((value) => {
+  isUpdating.value = true;
+  try {
+    sentimentSettings.setSensitivity('overall', value);
+  } finally {
+    isUpdating.value = false;
+  }
+}, 200);
+
+const debouncedUpdateRegions = createDebouncedFunction((value) => {
+  isUpdating.value = true;
+  try {
+    sentimentSettings.setSensitivity('regions', value);
+  } finally {
+    isUpdating.value = false;
+  }
+}, 200);
+
+const debouncedUpdateDemographics = createDebouncedFunction((value) => {
+  isUpdating.value = true;
+  try {
+    sentimentSettings.setSensitivity('demographics', value);
+  } finally {
+    isUpdating.value = false;
+  }
+}, 200);
+
+const debouncedUpdateSectors = createDebouncedFunction((value) => {
+  isUpdating.value = true;
+  try {
+    sentimentSettings.setSensitivity('sectors', value);
+  } finally {
+    isUpdating.value = false;
+  }
+}, 200);
 
 const overall = computed({
   get: () => sentimentSettings.sensitivity.overall,
@@ -89,22 +135,22 @@ const sectors = computed({
 
 function updateOverall() {
   console.log('[SENSITIVITY DEBUG] Setting overall to:', overall.value);
-  sentimentSettings.setSensitivity('overall', overall.value);
+  debouncedUpdateOverall(overall.value);
 }
 
 function updateRegions() {
   console.log('[SENSITIVITY DEBUG] Setting regions to:', regions.value);
-  sentimentSettings.setSensitivity('regions', regions.value);
+  debouncedUpdateRegions(regions.value);
 }
 
 function updateDemographics() {
   console.log('[SENSITIVITY DEBUG] Setting demographics to:', demographics.value);
-  sentimentSettings.setSensitivity('demographics', demographics.value);
+  debouncedUpdateDemographics(demographics.value);
 }
 
 function updateSectors() {
   console.log('[SENSITIVITY DEBUG] Setting sectors to:', sectors.value);
-  sentimentSettings.setSensitivity('sectors', sectors.value);
+  debouncedUpdateSectors(sectors.value);
 }
 
 function resetAll() {
@@ -141,7 +187,61 @@ label {
 
 input[type="range"] {
   flex: 1;
-  min-width: 150px;
+  height: 6px;
+  border-radius: 3px;
+  background: #e2e8f0;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #4299e1;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #4299e1;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+input[type="range"]::-moz-range-thumb:hover {
+  transform: scale(1.2);
+}
+
+button {
+  background: #4299e1;
+  color: white;
+  border: none;
+  padding: 0.5em 1em;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+button:hover {
+  background: #3182ce;
+}
+
+span {
+  min-width: 40px;
+  text-align: right;
+  font-family: monospace;
 }
 
 @media (max-width: 600px) {
