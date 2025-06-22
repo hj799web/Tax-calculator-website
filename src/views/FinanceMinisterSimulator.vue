@@ -75,7 +75,7 @@
       <MainNavigation />
 
       <!-- Sub Navigation Bar -->
-      <nav class="sub-navigation">
+      <nav class="sub-navigation" :class="{ 'mobile': isMobile }">
         <a @click="scrollToSection('budget-goals')" class="sub-nav-link">
           <span class="material-icons">flag</span>
           Budget Goals
@@ -276,8 +276,10 @@ import { setPreset } from '@/presets'
 
 import { parseSharedBudgetParams, applySharedBudgetToStore } from '@/domains/budget/utils/sharedBudget.js'
 import { handleError } from '@/utils/errorHandler.js'
+import { useDeviceDetection } from '@/utils/deviceDetection.js'
 
 const budgetStore = useBudgetSimulatorStore();
+const { isMobile } = useDeviceDetection();
 const currentYear = ref(budgetStore.currentYear);
 const expandedGroups = ref({
   mainCategories: false,
@@ -730,35 +732,93 @@ const toggleSection = (section) => {
 
 /* 4. Sticky/Floating Sub-Navigation */
 .sub-navigation {
-  position: sticky;
-  top: 0.5rem;
-  z-index: 10;
-  background: rgba(255,255,255,0.7);
-  backdrop-filter: blur(6px);
-  border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(52, 152, 219, 0.08);
-  padding: 0.5rem 1rem;
-  margin-bottom: 1.5rem;
   display: flex;
-  gap: 1rem;
+  justify-content: center;
+  gap: 15px;
+  margin: 15px 0;
+  padding: 10px;
+  background-color: rgba(248, 249, 250, 0.95);
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
   flex-wrap: wrap;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
+
+.sub-navigation.mobile {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  margin: 0;
+  border-radius: 0;
+  border-bottom: 1px solid #e9ecef;
+  background-color: rgba(248, 249, 250, 0.98);
+  backdrop-filter: blur(15px);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+}
+
 .sub-nav-link {
   color: #3498db;
-  font-weight: 600;
-  padding: 0.5rem 1.2rem;
-  border-radius: 6px;
-  transition: background 0.2s, color 0.2s, transform 0.2s;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 5px;
   cursor: pointer;
-  font-size: 1rem;
+  white-space: nowrap;
 }
+
 .sub-nav-link:hover {
-  background: linear-gradient(135deg, #27ae60, #3498db);
-  color: #fff;
-  transform: translateY(-2px) scale(1.04);
+  background-color: #3498db;
+  color: white;
+}
+
+.sub-nav-link .material-icons {
+  font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+  .sub-navigation {
+    gap: 8px;
+    padding: 8px;
+  }
+  
+  .sub-navigation.mobile {
+    padding: 12px 8px;
+  }
+  
+  .sub-nav-link {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+  }
+  
+  .sub-nav-link .material-icons {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .sub-navigation.mobile {
+    padding: 10px 6px;
+  }
+  
+  .sub-nav-link {
+    font-size: 0.75rem;
+    padding: 5px 8px;
+  }
+  
+  .sub-nav-link .material-icons {
+    font-size: 0.9rem;
+  }
 }
 
 /* 5. Modern Inputs & Sliders */
@@ -901,7 +961,8 @@ input:focus, select:focus, textarea:focus {
 }
 
 .finance-minister-simulator {
-  background: rgba(255,255,255,0.2);
+  /* Remove conflicting background - global background handled by App.vue */
+  background: none;
   position: relative;
   z-index: 1;
   padding: 1rem;
@@ -1282,10 +1343,29 @@ input:focus, select:focus, textarea:focus {
   gap: 15px;
   margin: 15px 0;
   padding: 10px;
-  background-color: #f8f9fa;
+  background-color: rgba(248, 249, 250, 0.95);
   border-radius: 8px;
   border: 1px solid #e9ecef;
   flex-wrap: wrap;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.sub-navigation.mobile {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  margin: 0;
+  border-radius: 0;
+  border-bottom: 1px solid #e9ecef;
+  background-color: rgba(248, 249, 250, 0.98);
+  backdrop-filter: blur(15px);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
 }
 
 .sub-nav-link {
@@ -1299,7 +1379,8 @@ input:focus, select:focus, textarea:focus {
   display: flex;
   align-items: center;
   gap: 5px;
-  cursor: pointer; /* Add cursor pointer to show it's clickable */
+  cursor: pointer;
+  white-space: nowrap;
 }
 
 .sub-nav-link:hover {
@@ -1317,9 +1398,32 @@ input:focus, select:focus, textarea:focus {
     padding: 8px;
   }
   
+  .sub-navigation.mobile {
+    padding: 12px 8px;
+  }
+  
   .sub-nav-link {
     font-size: 0.8rem;
     padding: 6px 12px;
+  }
+  
+  .sub-nav-link .material-icons {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .sub-navigation.mobile {
+    padding: 10px 6px;
+  }
+  
+  .sub-nav-link {
+    font-size: 0.75rem;
+    padding: 5px 8px;
+  }
+  
+  .sub-nav-link .material-icons {
+    font-size: 0.9rem;
   }
 }
 
