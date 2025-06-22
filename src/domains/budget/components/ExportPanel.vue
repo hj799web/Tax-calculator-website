@@ -17,8 +17,8 @@
       Include Full Budget Breakdown
     </label>
     
-    <!-- Export Card for PDF Generation - Visible but positioned off-screen -->
-    <div style="position: fixed; top: 0; left: -2000px; width: 800px; height: auto; overflow: visible;">
+    <!-- Export Card for PDF Generation - Hidden off-screen -->
+    <div style="position: fixed; top: -9999px; left: -9999px; width: 800px; height: auto; overflow: visible; visibility: hidden;">
       <ExportCard 
         id="export-summary"
         :budget-title="budgetTitle"
