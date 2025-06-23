@@ -144,7 +144,7 @@ export const budgetPresets = {
   progressiveExpansion: {
     label: "🌿 Green Growth Stimulus",
     description:
-      "An economic growth-focused approach that uses strategic deficits to stimulate the economy while staying under the $60B deficit threshold. This preset is designed to earn the 'Stimulus Commander' and 'Stimulus Engineer' badges.",
+      "An economic growth-focused approach that uses strategic deficits to stimulate the economy while staying under the $50B deficit threshold. This preset is designed to earn the 'Stimulus Commander' and 'Stimulus Engineer' badges.",
     revenue: {
       personalIncomeTax: 23, // Increased from 22.5 (+0.5)
       corporateIncomeTax: 17, // Increased from 16.5 (+0.5)

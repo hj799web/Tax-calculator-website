@@ -197,13 +197,13 @@ const applySensitivityToGroup = (group, groupMultiplier = 1.0) => {
   // Check for deficit-related triggers that affect fiscal anxiety
   const deficit = budget?.fiscalIndicators?.deficit || 0;
   const debtToGdpRatio = budget?.fiscalIndicators?.debtToGdpRatio || 0;
-  const hasHighDeficit = deficit > 60; // $60B threshold (updated from $40B)
+  const hasHighDeficit = deficit > 50; // $50B threshold (updated to align with new fiscal risk system)
   const hasRisingDebtRatio = debtToGdpRatio > 45; // 45% threshold
   
   // Track groups that should be absolutely overridden
   const overriddenGroups = { provinces: new Set(), demographics: new Set(), sectors: new Set() };
   // Cap logic: Block positive sentiment if surplus or deficit caps are broken
-  const capBroken = (budget?.fiscalIndicators?.surplus > 50000000000) || (budget?.fiscalIndicators?.deficit < -60000000000);
+  const capBroken = (budget?.fiscalIndicators?.surplus > 50000000000) || (budget?.fiscalIndicators?.deficit < -50000000000);
 
   for (const [groupType, groups] of Object.entries(allConfigs)) {
     for (const [group, config] of Object.entries(groups)) {
@@ -216,7 +216,7 @@ const applySensitivityToGroup = (group, groupMultiplier = 1.0) => {
         
         // Apply fiscal anxiety penalties for deficit-sensitive groups
         if (config.deficitSensitivity && hasHighDeficit) {
-          score -= config.deficitSensitivity * (deficit - 60) / 20; // Scale by how much over $60B
+          score -= config.deficitSensitivity * (deficit - 50) / 20; // Scale by how much over $50B
         }
         
         if (config.debtRatioSensitivity && hasRisingDebtRatio) {

@@ -451,33 +451,33 @@ onUnmounted(() => {
 const deficitWarningLevel = computed(() => {
   if (warningDismissed.value) return 'none';
   
-  // Check if we have a surplus or small deficit (≤ $20B)
-  if (surplusValue.value >= 0 || surplusValue.value > -20) {
+  // Check if we have a surplus or small deficit (≤ $25B) - Fiscal Stability Zone
+  if (surplusValue.value >= 0 || surplusValue.value > -25) {
     return 'none';
   }
   
-  // $20B–$39.9B deficit: Mild Warning
-  if (surplusValue.value >= -40) {
+  // $25B–$49.9B deficit: Mild Warning - Fiscal Vigilance Zone
+  if (surplusValue.value >= -50) {
     return 'mild';
   }
   
-  // $40B–$99.9B deficit: High Warning
+  // $50B–$99.9B deficit: High Warning - Fiscal Stress Zone
   if (surplusValue.value >= -100) {
     return 'high';
   }
   
-  // ≥ $100B deficit: Critical Deficit Alert
+  // ≥ $100B deficit: Critical Warning - Fiscal Emergency Zone
   return 'critical';
 });
 
 const deficitWarningMessage = computed(() => {
   switch (deficitWarningLevel.value) {
     case 'mild':
-      return "Caution: Your deficit is approaching unsustainable levels.";
+      return "Caution: Deficit may require future fiscal adjustment.";
     case 'high':
-      return "Warning: Large deficit may lead to long-term debt challenges.";
+      return "Warning: Large deficit could challenge fiscal stability long-term.";
     case 'critical':
-      return "Critical: Your deficit exceeds $100B — urgent action required.";
+      return "Critical: Severe deficit. Immediate fiscal intervention recommended.";
     default:
       return "";
   }

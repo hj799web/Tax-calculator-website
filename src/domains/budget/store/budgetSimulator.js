@@ -1328,8 +1328,8 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
       const currentSurplus = this.surplus;
       if (currentSurplus > 50) {
         console.warn(`Surplus exceeds $50B limit: $${currentSurplus.toFixed(1)}B`);
-      } else if (currentSurplus < -60) {
-        console.warn(`Deficit exceeds $60B limit: $${-currentSurplus.toFixed(1)}B`);
+      } else if (currentSurplus < -50) {
+        console.warn(`Deficit exceeds $50B limit: $${-currentSurplus.toFixed(1)}B`);
       }
     },
 
