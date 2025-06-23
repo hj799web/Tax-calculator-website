@@ -18,7 +18,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -189,11 +189,11 @@
     }
     
     .feature-icon {
-      font-size: 2rem;
+      font-size: 2.5rem;
       margin-bottom: 20px;
       color: #3498db;
-      width: 60px;
-      height: 60px;
+      width: 80px;
+      height: 80px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -203,11 +203,18 @@
       margin-right: auto;
       transform: translateZ(30px);
       transition: all 0.3s ease;
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
     }
     
     .feature-card:hover .feature-icon {
       transform: translateZ(50px) scale(1.1);
       background: rgba(52, 152, 219, 0.2);
+      filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.2));
+    }
+    
+    .feature-icon .material-icons {
+      font-size: 2.5rem;
+      color: #3498db;
     }
     
     .feature-title {
@@ -582,28 +589,28 @@
       <p class="subtitle">Get an accurate breakdown of your 2024 taxes and see how your money is spent by the Canadian government with our free, easy-to-use calculator.</p>
       
       <div class="nav-menu">
-        <a href="./#/how-it-works" class="nav-link"><i class="fas fa-info-circle"></i> How It Works</a>
-        <a href="https://www.canada.ca/en/revenue-agency.html" target="_blank" rel="noopener noreferrer" class="nav-link"><i class="fas fa-external-link-alt"></i> CRA</a>
+        <a href="./#/how-it-works" class="nav-link"><span class="material-icons">info</span> How It Works</a>
+        <a href="https://www.canada.ca/en/revenue-agency.html" target="_blank" rel="noopener noreferrer" class="nav-link"><span class="material-icons">open_in_new</span> CRA</a>
       </div>
       
-      <a href="index.html" class="cta-button"><i class="fas fa-calculator"></i> Start Calculating Now</a>
+      <a href="index.html" class="cta-button"><span class="material-icons">calculate</span> Start Calculating Now</a>
     </header>
     
     <section class="features">
       <div class="feature-card">
-        <div class="feature-icon"><i class="fas fa-chart-bar"></i></div>
+        <div class="feature-icon"><span class="material-icons">bar_chart</span></div>
         <h3 class="feature-title">Accurate Tax Breakdown</h3>
         <p class="feature-description">Get a detailed breakdown of federal and provincial taxes based on your income and province of residence, using the latest 2024 tax rates.</p>
       </div>
       
       <div class="feature-card">
-        <div class="feature-icon"><i class="fas fa-dollar-sign"></i></div>
+        <div class="feature-icon"><span class="material-icons">account_balance</span></div>
         <h3 class="feature-title">Government Spending Visualization</h3>
         <p class="feature-description">See exactly how your tax dollars are allocated across different government spending categories like healthcare, education, and defense.</p>
       </div>
       
       <div class="feature-card">
-        <div class="feature-icon"><i class="fas fa-exchange-alt"></i></div>
+        <div class="feature-icon"><span class="material-icons">swap_horiz</span></div>
         <h3 class="feature-title">Multiple Income Types</h3>
         <p class="feature-description">Calculate taxes for employment income, self-employment, capital gains, dividends, and more with our comprehensive calculator.</p>
       </div>
@@ -674,22 +681,22 @@
         </p>
         <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
           <a href="./#/simulator" class="cta-button" style="background: linear-gradient(135deg, #e74c3c, #c0392b); box-shadow: 0 4px 10px rgba(231, 76, 60, 0.3);">
-            <i class="fas fa-balance-scale"></i> Launch Simulator
+            <span class="material-icons">balance</span> Launch Simulator
           </a>
         </div>
         <div style="margin-top: 30px; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
           <div style="background: rgba(255, 255, 255, 0.1); padding: 20px; border-radius: 10px;">
-            <i class="fas fa-chart-line" style="font-size: 1.5rem; margin-bottom: 10px;"></i>
+            <span class="material-icons" style="font-size: 2rem; margin-bottom: 10px;">trending_up</span>
             <h3 style="font-size: 1.2rem; margin-bottom: 10px;">Track Economic Impact</h3>
             <p style="opacity: 0.9;">Monitor GDP growth, debt-to-GDP ratio, and fiscal balance as you make budget decisions.</p>
           </div>
           <div style="background: rgba(255, 255, 255, 0.1); padding: 20px; border-radius: 10px;">
-            <i class="fas fa-users" style="font-size: 1.5rem; margin-bottom: 10px;"></i>
+            <span class="material-icons" style="font-size: 2rem; margin-bottom: 10px;">people</span>
             <h3 style="font-size: 1.2rem; margin-bottom: 10px;">Public Sentiment</h3>
             <p style="opacity: 0.9;">See how different demographic groups react to your budget choices.</p>
           </div>
           <div style="background: rgba(255, 255, 255, 0.1); padding: 20px; border-radius: 10px;">
-            <i class="fas fa-trophy" style="font-size: 1.5rem; margin-bottom: 10px;"></i>
+            <span class="material-icons" style="font-size: 2rem; margin-bottom: 10px;">emoji_events</span>
             <h3 style="font-size: 1.2rem; margin-bottom: 10px;">Earn Badges</h3>
             <p style="opacity: 0.9;">Achieve special badges for creating balanced budgets and making impactful decisions.</p>
           </div>
@@ -697,14 +704,14 @@
       </div>
     </section>
     
-    <a href="./" class="cta-button"><i class="fas fa-arrow-right"></i> Try the Canada Tax Calculator Now</a>
+    <a href="./" class="cta-button"><span class="material-icons">arrow_forward</span> Try the Canada Tax Calculator Now</a>
     
     <footer>
       <div class="footer-links">
-        <a href="./#/how-it-works" class="footer-link"><i class="fas fa-info-circle"></i> How It Works</a>
-        <a href="mailto:fiscal-insights@outlook.com" class="footer-link"><i class="fas fa-envelope"></i> Contact Us</a>
-        <a href="https://forms.gle/Yofdxnr1iLZ5fRJ8A" target="_blank" rel="noopener noreferrer" class="footer-link"><i class="fas fa-comment-alt"></i> Feedback</a>
-        <a href="https://www.canada.ca/en/revenue-agency.html" target="_blank" rel="noopener noreferrer" class="footer-link"><i class="fas fa-external-link-alt"></i> CRA</a>
+        <a href="./#/how-it-works" class="footer-link"><span class="material-icons">info</span> How It Works</a>
+        <a href="mailto:fiscal-insights@outlook.com" class="footer-link"><span class="material-icons">email</span> Contact Us</a>
+        <a href="https://forms.gle/Yofdxnr1iLZ5fRJ8A" target="_blank" rel="noopener noreferrer" class="footer-link"><span class="material-icons">feedback</span> Feedback</a>
+        <a href="https://www.canada.ca/en/revenue-agency.html" target="_blank" rel="noopener noreferrer" class="footer-link"><span class="material-icons">open_in_new</span> CRA</a>
       </div>
       <p class="copyright">&copy; 2025 Fiscal Insights. All rights reserved. | Last Updated: May 2025</p>
     </footer>
