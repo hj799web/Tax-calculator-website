@@ -7,7 +7,9 @@
     "build": "vue-cli-service build",
     "build:gh-pages": "cross-env DEPLOY_ENV=GH_PAGES vue-cli-service build",
     "deploy:gh-pages": "cross-env DEPLOY_ENV=GH_PAGES npm run build:gh-pages && gh-pages -d docs",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist",
+    "lint": "vue-cli-service lint",
+    "optimize-images": "node scripts/optimize-images.js"
   },
   "dependencies": {
     "@vuelidate/core": "^2.0.3",
@@ -53,6 +55,12 @@
     "eslint": "^8.0.0",
     "eslint-plugin-vue": "^9.0.0",
     "gh-pages": "^6.3.0",
+    "imagemin": "^9.0.1",
+    "imagemin-cli": "^8.0.0",
+    "imagemin-mozjpeg": "^10.0.0",
+    "imagemin-pngquant": "^10.0.0",
+    "imagemin-webp": "^8.0.0",
+    "sharp": "^0.34.2",
     "tailwindcss": "^4.0.17"
   },
   "eslintConfig": {

@@ -295,15 +295,53 @@
 </template>
 
 <script>
-import { ref, computed } from 'vue'
+import { ref, computed, defineAsyncComponent } from 'vue'
 import { useYearStore } from '@/domains/calculator/store/year.js'
-import CalculatorView from '@/views/CalculatorView.vue'
-import ResultView from '@/views/ResultView.vue'
-import FederalBudgetView from '@/views/FederalBudgetView.vue'
-import BudgetCategoriesView from '@/views/BudgetCategoriesView.vue'
-import FAQSection from '@/domains/faq/components/FAQSection.vue'
-import SalaryRateSelector from '@/domains/calculator/components/SalaryRateSelector.vue'
 import ErrorBoundary from '@/components/ErrorBoundary.vue'
+
+// Lazy load heavy components for better initial page load
+const CalculatorView = defineAsyncComponent({
+  loader: () => import('@/views/CalculatorView.vue'),
+  loadingComponent: { template: '<div class="loading-view">Loading calculator...</div>' },
+  errorComponent: { template: '<div class="error-view">Failed to load calculator</div>' },
+  delay: 200,
+  timeout: 10000
+})
+
+const ResultView = defineAsyncComponent({
+  loader: () => import('@/views/ResultView.vue'),
+  loadingComponent: { template: '<div class="loading-view">Loading results...</div>' },
+  errorComponent: { template: '<div class="error-view">Failed to load results</div>' },
+  delay: 200,
+  timeout: 10000
+})
+
+const FederalBudgetView = defineAsyncComponent({
+  loader: () => import('@/views/FederalBudgetView.vue'),
+  loadingComponent: { template: '<div class="loading-view">Loading budget view...</div>' },
+  errorComponent: { template: '<div class="error-view">Failed to load budget view</div>' },
+  delay: 200,
+  timeout: 10000
+})
+
+const BudgetCategoriesView = defineAsyncComponent({
+  loader: () => import('@/views/BudgetCategoriesView.vue'),
+  loadingComponent: { template: '<div class="loading-view">Loading budget categories...</div>' },
+  errorComponent: { template: '<div class="error-view">Failed to load budget categories</div>' },
+  delay: 200,
+  timeout: 10000
+})
+
+const FAQSection = defineAsyncComponent({
+  loader: () => import('@/domains/faq/components/FAQSection.vue'),
+  loadingComponent: { template: '<div class="loading-view">Loading FAQ...</div>' },
+  errorComponent: { template: '<div class="error-view">Failed to load FAQ</div>' },
+  delay: 200,
+  timeout: 10000
+})
+
+// Keep lightweight components as regular imports
+import SalaryRateSelector from '@/domains/calculator/components/SalaryRateSelector.vue'
 
 export default {
   name: 'App',
@@ -1723,7 +1761,10 @@ button::before, .button::before {
   width: 100vw;
   height: 100vh;
   z-index: -1;
-  background-image: url('@/assets/calculator-bg.jpg'); /* Use calculator background for all screen sizes */
+  background-image: url('@/assets/optimized/calculator-bg.webp'); /* Use optimized WebP background */
+  background-image: 
+    url('@/assets/optimized/calculator-bg.webp'), /* WebP for modern browsers */
+    url('@/assets/optimized/calculator-bg.jpg'); /* JPEG fallback */
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -1740,5 +1781,73 @@ button::before, .button::before {
   background: rgba(0,0,0,0.15);
   z-index: 0;
   pointer-events: none;
+}
+
+/* Loading and Error States for Lazy Components */
+.loading-view {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  color: #3498db;
+  font-weight: 600;
+  font-size: 1.1rem;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  margin: 2rem auto;
+  max-width: 600px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  animation: loadingPulse 1.5s ease-in-out infinite;
+}
+
+.loading-view::before {
+  content: "⏳";
+  margin-right: 0.75rem;
+  font-size: 1.5em;
+  animation: spin 2s linear infinite;
+}
+
+.error-view {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  color: #e74c3c;
+  font-weight: 600;
+  font-size: 1.1rem;
+  background: rgba(255, 245, 245, 0.95);
+  border: 2px solid #e74c3c;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  margin: 2rem auto;
+  max-width: 600px;
+  box-shadow: 0 4px 6px rgba(231, 76, 60, 0.2);
+}
+
+.error-view::before {
+  content: "⚠️";
+  margin-right: 0.75rem;
+  font-size: 1.5em;
+}
+
+@keyframes loadingPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.02);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 </style>

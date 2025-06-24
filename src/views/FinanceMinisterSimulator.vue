@@ -249,29 +249,66 @@
 </template>
 
 <script setup>
-import CollapsibleSentimentBanner from '@/domains/sentiment/components/CollapsibleSentimentBanner.vue'
-import SentimentSensitivityControl from '@/domains/sentiment/components/SentimentSensitivityControl.vue'
-import SharedBudgetDetailModal from '@/domains/budget/components/SharedBudgetDetailModal.vue'
-import { SocialShareModal } from '@/domains/social'
+import { computed, ref, onMounted, watch, nextTick, defineAsyncComponent } from 'vue'
+import { useBudgetSimulatorStore } from '@/domains/budget'
+import { computeSentimentScores, getSentimentLabel, getSentimentEmoji } from '@/domains/sentiment/utils/computeSentimentScores'
 import MainNavigation from '@/components/MainNavigation.vue'
 import logoImage from '@/assets/fiscal-insights-logo.jpg'
 import OnboardingTour from '@/components/OnboardingTour.vue'
 
-import { computed, ref, onMounted, watch, nextTick } from 'vue'
-import { useBudgetSimulatorStore } from '@/domains/budget'
-import { computeSentimentScores, getSentimentLabel, getSentimentEmoji } from '@/domains/sentiment/utils/computeSentimentScores'
-// Import scenario logic if needed
+// Lazy load heavy components for better performance
+const ChartsPanel = defineAsyncComponent({
+  loader: () => import('@/domains/budget/components/ChartsPanel.vue'),
+  loadingComponent: { template: '<div class="loading-component">Loading charts...</div>' },
+  errorComponent: { template: '<div class="error-component">Failed to load charts</div>' },
+  delay: 200,
+  timeout: 10000
+})
+
+const RadarSentiment = defineAsyncComponent({
+  loader: () => import('@/domains/sentiment/components/RadarSentiment.vue'),
+  loadingComponent: { template: '<div class="loading-component">Loading sentiment analysis...</div>' },
+  errorComponent: { template: '<div class="error-component">Failed to load sentiment analysis</div>' },
+  delay: 200,
+  timeout: 10000
+})
+
+const SocialShareModal = defineAsyncComponent({
+  loader: () => import('@/domains/social/components/SocialShareModal.vue'),
+  loadingComponent: { template: '<div class="loading-component">Loading share modal...</div>' },
+  errorComponent: { template: '<div class="error-component">Failed to load share modal</div>' },
+  delay: 200,
+  timeout: 10000
+})
+
+const BadgeGalleryModal = defineAsyncComponent({
+  loader: () => import('@/domains/badges/components/BadgeGalleryModal.vue'),
+  loadingComponent: { template: '<div class="loading-component">Loading badge gallery...</div>' },
+  errorComponent: { template: '<div class="error-component">Failed to load badge gallery</div>' },
+  delay: 200,
+  timeout: 10000
+})
+
+// Lazy load modal components (only loaded when opened)
+const SharedBudgetDetailModal = defineAsyncComponent({
+  loader: () => import('@/domains/budget/components/SharedBudgetDetailModal.vue'),
+  loadingComponent: { template: '<div class="loading-component">Loading budget details...</div>' },
+  errorComponent: { template: '<div class="error-component">Failed to load budget details</div>' },
+  delay: 200,
+  timeout: 10000
+})
+
+// Import lightweight components normally
+import CollapsibleSentimentBanner from '@/domains/sentiment/components/CollapsibleSentimentBanner.vue'
+import SentimentSensitivityControl from '@/domains/sentiment/components/SentimentSensitivityControl.vue'
 import RevenueSliders from '@/domains/budget/components/RevenueSliders.vue'
 import GoalTracker from '@/domains/budget/components/GoalTracker.vue'
 import PartyBudgetSharing from '@/domains/social/components/PartyBudgetSharing.vue'
-import ChartsPanel from '@/domains/budget/components/ChartsPanel.vue'
 import YearSelector from '@/domains/budget/components/YearSelector.vue'
 import BudgetResults from '@/domains/budget/components/BudgetResults.vue'
 import SpendingControls from '@/domains/budget/components/SpendingControls.vue'
 import PresetSelector from '@/domains/calculator/components/PresetSelector.vue'
 import AchievementBadge from '@/domains/badges/components/AchievementBadge.vue'
-import BadgeGalleryModal from '@/domains/badges/components/BadgeGalleryModal.vue'
-import RadarSentiment from '@/domains/sentiment/components/RadarSentiment.vue'
 import { setPreset } from '@/presets'
 
 import { parseSharedBudgetParams, applySharedBudgetToStore } from '@/domains/budget/utils/sharedBudget.js'
@@ -1358,5 +1395,53 @@ input:focus, select:focus, textarea:focus {
   width: auto;
   max-width: 95%;
   align-self: center;
+}
+
+/* Loading and Error States for Lazy Components */
+.loading-component {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  color: #3498db;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 8px;
+  backdrop-filter: blur(10px);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.loading-component::before {
+  content: "⏳";
+  margin-right: 0.5rem;
+  font-size: 1.2em;
+}
+
+.error-component {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  color: #e74c3c;
+  font-weight: 500;
+  background: rgba(255, 240, 240, 0.9);
+  border: 1px solid #e74c3c;
+  border-radius: 8px;
+  backdrop-filter: blur(10px);
+}
+
+.error-component::before {
+  content: "⚠️";
+  margin-right: 0.5rem;
+  font-size: 1.2em;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
 }
 </style>

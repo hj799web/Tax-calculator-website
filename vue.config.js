@@ -27,5 +27,73 @@ module.exports = {
         vue: path.resolve('./node_modules/vue'),
       },
     },
+    optimization: {
+      splitChunks: {
+        chunks: 'all',
+        cacheGroups: {
+          // Vendor libraries chunk
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            priority: 10,
+            chunks: 'initial',
+          },
+          // Chart.js specific chunk (heavy library)
+          charts: {
+            test: /[\\/]node_modules[\\/](chart\.js|vue-chartjs)[\\/]/,
+            name: 'charts',
+            priority: 20,
+            chunks: 'all',
+          },
+          // Lodash specific chunk
+          lodash: {
+            test: /[\\/]node_modules[\\/](lodash|lodash-es)[\\/]/,
+            name: 'lodash',
+            priority: 20,
+            chunks: 'all',
+          },
+          // Common components chunk
+          common: {
+            name: 'common',
+            minChunks: 2,
+            priority: 5,
+            reuseExistingChunk: true,
+            chunks: 'all',
+          }
+        }
+      }
+    },
+    performance: {
+      hints: process.env.NODE_ENV === 'production' ? 'warning' : false,
+      maxAssetSize: 512000, // 512kb
+      maxEntrypointSize: 512000, // 512kb
+    }
   },
+  chainWebpack: config => {
+    // Remove default prefetch and preload to control loading behavior
+    config.plugins.delete('prefetch')
+    
+    // Optimize chunks
+    config.optimization.splitChunks({
+      cacheGroups: {
+        default: false,
+        vendors: false,
+        // Bundle vendor libraries
+        vendor: {
+          name: 'chunk-vendors',
+          test: /[\\/]node_modules[\\/]/,
+          priority: 10,
+          chunks: 'initial'
+        },
+        // Bundle common modules
+        common: {
+          name: 'chunk-common',
+          minChunks: 2,
+          priority: 5,
+          chunks: 'initial',
+          reuseExistingChunk: true
+        }
+      }
+    })
+  }
 };

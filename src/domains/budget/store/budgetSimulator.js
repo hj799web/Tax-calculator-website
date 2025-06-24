@@ -5,7 +5,7 @@ import { handleError } from '@/utils/errorHandler.js';
 import { ref, markRaw } from 'vue';
 import { budgetValidationSchemas } from '@/utils/storeValidation.js';
 import { wrapStoreAction } from '@/utils/storeActionWrapper.js';
-import debounce from 'lodash.debounce';
+import { debounce } from 'lodash-es';
 
 // Development logging utilities
 const devLog = (message, ...args) => {
@@ -639,6 +639,10 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
       gdp: 2500, // $2.5 trillion (2024 estimate)
       debt: 1173, // $1.173 trillion (2024 estimate)
     },
+
+    // Performance optimization - debounced calculation
+    _debouncedRecalculate: null,
+    _lastRecalculationTime: 0,
   }),
 
   getters: {
@@ -1106,6 +1110,11 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
 
       // Signal initialization complete
       this.lastUpdate = Date.now();
+
+      // Create debounced recalculation function
+      this._debouncedRecalculate = debounce(() => {
+        this._performRecalculation();
+      }, 150); // 150ms delay for smooth UX
     },
     
     // Load budget data from localStorage
@@ -1197,6 +1206,11 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
         clampedRate = Math.min(source.maxRate, clampedRate);
       }
       
+      // Skip update if rate hasn't actually changed
+      if (Math.abs(source.rate - clampedRate) < 0.01) {
+        return true;
+      }
+      
       // Create a shallow copy of the source for reactive updates
       const updatedSource = { ...source };
       
@@ -1228,7 +1242,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
       
       // Only perform additional updates if not in batch mode
       if (!this.isBatchUpdateInProgress) {
-        // Recalculate totals for display
+        // Use debounced recalculation for better performance
         this.recalculateTotals();
         
         // Update the reactive triggers to force component updates
@@ -1238,8 +1252,8 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
         // Signal that sentiment update is needed
         this.setSentimentUpdateRequired(true);
         
-        // Sync to localStorage
-        this.syncToLocalStorage();
+        // Debounced sync to localStorage
+        this.debouncedSyncToLocalStorage();
         
         devLog(`Updated revenue source ${sourceId} rate to ${clampedRate}%, amount: ${this.revenueSources[sourceId].amount.toFixed(2)}B, adjusted: ${this.revenueSources[sourceId].adjustedAmount?.toFixed(2)}B`);
       }
@@ -1288,48 +1302,12 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
     },
 
     recalculateTotals() {
-      // Update all revenue sources to reflect current tax expenditures
-      Object.keys(this.revenueSources).forEach((id) => {
-        this.updateRevenueSourceAdjustedAmount(id);
-      });
-      
-      // Update the reactive triggers to force component updates
-      this.lastTaxExpenditureUpdate = Date.now();
-      this.lastRevenueSourceUpdate = Date.now();
-      
-      // Update the goal status if goals are enabled
-      if (this.budgetGoals.enabled) {
-        this.updateGoalStatus();
-      }
-      
-      // Update badges based on current budget
-      this.updateBadges();
-      
-      // If auto-balance is active, attempt to balance the budget
-      // But avoid infinite recursion by checking a flag
-      if (this.autoBalanceActive && !this._isRecalculating) {
-        this._isRecalculating = true;
-        
-        try {
-          // If we have a target deficit, use goal-based balancing
-          if (this.budgetGoals.enabled && this.budgetGoals.targetDeficit !== null) {
-            // Call autoBalanceBudgetForGoal directly
-            this.autoBalanceBudgetForGoal();
-          } else {
-            // Otherwise use regular auto-balance
-            this.autoBalanceBudget();
-          }
-        } finally {
-          this._isRecalculating = false;
-        }
-      }
-      
-      // Check for deficit/surplus limits
-      const currentSurplus = this.surplus;
-      if (currentSurplus > 50) {
-        console.warn(`Surplus exceeds $50B limit: $${currentSurplus.toFixed(1)}B`);
-      } else if (currentSurplus < -50) {
-        console.warn(`Deficit exceeds $50B limit: $${-currentSurplus.toFixed(1)}B`);
+      // Use debounced version unless we're in batch mode or this is urgent
+      if (!this.isBatchUpdateInProgress && this._debouncedRecalculate) {
+        this._debouncedRecalculate();
+      } else {
+        // Immediate calculation for batch operations or urgent updates
+        this._performRecalculation();
       }
     },
 
@@ -1360,6 +1338,9 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
         this.lastUpdate = Date.now();
         // Signal that sentiment update is needed
         this.setSentimentUpdateRequired(true);
+        
+        // Use debounced recalculation for spending changes too
+        this.recalculateTotals();
       }
     },
 
@@ -1376,6 +1357,9 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
           this.lastUpdate = Date.now();
           // Signal that sentiment update is needed
           this.setSentimentUpdateRequired(true);
+          
+          // Use debounced recalculation for group spending changes too
+          this.recalculateTotals();
         }
       }
     },
@@ -2554,6 +2538,58 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
       this.syncToLocalStorage();
     },
     
+    // Internal method that performs the actual recalculation
+    _performRecalculation() {
+      // Prevent recursive calls
+      if (this._isRecalculating) {
+        return;
+      }
+      
+      this._isRecalculating = true;
+      this._lastRecalculationTime = Date.now();
+      
+      try {
+        // Update all revenue sources to reflect current tax expenditures
+        Object.keys(this.revenueSources).forEach((id) => {
+          this.updateRevenueSourceAdjustedAmount(id);
+        });
+        
+        // Update the reactive triggers to force component updates
+        this.lastTaxExpenditureUpdate = Date.now();
+        this.lastRevenueSourceUpdate = Date.now();
+        
+        // Update the goal status if goals are enabled
+        if (this.budgetGoals.enabled) {
+          this.updateGoalStatus();
+        }
+        
+        // Update badges based on current budget
+        this.updateBadges();
+        
+        // If auto-balance is active, attempt to balance the budget
+        if (this.autoBalanceActive) {
+          if (this.budgetGoals.enabled && this.budgetGoals.targetDeficit !== null) {
+            this.autoBalanceBudgetForGoal();
+          } else {
+            this.autoBalanceBudget();
+          }
+        }
+        
+        // Check for deficit/surplus limits
+        const currentSurplus = this.surplus;
+        if (currentSurplus > 50) {
+          console.warn(`Surplus exceeds $50B limit: $${currentSurplus.toFixed(1)}B`);
+        } else if (currentSurplus < -50) {
+          console.warn(`Deficit exceeds $50B limit: $${-currentSurplus.toFixed(1)}B`);
+        }
+      } finally {
+        this._isRecalculating = false;
+      }
+    },
 
+    // Add debounced localStorage sync
+    debouncedSyncToLocalStorage: debounce(function() {
+      this.syncToLocalStorage();
+    }, 500), // Longer delay for localStorage operations
   },
 });

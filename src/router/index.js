@@ -1,6 +1,5 @@
 // src/router/index.js
 import { createRouter, createWebHashHistory } from 'vue-router'
-import HowItWorksView from '../views/HowItWorksView.vue'
 
 const routes = [
   {
@@ -11,7 +10,7 @@ const routes = [
   {
     path: '/how-it-works',
     name: 'how-it-works',
-    component: HowItWorksView
+    component: () => import('../views/HowItWorksView.vue')
   },
   {
     path: '/simulator',
