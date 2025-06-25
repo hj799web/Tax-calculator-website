@@ -1,8 +1,6 @@
 <template>
   <ErrorBoundary component-name="App">
     <div id="app">
-      <div v-if="$route.path === '/simulator'" class="global-bg-image"></div>
-      <div v-if="$route.path === '/simulator'" class="global-bg-overlay"></div>
       <!-- Router View - This is where route components will be rendered -->
       <router-view v-if="$route.path !== '/'" />
 
@@ -1754,34 +1752,7 @@ button::before, .button::before {
   text-shadow: 0 3px 12px rgba(0,0,0,0.45), 0 1px 0 #222;
 }
 
-.global-bg-image {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: -1;
-  background-image: url('@/assets/optimized/calculator-bg.webp'); /* Use optimized WebP background */
-  background-image: 
-    url('@/assets/optimized/calculator-bg.webp'), /* WebP for modern browsers */
-    url('@/assets/optimized/calculator-bg.jpg'); /* JPEG fallback */
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-  filter: brightness(0.45) blur(0.5px);
-  pointer-events: none;
-}
-
-.global-bg-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0,0,0,0.15);
-  z-index: 0;
-  pointer-events: none;
-}
+/* Background is handled by public/index.html */
 
 /* Loading and Error States for Lazy Components */
 .loading-view {
