@@ -10,8 +10,8 @@ export const useYearStore = defineStore('year', () => {
     { id: '2025', label: '2024-2025' }
   ];
   
-  // Default to 2023
-  const selectedTaxYear = ref('2023');
+  // Default to 2025 (2024-2025 tax year)
+  const selectedTaxYear = ref('2025');
   
   // Computed property to determine which budget data to use
   const budgetYear = computed(() => {

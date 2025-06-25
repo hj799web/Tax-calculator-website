@@ -47,27 +47,7 @@
         min-height: 100vh;
         overflow-x: hidden;
       }
-      .background-image {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        z-index: 0;
-        background: url('./img/calculator-bg.jpg') center center/cover no-repeat;
-        filter: brightness(0.45) blur(0.3px);
-        pointer-events: none;
-      }
-      .background-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        background: rgba(0,0,0,0.38);
-        z-index: 1;
-        pointer-events: none;
-      }
+      /* Background images are now handled by the Vue app */
       #app {
         position: relative;
         z-index: 2;
@@ -75,8 +55,6 @@
     </style>
   </head>
   <body>
-    <div class="background-image"></div>
-    <div class="background-overlay"></div>
     <noscript>
       <strong>We're sorry but our Canada Tax Calculator doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
