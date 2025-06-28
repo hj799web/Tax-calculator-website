@@ -1,15 +1,30 @@
 <template>
   <nav class="main-navigation">
     <a href="welcome.html" class="nav-link">Home</a>
-    <router-link to="/how-it-works" class="nav-link">How It Works</router-link>
-    <router-link to="/" class="nav-link">Tax Calculator</router-link>
-    <router-link to="/simulator" class="nav-link simulator-link">Budget Simulator</router-link>
+    <router-link 
+      to="/how-it-works" 
+      class="nav-link"
+    >
+      How It Works
+    </router-link>
+    <router-link 
+      to="/" 
+      class="nav-link"
+    >
+      Tax Calculator
+    </router-link>
+    <router-link 
+      to="/simulator" 
+      class="nav-link simulator-link"
+    >
+      Budget Simulator
+    </router-link>
     <a href="https://www.canada.ca/en/revenue-agency.html" target="_blank" rel="noopener noreferrer" class="nav-link">CRA</a>
   </nav>
 </template>
 
 <script setup>
-// No script logic needed for this navigation bar
+// Component is now simplified without overengineered preloading
 </script>
 
 <style scoped>

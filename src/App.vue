@@ -358,7 +358,7 @@ export default {
     const showFAQs = ref(false)
 
     const logoUrl = computed(() => {
-      return new URL('@/assets/fiscal-insights-logo.jpg', import.meta.url).href
+      return new URL('@/assets/fiscal-insights-logo.webp', import.meta.url).href
     })
 
     const toggleBudgetCategories = () => {

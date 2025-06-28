@@ -3,7 +3,7 @@
     <!-- Story Header with Gradient Background -->
     <div class="story-header">
       <div class="logo-container">
-        <img src="../assets/fiscal-insights-logo.jpg" alt="Fiscal Insights" class="logo-image" />
+        <img src="../assets/fiscal-insights-logo.webp" alt="Fiscal Insights" class="logo-image" />
       </div>
       <h2 class="story-title">Canadian Budget</h2>
     </div>

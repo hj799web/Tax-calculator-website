@@ -253,7 +253,7 @@ import { computed, ref, onMounted, watch, nextTick, defineAsyncComponent } from 
 import { useBudgetSimulatorStore } from '@/domains/budget'
 import { computeSentimentScores, getSentimentLabel, getSentimentEmoji } from '@/domains/sentiment/utils/computeSentimentScores'
 import MainNavigation from '@/components/MainNavigation.vue'
-import logoImage from '@/assets/fiscal-insights-logo.jpg'
+import logoImage from '@/assets/fiscal-insights-logo.webp'
 import OnboardingTour from '@/components/OnboardingTour.vue'
 
 // Lazy load heavy components for better performance

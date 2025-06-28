@@ -223,7 +223,7 @@ export function applyBadgeModifiers(earnedBadges, section, group, baseScore, act
   
   try {
     // Dynamic import would be better, but for now we'll use a try/catch
-    const { hasAbsolutePrecedence: checkPrecedence } = require('./sentimentPrecedenceRules');
+    const { hasAbsolutePrecedence: checkPrecedence } = require('../../sentiment/config/sentimentPrecedenceRules');
     hasAbsolutePrecedence = checkPrecedence(activeTriggers, group, section);
   } catch (e) {
     // If precedence module isn't available, continue without it

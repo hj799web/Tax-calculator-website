@@ -199,20 +199,30 @@ const partyHeaderStyle = computed(() => {
 
 // Helper function to lighten a color for the gradient
 function lightenColor(color, percent) {
-  // Simple lightening for hex colors
-  if (color.startsWith('#')) {
-    const hex = color.slice(1);
-    let r = parseInt(hex.slice(0, 2), 16);
-    let g = parseInt(hex.slice(2, 4), 16);
-    let b = parseInt(hex.slice(4, 6), 16);
-    
-    r = Math.min(255, r + (255 - r) * (percent / 100));
-    g = Math.min(255, g + (255 - g) * (percent / 100));
-    b = Math.min(255, b + (255 - b) * (percent / 100));
-    
-    return `#${Math.round(r).toString(16).padStart(2, '0')}${Math.round(g).toString(16).padStart(2, '0')}${Math.round(b).toString(16).padStart(2, '0')}`;
+  const num = parseInt(color.replace("#", ""), 16);
+  const amt = Math.round(2.55 * percent);
+  const R = (num >> 16) + amt;
+  const G = (num >> 8 & 0x00FF) + amt;
+  const B = (num & 0x0000FF) + amt;
+  return "#" + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 +
+    (G < 255 ? G < 1 ? 0 : G : 255) * 0x100 +
+    (B < 255 ? B < 1 ? 0 : B : 255)).toString(16).slice(1);
+}
+
+// Format currency for display
+function formatCurrency(value) {
+  if (value === undefined || value === null || isNaN(value)) {
+    return '0.0';
   }
-  return color; // Return original color if not hex
+  return new Intl.NumberFormat('en-US', {
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
+  }).format(value);
+}
+
+// Format segment score for display
+function formatSegmentScore(score) {
+  return Math.abs(score).toFixed(1);
 }
 
 const emit = defineEmits(['update:modelValue', 'apply-budget']);

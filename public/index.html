@@ -5,8 +5,24 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!-- Favicon links -->
-    <link rel="icon" href="<%= BASE_URL %>img/fiscal-insights-logo.jpg">
-    <link rel="apple-touch-icon" href="<%= BASE_URL %>img/fiscal-insights-logo.jpg">
+    <link rel="icon" href="<%= BASE_URL %>img/fiscal-insights-logo.webp">
+    <link rel="apple-touch-icon" href="<%= BASE_URL %>img/fiscal-insights-logo.webp">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="<%= BASE_URL %>manifest.json">
+    
+    <!-- PWA Meta Tags -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Tax Calculator">
+    <meta name="msapplication-TileColor" content="#3498db">
+    
+    <!-- Apple Touch Icons for various sizes -->
+    <link rel="apple-touch-icon" sizes="152x152" href="<%= BASE_URL %>img/fiscal-insights-logo.webp">
+    <link rel="apple-touch-icon" sizes="180x180" href="<%= BASE_URL %>img/fiscal-insights-logo.webp">
+    
+    <!-- Microsoft Tiles -->
+    <meta name="msapplication-TileImage" content="<%= BASE_URL %>img/fiscal-insights-logo.webp">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1045908201379212"
      crossorigin="anonymous"></script>
     <title>Canada Tax Calculator 2025 | See Your Taxes & Government Spending</title>
@@ -19,7 +35,7 @@
     <meta property="og:description" content="Get an accurate breakdown of your 2025 taxes and see where your money goes with our free Canada tax calculator.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://hj799web.github.io/Tax-calculator-website/">
-    <meta property="og:image" content="https://hj799web.github.io/Tax-calculator-website/img/fiscal-insights-logo.jpg">
+    <meta property="og:image" content="https://hj799web.github.io/Tax-calculator-website/img/fiscal-insights-logo.webp">
     <meta property="og:image:alt" content="Fiscal Insights Logo">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -30,23 +46,40 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Canada Tax Calculator 2025 | See Your Taxes & Government Spending">
     <meta name="twitter:description" content="Get an accurate breakdown of your 2025 taxes and see where your money goes with our free Canada tax calculator.">
-    <meta name="twitter:image" content="https://hj799web.github.io/Tax-calculator-website/img/fiscal-insights-logo.jpg">
+    <meta name="twitter:image" content="https://hj799web.github.io/Tax-calculator-website/img/fiscal-insights-logo.webp">
     <meta name="twitter:image:alt" content="Fiscal Insights Logo">
     <!-- Canonical URL to prevent duplicate content issues -->
     <link rel="canonical" href="https://hj799web.github.io/Tax-calculator-website/">
     <!-- Clicky Analytics -->
-    <script async data-id="101485956" src="//static.getclicky.com/js"></script>
-    <!-- Material Icons -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <!-- html2canvas for social card image capture -->
-    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script async data-id="101485956" src="https://static.getclicky.com/js"></script>
+    
+    <!-- Critical CSS - Inlined for instant rendering -->
     <style>
-      body {
+      /* Critical font loading */
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+      
+      /* Critical base styles - above the fold */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+      }
+      
+      html, body {
+        font-family: 'Poppins', sans-serif;
         background: none;
+        color: #2c3e50;
         position: relative;
         min-height: 100vh;
         overflow-x: hidden;
+        margin: 0;
+        padding: 0;
       }
+      
+      /* Critical background styles */
       .background-image {
         position: fixed;
         top: 0;
@@ -54,10 +87,11 @@
         width: 100vw;
         height: 100vh;
         z-index: 0;
-        background: url('./img/calculator-bg.jpg') center center/cover no-repeat;
+        background: url('./img/calculator-bg.webp') center center/cover no-repeat;
         filter: brightness(0.45) blur(0.3px);
         pointer-events: none;
       }
+      
       .background-overlay {
         position: fixed;
         top: 0;
@@ -68,11 +102,150 @@
         z-index: 1;
         pointer-events: none;
       }
+      
+      /* Critical app container */
       #app {
         position: relative;
         z-index: 2;
+        font-family: 'Poppins', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+        min-height: 100vh;
+      }
+      
+      /* Critical layout styles */
+      .main-container {
+        max-width: 1000px;
+        margin: 40px auto;
+        padding: 0 20px;
+      }
+      
+      /* Critical header styles */
+      .logo-container {
+        text-align: center;
+        margin-bottom: 15px;
+      }
+      
+      .site-logo {
+        max-width: 180px;
+        height: auto;
+        transition: transform 0.3s ease;
+      }
+      
+      .main-title {
+        font-size: 36px;
+        color: #fff;
+        margin-bottom: 5px;
+        font-weight: 700;
+        text-align: center;
+        text-shadow: 0 4px 18px rgba(0,0,0,0.45), 0 1px 0 #222;
+        transition: transform 0.3s ease;
+      }
+      
+      .subtitle {
+        font-size: 20px;
+        color: #f3f6fa;
+        text-align: center;
+        max-width: 800px;
+        margin: 0 auto 30px;
+        text-shadow: 0 3px 12px rgba(0,0,0,0.45), 0 1px 0 #222;
+      }
+      
+      /* Critical navigation styles */
+      .main-navigation {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin: 15px 0;
+        flex-wrap: wrap;
+      }
+      
+      .nav-link {
+        color: #3498db;
+        text-decoration: none;
+        font-weight: 600;
+        padding: 10px 20px;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        min-width: 120px;
+        text-align: center;
+        transition: all 0.3s ease;
+      }
+      
+      /* Critical responsive styles */
+      @media (max-width: 768px) {
+        #app {
+          transform: scale(0.9);
+          transform-origin: top center;
+          width: 111.11%;
+          margin-left: -5.55%;
+        }
+        
+        .main-title {
+          font-size: 1.8rem;
+          margin-bottom: 1.5rem;
+        }
+        
+        .subtitle {
+          font-size: 0.9rem;
+          margin-bottom: 1.5rem;
+        }
+        
+        .main-navigation {
+          flex-wrap: wrap;
+          gap: 1rem;
+          padding: 1rem;
+        }
+        
+        .nav-link {
+          font-size: 0.9rem;
+          padding: 0.75rem 1rem;
+          margin: 0.25rem;
+        }
+        
+        .site-logo {
+          max-width: 140px;
+        }
+      }
+      
+      /* Critical loading states */
+      .route-loading {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 50vh;
+        padding: 2rem;
+        color: #3498db;
+        font-weight: 600;
+      }
+      
+      .route-loading .loading-spinner {
+        width: 32px;
+        height: 32px;
+        border: 3px solid rgba(52, 152, 219, 0.2);
+        border-radius: 50%;
+        border-top-color: #3498db;
+        animation: spin 1s linear infinite;
+        margin-bottom: 1rem;
+      }
+      
+      @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
       }
     </style>
+    
+    <!-- Material Icons - deferred to avoid render blocking -->
+    <link rel="preload" href="https://fonts.googleapis.com/icon?family=Material+Icons" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"></noscript>
+    
+    <!-- html2canvas for social card image capture - deferred -->
+    <script defer src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
   </head>
   <body>
     <div class="background-image"></div>

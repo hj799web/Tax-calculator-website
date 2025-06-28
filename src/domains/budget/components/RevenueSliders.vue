@@ -1111,7 +1111,6 @@ import { ref, onMounted, watch, computed, shallowRef, nextTick } from 'vue';
 import debounce from 'lodash.debounce';
 import throttle from 'lodash.throttle';
 import { useBudgetSimulatorStore } from '../store/budgetSimulator';
-import { performanceMonitor } from '@/utils/performanceMonitor.js';
 
 const budgetStore = useBudgetSimulatorStore();
 
@@ -1376,9 +1375,7 @@ watch(() => revenueRates.value, () => {
 
 // Initialize on component mount
 onMounted(() => {
-  performanceMonitor.measureComponent('RevenueSliders', () => {
-    initializeLocalValues();
-  });
+  initializeLocalValues();
 });
 </script>
 

@@ -45,11 +45,11 @@ const props = defineProps({
     default: false
   },
   height: {
-    type: Number,
+    type: [String, Number],
     default: 300
   },
   width: {
-    type: Number,
+    type: [String, Number],
     default: 300
   }
 });

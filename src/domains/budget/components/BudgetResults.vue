@@ -328,80 +328,73 @@ import { useBudgetSimulatorStore } from '@/domains/budget/store/budgetSimulator.
 import AchievementBadge from '@/domains/badges/components/AchievementBadge.vue';
 import html2canvas from 'html2canvas';
 import throttle from 'lodash.throttle';
-import { performanceMonitor } from '@/utils/performanceMonitor.js';
 import { handleComponentError } from '@/utils/errorHandler.js';
+
+// Disable automatic attribute inheritance to prevent warnings
+defineOptions({
+  inheritAttrs: false
+});
 
 // State for collapsible sections
 const showBadges = ref(true);
 
 const budgetStore = useBudgetSimulatorStore();
 
-// Instead of using storeToRefs which can cause issues if the store is not fully initialized,
-// we'll access the reactive properties directly from the store in our computed properties
-
 // Use computed properties instead of refs for better reactivity
 // These will automatically update when the store changes
 const totalRevenueValue = computed(() => {
-  return performanceMonitor.measureComponent('BudgetResults_totalRevenue', () => {
-    try {
-      // eslint-disable-next-line no-unused-vars
-      const _ = budgetStore.lastRevenueSourceUpdate;
-      // eslint-disable-next-line no-unused-vars
-      const __ = budgetStore.lastTaxExpenditureUpdate;
-      // eslint-disable-next-line no-unused-vars
-      const ___ = budgetStore.lastUpdate;
-      return budgetStore.totalRevenue;
-    } catch (error) {
-      handleComponentError(error, 'BudgetResults.totalRevenue');
-      return 0;
-    }
-  });
+  try {
+    // eslint-disable-next-line no-unused-vars
+    const _ = budgetStore.lastRevenueSourceUpdate;
+    // eslint-disable-next-line no-unused-vars
+    const __ = budgetStore.lastTaxExpenditureUpdate;
+    // eslint-disable-next-line no-unused-vars
+    const ___ = budgetStore.lastUpdate;
+    return budgetStore.totalRevenue;
+  } catch (error) {
+    handleComponentError(error, 'BudgetResults.totalRevenue');
+    return 0;
+  }
 });
 
 const totalSpendingValue = computed(() => {
-  return performanceMonitor.measureComponent('BudgetResults_totalSpending', () => {
-    try {
-      // eslint-disable-next-line no-unused-vars
-      const _ = budgetStore.lastUpdate;
-      return budgetStore.totalSpending;
-    } catch (error) {
-      handleComponentError(error, 'BudgetResults.totalSpending');
-      return 0;
-    }
-  });
+  try {
+    // eslint-disable-next-line no-unused-vars
+    const _ = budgetStore.lastUpdate;
+    return budgetStore.totalSpending;
+  } catch (error) {
+    handleComponentError(error, 'BudgetResults.totalSpending');
+    return 0;
+  }
 });
 
 const surplusValue = computed(() => {
-  return performanceMonitor.measureComponent('BudgetResults_surplus', () => {
-    try {
-      // eslint-disable-next-line no-unused-vars
-      const _ = budgetStore.lastRevenueSourceUpdate;
-      // eslint-disable-next-line no-unused-vars
-      const __ = budgetStore.lastTaxExpenditureUpdate;
-      // eslint-disable-next-line no-unused-vars
-      const ___ = budgetStore.lastUpdate;
-      return budgetStore.surplus;
-    } catch (error) {
-      handleComponentError(error, 'BudgetResults.surplus');
-      return 0;
-    }
-  });
+  try {
+    // eslint-disable-next-line no-unused-vars
+    const _ = budgetStore.lastRevenueSourceUpdate;
+    // eslint-disable-next-line no-unused-vars
+    const __ = budgetStore.lastTaxExpenditureUpdate;
+    // eslint-disable-next-line no-unused-vars
+    const ___ = budgetStore.lastUpdate;
+    return budgetStore.surplus;
+  } catch (error) {
+    handleComponentError(error, 'BudgetResults.surplus');
+    return 0;
+  }
 });
 
 // Get earned badges from the store with reactive dependency on lastBadgeUpdate
 const earnedBadges = computed(() => {
-  return performanceMonitor.measureComponent('BudgetResults_earnedBadges', () => {
-    try {
-      // eslint-disable-next-line no-unused-vars
-      const _ = budgetStore.lastBadgeUpdate;
-      // eslint-disable-next-line no-unused-vars
-      const __ = budgetStore.lastUpdate;
-      return budgetStore.earnedBadges || [];
-    } catch (error) {
-      handleComponentError(error, 'BudgetResults.earnedBadges');
-      return [];
-    }
-  });
+  try {
+    // eslint-disable-next-line no-unused-vars
+    const _ = budgetStore.lastBadgeUpdate;
+    // eslint-disable-next-line no-unused-vars
+    const __ = budgetStore.lastUpdate;
+    return budgetStore.earnedBadges || [];
+  } catch (error) {
+    handleComponentError(error, 'BudgetResults.earnedBadges');
+    return [];
+  }
 });
 
 // Mobile view state
@@ -435,16 +428,10 @@ onMounted(() => {
   
   // Initial check for mobile view
   handleResize();
-  
-  // Monitor component performance
-  performanceMonitor.observeComponent('BudgetResults', (entry) => {
-    console.log(`[PERFORMANCE] BudgetResults update took ${entry.duration}ms`);
-  });
 });
 
 onUnmounted(() => {
   window.removeEventListener('resize', handleResize);
-  performanceMonitor.cleanup();
 });
 
 // Computed properties for deficit warning
@@ -522,6 +509,26 @@ function formatPercentage(value, total) {
 // eslint-disable-next-line no-unused-vars
 const props = defineProps({
   autoBalanceActive: {
+    type: Boolean,
+    default: false
+  },
+  id: {
+    type: String,
+    default: 'budget-results'
+  },
+  totalRevenue: {
+    type: Number,
+    default: 0
+  },
+  totalSpending: {
+    type: Number,
+    default: 0
+  },
+  surplus: {
+    type: Number,
+    default: 0
+  },
+  fiscalChaos: {
     type: Boolean,
     default: false
   }
