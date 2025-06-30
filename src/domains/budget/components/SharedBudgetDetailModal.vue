@@ -218,7 +218,7 @@ function formatCurrency(value) {
     minimumFractionDigits: 1,
     maximumFractionDigits: 1,
   }).format(value);
-}
+  }
 
 // Format segment score for display
 function formatSegmentScore(score) {

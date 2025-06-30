@@ -1375,7 +1375,7 @@ watch(() => revenueRates.value, () => {
 
 // Initialize on component mount
 onMounted(() => {
-  initializeLocalValues();
+    initializeLocalValues();
 });
 </script>
 
