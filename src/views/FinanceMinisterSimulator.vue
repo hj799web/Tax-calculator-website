@@ -100,6 +100,16 @@
           <span class="material-icons">people</span>
           Public Sentiment
         </a>
+        <div class="section-controls">
+          <button @click="expandAllSections" class="section-control-btn">
+            <span class="material-icons">expand_more</span>
+            Expand All
+          </button>
+          <button @click="collapseAllSections" class="section-control-btn">
+            <span class="material-icons">expand_less</span>
+            Collapse All
+          </button>
+        </div>
       </nav>
 
       <p class="description">Experience what it's like to manage Canada's federal budget. Adjust revenue sources and spending priorities to balance the budget while considering public sentiment across different regions and sectors.</p>
@@ -139,25 +149,40 @@
         <div v-if="fiscalChaos" class="budget-chaos-warning">
           <strong>⚠️ Public outrage: Revenue system in chaos! ⚠️</strong>
         </div>
-        <BudgetResults 
-          id="budget-results"
-          :total-revenue="budgetStore.totalRevenue"
-          :total-spending="budgetStore.totalSpending"
-          :surplus="budgetStore.surplus"
-          :auto-balance-active="autoBalanceActive"
-          :fiscal-chaos="fiscalChaos"
-          @reset-budget="resetBudget"
-          @toggle-auto-balance="toggleAutoBalance"
-          @save-budget="saveBudget"
-          @share-budget="openSocialShareModal"
-        />
+        <section id="budget-results" class="simulator-card budget-results-card">
+          <h2 class="card-title" @click="toggleSection('budgetResults')">
+            <span class="material-icons icon">summarize</span>
+            Budget Results
+            <span class="material-icons toggle-icon" :class="{ 'rotated': !sectionsExpanded.budgetResults }">expand_more</span>
+          </h2>
+          <div class="card-content" v-show="sectionsExpanded.budgetResults">
+            <BudgetResults 
+              :total-revenue="budgetStore.totalRevenue"
+              :total-spending="budgetStore.totalSpending"
+              :surplus="budgetStore.surplus"
+              :auto-balance-active="autoBalanceActive"
+              :fiscal-chaos="fiscalChaos"
+              @reset-budget="resetBudget"
+              @toggle-auto-balance="toggleAutoBalance"
+              @save-budget="saveBudget"
+              @share-budget="openSocialShareModal"
+            />
+          </div>
+        </section>
         
         <!-- Budget Presets Section -->
         <section class="simulator-card preset-panel-container">
-          <PresetSelector
-            @preset-applied="handlePresetApplied"
-            @preset-reset="resetBudget"
-          />
+          <h2 class="card-title" @click="toggleSection('budgetPresets')">
+            <span class="material-icons icon">settings</span>
+            Budget Presets
+            <span class="material-icons toggle-icon" :class="{ 'rotated': !sectionsExpanded.budgetPresets }">expand_more</span>
+          </h2>
+          <div class="card-content" v-show="sectionsExpanded.budgetPresets">
+            <PresetSelector
+              @preset-applied="handlePresetApplied"
+              @preset-reset="resetBudget"
+            />
+          </div>
         </section>
 
         <!-- Revenue Sources Section -->
@@ -203,7 +228,14 @@
 
         <!-- Charts Panel -->
         <section id="budget-analysis" class="simulator-card charts-card">
-          <ChartsPanel />
+          <h2 class="card-title" @click="toggleSection('budgetAnalysis')">
+            <span class="material-icons icon">bar_chart</span>
+            Budget Analysis
+            <span class="material-icons toggle-icon" :class="{ 'rotated': !sectionsExpanded.budgetAnalysis }">expand_more</span>
+          </h2>
+          <div class="card-content" v-show="sectionsExpanded.budgetAnalysis">
+            <ChartsPanel />
+          </div>
         </section>
         
         <!-- Public Sentiment Section -->
@@ -695,14 +727,26 @@ function scrollToSection(sectionId) {
 // Add sections expanded state
 const sectionsExpanded = ref({
   budgetGoals: true,
+  budgetResults: true,
+  budgetPresets: true,
   revenueSources: true,
   spendingControls: true,
+  budgetAnalysis: true,
   publicSentiment: true
 });
 
 // Add toggle function
 const toggleSection = (section) => {
   sectionsExpanded.value[section] = !sectionsExpanded.value[section];
+};
+
+// Add expandAllSections and collapseAllSections functions
+const expandAllSections = () => {
+  Object.keys(sectionsExpanded.value).forEach(section => sectionsExpanded.value[section] = true);
+};
+
+const collapseAllSections = () => {
+  Object.keys(sectionsExpanded.value).forEach(section => sectionsExpanded.value[section] = false);
 };
 </script>
 
@@ -725,7 +769,60 @@ const toggleSection = (section) => {
   align-items: center;
   gap: 10px;
   border-left: 4px solid #27ae60;
-  padding-left: 12px;
+  padding: 12px 16px;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.3s ease;
+  margin-bottom: 1rem;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.card-title:hover {
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
+}
+
+.card-title .icon {
+  color: #27ae60;
+  font-size: 1.5rem;
+}
+
+.card-title .toggle-icon {
+  margin-left: auto;
+  transition: transform 0.3s ease;
+  color: #3498db;
+  font-size: 1.2rem;
+}
+
+.card-title .toggle-icon.rotated {
+  transform: rotate(-90deg);
+}
+
+.card-content {
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+/* Smooth collapse/expand animation */
+.card-content[v-show="false"] {
+  max-height: 0;
+  opacity: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.card-content[v-show="true"] {
+  max-height: 2000px;
+  opacity: 1;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 /* 2. Glassmorphism Cards */
@@ -901,6 +998,42 @@ input:focus, select:focus, textarea:focus {
     transform-origin: top center;
     width: 111.11%; /* Compensate for the 10% scale down (100/0.9) */
     margin-left: -5.55%; /* Center the scaled content */
+  }
+  
+  .sub-navigation {
+    gap: 8px;
+    padding: 8px;
+  }
+  
+  .sub-nav-link {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+  }
+  
+  .section-controls {
+    margin-left: 0;
+    margin-top: 8px;
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .section-control-btn {
+    font-size: 0.75rem;
+    padding: 5px 10px;
+  }
+  
+  .card-title {
+    font-size: 1.1rem;
+    padding: 10px 12px;
+    margin-bottom: 0.75rem;
+  }
+  
+  .card-title .icon {
+    font-size: 1.3rem;
+  }
+  
+  .card-title .toggle-icon {
+    font-size: 1.1rem;
   }
 }
 
@@ -1323,6 +1456,7 @@ input:focus, select:focus, textarea:focus {
   border-radius: 8px;
   border: 1px solid #e9ecef;
   flex-wrap: wrap;
+  align-items: center;
 }
 
 .sub-nav-link {
@@ -1348,6 +1482,38 @@ input:focus, select:focus, textarea:focus {
   font-size: 1.1rem;
 }
 
+.section-controls {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.section-control-btn {
+  background: linear-gradient(135deg, #27ae60, #3498db);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 2px 4px rgba(52, 152, 219, 0.2);
+}
+
+.section-control-btn:hover {
+  background: linear-gradient(135deg, #3498db, #27ae60);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+}
+
+.section-control-btn .material-icons {
+  font-size: 1rem;
+}
+
 @media (max-width: 768px) {
   .sub-navigation {
     gap: 8px;
@@ -1357,6 +1523,18 @@ input:focus, select:focus, textarea:focus {
   .sub-nav-link {
     font-size: 0.8rem;
     padding: 6px 12px;
+  }
+  
+  .section-controls {
+    margin-left: 0;
+    margin-top: 8px;
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .section-control-btn {
+    font-size: 0.75rem;
+    padding: 5px 10px;
   }
 }
 
