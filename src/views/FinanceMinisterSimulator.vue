@@ -787,6 +787,14 @@ const collapseAllSections = () => {
   transform: translateY(-1px);
 }
 
+/* Disable hover effects on touch devices to prevent interference */
+@media (hover: none) and (pointer: coarse) {
+  .card-title:hover {
+    transform: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+
 .card-title .icon {
   color: #27ae60;
   font-size: 1.5rem;
@@ -841,6 +849,14 @@ const collapseAllSections = () => {
 .simulator-card:hover, .sentiment-card:hover {
   box-shadow: 0 16px 40px 0 rgba(31, 38, 135, 0.22);
   transform: translateY(-4px) scale(1.01);
+}
+
+/* Disable hover transforms on touch devices */
+@media (hover: none) and (pointer: coarse) {
+  .simulator-card:hover, .sentiment-card:hover {
+    transform: none;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+  }
 }
 
 /* 3. Gradient Buttons */
@@ -994,10 +1010,10 @@ input:focus, select:focus, textarea:focus {
 
 @media (max-width: 768px) {
   .finance-minister-simulator {
-    transform: scale(0.9);
-    transform-origin: top center;
-    width: 111.11%; /* Compensate for the 10% scale down (100/0.9) */
-    margin-left: -5.55%; /* Center the scaled content */
+    /* Remove the problematic scaling that interferes with touch events */
+    padding: 1rem;
+    width: 100%;
+    margin: 0;
   }
   
   .sub-navigation {
@@ -1026,6 +1042,10 @@ input:focus, select:focus, textarea:focus {
     font-size: 1.1rem;
     padding: 10px 12px;
     margin-bottom: 0.75rem;
+    /* Ensure proper touch targets */
+    min-height: 44px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
   }
   
   .card-title .icon {
@@ -1034,6 +1054,17 @@ input:focus, select:focus, textarea:focus {
   
   .card-title .toggle-icon {
     font-size: 1.1rem;
+  }
+  
+  /* Optimize transitions for mobile */
+  .card-content {
+    transition: all 0.2s ease; /* Faster transition on mobile */
+  }
+  
+  /* Reduce animation complexity on mobile */
+  .simulator-card, .sentiment-card {
+    animation: none; /* Remove complex animations on mobile */
+    transform: none; /* Remove transforms that could interfere */
   }
 }
 
