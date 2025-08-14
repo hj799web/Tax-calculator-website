@@ -157,7 +157,7 @@ export const validationSchemas = {
   salary: {
     selectedSalaryRate: {
       type: 'string',
-      allowedValues: ['Annual', 'Monthly', 'Weekly', 'Hourly'],
+      allowedValues: ['Annual', 'Monthly', 'Bi-weekly', 'Weekly', 'Daily', 'Hourly'],
       required: true
     }
   },
@@ -364,7 +364,6 @@ export function validateValue(value, schema) {
   }
 }
 
-// Sanitization functions
 export function sanitizeValue(value, schema) {
   try {
     if (value === undefined || value === null) {
@@ -408,7 +407,6 @@ export function sanitizeValue(value, schema) {
   }
 }
 
-// Main validation function for store actions
 export function validateStoreAction(storeName, actionName, data) {
   const schema = validationSchemas[storeName];
   if (!schema) {
@@ -423,7 +421,6 @@ export function validateStoreAction(storeName, actionName, data) {
   return validateValue(data, actionSchema);
 }
 
-// Main sanitization function for store actions
 export function sanitizeStoreAction(storeName, actionName, data) {
   const schema = validationSchemas[storeName];
   if (!schema) {
@@ -436,4 +433,4 @@ export function sanitizeStoreAction(storeName, actionName, data) {
   }
   
   return sanitizeValue(data, actionSchema);
-} 
+}
