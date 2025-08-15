@@ -128,9 +128,11 @@
               <span class="material-icons text-red-500 mr-1 text-xs">trending_down</span>
               Total Spending:
             </span>
-            <span class="font-medium text-red-600 text-sm tooltip-container"
+            <span
+              class="font-medium text-red-600 text-sm tooltip-container"
               @mouseenter="showTooltip(formatPercentage(totalSpendingValue, totalRevenueValue) + ' of total revenue')"
-              @mouseleave="hideTooltip()">
+              @mouseleave="hideTooltip()"
+            >
               {{ formatCurrency(totalSpendingValue) }}
             </span>
           </div>
@@ -140,10 +142,12 @@
             <span class="result-label">
               <span class="material-icons text-gray-500 mr-1 text-xs">account_balance</span>
               Debt Servicing:
-              <span class="info-icon tooltip-container" 
+              <span
+                class="info-icon tooltip-container" 
+                style="margin-left: 4px; cursor: pointer;"
                 @mouseenter="showTooltip('Interest payments on the federal debt (fixed cost that cannot be adjusted)')"
                 @mouseleave="hideTooltip()"
-                style="margin-left: 4px; cursor: pointer;">
+              >
                 ⓘ
               </span>
             </span>
@@ -169,13 +173,13 @@
             </span>
             <span
               class="font-medium text-sm tooltip-container"
-              @mouseenter="showTooltip(formatPercentage(Math.abs(surplusValue), totalRevenueValue) + ' of total revenue')"
-              @mouseleave="hideTooltip()"
               :class="{
                 'text-green-600': surplusValue > 0,
                 'text-red-600': surplusValue < 0,
                 'text-gray-600': surplusValue === 0
               }"
+              @mouseenter="showTooltip(formatPercentage(Math.abs(surplusValue), totalRevenueValue) + ' of total revenue')"
+              @mouseleave="hideTooltip()"
             >
               {{ surplusValue > 0 ? 'Surplus: +' : surplusValue < 0 ? 'Deficit: ' : '' }}
               {{ formatCurrency(Math.abs(surplusValue)) }}
@@ -183,14 +187,19 @@
           </div>
 
           <!-- Debt-to-GDP Ratio -->
-          <div class="result-item" :class="{ 'mobile-view': isMobileView }">
+          <div
+            class="result-item"
+            :class="{ 'mobile-view': isMobileView }"
+          >
             <span class="result-label">
               <span class="material-icons text-gray-500 mr-1 text-xs">account_balance</span>
               Debt-to-GDP Ratio:
-              <span class="info-icon tooltip-container" 
+              <span
+                class="info-icon tooltip-container" 
+                style="margin-left: 4px; cursor: pointer;"
                 @mouseenter="showTooltip('The ratio of total federal debt to the size of the Canadian economy (GDP). Lower is generally better for fiscal health.')"
                 @mouseleave="hideTooltip()"
-                style="margin-left: 4px; cursor: pointer;">
+              >
                 ⓘ
               </span>
             </span>
@@ -219,11 +228,14 @@
           </h3>
           <button
             class="share-budget-button"
-            @click="throttledShareBudget"
             aria-label="Share your budget on social media"
             style="display: flex; align-items: center; gap: 4px; background: #4263eb; color: #fff; border: none; border-radius: 4px; padding: 6px 14px; font-weight: 500; cursor: pointer; transition: background 0.2s;"
+            @click="throttledShareBudget"
           >
-            <span class="material-icons" style="font-size: 18px;">share</span>
+            <span
+              class="material-icons"
+              style="font-size: 18px;"
+            >share</span>
             Share Budget
           </button>
         </div>

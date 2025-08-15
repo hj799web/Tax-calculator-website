@@ -68,7 +68,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
         name: "Personal Income Tax",
         rate: 21,
         base: 10, // $10B per 1%
-        amount: 210, // $210B
+        amount: 210, // $220B
         adjustedAmount: 210,
         rateByYear: {
           2022: 20,
@@ -91,7 +91,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
         name: "Corporate Income Tax",
         rate: 15,
         base: 5.33, // ~$5.33B per 1%
-        amount: 80, // $80B
+        amount: 80, // ~$85.28B
         adjustedAmount: 80,
         rateByYear: {
           2022: 14,
@@ -329,6 +329,126 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
           "Military, RCMP, border services, and other security agencies.",
         color: "#38B2AC", // teal-500
       },
+      
+      // Add missing categories that presets expect
+      education: {
+        id: "education",
+        name: "Education",
+        baseAmount: 25.0, // $25.0B (Federal education funding)
+        adjustmentFactor: 1,
+        description:
+          "Federal education funding, student support, and educational programs.",
+        color: "#48BB78", // green-500
+      },
+      defense: {
+        id: "defense",
+        name: "Defense",
+        baseAmount: 28.0, // $28.0B (Military defense spending)
+        adjustmentFactor: 1,
+        description:
+          "National defense spending, military operations, and defense procurement.",
+        color: "#F56565", // red-500
+      },
+      scienceAndInnovation: {
+        id: "scienceAndInnovation",
+        name: "Science & Innovation",
+        baseAmount: 15.0, // $15.0B (Research and development)
+        adjustmentFactor: 1,
+        description:
+          "Scientific research, innovation programs, and technology development.",
+        color: "#9F7AEA", // purple-500
+      },
+      infrastructure: {
+        id: "infrastructure",
+        name: "Infrastructure",
+        baseAmount: 20.0, // $20.0B (Infrastructure investments)
+        adjustmentFactor: 1,
+        description:
+          "Physical infrastructure, transportation, and public works projects.",
+        color: "#ED8936", // orange-500
+      },
+      digitalGovernment: {
+        id: "digitalGovernment",
+        name: "Digital Government",
+        baseAmount: 5.0, // $5.0B (Digital services)
+        adjustmentFactor: 1,
+        description:
+          "Digital government services, IT infrastructure, and e-government initiatives.",
+        color: "#4299E1", // blue-500
+      },
+      environmentAndClimateChange: {
+        id: "environmentAndClimateChange",
+        name: "Environment & Climate Change",
+        baseAmount: 8.0, // $8.0B (Environmental programs)
+        adjustmentFactor: 1,
+        description:
+          "Environmental protection, climate change initiatives, and conservation programs.",
+        color: "#38A169", // green-600
+      },
+      carbonPricing: {
+        id: "carbonPricing",
+        name: "Carbon Pricing",
+        baseAmount: 2.0, // $2.0B (Carbon pricing programs)
+        adjustmentFactor: 1,
+        description:
+          "Carbon pricing initiatives, emissions reduction programs, and climate action.",
+        color: "#319795", // teal-600
+      },
+      agriculture: {
+        id: "agriculture",
+        name: "Agriculture",
+        baseAmount: 3.0, // $3.0B (Agricultural support)
+        adjustmentFactor: 1,
+        description:
+          "Agricultural support programs, farm subsidies, and rural development.",
+        color: "#D69E2E", // yellow-600
+      },
+      culturalPrograms: {
+        id: "culturalPrograms",
+        name: "Cultural Programs",
+        baseAmount: 2.0, // $2.0B (Cultural funding)
+        adjustmentFactor: 1,
+        description:
+          "Arts, culture, heritage preservation, and cultural institutions.",
+        color: "#B794F4", // purple-400
+      },
+      transit: {
+        id: "transit",
+        name: "Transit",
+        baseAmount: 12.0, // $12.0B (Public transit)
+        adjustmentFactor: 1,
+        description:
+          "Public transportation, transit infrastructure, and mobility programs.",
+        color: "#667EEA", // indigo-500
+      },
+      economicDevelopment: {
+        id: "economicDevelopment",
+        name: "Economic Development",
+        baseAmount: 8.0, // $8.0B (Economic development)
+        adjustmentFactor: 1,
+        description:
+          "Economic development programs, regional growth, and business support.",
+        color: "#F6AD55", // orange-400
+      },
+      indigenousOperations: {
+        id: "indigenousOperations",
+        name: "Indigenous Operations",
+        baseAmount: 4.0, // $4.0B (Indigenous operations)
+        adjustmentFactor: 1,
+        description:
+          "Indigenous operations, administrative services, and community support.",
+        color: "#ED8936", // orange-500
+      },
+      diplomaticRepresentation: {
+        id: "diplomaticRepresentation",
+        name: "Diplomatic Representation",
+        baseAmount: 5.0, // $5.0B (Diplomatic services)
+        adjustmentFactor: 1,
+        description:
+          "Diplomatic missions, international representation, and foreign affairs.",
+        color: "#4C51BF", // indigo-600
+      },
+      
       // Loans, Investments & Advances group
       loansInvestments: {
         id: "loansInvestments",
@@ -2172,7 +2292,13 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
           lastUpdate: Date.now()
         };
         
-        budgetPersistence.autoSave(stateToSave);
+        // Use autoSave if available (debounced); otherwise fall back to immediate save
+        if (typeof budgetPersistence.autoSave === 'function') {
+          budgetPersistence.autoSave(stateToSave);
+        } else {
+          console.warn('[BudgetStore] budgetPersistence.autoSave not found – falling back to save()');
+          budgetPersistence.save(stateToSave);
+        }
       } catch (error) {
         console.error('[BudgetStore] Failed to auto-save state:', error);
       }
@@ -2191,6 +2317,13 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
         } else {
           // Initialize with defaults
           this.initializeWithDefaults();
+          // First-load UX: apply Status Quo preset to calibrate to published figures
+          try {
+            const { setPreset } = await import('@/presets.js');
+            setPreset('statusQuo2024', this);
+          } catch (e) {
+            console.warn('[BudgetStore] Could not apply statusQuo2024 preset on first load:', e);
+          }
         }
         
         // Ensure calculations are up to date

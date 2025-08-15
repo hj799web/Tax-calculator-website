@@ -1,13 +1,25 @@
 <template>
   <div class="radar-sentiment">
     <!-- Critical Alerts Section -->
-    <div v-if="criticalAlerts.length > 0" class="critical-alerts">
-      <h3 class="critical-alerts-title">⚠️ Critical Alerts</h3>
+    <div
+      v-if="criticalAlerts.length > 0"
+      class="critical-alerts"
+    >
+      <h3 class="critical-alerts-title">
+        ⚠️ Critical Alerts
+      </h3>
       <ul class="critical-alerts-list">
-        <li v-for="alert in criticalAlerts" :key="alert.group + alert.trigger" class="critical-alert-item">
+        <li
+          v-for="alert in criticalAlerts"
+          :key="alert.group + alert.trigger"
+          class="critical-alert-item"
+        >
           <span class="alert-group">{{ alert.group }}</span>:
           <span class="alert-trigger">{{ formatTriggerName(alert.trigger) }}</span>
-          <span class="alert-score" :class="getScoreClass(alert.score)">
+          <span
+            class="alert-score"
+            :class="getScoreClass(alert.score)"
+          >
             {{ formatScore(alert.score) }}
           </span>
         </li>
@@ -16,7 +28,7 @@
 
     <!-- Existing Radar Chart -->
     <div class="radar-chart-container">
-      <canvas ref="radarChart"></canvas>
+      <canvas ref="radarChart" />
     </div>
   </div>
 </template>

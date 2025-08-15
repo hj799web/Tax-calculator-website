@@ -16,8 +16,11 @@
         {{ budgetTitle }}
       </h1>
       <div style="display: flex; flex-direction: column; gap: 12px;">
-        <div v-for="(badge, index) in badges" :key="index" 
-             style="padding: 12px 16px; background-color: #FEF3C7; border: 1px solid #FCD34D; border-radius: 6px; color: #92400E; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+        <div
+          v-for="(badge, index) in badges"
+          :key="index" 
+          style="padding: 12px 16px; background-color: #FEF3C7; border: 1px solid #FCD34D; border-radius: 6px; color: #92400E; box-shadow: 0 2px 4px rgba(0,0,0,0.05);"
+        >
           <div style="font-size: 16px; font-weight: 600; margin-bottom: 4px;">
             {{ badge.icon }} {{ badge.title }}
           </div>
@@ -44,24 +47,36 @@
       <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
         <!-- Revenue Card -->
         <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border: 1px solid #e2e8f0;">
-          <div style="font-size: 14px; color: #64748b; margin-bottom: 8px;">Total Revenue</div>
-          <div style="font-size: 24px; font-weight: 700; color: #1a365d;">{{ formatCurrency(totalRevenue) }}</div>
+          <div style="font-size: 14px; color: #64748b; margin-bottom: 8px;">
+            Total Revenue
+          </div>
+          <div style="font-size: 24px; font-weight: 700; color: #1a365d;">
+            {{ formatCurrency(totalRevenue) }}
+          </div>
         </div>
         
         <!-- Spending Card -->
         <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border: 1px solid #e2e8f0;">
-          <div style="font-size: 14px; color: #64748b; margin-bottom: 8px;">Total Spending</div>
-          <div style="font-size: 24px; font-weight: 700; color: #1a365d;">{{ formatCurrency(totalSpending) }}</div>
+          <div style="font-size: 14px; color: #64748b; margin-bottom: 8px;">
+            Total Spending
+          </div>
+          <div style="font-size: 24px; font-weight: 700; color: #1a365d;">
+            {{ formatCurrency(totalSpending) }}
+          </div>
         </div>
         
         <!-- Surplus/Deficit Card -->
         <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border: 1px solid #e2e8f0;">
-          <div style="font-size: 14px; color: #64748b; margin-bottom: 8px;">Surplus/Deficit</div>
-          <div :style="{
-            fontSize: '24px',
-            fontWeight: '700',
-            color: surplus >= 0 ? '#059669' : '#dc2626'
-          }">
+          <div style="font-size: 14px; color: #64748b; margin-bottom: 8px;">
+            Surplus/Deficit
+          </div>
+          <div
+            :style="{
+              fontSize: '24px',
+              fontWeight: '700',
+              color: surplus >= 0 ? '#059669' : '#dc2626'
+            }"
+          >
             {{ formatCurrency(surplus) }}
           </div>
         </div>
@@ -69,29 +84,41 @@
     </div>
 
     <!-- Sentiment Analysis Section (new page) -->
-    <div class="page-break-before"></div>
+    <div class="page-break-before" />
     <h2 style="font-size: 20px; font-weight: 600; color: #1a365d; margin-bottom: 20px; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0;">
       Public Sentiment Analysis
     </h2>
     <div style="padding: 0 40px; margin-bottom: 30px;">
       <!-- Provinces & Territories -->
       <div style="margin-bottom: 30px;">
-        <h3 style="font-size: 16px; font-weight: 600; color: #2d3748; margin-bottom: 16px;">Provinces & Territories</h3>
+        <h3 style="font-size: 16px; font-weight: 600; color: #2d3748; margin-bottom: 16px;">
+          Provinces & Territories
+        </h3>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
           <!-- Most Positive -->
           <div style="background: #F0FDF4; padding: 16px; border-radius: 8px; border: 1px solid #86EFAC;">
-            <div style="font-size: 14px; color: #166534; margin-bottom: 12px; font-weight: 600;">Most Positive</div>
-            <div v-for="[province, score] in topProvinceScores.positive" :key="province" 
-                 style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div style="font-size: 14px; color: #166534; margin-bottom: 12px; font-weight: 600;">
+              Most Positive
+            </div>
+            <div
+              v-for="[province, score] in topProvinceScores.positive"
+              :key="province" 
+              style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;"
+            >
               <span style="color: #166534;">{{ province }}</span>
               <span style="color: #166534; font-weight: 600;">{{ getSentimentEmoji(score) }} {{ getSentimentLabel(score) }}</span>
             </div>
           </div>
           <!-- Most Negative -->
           <div style="background: #FEF2F2; padding: 16px; border-radius: 8px; border: 1px solid #FCA5A5;">
-            <div style="font-size: 14px; color: #991B1B; margin-bottom: 12px; font-weight: 600;">Most Negative</div>
-            <div v-for="[province, score] in topProvinceScores.negative" :key="province"
-                 style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div style="font-size: 14px; color: #991B1B; margin-bottom: 12px; font-weight: 600;">
+              Most Negative
+            </div>
+            <div
+              v-for="[province, score] in topProvinceScores.negative"
+              :key="province"
+              style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;"
+            >
               <span style="color: #991B1B;">{{ province }}</span>
               <span style="color: #991B1B; font-weight: 600;">{{ getSentimentEmoji(score) }} {{ getSentimentLabel(score) }}</span>
             </div>
@@ -100,22 +127,34 @@
       </div>
       <!-- Sectors -->
       <div style="margin-bottom: 30px;">
-        <h3 style="font-size: 16px; font-weight: 600; color: #2d3748; margin-bottom: 16px;">Sectors</h3>
+        <h3 style="font-size: 16px; font-weight: 600; color: #2d3748; margin-bottom: 16px;">
+          Sectors
+        </h3>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
           <!-- Most Positive -->
           <div style="background: #F0FDF4; padding: 16px; border-radius: 8px; border: 1px solid #86EFAC;">
-            <div style="font-size: 14px; color: #166534; margin-bottom: 12px; font-weight: 600;">Most Positive</div>
-            <div v-for="[sector, score] in topSectorScores.positive" :key="sector"
-                 style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div style="font-size: 14px; color: #166534; margin-bottom: 12px; font-weight: 600;">
+              Most Positive
+            </div>
+            <div
+              v-for="[sector, score] in topSectorScores.positive"
+              :key="sector"
+              style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;"
+            >
               <span style="color: #166534;">{{ sector }}</span>
               <span style="color: #166534; font-weight: 600;">{{ getSentimentEmoji(score) }} {{ getSentimentLabel(score) }}</span>
             </div>
           </div>
           <!-- Most Negative -->
           <div style="background: #FEF2F2; padding: 16px; border-radius: 8px; border: 1px solid #FCA5A5;">
-            <div style="font-size: 14px; color: #991B1B; margin-bottom: 12px; font-weight: 600;">Most Negative</div>
-            <div v-for="[sector, score] in topSectorScores.negative" :key="sector"
-                 style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div style="font-size: 14px; color: #991B1B; margin-bottom: 12px; font-weight: 600;">
+              Most Negative
+            </div>
+            <div
+              v-for="[sector, score] in topSectorScores.negative"
+              :key="sector"
+              style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;"
+            >
               <span style="color: #991B1B;">{{ sector }}</span>
               <span style="color: #991B1B; font-weight: 600;">{{ getSentimentEmoji(score) }} {{ getSentimentLabel(score) }}</span>
             </div>
@@ -124,22 +163,34 @@
       </div>
       <!-- Demographics -->
       <div style="margin-bottom: 30px;">
-        <h3 style="font-size: 16px; font-weight: 600; color: #2d3748; margin-bottom: 16px;">Demographics</h3>
+        <h3 style="font-size: 16px; font-weight: 600; color: #2d3748; margin-bottom: 16px;">
+          Demographics
+        </h3>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
           <!-- Most Positive -->
           <div style="background: #F0FDF4; padding: 16px; border-radius: 8px; border: 1px solid #86EFAC;">
-            <div style="font-size: 14px; color: #166534; margin-bottom: 12px; font-weight: 600;">Most Positive</div>
-            <div v-for="[demographic, score] in topDemographicScores.positive" :key="demographic"
-                 style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div style="font-size: 14px; color: #166534; margin-bottom: 12px; font-weight: 600;">
+              Most Positive
+            </div>
+            <div
+              v-for="[demographic, score] in topDemographicScores.positive"
+              :key="demographic"
+              style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;"
+            >
               <span style="color: #166534;">{{ demographic }}</span>
               <span style="color: #166534; font-weight: 600;">{{ getSentimentEmoji(score) }} {{ getSentimentLabel(score) }}</span>
             </div>
           </div>
           <!-- Most Negative -->
           <div style="background: #FEF2F2; padding: 16px; border-radius: 8px; border: 1px solid #FCA5A5;">
-            <div style="font-size: 14px; color: #991B1B; margin-bottom: 12px; font-weight: 600;">Most Negative</div>
-            <div v-for="[demographic, score] in topDemographicScores.negative" :key="demographic"
-                 style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div style="font-size: 14px; color: #991B1B; margin-bottom: 12px; font-weight: 600;">
+              Most Negative
+            </div>
+            <div
+              v-for="[demographic, score] in topDemographicScores.negative"
+              :key="demographic"
+              style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;"
+            >
               <span style="color: #991B1B;">{{ demographic }}</span>
               <span style="color: #991B1B; font-weight: 600;">{{ getSentimentEmoji(score) }} {{ getSentimentLabel(score) }}</span>
             </div>
@@ -149,46 +200,72 @@
     </div>
 
     <!-- Full Budget Breakdown (if enabled) -->
-    <div v-if="includeFullBreakdown" class="full-breakdown-table" style="padding: 0 40px; margin-bottom: 30px;">
+    <div
+      v-if="includeFullBreakdown"
+      class="full-breakdown-table"
+      style="padding: 0 40px; margin-bottom: 30px;"
+    >
       <h2 style="font-size: 20px; font-weight: 600; color: #1a365d; margin-bottom: 20px; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0;">
         Detailed Budget Breakdown
       </h2>
       
       <!-- Revenue Sources (new page) -->
-      <div class="page-break-before"></div>
-      <h3 style="font-size: 16px; font-weight: 600; color: #2d3748; margin: 12px 0 8px;">Revenue Sources</h3>
+      <div class="page-break-before" />
+      <h3 style="font-size: 16px; font-weight: 600; color: #2d3748; margin: 12px 0 8px;">
+        Revenue Sources
+      </h3>
       <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 30px; padding-top: 0;">
-        <div v-for="source in getSortedRevenueSources" :key="source.name" 
-             style="background: white; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; overflow: hidden; min-height: 120px; page-break-inside: avoid;">
+        <div
+          v-for="source in getSortedRevenueSources"
+          :key="source.name" 
+          style="background: white; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; overflow: hidden; min-height: 120px; page-break-inside: avoid;"
+        >
           <!-- Header -->
           <div style="padding: 12px; background: #f8fafc; border-bottom: 1px solid #e2e8f0;">
-            <div style="font-size: 14px; font-weight: 600; color: #1a365d;">{{ source.name }}</div>
+            <div style="font-size: 14px; font-weight: 600; color: #1a365d;">
+              {{ source.name }}
+            </div>
           </div>
           <!-- Content -->
           <div style="padding: 12px;">
             <!-- Base Amount -->
             <div style="margin-bottom: 8px;">
-              <div style="font-size: 11px; color: #64748b; margin-bottom: 2px;">Base Amount</div>
-              <div style="font-size: 14px; font-weight: 600; color: #1a365d;">{{ formatCurrency(source.baseAmount) }}</div>
+              <div style="font-size: 11px; color: #64748b; margin-bottom: 2px;">
+                Base Amount
+              </div>
+              <div style="font-size: 14px; font-weight: 600; color: #1a365d;">
+                {{ formatCurrency(source.baseAmount) }}
+              </div>
             </div>
             <!-- Adjusted Amount -->
             <div style="margin-bottom: 8px;">
-              <div style="font-size: 11px; color: #64748b; margin-bottom: 2px;">Adjusted Amount</div>
-              <div style="font-size: 14px; font-weight: 600; color: #1a365d;">{{ formatCurrency(source.adjustedAmount) }}</div>
+              <div style="font-size: 11px; color: #64748b; margin-bottom: 2px;">
+                Adjusted Amount
+              </div>
+              <div style="font-size: 14px; font-weight: 600; color: #1a365d;">
+                {{ formatCurrency(source.adjustedAmount) }}
+              </div>
             </div>
             <!-- Change -->
             <div>
-              <div style="font-size: 11px; color: #64748b; margin-bottom: 2px;">Change</div>
-              <div :style="{
-                fontSize: '14px',
-                fontWeight: '600',
-                color: source.change > 0 ? '#059669' : source.change < 0 ? '#dc2626' : '#64748b',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '4px'
-              }">
+              <div style="font-size: 11px; color: #64748b; margin-bottom: 2px;">
+                Change
+              </div>
+              <div
+                :style="{
+                  fontSize: '14px',
+                  fontWeight: '600',
+                  color: source.change > 0 ? '#059669' : source.change < 0 ? '#dc2626' : '#64748b',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px'
+                }"
+              >
                 <span>{{ formatPercentageWithSign(source.change) }}</span>
-                <span v-if="source.change !== 0" style="font-size: 12px;">
+                <span
+                  v-if="source.change !== 0"
+                  style="font-size: 12px;"
+                >
                   {{ source.change > 0 ? '↑' : '↓' }}
                 </span>
               </div>
@@ -198,23 +275,46 @@
       </div>
 
       <!-- Spending Categories (new page) -->
-      <div class="page-break-before"></div>
-      <h3 style="font-size: 16px; font-weight: 600; color: #2d3748; margin: 12px 0 8px;">Spending Categories</h3>
+      <div class="page-break-before" />
+      <h3 style="font-size: 16px; font-weight: 600; color: #2d3748; margin: 12px 0 8px;">
+        Spending Categories
+      </h3>
       <table style="width: 100%; border-collapse: collapse;">
         <thead>
           <tr style="background-color: #f8fafc;">
-            <th style="padding: 12px; text-align: left; border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 600;">Category</th>
-            <th style="padding: 12px; text-align: right; border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 600;">Base Amount</th>
-            <th style="padding: 12px; text-align: right; border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 600;">Adjusted Amount</th>
-            <th style="padding: 12px; text-align: right; border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 600;">Change</th>
+            <th style="padding: 12px; text-align: left; border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 600;">
+              Category
+            </th>
+            <th style="padding: 12px; text-align: right; border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 600;">
+              Base Amount
+            </th>
+            <th style="padding: 12px; text-align: right; border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 600;">
+              Adjusted Amount
+            </th>
+            <th style="padding: 12px; text-align: right; border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 600;">
+              Change
+            </th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="category in getSortedSpendingCategories" :key="category.name" style="border-bottom: 1px solid #e2e8f0;">
-            <td style="padding: 12px; color: #1a365d;">{{ category.name }}</td>
-            <td style="padding: 12px; text-align: right; color: #1a365d;">{{ formatCurrency(category.baseAmount) }}</td>
-            <td style="padding: 12px; text-align: right; color: #1a365d;">{{ formatCurrency(category.adjustedAmount) }}</td>
-            <td style="padding: 12px; text-align: right; color: #1a365d;" :style="{ color: category.change > 0 ? '#059669' : category.change < 0 ? '#dc2626' : '#64748b' }">
+          <tr
+            v-for="category in getSortedSpendingCategories"
+            :key="category.name"
+            style="border-bottom: 1px solid #e2e8f0;"
+          >
+            <td style="padding: 12px; color: #1a365d;">
+              {{ category.name }}
+            </td>
+            <td style="padding: 12px; text-align: right; color: #1a365d;">
+              {{ formatCurrency(category.baseAmount) }}
+            </td>
+            <td style="padding: 12px; text-align: right; color: #1a365d;">
+              {{ formatCurrency(category.adjustedAmount) }}
+            </td>
+            <td
+              style="padding: 12px; text-align: right; color: #1a365d;"
+              :style="{ color: category.change > 0 ? '#059669' : category.change < 0 ? '#dc2626' : '#64748b' }"
+            >
               {{ formatPercentageWithSign(category.change) }}
             </td>
           </tr>
@@ -224,8 +324,15 @@
 
     <!-- Footer -->
     <div style="margin-top: 40px; padding: 20px 40px; background-color: #f8fafc; border-top: 1px solid #e2e8f0; font-size: 12px; color: #64748b;">
-      <p style="margin: 0;">This budget summary was generated using the Canada Tax Calculator's Budget Simulator.</p>
-      <p style="margin: 8px 0 0;">For more information, visit: <a href="https://hj799web.github.io/Tax-calculator-website/" style="color: #2c5282; text-decoration: none;">https://hj799web.github.io/Tax-calculator-website/</a></p>
+      <p style="margin: 0;">
+        This budget summary was generated using the Canada Tax Calculator's Budget Simulator.
+      </p>
+      <p style="margin: 8px 0 0;">
+        For more information, visit: <a
+          href="https://hj799web.github.io/Tax-calculator-website/"
+          style="color: #2c5282; text-decoration: none;"
+        >https://hj799web.github.io/Tax-calculator-website/</a>
+      </p>
     </div>
   </div>
 </template>

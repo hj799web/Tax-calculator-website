@@ -40,26 +40,34 @@
         >
           {{ overallEmoji }}
         </div>
-        <div v-if="fiscalChaos" class="fiscal-chaos-indicator" title="Fiscal chaos detected!" style="margin-left: 0.5em; color: #e53e3e; font-size: 1.4em; display: flex; align-items: center;">
+        <div
+          v-if="fiscalChaos"
+          class="fiscal-chaos-indicator"
+          title="Fiscal chaos detected!"
+          style="margin-left: 0.5em; color: #e53e3e; font-size: 1.4em; display: flex; align-items: center;"
+        >
           <span style="margin-right: 0.2em;">⚠️</span>
           <span style="font-size: 0.85em; font-weight: 600;">Fiscal Chaos</span>
         </div>
         <div class="sentiment-score">
-  <span class="score-value" :style="{ color: overallColor }">
-    {{ overallScore.toFixed(1) }}
-  </span>
-  <span
-    v-if="Math.abs(overallDelta) > 0.01"
-    :class="['score-delta', overallDelta > 0 ? 'delta-up' : 'delta-down']"
-    :title="overallDelta > 0 ? 'Increased' : 'Decreased'"
-    style="margin-left: 0.3em;"
-  >
-    <span v-if="overallDelta > 0">▲</span>
-    <span v-else>▼</span>
-    {{ Math.abs(overallDelta).toFixed(2) }}
-  </span>
-  <span class="score-label">{{ overallLabel }}</span>
-</div>
+          <span
+            class="score-value"
+            :style="{ color: overallColor }"
+          >
+            {{ overallScore.toFixed(1) }}
+          </span>
+          <span
+            v-if="Math.abs(overallDelta) > 0.01"
+            :class="['score-delta', overallDelta > 0 ? 'delta-up' : 'delta-down']"
+            :title="overallDelta > 0 ? 'Increased' : 'Decreased'"
+            style="margin-left: 0.3em;"
+          >
+            <span v-if="overallDelta > 0">▲</span>
+            <span v-else>▼</span>
+            {{ Math.abs(overallDelta).toFixed(2) }}
+          </span>
+          <span class="score-label">{{ overallLabel }}</span>
+        </div>
       </div>
     </div>
     
@@ -127,16 +135,24 @@
             <span class="entity-emoji">{{ getSentimentEmoji(score) }}</span>
           </div>
           <!-- Add impact banner with hover -->
-          <div v-if="getEntityImpacts(name)" class="impact-banner">
-            <div v-for="(data, category) in getEntityImpacts(name)" :key="category" 
-                 class="impact-item">
+          <div
+            v-if="getEntityImpacts(name)"
+            class="impact-banner"
+          >
+            <div
+              v-for="(data, category) in getEntityImpacts(name)"
+              :key="category" 
+              class="impact-item"
+            >
               <div class="impact-header">
                 <span class="impact-category">{{ formatCategoryName(category) }}:</span>
                 <span :class="['impact-value', data.impact > 0 ? 'positive' : 'negative']">
                   {{ data.impact > 0 ? '+' : '' }}{{ formatPercentageChange(data.impact * 100) }}
                 </span>
               </div>
-              <div class="impact-description">{{ data.description }}</div>
+              <div class="impact-description">
+                {{ data.description }}
+              </div>
             </div>
           </div>
         </div>
@@ -184,22 +200,35 @@
             <span class="entity-emoji">{{ getSentimentEmoji(score) }}</span>
           </div>
           <!-- Add impact banner with hover -->
-          <div v-if="getEntityImpacts(name)" class="impact-banner">
-            <div v-for="(data, category) in getEntityImpacts(name)" :key="category" 
-                 class="impact-item">
+          <div
+            v-if="getEntityImpacts(name)"
+            class="impact-banner"
+          >
+            <div
+              v-for="(data, category) in getEntityImpacts(name)"
+              :key="category" 
+              class="impact-item"
+            >
               <div class="impact-header">
                 <span class="impact-category">{{ formatCategoryName(category) }}:</span>
                 <span :class="['impact-value', data.impact > 0 ? 'positive' : 'negative']">
                   {{ data.impact > 0 ? '+' : '' }}{{ formatPercentageChange(data.impact * 100) }}
                 </span>
               </div>
-              <div class="impact-description">{{ data.description }}</div>
+              <div class="impact-description">
+                {{ data.description }}
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
+    <div
+      v-if="errorMessage"
+      class="error-message"
+    >
+      {{ errorMessage }}
+    </div>
   </div>
 </template>
 

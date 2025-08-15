@@ -122,7 +122,7 @@ export async function applySharedBudgetToStore(sharedData, budgetStore) {
     // Set revenue sliders
     for (const [sourceId, rate] of Object.entries(sharedData.revenueSources || {})) {
       if (budgetStore.revenueSources[sourceId]) {
-        budgetStore.updateRevenueRate(sourceId, rate);
+        budgetStore.setRevenueRate(sourceId, rate);
       }
     }
     // Set spending sliders

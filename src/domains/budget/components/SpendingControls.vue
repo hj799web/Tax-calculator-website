@@ -464,7 +464,6 @@ import CategoryGroup from './CategoryGroup.vue';
 import SpendingCategory from './SpendingCategory.vue';
 import PercentageInput from './PercentageInput.vue';
 import CategoryInfo from './CategoryInfo.vue';
-import { createDebouncedFunction } from '@/utils/debounceUtils';
 import LoadingIndicator from '@/components/LoadingIndicator.vue';
 
 // Define props
@@ -549,11 +548,14 @@ const budgetStore = useBudgetSimulatorStore();
 // Add loading state
 const isUpdating = ref(false);
 
-// Create debounced update function
-const debouncedUpdateCategory = createDebouncedFunction((categoryId, value) => {
+// Remove debounced function and use direct method call
+function updateCategoryAdjustment(categoryId, value) {
+  console.log('SpendingControls: updateCategoryAdjustment called with', categoryId, value);
+  
   isUpdating.value = true;
   try {
     const factor = value / 100;
+    // Direct call to store method (which may be intercepted)
     budgetStore.updateSpendingFactor(categoryId, factor);
     
     // Emit the event for backward compatibility
@@ -561,7 +563,7 @@ const debouncedUpdateCategory = createDebouncedFunction((categoryId, value) => {
   } finally {
     isUpdating.value = false;
   }
-}, 200);
+}
 
 // Ensure we have valid spending factors for all categories
 const validSpendingFactors = computed(() => {
@@ -642,17 +644,6 @@ const otherCategoriesList = computed(() => {
 // Methods
 function toggleGroup(groupId) {
   emit('toggle-group-expansion', groupId);
-}
-
-// Enhanced update function with loading state and debouncing
-function updateCategoryAdjustment(categoryId, value) {
-  console.log('SpendingControls: updateCategoryAdjustment called with', categoryId, value);
-  
-  // Add a reactivity trigger
-  budgetStore.lastUpdate = Date.now();
-  
-  // Use debounced update
-  debouncedUpdateCategory(categoryId, value);
 }
 
 function resetOtherCategories() {

@@ -69,8 +69,8 @@
                 {{ yearStore.selectedTaxYear === '2024' ? 
                   'Using 2024 tax rates and budget projections' : 
                   yearStore.selectedTaxYear === '2025' ?
-                  'Using 2025 tax rates with 2025-2026 spending projections' :
-                  `Using ${yearStore.selectedTaxYear} tax rates with 2022-2023 budget data` }}
+                    'Using 2025 tax rates with 2025-2026 spending projections' :
+                    `Using ${yearStore.selectedTaxYear} tax rates with 2022-2023 budget data` }}
               </p>
             </div>
           </section>
@@ -96,7 +96,10 @@
           </section>
 
           <!-- Understanding Your Tax Breakdown Section -->
-          <section id="how-it-works" class="income-section">
+          <section
+            id="how-it-works"
+            class="income-section"
+          >
             <h2 class="section-title section-title--highlight">
               Understanding Your Tax Breakdown
             </h2>
@@ -126,7 +129,7 @@
               <div v-if="showBudgetCategories">
                 <p class="section-description">
                   <template v-if="yearStore.selectedTaxYear === '2023'">
-                  These budget categories are for the 2022–2023 fiscal year. Data is sourced from the Public Accounts of Canada offering a view of how federal funds are allocated across key sectors such as healthcare, defense, infrastructure, and more.
+                    These budget categories are for the 2022–2023 fiscal year. Data is sourced from the Public Accounts of Canada offering a view of how federal funds are allocated across key sectors such as healthcare, defense, infrastructure, and more.
                   </template>
                   <template v-else-if="yearStore.selectedTaxYear === '2024'">
                     These budget categories are for the 2023–2024 fiscal year. The allocations reflect the proposed spending outlined in the 2023–2024 federal budget.
@@ -274,7 +277,12 @@
           </div>
         </div>
         <div class="footer-bottom">
-          <p>Contact us: <a href="mailto:fiscal-insights@outlook.com" class="text-blue-600 hover:text-blue-800">fiscal-insights@outlook.com</a></p>
+          <p>
+            Contact us: <a
+              href="mailto:fiscal-insights@outlook.com"
+              class="text-blue-600 hover:text-blue-800"
+            >fiscal-insights@outlook.com</a>
+          </p>
           <p>&copy; {{ new Date().getFullYear() }} Fiscal Insights. All rights reserved.</p>
         </div>
       </footer>

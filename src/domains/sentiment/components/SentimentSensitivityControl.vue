@@ -12,28 +12,30 @@
       <label for="overall-sensitivity">Overall Sensitivity</label>
       <input
         id="overall-sensitivity"
+        v-model.number="overall"
         type="range"
         min="0.5"
         max="2"
         step="0.01"
-        v-model.number="overall"
         @input="updateOverall"
-      />
+      >
       <span>{{ overall.toFixed(2) }}</span>
     </div>
-    <button @click="resetAll">Reset to Default</button>
+    <button @click="resetAll">
+      Reset to Default
+    </button>
     <div class="category-sliders">
       <div class="slider-group">
         <label for="regions-sensitivity">Provinces and territories Multiplier</label>
         <input
           id="regions-sensitivity"
+          v-model.number="regions"
           type="range"
           min="0.5"
           max="2"
           step="0.01"
-          v-model.number="regions"
           @input="updateRegions"
-        />
+        >
         <span>{{ regions.toFixed(2) }}</span>
       </div>
       
@@ -41,13 +43,13 @@
         <label for="demographics-sensitivity">Demographics Multiplier</label>
         <input
           id="demographics-sensitivity"
+          v-model.number="demographics"
           type="range"
           min="0.5"
           max="2"
           step="0.01"
-          v-model.number="demographics"
           @input="updateDemographics"
-        />
+        >
         <span>{{ demographics.toFixed(2) }}</span>
       </div>
       
@@ -55,13 +57,13 @@
         <label for="sectors-sensitivity">Sectors Multiplier</label>
         <input
           id="sectors-sensitivity"
+          v-model.number="sectors"
           type="range"
           min="0.5"
           max="2"
           step="0.01"
-          v-model.number="sectors"
           @input="updateSectors"
-        />
+        >
         <span>{{ sectors.toFixed(2) }}</span>
       </div>
     </div>

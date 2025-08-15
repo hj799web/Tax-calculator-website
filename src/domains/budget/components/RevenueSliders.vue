@@ -1,13 +1,17 @@
 <template>
   <div class="revenue-sliders">
     <div class="revenue-explanation mb-4 p-4 bg-gray-50 rounded-lg">
-      <p class="text-sm text-gray-700 mb-2">The Budget Simulator uses a simplified approach to tax calculations to help you understand the fiscal impact of tax changes. Instead of detailed tax brackets, it uses average effective rates:</p>
+      <p class="text-sm text-gray-700 mb-2">
+        The Budget Simulator uses a simplified approach to tax calculations to help you understand the fiscal impact of tax changes. Instead of detailed tax brackets, it uses average effective rates:
+      </p>
       <ul class="text-sm text-gray-600 list-disc pl-5 mb-2">
         <li>Personal Income Tax: Base rate of 21% (2024) with $10 billion in revenue per percentage point</li>
         <li>Corporate Income Tax: Base rate of 15% (2024) with $5.33 billion in revenue per percentage point</li>
         <li>Tax credits and expenditures can be adjusted separately to see their impact on revenue</li>
       </ul>
-      <p class="text-sm text-gray-700">This approach focuses on overall revenue impact rather than individual taxpayer scenarios.</p>
+      <p class="text-sm text-gray-700">
+        This approach focuses on overall revenue impact rather than individual taxpayer scenarios.
+      </p>
     </div>
     <div class="revenue-controls">
       <div class="overflow-y-auto pr-2 max-h-[60vh]">
@@ -64,11 +68,11 @@
                     <div class="total-amount">
                       ${{ formatCurrency(budgetStore.revenueSources.personalIncomeTax?.adjustedAmount || budgetStore.revenueSources.personalIncomeTax?.amount, 1) }}B
                       <span
-                      v-if="getAdditionalRevenue('personalIncomeTax') !== 0"
-                      :class="{
-                        'positive': getAdditionalRevenue('personalIncomeTax') > 0,
-                        'negative': getAdditionalRevenue('personalIncomeTax') < 0
-                      }"
+                        v-if="getAdditionalRevenue('personalIncomeTax') !== 0"
+                        :class="{
+                          'positive': getAdditionalRevenue('personalIncomeTax') > 0,
+                          'negative': getAdditionalRevenue('personalIncomeTax') < 0
+                        }"
                         style="font-size: 0.9em; margin-left: 4px;"
                       >
                         ({{ getAdditionalRevenue('personalIncomeTax') > 0 ? '+' : '' }}${{ formatCurrency(getAdditionalRevenue('personalIncomeTax'), 1) }}B)
@@ -116,7 +120,7 @@
                     :step="0.1" 
                     class="slider"
                     @input="onSliderInput('personalIncomeTax', localSliderValues.personalIncomeTax)" 
-                    /> <!-- 🆕 PERFORMANCE NOTE: Debounced slider commit using localSliderValues -->
+                  > <!-- 🆕 PERFORMANCE NOTE: Debounced slider commit using localSliderValues -->
                   <div class="input-controls">
                     <div class="input-group">
                       <input 
@@ -157,11 +161,11 @@
                     <div class="total-amount">
                       ${{ formatCurrency(budgetStore.revenueSources.corporateIncomeTax?.adjustedAmount || budgetStore.revenueSources.corporateIncomeTax?.amount, 1) }}B
                       <span
-                      v-if="getAdditionalRevenue('corporateIncomeTax') !== 0"
-                      :class="{
-                        'positive': getAdditionalRevenue('corporateIncomeTax') > 0,
-                        'negative': getAdditionalRevenue('corporateIncomeTax') < 0
-                      }"
+                        v-if="getAdditionalRevenue('corporateIncomeTax') !== 0"
+                        :class="{
+                          'positive': getAdditionalRevenue('corporateIncomeTax') > 0,
+                          'negative': getAdditionalRevenue('corporateIncomeTax') < 0
+                        }"
                         style="font-size: 0.9em; margin-left: 4px;"
                       >
                         ({{ getAdditionalRevenue('corporateIncomeTax') > 0 ? '+' : '' }}${{ formatCurrency(getAdditionalRevenue('corporateIncomeTax'), 1) }}B)
@@ -209,7 +213,7 @@
                     :step="0.1" 
                     class="slider"
                     @input="onSliderInput('corporateIncomeTax', localSliderValues.corporateIncomeTax)" 
-                    /> <!-- 🆕 PERFORMANCE NOTE: Debounced slider commit using localSliderValues -->
+                  > <!-- 🆕 PERFORMANCE NOTE: Debounced slider commit using localSliderValues -->
                   <div class="input-controls">
                     <div class="input-group">
                       <input 
@@ -293,11 +297,11 @@
                     <div class="total-amount">
                       ${{ formatCurrency(budgetStore.revenueSources.gst?.adjustedAmount || budgetStore.revenueSources.gst?.amount, 1) }}B
                       <span
-                      v-if="getAdditionalRevenue('gst') !== 0"
-                      :class="{
-                        'positive': getAdditionalRevenue('gst') > 0,
-                        'negative': getAdditionalRevenue('gst') < 0
-                      }"
+                        v-if="getAdditionalRevenue('gst') !== 0"
+                        :class="{
+                          'positive': getAdditionalRevenue('gst') > 0,
+                          'negative': getAdditionalRevenue('gst') < 0
+                        }"
                         style="font-size: 0.9em; margin-left: 4px;"
                       >
                         ({{ getAdditionalRevenue('gst') > 0 ? '+' : '' }}${{ formatCurrency(getAdditionalRevenue('gst'), 1) }}B)
@@ -345,7 +349,7 @@
                     :step="0.1" 
                     class="slider"
                     @input="onSliderInput('gst', localSliderValues.gst)" 
-                    /> <!-- 🆕 PERFORMANCE NOTE: Debounced slider commit using localSliderValues -->
+                  > <!-- 🆕 PERFORMANCE NOTE: Debounced slider commit using localSliderValues -->
                   <div class="input-controls">
                     <div class="input-group">
                       <input 
@@ -386,11 +390,11 @@
                     <div class="total-amount">
                       ${{ formatCurrency(budgetStore.revenueSources.customsDuties?.adjustedAmount || budgetStore.revenueSources.customsDuties?.amount, 1) }}B
                       <span
-                      v-if="getAdditionalRevenue('customsDuties') !== 0"
-                      :class="{
-                        'positive': getAdditionalRevenue('customsDuties') > 0,
-                        'negative': getAdditionalRevenue('customsDuties') < 0
-                      }"
+                        v-if="getAdditionalRevenue('customsDuties') !== 0"
+                        :class="{
+                          'positive': getAdditionalRevenue('customsDuties') > 0,
+                          'negative': getAdditionalRevenue('customsDuties') < 0
+                        }"
                         style="font-size: 0.9em; margin-left: 4px;"
                       >
                         ({{ getAdditionalRevenue('customsDuties') > 0 ? '+' : '' }}${{ formatCurrency(getAdditionalRevenue('customsDuties'), 1) }}B)
@@ -438,7 +442,7 @@
                     :step="0.1" 
                     class="slider"
                     @input="onSliderInput('customsDuties', localSliderValues.customsDuties)" 
-                    /> <!-- 🆕 PERFORMANCE NOTE: Debounced slider commit using localSliderValues -->
+                  > <!-- 🆕 PERFORMANCE NOTE: Debounced slider commit using localSliderValues -->
                   <div class="input-controls">
                     <div class="input-group">
                       <input 
@@ -481,11 +485,11 @@
                     <div class="total-amount">
                       ${{ formatCurrency(budgetStore.revenueSources.carbonPricing?.adjustedAmount || budgetStore.revenueSources.carbonPricing?.amount, 1) }}B
                       <span
-                      v-if="getAdditionalRevenue('carbonPricing') !== 0"
-                      :class="{
-                        'positive': getAdditionalRevenue('carbonPricing') > 0,
-                        'negative': getAdditionalRevenue('carbonPricing') < 0
-                      }"
+                        v-if="getAdditionalRevenue('carbonPricing') !== 0"
+                        :class="{
+                          'positive': getAdditionalRevenue('carbonPricing') > 0,
+                          'negative': getAdditionalRevenue('carbonPricing') < 0
+                        }"
                         style="font-size: 0.9em; margin-left: 4px;"
                       >
                         ({{ getAdditionalRevenue('carbonPricing') > 0 ? '+' : '' }}${{ formatCurrency(getAdditionalRevenue('carbonPricing'), 1) }}B)
@@ -533,7 +537,7 @@
                     :step="0.1" 
                     class="slider"
                     @input="onSliderInput('carbonPricing', localSliderValues.carbonPricing)" 
-                    /> <!-- 🆕 PERFORMANCE NOTE: Debounced slider commit using localSliderValues -->
+                  > <!-- 🆕 PERFORMANCE NOTE: Debounced slider commit using localSliderValues -->
                   <div class="input-controls">
                     <div class="input-group">
                       <input 
@@ -574,11 +578,11 @@
                     <div class="total-amount">
                       ${{ formatCurrency(budgetStore.revenueSources.exciseTaxes?.adjustedAmount || budgetStore.revenueSources.exciseTaxes?.amount, 1) }}B
                       <span
-                      v-if="getAdditionalRevenue('exciseTaxes') !== 0"
-                      :class="{
-                        'positive': getAdditionalRevenue('exciseTaxes') > 0,
-                        'negative': getAdditionalRevenue('exciseTaxes') < 0
-                      }"
+                        v-if="getAdditionalRevenue('exciseTaxes') !== 0"
+                        :class="{
+                          'positive': getAdditionalRevenue('exciseTaxes') > 0,
+                          'negative': getAdditionalRevenue('exciseTaxes') < 0
+                        }"
                         style="font-size: 0.9em; margin-left: 4px;"
                       >
                         ({{ getAdditionalRevenue('exciseTaxes') > 0 ? '+' : '' }}${{ formatCurrency(getAdditionalRevenue('exciseTaxes'), 1) }}B)
@@ -626,7 +630,7 @@
                     :step="0.1" 
                     class="slider"
                     @input="onSliderInput('exciseTaxes', localSliderValues.exciseTaxes)" 
-                    /> <!-- 🆕 PERFORMANCE NOTE: Debounced slider commit using localSliderValues -->
+                  > <!-- 🆕 PERFORMANCE NOTE: Debounced slider commit using localSliderValues -->
                   <div class="input-controls">
                     <div class="input-group">
                       <input 
@@ -710,11 +714,11 @@
                     <div class="total-amount">
                       ${{ formatCurrency(budgetStore.revenueSources.eiPremiums?.adjustedAmount || budgetStore.revenueSources.eiPremiums?.amount, 1) }}B
                       <span
-                      v-if="getAdditionalRevenue('eiPremiums') !== 0"
-                      :class="{
-                        'positive': getAdditionalRevenue('eiPremiums') > 0,
-                        'negative': getAdditionalRevenue('eiPremiums') < 0
-                      }"
+                        v-if="getAdditionalRevenue('eiPremiums') !== 0"
+                        :class="{
+                          'positive': getAdditionalRevenue('eiPremiums') > 0,
+                          'negative': getAdditionalRevenue('eiPremiums') < 0
+                        }"
                         style="font-size: 0.9em; margin-left: 4px;"
                       >
                         ({{ getAdditionalRevenue('eiPremiums') > 0 ? '+' : '' }}${{ formatCurrency(getAdditionalRevenue('eiPremiums'), 1) }}B)
@@ -762,7 +766,7 @@
                     :step="0.1" 
                     class="slider"
                     @input="onSliderInput('eiPremiums', localSliderValues.eiPremiums)" 
-                    /> <!-- 🆕 PERFORMANCE NOTE: Debounced slider commit using localSliderValues -->
+                  > <!-- 🆕 PERFORMANCE NOTE: Debounced slider commit using localSliderValues -->
                   <div class="input-controls">
                     <div class="input-group">
                       <input 
@@ -865,7 +869,7 @@
                     :step="0.1" 
                     class="slider"
                     @input="onSliderInput('crownProfits', localSliderValues.crownProfits)" 
-                    /> <!-- 🆕 PERFORMANCE NOTE: Debounced slider commit using localSliderValues -->
+                  > <!-- 🆕 PERFORMANCE NOTE: Debounced slider commit using localSliderValues -->
                   <div class="input-controls">
                     <div class="input-group">
                       <input 
@@ -908,11 +912,11 @@
                     <div class="total-amount">
                       ${{ formatCurrency(budgetStore.revenueSources.resourceRoyalties?.adjustedAmount || budgetStore.revenueSources.resourceRoyalties?.amount, 1) }}B
                       <span
-                      v-if="getAdditionalRevenue('resourceRoyalties') !== 0"
-                      :class="{
-                        'positive': getAdditionalRevenue('resourceRoyalties') > 0,
-                        'negative': getAdditionalRevenue('resourceRoyalties') < 0
-                      }"
+                        v-if="getAdditionalRevenue('resourceRoyalties') !== 0"
+                        :class="{
+                          'positive': getAdditionalRevenue('resourceRoyalties') > 0,
+                          'negative': getAdditionalRevenue('resourceRoyalties') < 0
+                        }"
                         style="font-size: 0.9em; margin-left: 4px;"
                       >
                         ({{ getAdditionalRevenue('resourceRoyalties') > 0 ? '+' : '' }}${{ formatCurrency(getAdditionalRevenue('resourceRoyalties'), 1) }}B)
@@ -960,7 +964,7 @@
                     :step="0.1" 
                     class="slider"
                     @input="onSliderInput('resourceRoyalties', localSliderValues.resourceRoyalties)" 
-                    /> <!-- 🆕 PERFORMANCE NOTE: Debounced slider commit using localSliderValues -->
+                  > <!-- 🆕 PERFORMANCE NOTE: Debounced slider commit using localSliderValues -->
                   <div class="input-controls">
                     <div class="input-group">
                       <input 
@@ -1001,11 +1005,11 @@
                     <div class="total-amount">
                       ${{ formatCurrency(budgetStore.revenueSources.nonTaxRevenue?.adjustedAmount || budgetStore.revenueSources.nonTaxRevenue?.amount, 1) }}B
                       <span
-                      v-if="getAdditionalRevenue('nonTaxRevenue') !== 0"
-                      :class="{
-                        'positive': getAdditionalRevenue('nonTaxRevenue') > 0,
-                        'negative': getAdditionalRevenue('nonTaxRevenue') < 0
-                      }"
+                        v-if="getAdditionalRevenue('nonTaxRevenue') !== 0"
+                        :class="{
+                          'positive': getAdditionalRevenue('nonTaxRevenue') > 0,
+                          'negative': getAdditionalRevenue('nonTaxRevenue') < 0
+                        }"
                         style="font-size: 0.9em; margin-left: 4px;"
                       >
                         ({{ getAdditionalRevenue('nonTaxRevenue') > 0 ? '+' : '' }}${{ formatCurrency(getAdditionalRevenue('nonTaxRevenue'), 1) }}B)
@@ -1053,7 +1057,7 @@
                     :step="0.1" 
                     class="slider"
                     @input="onSliderInput('nonTaxRevenue', localSliderValues.nonTaxRevenue)" 
-                    /> <!-- 🆕 PERFORMANCE NOTE: Debounced slider commit using localSliderValues -->
+                  > <!-- 🆕 PERFORMANCE NOTE: Debounced slider commit using localSliderValues -->
                   <div class="input-controls">
                     <div class="input-group">
                       <input 

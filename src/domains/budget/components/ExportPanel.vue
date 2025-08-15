@@ -5,7 +5,7 @@
       class="btn btn-primary mt-4"
       @click="throttledDownloadBudgetPDF(includeFullBreakdown)"
     >
-       Download as PDF
+      Download as PDF
     </button>
 
     <!-- Toggle for Full Breakdown -->

@@ -399,14 +399,16 @@
 
         <h4>Tax Expenditures and Credits</h4>
         <ul>
-          <li><strong>Personal Tax Credits:</strong>
+          <li>
+            <strong>Personal Tax Credits:</strong>
             <ul>
               <li>Base amount: $120 billion gross</li>
               <li>Net amount: $102 billion (adjusted for interactions)</li>
               <li>Can be adjusted to impact personal income tax revenue</li>
             </ul>
           </li>
-          <li><strong>Corporate Tax Expenditures:</strong>
+          <li>
+            <strong>Corporate Tax Expenditures:</strong>
             <ul>
               <li>Base amount: $25 billion gross</li>
               <li>Net amount: $23.75 billion (adjusted for interactions)</li>

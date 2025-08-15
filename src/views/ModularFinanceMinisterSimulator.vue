@@ -1,6 +1,9 @@
 <template>
   <ErrorBoundary component-name="FinanceMinisterSimulator">
     <div class="simulator-container">
+      <!-- Budget Change Banner -->
+      <BudgetChangeBanner :persistent="true" position="left" />
+      
       <div class="simulator-header">
         <h1 class="simulator-title">Finance Minister Simulator</h1>
         <div class="year-selector">
@@ -93,6 +96,7 @@ import BudgetResults from '@/domains/budget/components/BudgetResults.vue';
 import RevenueSliders from '@/domains/budget/components/RevenueSliders.vue';
 import SpendingControls from '@/domains/budget/components/SpendingControls.vue';
 import ChartsPanel from '@/domains/budget/components/ChartsPanel.vue';
+import BudgetChangeBanner from '@/domains/budget/components/BudgetChangeBanner.vue';
 import { debounce } from 'lodash-es';
 import { handleError } from '@/utils/errorHandler.js';
 

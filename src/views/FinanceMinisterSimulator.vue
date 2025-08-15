@@ -4,6 +4,8 @@
     :class="{ 'panel-collapsed': !badgePanelExpanded }"
   >
     <OnboardingTour />
+    <!-- Budget Change Banner -->
+    <BudgetChangeBanner persistent position="left" />
     <!-- Public Sentiment Banner (includes fiscal chaos warning when needed) -->
     <CollapsibleSentimentBanner
       :emoji="groupSentimentEmoji"
@@ -341,6 +343,7 @@ import BudgetResults from '@/domains/budget/components/BudgetResults.vue'
 import SpendingControls from '@/domains/budget/components/SpendingControls.vue'
 import PresetSelector from '@/domains/calculator/components/PresetSelector.vue'
 import AchievementBadge from '@/domains/badges/components/AchievementBadge.vue'
+import BudgetChangeBanner from '@/domains/budget/components/BudgetChangeBanner.vue'
 import { setPreset } from '@/presets'
 
 import { parseSharedBudgetParams, applySharedBudgetToStore } from '@/domains/budget/utils/sharedBudget.js'

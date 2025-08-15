@@ -1,14 +1,21 @@
 <template>
   <teleport to="body">
-    <transition name="modal" appear>
-      <div v-if="modelValue" class="social-share-modal" 
-           aria-modal="true" role="dialog" 
-           tabindex="-1">
+    <transition
+      name="modal"
+      appear
+    >
+      <div
+        v-if="modelValue"
+        class="social-share-modal" 
+        aria-modal="true"
+        role="dialog" 
+        tabindex="-1"
+      >
         <!-- Premium Backdrop -->
         <div 
           class="modal-backdrop"
           @click="$emit('update:modelValue', false)"
-        ></div>
+        />
         
         <!-- Modal Container -->
         <div 
@@ -20,60 +27,106 @@
           }"
         >
           <!-- Loading Indicator -->
-          <div v-if="props.isLoading" class="loading-overlay">
-            <div class="loading-spinner"></div>
-            <p class="loading-text">Preparing your budget visualization...</p>
+          <div
+            v-if="props.isLoading"
+            class="loading-overlay"
+          >
+            <div class="loading-spinner" />
+            <p class="loading-text">
+              Preparing your budget visualization...
+            </p>
           </div>
           <!-- Header -->
           <div class="sticky top-0 w-full bg-white dark:bg-gray-900 px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center z-10">
-            <h2 class="text-xl font-semibold">Share Your Budget</h2>
+            <h2 class="text-xl font-semibold">
+              Share Your Budget
+            </h2>
             <button 
-              @click="$emit('update:modelValue', false)"
               class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-500"
               aria-label="Close modal"
+              @click="$emit('update:modelValue', false)"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                  clip-rule="evenodd"
+                />
               </svg>
             </button>
           </div>
 
           <!-- Body Content -->
-          <div class="overflow-y-auto" style="max-height: calc(v-bind('modalMaxHeight') - 4rem); overflow-x: hidden;">
+          <div
+            class="overflow-y-auto"
+            style="max-height: calc(v-bind('modalMaxHeight') - 4rem); overflow-x: hidden;"
+          >
             <!-- Two Column Layout -->
             <div class="px-6 py-4 md:grid md:grid-cols-2 md:gap-6">
               <!-- Left Column: Budget Preview -->
               <div class="social-media-buttons">
-                <h4 class="text-lg font-semibold mb-4">Share on Social Media</h4>
+                <h4 class="text-lg font-semibold mb-4">
+                  Share on Social Media
+                </h4>
                 <div class="flex flex-col gap-3 mb-6">
                   <!-- Link Preview with Detailed Card -->
-                  <div class="link-preview-container" ref="socialCardRef">
+                  <div
+                    ref="socialCardRef"
+                    class="link-preview-container"
+                  >
                     <div class="link-preview">
                       <div class="link-preview-header">
                         <div class="link-preview-icon">
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            class="w-6 h-6"
+                          >
                             <path d="M11.7 2.805a.75.75 0 01.6 0A60.65 60.65 0 0122.83 8.72a.75.75 0 01-.231 1.337 49.949 49.949 0 00-9.902 3.912l-.003.002-.34.18a.75.75 0 01-.707 0A50.009 50.009 0 007.5 12.174v-.224c0-.131.067-.248.172-.311a54.614 54.614 0 014.653-2.52.75.75 0 00-.65-1.352 56.129 56.129 0 00-4.78 2.589 1.858 1.858 0 00-.859 1.228 49.803 49.803 0 00-4.634-1.527.75.75 0 01-.231-1.337A60.653 60.653 0 0111.7 2.805z" />
                           </svg>
                         </div>
-                        <div class="link-preview-title">Federal Canadian Budget Simulator</div>
+                        <div class="link-preview-title">
+                          Federal Canadian Budget Simulator
+                        </div>
                       </div>
                       
                       <!-- Budget Metrics -->
                       <div class="link-preview-content">
                         <div class="link-preview-metrics">
                           <div class="metric">
-                            <div class="metric-label">Revenue</div>
-                            <div class="metric-value">{{ formatCurrency(effectiveTotalRevenue) }}B</div>
+                            <div class="metric-label">
+                              Revenue
+                            </div>
+                            <div class="metric-value">
+                              {{ formatCurrency(effectiveTotalRevenue) }}B
+                            </div>
                           </div>
                           
-                          <div class="metric" :class="effectiveBudgetSurplus >= 0 ? 'positive' : 'negative'">
-                            <div class="metric-label">{{ effectiveBudgetSurplus >= 0 ? 'Surplus' : 'Deficit' }}</div>
-                            <div class="metric-value">{{ effectiveBudgetSurplus >= 0 ? '+' : '' }}{{ formatCurrency(effectiveBudgetSurplus) }}B</div>
+                          <div
+                            class="metric"
+                            :class="effectiveBudgetSurplus >= 0 ? 'positive' : 'negative'"
+                          >
+                            <div class="metric-label">
+                              {{ effectiveBudgetSurplus >= 0 ? 'Surplus' : 'Deficit' }}
+                            </div>
+                            <div class="metric-value">
+                              {{ effectiveBudgetSurplus >= 0 ? '+' : '' }}{{ formatCurrency(effectiveBudgetSurplus) }}B
+                            </div>
                           </div>
                           
                           <div class="metric">
-                            <div class="metric-label">Debt-to-GDP</div>
-                            <div class="metric-value">{{ effectiveDebtToGdpRatio.toFixed(1) }}%</div>
+                            <div class="metric-label">
+                              Debt-to-GDP
+                            </div>
+                            <div class="metric-value">
+                              {{ effectiveDebtToGdpRatio.toFixed(1) }}%
+                            </div>
                           </div>
                         </div>
                         
@@ -81,11 +134,17 @@
                         <div class="compact-preview">
                           <!-- Top Positive/Negative Segments -->
                           <div class="compact-segments">
-                            <div v-if="mostPositiveSegments.length > 0" class="compact-segment positive">
+                            <div
+                              v-if="mostPositiveSegments.length > 0"
+                              class="compact-segment positive"
+                            >
                               <span class="material-icons">trending_up</span>
                               <span>{{ mostPositiveSegments[0]?.name }}</span>
                             </div>
-                            <div v-if="mostNegativeSegments.length > 0" class="compact-segment negative">
+                            <div
+                              v-if="mostNegativeSegments.length > 0"
+                              class="compact-segment negative"
+                            >
                               <span class="material-icons">trending_down</span>
                               <span>{{ mostNegativeSegments[0]?.name }}</span>
                             </div>
@@ -93,7 +152,11 @@
                           
                           <!-- Top Badges -->
                           <div class="compact-badges">
-                            <div v-for="badge in effectiveBadges.slice(0, 2)" :key="badge.name" class="compact-badge">
+                            <div
+                              v-for="badge in effectiveBadges.slice(0, 2)"
+                              :key="badge.name"
+                              class="compact-badge"
+                            >
                               <span class="badge-icon">{{ badge.icon }}</span>
                               <span class="badge-name">{{ badge.name }}</span>
                             </div>
@@ -101,8 +164,17 @@
                         </div>
                         
                         <div class="link-preview-url">
-                          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5a2 2 0 11-2.828-2.828l3-3z" clip-rule="evenodd" />
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="h-4 w-4 text-gray-500"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5a2 2 0 11-2.828-2.828l3-3z"
+                              clip-rule="evenodd"
+                            />
                           </svg>
                           <span>{{ safeHostUrl }}/budget-simulator</span>
                         </div>
@@ -110,7 +182,9 @@
                       
                       <!-- Detailed Budget Sentiment and Badge Card -->
                       <div class="link-preview-detailed-card">
-                        <h3 class="text-xl font-bold mb-3">Budget Impact Analysis</h3>
+                        <h3 class="text-xl font-bold mb-3">
+                          Budget Impact Analysis
+                        </h3>
                         <BudgetSentimentBadgeCard :budget-data="previewBudgetData" />
                       </div>
                     </div>
@@ -124,78 +198,109 @@
               
               <!-- Right Column: Share Options -->
               <div>
-                <h4 class="text-lg font-semibold mb-4">Share Your Budget</h4>
+                <h4 class="text-lg font-semibold mb-4">
+                  Share Your Budget
+                </h4>
                 
                 <!-- Social Share Buttons -->
                 <div class="flex flex-col gap-3 mb-6">
                   <button 
-                    @click="shareToSocialMedia('twitter')"
                     class="social-button twitter-button"
                     :class="{ 'shared': sharedPlatform === 'twitter' }"
+                    @click="shareToSocialMedia('twitter')"
                   >
                     <template v-if="sharedPlatform === 'twitter'">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-4 w-4"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clip-rule="evenodd"
+                        />
                       </svg>
                       Shared on X
                     </template>
                     <template v-else>
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-4 w-4"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                      >
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                       </svg>
                       Share on X
                     </template>
                   </button>
                   
                   <button 
-                    @click="shareToSocialMedia('facebook')"
                     class="flex items-center gap-3 px-5 py-3 rounded-lg text-white transition-all hover:scale-105 bg-[var(--color-facebook)] hover:bg-[var(--facebook-hover)]"
                     aria-label="Share on Facebook"
                     title="Share your budget on Facebook"
+                    @click="shareToSocialMedia('facebook')"
                   >
                     <template v-if="sharedPlatform === 'facebook'">
                       <span class="material-icons animate-pop">check_circle</span>
                       Shared!
                     </template>
                     <template v-else>
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-4 w-4"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                      >
+                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                       </svg>
                       Share on Facebook
                     </template>
                   </button>
                   
                   <button 
-                    @click="shareToSocialMedia('linkedin')"
                     class="flex items-center gap-3 px-5 py-3 rounded-lg text-white transition-all hover:scale-105 bg-[var(--color-linkedin)] hover:bg-[var(--linkedin-hover)]"
                     aria-label="Share on LinkedIn"
                     title="Share your budget on LinkedIn"
+                    @click="shareToSocialMedia('linkedin')"
                   >
                     <template v-if="sharedPlatform === 'linkedin'">
                       <span class="material-icons animate-pop">check_circle</span>
                       Shared!
                     </template>
                     <template v-else>
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-4 w-4"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                      >
+                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                       </svg>
                       Share on LinkedIn
                     </template>
                   </button>
                   
                   <button 
-                    @click="shareToSocialMedia('instagram')"
                     class="flex items-center gap-3 px-5 py-3 rounded-lg text-white transition-all hover:scale-105 bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 hover:from-purple-600 hover:via-pink-600 hover:to-orange-600"
                     aria-label="Share on Instagram"
                     title="Share your budget on Instagram"
+                    @click="shareToSocialMedia('instagram')"
                   >
                     <template v-if="sharedPlatform === 'instagram'">
                       <span class="material-icons animate-pop">check_circle</span>
                       Shared!
                     </template>
                     <template v-else>
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-4 w-4"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                      >
+                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
                       </svg>
                       Share on Instagram
                     </template>
@@ -205,39 +310,62 @@
                 <!-- Download & Copy Buttons -->
                 <div class="flex flex-col sm:flex-row gap-3">
                   <button 
-                    @click="downloadImage"
                     class="flex items-center justify-center gap-2 px-5 py-3 rounded-lg text-white transition-all hover:scale-105 bg-emerald-600 hover:bg-emerald-700"
                     aria-label="Download budget image"
+                    @click="downloadImage"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                      <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-5 w-5"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+                        clip-rule="evenodd"
+                      />
                     </svg>
                     Download Image
                   </button>
                   
                   <button 
-                    @click="copyLink"
                     class="flex items-center justify-center gap-2 px-5 py-3 rounded-lg text-white transition-all hover:scale-105 bg-blue-600 hover:bg-blue-700"
                     aria-label="Copy link to share"
+                    @click="copyLink"
                   >
                     <template v-if="linkCopied">
                       <span class="material-icons animate-pop">check_circle</span>
                       Copied!
                     </template>
                     <template v-else>
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5a2 2 0 11-2.828-2.828l3-3z" clip-rule="evenodd" />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-5 w-5"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5a2 2 0 11-2.828-2.828l3-3z"
+                          clip-rule="evenodd"
+                        />
                       </svg>
                       Copy Link
                     </template>
                   </button>
                   
                   <button 
-                    @click="copyImage"
                     class="flex items-center justify-center gap-2 px-5 py-3 rounded-lg text-white transition-all hover:scale-105 bg-purple-600 hover:bg-purple-700"
                     aria-label="Copy image to clipboard"
+                    @click="copyImage"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-5 w-5"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
                       <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
                       <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
                     </svg>

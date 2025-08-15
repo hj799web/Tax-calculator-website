@@ -1,6 +1,9 @@
 <template>
   <Teleport to="body">
-    <Transition name="notification-slide" appear>
+    <Transition
+      name="notification-slide"
+      appear
+    >
       <div
         v-if="modelValue"
         class="tax-breakdown-notification"
@@ -17,30 +20,60 @@
           <!-- Close Button -->
           <button
             class="close-button"
-            @click="closePopup"
             aria-label="Close notification"
+            @click="closePopup"
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <line
+                x1="18"
+                y1="6"
+                x2="6"
+                y2="18"
+              />
+              <line
+                x1="6"
+                y1="6"
+                x2="18"
+                y2="18"
+              />
             </svg>
           </button>
           
           <!-- Content -->
           <div class="notification-content">
             <div class="notification-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                <path d="M10 7v3m0 0v3m0-3h3m-3 0H7"></path>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                <path d="M10 7v3m0 0v3m0-3h3m-3 0H7" />
               </svg>
             </div>
             
             <div class="notification-text">
-              <h3 id="notification-title" class="notification-title">
+              <h3
+                id="notification-title"
+                class="notification-title"
+              >
                 {{ popupTitle }}
               </h3>
               
-              <p id="notification-description" class="notification-description">
+              <p
+                id="notification-description"
+                class="notification-description"
+              >
                 {{ popupDescription }}
               </p>
             </div>
@@ -51,9 +84,20 @@
                 class="primary-button"
                 @click="navigateToBreakdown"
               >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                  <circle cx="12" cy="12" r="3"></circle>
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="3"
+                  />
                 </svg>
                 View Breakdown
               </button>

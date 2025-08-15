@@ -1,14 +1,19 @@
 <template>
   <div>
     <button 
-      @click="startTour" 
+      v-if="!isTourActive" 
       class="tour-button"
-      v-if="!isTourActive"
+      @click="startTour"
     >
       <span class="material-icons">lightbulb</span>
       Interactive Tour
     </button>
-    <div v-if="onboardingTourErrorMessage" class="error-message">{{ onboardingTourErrorMessage }}</div>
+    <div
+      v-if="onboardingTourErrorMessage"
+      class="error-message"
+    >
+      {{ onboardingTourErrorMessage }}
+    </div>
   </div>
 </template>
 

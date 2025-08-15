@@ -1,7 +1,9 @@
 <template>
   <div class="terms-of-service">
     <div class="container mx-auto px-4 py-8 max-w-4xl">
-      <h1 class="text-3xl font-bold mb-8">Terms of Service</h1>
+      <h1 class="text-3xl font-bold mb-8">
+        Terms of Service
+      </h1>
       
       <div class="prose prose-lg max-w-none">
         <h2>1. Introduction</h2>
@@ -42,10 +44,20 @@
           <li>Public events or media presentations</li>
           <li>Research or commercial applications</li>
         </ul>
-        <p>To request permission, please contact: <a href="mailto:fiscal-insights@outlook.com" class="text-blue-600 hover:text-blue-800">fiscal-insights@outlook.com</a></p>
+        <p>
+          To request permission, please contact: <a
+            href="mailto:fiscal-insights@outlook.com"
+            class="text-blue-600 hover:text-blue-800"
+          >fiscal-insights@outlook.com</a>
+        </p>
 
         <h2>10. Contact</h2>
-        <p>For any questions or concerns regarding these Terms of Service, please contact us at: <a href="mailto:fiscal-insights@outlook.com" class="text-blue-600 hover:text-blue-800">fiscal-insights@outlook.com</a></p>
+        <p>
+          For any questions or concerns regarding these Terms of Service, please contact us at: <a
+            href="mailto:fiscal-insights@outlook.com"
+            class="text-blue-600 hover:text-blue-800"
+          >fiscal-insights@outlook.com</a>
+        </p>
       </div>
     </div>
   </div>

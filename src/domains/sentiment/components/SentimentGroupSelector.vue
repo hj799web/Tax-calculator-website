@@ -2,23 +2,44 @@
   <div class="sentiment-group-selector">
     <label>
       Province(s):
-      <select :value="provinces[0] || ''" @change="updateProvinces($event)">
-  <option value="">-- None --</option>
-        <option v-for="province in provinceOptions" :key="province" :value="province">{{ province }}</option>
+      <select
+        :value="provinces[0] || ''"
+        @change="updateProvinces($event)"
+      >
+        <option value="">-- None --</option>
+        <option
+          v-for="province in provinceOptions"
+          :key="province"
+          :value="province"
+        >{{ province }}</option>
       </select>
     </label>
     <label>
       Sector(s):
-      <select :value="sectors[0] || ''" @change="updateSectors($event)">
-  <option value="">-- None --</option>
-        <option v-for="sector in sectorOptions" :key="sector" :value="sector">{{ sector }}</option>
+      <select
+        :value="sectors[0] || ''"
+        @change="updateSectors($event)"
+      >
+        <option value="">-- None --</option>
+        <option
+          v-for="sector in sectorOptions"
+          :key="sector"
+          :value="sector"
+        >{{ sector }}</option>
       </select>
     </label>
     <label>
       Demographic(s):
-      <select :value="demographics[0] || ''" @change="updateDemographics($event)">
-  <option value="">-- None --</option>
-        <option v-for="demo in demographicOptions" :key="demo" :value="demo">{{ demo }}</option>
+      <select
+        :value="demographics[0] || ''"
+        @change="updateDemographics($event)"
+      >
+        <option value="">-- None --</option>
+        <option
+          v-for="demo in demographicOptions"
+          :key="demo"
+          :value="demo"
+        >{{ demo }}</option>
       </select>
     </label>
   </div>
