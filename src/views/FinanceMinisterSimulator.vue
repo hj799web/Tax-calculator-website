@@ -774,14 +774,14 @@ const collapseAllSections = () => {
 <style scoped>
 /* 1. Modern Typography */
 .finance-minister-simulator, .simulator-card, .sentiment-card {
-  font-family: 'Inter', 'Poppins', 'Roboto', Arial, sans-serif;
-  color: #1a202c;
+  font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial, sans-serif;
+  color: var(--fg);
 }
 .main-title, .card-title {
-  font-family: 'Poppins', 'Inter', Arial, sans-serif;
+  font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial, sans-serif;
   font-weight: 700;
-  letter-spacing: 0.5px;
-  color: #222;
+  letter-spacing: 0.2px;
+  color: var(--fg);
   margin-bottom: 0.5rem;
 }
 .card-title {
@@ -789,23 +789,22 @@ const collapseAllSections = () => {
   display: flex;
   align-items: center;
   gap: 10px;
-  border-left: 4px solid #27ae60;
+  border-left: 3px solid var(--accent);
   padding: 12px 16px;
   cursor: pointer;
   user-select: none;
   transition: all 0.3s ease;
   margin-bottom: 1rem;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
   font-weight: 600;
-  color: #2c3e50;
+  color: var(--fg);
 }
 
 .card-title:hover {
-  background: rgba(255, 255, 255, 1);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  transform: translateY(-1px);
+  background: var(--surface);
+  box-shadow: var(--shadow);
 }
 
 /* Disable hover effects on touch devices to prevent interference */
@@ -817,14 +816,14 @@ const collapseAllSections = () => {
 }
 
 .card-title .icon {
-  color: #27ae60;
+  color: var(--accent);
   font-size: 1.5rem;
 }
 
 .card-title .toggle-icon {
   margin-left: auto;
   transition: transform 0.3s ease;
-  color: #3498db;
+  color: var(--accent);
   font-size: 1.2rem;
 }
 
@@ -856,20 +855,17 @@ const collapseAllSections = () => {
 
 /* 2. Glassmorphism Cards */
 .simulator-card, .sentiment-card {
-  background: rgba(255, 255, 255, 0.28) !important;
-  border-radius: 22px;
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
-  border: 1.5px solid rgba(255, 255, 255, 0.22);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: var(--surface) !important;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
   overflow: hidden;
-  padding: 2rem 1.5rem;
-  margin-bottom: 2rem;
-  transition: box-shadow 0.3s, transform 0.3s;
+  padding: 1.5rem 1.25rem;
+  margin-bottom: 1.5rem;
+  transition: box-shadow 0.25s ease;
 }
 .simulator-card:hover, .sentiment-card:hover {
-  box-shadow: 0 16px 40px 0 rgba(31, 38, 135, 0.22);
-  transform: translateY(-4px) scale(1.01);
+  box-shadow: var(--shadow);
 }
 
 /* Disable hover transforms on touch devices */
@@ -880,23 +876,31 @@ const collapseAllSections = () => {
   }
 }
 
-/* 3. Gradient Buttons */
+/* 3. Modern Buttons */
 .button, button, .view-all-badges-btn, .toggle-badge-panel-btn {
-  background: linear-gradient(135deg, #3498db, #27ae60);
-  color: #fff;
-  border: none;
-  border-radius: 10px;
-  padding: 0.75rem 1.5rem;
+  background: var(--surface);
+  color: var(--fg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.6rem 1.1rem;
   font-weight: 600;
-  font-size: 1rem;
-  box-shadow: 0 2px 8px rgba(52, 152, 219, 0.12);
-  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
-  outline: none;
+  font-size: 0.95rem;
+  box-shadow: var(--shadow-sm);
+  transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
 }
 .button:hover, button:hover, .view-all-badges-btn:hover, .toggle-badge-panel-btn:hover {
-  background: linear-gradient(135deg, #27ae60, #3498db);
-  transform: translateY(-2px) scale(1.04);
-  box-shadow: 0 4px 16px rgba(39, 174, 96, 0.18);
+  background: rgba(34, 211, 238, 0.12);
+  color: var(--fg);
+  box-shadow: var(--shadow);
+}
+/* Emphasize key CTA */
+.view-all-badges-btn {
+  background: var(--accent);
+  border-color: transparent;
+  color: #001018;
+}
+.view-all-badges-btn:hover {
+  box-shadow: var(--shadow);
 }
 
 /* 4. Sticky/Floating Sub-Navigation */
@@ -904,10 +908,8 @@ const collapseAllSections = () => {
   position: sticky;
   top: 0.5rem;
   z-index: 10;
-  background: rgba(255,255,255,0.7);
-  backdrop-filter: blur(6px);
-  border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(52, 152, 219, 0.08);
+  background: var(--surface-muted);
+  border-bottom: 1px solid var(--border);
   padding: 0.5rem 1rem;
   margin-bottom: 1.5rem;
   display: flex;
@@ -915,7 +917,7 @@ const collapseAllSections = () => {
   flex-wrap: wrap;
 }
 .sub-nav-link {
-  color: #3498db;
+  color: var(--fg);
   font-weight: 600;
   padding: 0.5rem 1.2rem;
   border-radius: 6px;
@@ -927,9 +929,8 @@ const collapseAllSections = () => {
   font-size: 1rem;
 }
 .sub-nav-link:hover {
-  background: linear-gradient(135deg, #27ae60, #3498db);
-  color: #fff;
-  transform: translateY(-2px) scale(1.04);
+  background: rgba(34, 211, 238, 0.12);
+  color: var(--fg);
 }
 
 /* 5. Modern Inputs & Sliders */

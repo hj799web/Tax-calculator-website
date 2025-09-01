@@ -296,11 +296,10 @@ export default {
   transform: translateY(-50%);
   width: 320px;
   max-height: 600px;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 12px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
   z-index: 1000;
   transition: all 0.3s ease;
   overflow: hidden;
@@ -315,8 +314,9 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding: 16px 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  color: var(--fg);
   cursor: pointer;
   user-select: none;
 }
@@ -347,7 +347,7 @@ export default {
 .collapse-btn {
   background: none;
   border: none;
-  color: white;
+  color: var(--fg);
   cursor: pointer;
   padding: 4px;
   border-radius: 4px;
@@ -356,7 +356,7 @@ export default {
 
 .clear-btn:hover,
 .collapse-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(34, 211, 238, 0.12);
 }
 
 .banner-content {
@@ -401,8 +401,8 @@ export default {
 }
 
 .category-tab.active {
-  background: #667eea;
-  color: white;
+  background: var(--accent);
+  color: #001018;
 }
 
 .tab-count {

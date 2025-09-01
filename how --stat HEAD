@@ -1,0 +1,5 @@
+[33m18b8aac[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m feat: enhance Budget Changes banner with positioning, persistence, and totals
+[33m9de09e8[m Update wip-refactor with merged state from main
+[33m1d9d473[m[33m ([m[1;31morigin/feature/refactor-presets[m[33m, [m[1;32mfeature/refactor-presets[m[33m)[m feat: add Bi-weekly and Daily salary rate validation and improve validation functions
+[33mbc40994[m Fix mobile collapsing buttons by removing problematic CSS scaling and adding touch optimizations
+[33mb63710a[m Enhance section titles visibility with white backgrounds - Add white background to all collapsible section titles - Improve contrast with dark text on white background - Add subtle shadows and hover effects - Make titles more prominent and readable - Add responsive design for mobile devices

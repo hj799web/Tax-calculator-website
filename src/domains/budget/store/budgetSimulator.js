@@ -107,21 +107,24 @@ class ChangeRecord {
 
   // NEW: Method to get display amount (keeps existing interface)
   getDisplayAmount() {
-    if (this.type === CHANGE_TYPES.REVENUE && this.dollarImpact !== 0) {
-      return this.dollarImpact;  // Show dollar impact for revenue
+    // Prefer dollar impact when available for accurate fiscal representation
+    if (this.dollarImpact !== undefined && this.dollarImpact !== null) {
+      return this.dollarImpact;
     }
-    return this.amount;  // Show rate/factor change for others
+    return this.amount;  // Fallback to raw change amount (e.g., percent points)
   }
 
   getChangeIcon() {
-    if (this.amount > 0) return 'trending_up';
-    if (this.amount < 0) return 'trending_down';
+    const val = this.getDisplayAmount();
+    if (val > 0) return 'trending_up';
+    if (val < 0) return 'trending_down';
     return 'remove';
   }
 
   getChangeColor() {
-    if (this.amount > 0) return '#27ae60'; // Green for increases
-    if (this.amount < 0) return '#e74c3c'; // Red for decreases
+    const val = this.getDisplayAmount();
+    if (val > 0) return '#27ae60'; // Green for net-positive fiscal impact
+    if (val < 0) return '#e74c3c'; // Red for net-negative fiscal impact
     return '#95a5a6'; // Gray for no change
   }
 }
@@ -2937,14 +2940,21 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
     trackTaxExpenditureChange(expenditureId, oldAdjustment, newAdjustment) {
       const expenditure = this.taxExpenditures[expenditureId];
       if (!expenditure) return;
-      
+
+      // Compute dollar impact on revenue: increasing tax expenditures reduces revenue
+      const adjDelta = (newAdjustment || 0) - (oldAdjustment || 0);
+      const base = Number(expenditure.netAmount) || 0;
+      const dollarImpact = -1 * base * (adjDelta / 100);
+
       this.addBudgetChange(
         CHANGE_TYPES.TAX_EXPENDITURE,
         CHANGE_CATEGORIES.TAX_CREDITS,
         expenditureId,
         expenditure.name,
         oldAdjustment,
-        newAdjustment
+        newAdjustment,
+        null,
+        dollarImpact
       );
     },
 

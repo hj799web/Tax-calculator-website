@@ -33,7 +33,6 @@
               <router-link
                 to="/simulator"
                 class="nav-link simulator-link"
-                style="background-color: #3498db; color: white;"
               >
                 Try the Budget Simulator
               </router-link>
@@ -382,6 +381,34 @@ export default {
 </script>
 
 <style>
+/* Theme tokens (light + dark) */
+:root {
+  --bg: #ffffff;
+  --fg: #111827;           /* slate-900 */
+  --muted: #6b7280;        /* gray-500 */
+  --surface: #ffffff;      /* card surface */
+  --surface-muted: #f9fafb;/* subtle background */
+  --border: rgba(17, 24, 39, 0.08);
+  --accent: #22d3ee;       /* cyan-400 */
+  --success: #10b981;      /* emerald-500 */
+  --danger: #ef4444;       /* red-500 */
+  --radius: 8px;
+  --shadow-sm: 0 2px 8px rgba(0,0,0,.08);
+  --shadow: 0 8px 24px rgba(0,0,0,.12);
+  --nums: tabular-nums;
+}
+
+.dark {
+  --bg: #0b0f19;
+  --fg: #e5e7eb;
+  --muted: #9ca3af;
+  --surface: #0f1424;
+  --surface-muted: #0c1220;
+  --border: rgba(255,255,255,0.08);
+  --accent: #60a5fa;       /* blue-400 */
+  --shadow-sm: 0 2px 8px rgba(0,0,0,.35);
+  --shadow: 0 16px 40px rgba(0,0,0,.45);
+}
 /* Global crisp rendering improvements */
 * {
   -webkit-font-smoothing: antialiased;
@@ -393,10 +420,10 @@ export default {
 
 /* Base styles */
 #app {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
+  color: var(--fg);
   text-rendering: optimizeLegibility;
   min-height: 100vh;
   position: relative;
@@ -407,8 +434,8 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
 body {
-  font-family: 'Poppins', sans-serif;
-  background-color: transparent;
+  font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg);
   margin: 0;
   padding: 0;
   -webkit-font-smoothing: antialiased;
@@ -489,17 +516,39 @@ h1, h2, h3, h4, h5, h6, p, span, div, label, input, button, select, textarea {
 }
 
 .main-title {
-  font-size: 36px;
-  color: #fff;
-  margin-bottom: 5px;
+  font-size: 34px;
+  color: var(--fg);
+  margin-bottom: 8px;
   font-weight: 700;
   text-align: center;
-  text-shadow: 0 4px 18px rgba(0,0,0,0.45), 0 1px 0 #222;
-  transition: transform 0.3s ease;
 }
 
-.main-title:hover {
-  transform: scale(1.02);
+/* Modern navigation */
+.main-navigation {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 10px 0 0;
+}
+.nav-link {
+  color: var(--fg);
+  text-decoration: none;
+  padding: 8px 12px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  transition: background-color .2s ease, color .2s ease, box-shadow .2s ease;
+}
+.nav-link:hover {
+  background: var(--surface-muted);
+}
+.nav-link.simulator-link {
+  background: var(--accent);
+  color: #001018;
+  border-color: transparent;
+  box-shadow: var(--shadow-sm);
+}
+.nav-link.simulator-link:hover {
+  box-shadow: var(--shadow);
 }
 
 .welcome-link {
@@ -518,12 +567,11 @@ h1, h2, h3, h4, h5, h6, p, span, div, label, input, button, select, textarea {
 }
 
 .subtitle {
-  font-size: 20px;
-  color: #f3f6fa;
+  font-size: 18px;
+  color: var(--muted);
   text-align: center;
   max-width: 800px;
   margin: 0 auto 30px;
-  text-shadow: 0 3px 12px rgba(0,0,0,0.45), 0 1px 0 #222;
 }
 
 .section-title {
@@ -618,11 +666,10 @@ h1, h2, h3, h4, h5, h6, p, span, div, label, input, button, select, textarea {
 .budget-categories-section,
 .resources-section,
 .year-selector-container {
-  background: rgba(255,255,255,0.65) !important;
-  backdrop-filter: blur(10px);
-  border-radius: 15px;
-  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: var(--surface) !important;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
   flex: 1;
   min-width: 300px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
