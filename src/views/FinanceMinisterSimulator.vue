@@ -161,9 +161,11 @@
               :total-spending="budgetStore.totalSpending"
               :surplus="budgetStore.surplus"
               :auto-balance-active="autoBalanceActive"
+              :simple-auto-balance-active="budgetStore.simpleAutoBalanceActive"
               :fiscal-chaos="fiscalChaos"
               @reset-budget="resetBudget"
               @toggle-auto-balance="toggleAutoBalance"
+              @toggle-simple-auto-balance="toggleSimpleAutoBalance"
               @save-budget="saveBudget"
               @share-budget="openSocialShareModal"
             />
@@ -256,6 +258,9 @@
     </div>
   </div>
 
+  <!-- Budget Changes Banner -->
+  <BudgetChangesBanner :max-recent-changes="10" />
+
   <!-- Social Share Modal -->
   <SocialShareModal
     v-model="showSocialShareModal"
@@ -341,6 +346,7 @@ import BudgetResults from '@/domains/budget/components/BudgetResults.vue'
 import SpendingControls from '@/domains/budget/components/SpendingControls.vue'
 import PresetSelector from '@/domains/calculator/components/PresetSelector.vue'
 import AchievementBadge from '@/domains/badges/components/AchievementBadge.vue'
+import BudgetChangesBanner from '@/domains/budget/components/BudgetChangesBanner.vue'
 import { setPreset } from '@/presets'
 
 import { parseSharedBudgetParams, applySharedBudgetToStore } from '@/domains/budget/utils/sharedBudget.js'
@@ -488,12 +494,20 @@ function updateSpendingFactor(categoryId, value) {
   if (autoBalanceActive.value) {
     budgetStore.autoBalanceBudget();
   }
+  // Also trigger simple auto-balance if active
+  if (budgetStore.simpleAutoBalanceActive) {
+    budgetStore.autoBalanceBudget();
+  }
 }
 
 function updateGroupSpendingFactor(groupId, value) {
   const factor = value / 100;
   budgetStore.updateGroupSpendingFactor(groupId, factor);
   if (autoBalanceActive.value) {
+    budgetStore.autoBalanceBudget();
+  }
+  // Also trigger simple auto-balance if active
+  if (budgetStore.simpleAutoBalanceActive) {
     budgetStore.autoBalanceBudget();
   }
 }
@@ -503,6 +517,13 @@ function toggleAutoBalance(isActive) {
   budgetStore.toggleAutoBalance(isActive);
   
   console.log('Auto-balance mode:', isActive ? 'enabled' : 'disabled');
+}
+
+function toggleSimpleAutoBalance(isActive) {
+  // Update the simple auto-balance state
+  budgetStore.toggleSimpleAutoBalance(isActive);
+  
+  console.log('Simple auto-balance mode:', isActive ? 'enabled' : 'disabled');
 }
 
 function resetBudget() {

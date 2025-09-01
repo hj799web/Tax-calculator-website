@@ -1,0 +1,27 @@
+Replace the trackPresetApplication method in src/domains/budget/store/budgetSimulator.js (around line 2918):
+
+OLD:
+trackPresetApplication(presetKey, presetLabel) {
+  this.addBudgetChange(
+    CHANGE_TYPES.PRESET,
+    'System',
+    presetKey,
+    `Applied Preset: ${presetLabel}`,
+    0,
+    0,
+    `Applied "${presetLabel}" preset configuration`
+  );
+},
+
+NEW:
+trackPresetApplication(presetKey, presetLabel) {
+  this.addBudgetChange(
+    CHANGE_TYPES.PRESET,
+    CHANGE_CATEGORIES.SYSTEM_ACTIONS,
+    presetKey,
+    `Applied Preset: ${presetLabel}`,
+    0,
+    0,
+    `Applied "${presetLabel}" preset configuration`
+  );
+},

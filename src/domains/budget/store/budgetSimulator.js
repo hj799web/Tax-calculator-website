@@ -7,6 +7,125 @@ import { budgetValidationSchemas } from '@/utils/storeValidation.js';
 import { wrapStoreAction } from '@/utils/storeActionWrapper.js';
 import { debounce } from 'lodash-es';
 
+// Change types for categorization
+const CHANGE_TYPES = {
+  REVENUE: 'revenue',
+  SPENDING: 'spending',
+  TAX_EXPENDITURE: 'tax_expenditure',
+  PRESET: 'preset',
+  RESET: 'reset',
+  AUTO_BALANCE: 'auto_balance'
+};
+
+// Change categories for grouping
+const CHANGE_CATEGORIES = {
+  INCOME_TAXES: 'Income Taxes',
+  CONSUMPTION_TAXES: 'Consumption Taxes', 
+  OTHER_REVENUE: 'Other Revenue',
+  MAIN_SPENDING: 'Main Spending',
+  LOANS_INVESTMENTS: 'Loans & Investments',
+  GOVERNMENT_OPS: 'Government Operations',
+  TAX_CREDITS: 'Tax Credits & Deductions',
+  SYSTEM_ACTIONS: 'System Actions'
+};
+
+// Map revenue sources to categories
+const REVENUE_CATEGORY_MAP = {
+  personalIncomeTax: CHANGE_CATEGORIES.INCOME_TAXES,
+  corporateIncomeTax: CHANGE_CATEGORIES.INCOME_TAXES,
+  gst: CHANGE_CATEGORIES.CONSUMPTION_TAXES,
+  exciseTaxes: CHANGE_CATEGORIES.CONSUMPTION_TAXES,
+  carbonPricing: CHANGE_CATEGORIES.CONSUMPTION_TAXES,
+  customsDuties: CHANGE_CATEGORIES.CONSUMPTION_TAXES,
+  eiPremiums: CHANGE_CATEGORIES.OTHER_REVENUE,
+  crownProfits: CHANGE_CATEGORIES.OTHER_REVENUE,
+  resourceRoyalties: CHANGE_CATEGORIES.OTHER_REVENUE,
+  nonTaxRevenue: CHANGE_CATEGORIES.OTHER_REVENUE
+};
+
+// Map spending categories to change categories  
+const SPENDING_CATEGORY_MAP = {
+  healthcare: CHANGE_CATEGORIES.MAIN_SPENDING,
+  education: CHANGE_CATEGORIES.MAIN_SPENDING,
+  seniors: CHANGE_CATEGORIES.MAIN_SPENDING,
+  childrenFamilies: CHANGE_CATEGORIES.MAIN_SPENDING,
+  indigenousServices: CHANGE_CATEGORIES.MAIN_SPENDING,
+  employmentInsurance: CHANGE_CATEGORIES.MAIN_SPENDING,
+  defensePublicSafety: CHANGE_CATEGORIES.MAIN_SPENDING,
+  // Group children
+  studentLoans: CHANGE_CATEGORIES.LOANS_INVESTMENTS,
+  agricultureLoans: CHANGE_CATEGORIES.LOANS_INVESTMENTS,
+  internationalDevelopment: CHANGE_CATEGORIES.LOANS_INVESTMENTS,
+  businessInnovation: CHANGE_CATEGORIES.LOANS_INVESTMENTS,
+  defenseSector: CHANGE_CATEGORIES.LOANS_INVESTMENTS,
+  economicDevelopment: CHANGE_CATEGORIES.LOANS_INVESTMENTS,
+  // Government operations
+  transportationInfrastructure: CHANGE_CATEGORIES.GOVERNMENT_OPS,
+  environmentalPrograms: CHANGE_CATEGORIES.GOVERNMENT_OPS,
+  publicSafetyEmergency: CHANGE_CATEGORIES.GOVERNMENT_OPS,
+  governmentBuildings: CHANGE_CATEGORIES.GOVERNMENT_OPS,
+  researchInnovation: CHANGE_CATEGORIES.GOVERNMENT_OPS,
+  digitalGovernment: CHANGE_CATEGORIES.GOVERNMENT_OPS,
+  federalEmployeeSalaries: CHANGE_CATEGORIES.GOVERNMENT_OPS,
+  legalJusticeSystem: CHANGE_CATEGORIES.GOVERNMENT_OPS,
+  indigenousServicesOps: CHANGE_CATEGORIES.GOVERNMENT_OPS,
+  culturalHeritage: CHANGE_CATEGORIES.GOVERNMENT_OPS,
+  scientificResearch: CHANGE_CATEGORIES.GOVERNMENT_OPS,
+  diplomaticRepresentation: CHANGE_CATEGORIES.GOVERNMENT_OPS
+};
+
+// Change record class for structured data
+class ChangeRecord {
+  constructor(type, category, itemId, itemName, oldValue, newValue, description = null, dollarImpact = null) {
+    this.id = `change_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    this.type = type;
+    this.category = category;
+    this.itemId = itemId;
+    this.itemName = itemName;
+    this.oldValue = oldValue;
+    this.newValue = newValue;
+    this.amount = newValue - oldValue;          // Rate/factor change
+    this.dollarImpact = dollarImpact || 0;      // Actual dollar impact
+    this.timestamp = Date.now();
+    this.description = description || this.generateDescription();
+  }
+
+  generateDescription() {
+    const changeDirection = this.amount > 0 ? 'increased' : 'decreased';
+    
+    if (this.type === CHANGE_TYPES.REVENUE) {
+      // FIXED: Use rate values for percentage description
+      return `${this.itemName} rate ${changeDirection} by ${Math.abs(this.amount).toFixed(1)}%`;
+    } else if (this.type === CHANGE_TYPES.SPENDING) {
+      // FIXED: Use factor values for percentage description  
+      return `${this.itemName} ${changeDirection} by ${Math.abs(this.amount).toFixed(1)}%`;
+    } else if (this.type === CHANGE_TYPES.TAX_EXPENDITURE) {
+      return `${this.itemName} adjustment ${changeDirection} by ${Math.abs(this.amount).toFixed(1)}%`;
+    }
+    return `${this.itemName} ${changeDirection}`;
+  }
+
+  // NEW: Method to get display amount (keeps existing interface)
+  getDisplayAmount() {
+    if (this.type === CHANGE_TYPES.REVENUE && this.dollarImpact !== 0) {
+      return this.dollarImpact;  // Show dollar impact for revenue
+    }
+    return this.amount;  // Show rate/factor change for others
+  }
+
+  getChangeIcon() {
+    if (this.amount > 0) return 'trending_up';
+    if (this.amount < 0) return 'trending_down';
+    return 'remove';
+  }
+
+  getChangeColor() {
+    if (this.amount > 0) return '#27ae60'; // Green for increases
+    if (this.amount < 0) return '#e74c3c'; // Red for decreases
+    return '#95a5a6'; // Gray for no change
+  }
+}
+
 // Development logging utilities
 const devLog = (message, ...args) => {
   if (process.env.NODE_ENV === 'development') {
@@ -51,7 +170,8 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
     lastSentimentUpdate: Date.now(), // Trigger for sentiment recalculation
     activePreset: null,
     // Auto-balance feature state
-    autoBalanceActive: false,
+    autoBalanceActive: false, // Goal-based auto-balance
+    simpleAutoBalanceActive: false, // Simple auto-balance (just eliminate deficit)
     // Auto-balance configuration
     autoBalanceConfig: {
       revenueToSpendingRatio: 0.5, // 50% revenue / 50% spending (0.5 means 50/50 split)
@@ -283,6 +403,15 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
         description:
           "Canada Health Transfer to provinces and territories for healthcare services.",
         color: "#F56565", // red-500
+      },
+      education: {
+        id: "education",
+        name: "Education",
+        baseAmount: 12.0, // $12.0B (federal programs, transfers, research support)
+        adjustmentFactor: 1,
+        description:
+          "Federal education supports including transfers, grants, and learning programs.",
+        color: "#3182CE", // blue-600
       },
       seniors: {
         id: "seniors",
@@ -643,6 +772,11 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
     // Performance optimization - debounced calculation
     _debouncedRecalculate: null,
     _lastRecalculationTime: 0,
+
+    // Change tracking state
+    changeHistory: [],
+    changeHistoryVersion: 0,
+    maxChangeHistorySize: 50,
   }),
 
   getters: {
@@ -1108,6 +1242,10 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
         this.syncToLocalStorage();
       }
 
+      // Initialize change history
+      this.changeHistory = [];
+      this.changeHistoryVersion = 0;
+
       // Signal initialization complete
       this.lastUpdate = Date.now();
 
@@ -1206,10 +1344,28 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
         clampedRate = Math.min(source.maxRate, clampedRate);
       }
       
-      // Skip update if rate hasn't actually changed
-      if (Math.abs(source.rate - clampedRate) < 0.01) {
+      // Skip update if rate hasn't actually changed (lowered threshold for better tracking)
+      if (Math.abs(source.rate - clampedRate) < 0.001) {
+        console.log('%c[CHANGE DEBUG] Rate change too small, skipping:', 'background: #f39c12; color: white; padding: 2px 5px;', {
+          sourceId,
+          oldRate: source.rate,
+          newRate: clampedRate,
+          diff: Math.abs(source.rate - clampedRate),
+          threshold: 0.001
+        });
         return true;
       }
+      
+      console.log('%c[CHANGE DEBUG] setRevenueRate processing:', 'background: #27ae60; color: white; padding: 2px 5px;', {
+        sourceId,
+        oldRate: source.rate,
+        newRate: clampedRate,
+        diff: Math.abs(source.rate - clampedRate),
+        isBatchMode: this.isBatchUpdateInProgress
+      });
+      
+      // Track the change before updating
+      const oldRate = source.rate;
       
       // Create a shallow copy of the source for reactive updates
       const updatedSource = { ...source };
@@ -1239,6 +1395,9 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
       
       // Update the adjusted amount (accounting for tax expenditure impacts)
       this.updateRevenueSourceAdjustedAmount(sourceId);
+      
+      // Track the change after successful update
+      this.trackRevenueChange(sourceId, oldRate, clampedRate);
       
       // Only perform additional updates if not in batch mode
       if (!this.isBatchUpdateInProgress) {
@@ -1282,7 +1441,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
         const result = this.setRevenueRate(sourceId, newRate);
         
         // Auto-save state after successful update
-        this.autoSaveState();
+        this.debouncedSyncToLocalStorage();
         
         return result;
       } finally {
@@ -1313,11 +1472,14 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
 
     updateSpendingFactor(categoryId, factor) {
       let found = false;
-      // Update in main categories
+      let oldFactor = 1;
+      
+      // Find the category and get old factor
       Object.values(this.spendingCategories).forEach((cat) => {
         if (cat.id === categoryId && !cat.isGroup) {
-          cat.adjustmentFactor = factor;
+          oldFactor = cat.adjustmentFactor;
           found = true;
+          cat.adjustmentFactor = factor;
         }
       });
       // Update in group children if not found
@@ -1325,14 +1487,28 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
         Object.values(this.spendingCategories)
           .filter((cat) => cat.isGroup && cat.children)
           .forEach((group) => {
-            const child = Object.values(group.children).find(
-              (c) => c.id === categoryId
-            );
+            const child = Object.values(group.children).find((c) => c.id === categoryId);
             if (child) {
+              oldFactor = child.adjustmentFactor;
+              found = true;
               child.adjustmentFactor = factor;
             }
           });
       }
+      
+      // Skip if category not found or no actual change
+      if (!found) {
+        console.warn('[STORE] updateSpendingFactor: category not found, skipping tracking:', categoryId);
+        return;
+      }
+      if (Math.abs((oldFactor || 0) - (factor || 0)) < 1e-4) {
+        devLog(`[Spending] No-op change for ${categoryId}; old=${oldFactor}, new=${factor}`);
+        return;
+      }
+      
+      // Track the change
+      this.trackSpendingChange(categoryId, oldFactor, factor);
+      
       // Only update timestamps if not in batch mode
       if (!this.isBatchUpdateInProgress) {
         this.lastUpdate = Date.now();
@@ -1518,6 +1694,8 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
         
         if (adjustedSources.length > 0) {
           console.log(`Budget auto-balanced by adjusting ${adjustedSources.length} revenue source(s): ${adjustedSources.join(', ')}`);
+          // Track auto-balance activity
+          this.trackAutoBalance();
         } else {
           console.log('Could not auto-balance the budget with available revenue sources');
         }
@@ -1562,6 +1740,26 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
           console.log("[AutoBalance] Using standard auto-balance (no target deficit)");
           this.autoBalanceBudget();
         }
+      }
+    },
+
+    toggleSimpleAutoBalance(active) {
+      // Update the simple auto-balance state
+      this.simpleAutoBalanceActive = active;
+
+      // Diagnostic logging
+      console.log('[SimpleAutoBalance] toggleSimpleAutoBalance called with:', {
+        active,
+        currentDeficit: this.totalSpending - this.totalRevenue,
+        totalRevenue: this.totalRevenue,
+        totalSpending: this.totalSpending
+      });
+
+      // If simple auto-balance is now enabled, balance the budget immediately
+      if (this.simpleAutoBalanceActive) {
+        console.log("[SimpleAutoBalance] Using direct auto-balance (no goals)");
+        console.log(`[SimpleAutoBalance] Current state: Revenue=${this.totalRevenue}B, Spending=${this.totalSpending}B, Deficit=${this.totalSpending - this.totalRevenue}B`);
+        this.autoBalanceBudget();
       }
     },
 
@@ -1935,6 +2133,9 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
     
     resetBudget() {
       devLog('Starting budget reset...');
+      
+      // Track the reset
+      this.trackBudgetReset();
       
       // Store the current auto-balance state to log it
       const wasAutoBalanceActive = this.autoBalanceActive;
@@ -2316,6 +2517,9 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
 
           const numAdjustment = Number(adjustment) || 0;
           const clampedAdjustment = Math.max(-100, Math.min(100, numAdjustment));
+          
+          // Track the change before updating
+          const oldAdjustment = expenditure.adjustmentFactor || 0;
 
           // Calculate the revenue impact with explicit number conversion
           const netAmount = Number(expenditure.netAmount) || 0;
@@ -2337,6 +2541,9 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
           if (expenditure.linkedRevenueSource) {
             this.updateRevenueSourceAdjustedAmount(expenditure.linkedRevenueSource);
           }
+          
+          // Track the change
+          this.trackTaxExpenditureChange(expenditureId, oldAdjustment, clampedAdjustment);
 
           // Only update timestamps if not in batch mode
           if (!this.isBatchUpdateInProgress) {
@@ -2585,6 +2792,250 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
       } finally {
         this._isRecalculating = false;
       }
+    },
+
+    // Change tracking actions
+    addBudgetChange(type, category, itemId, itemName, oldValue, newValue, description = null, dollarImpact = null) {
+      console.log('%c[CHANGE DEBUG] addBudgetChange called:', 'background: #2ecc71; color: white; padding: 2px 5px;', {
+        type,
+        category,
+        itemId,
+        itemName,
+        oldValue,
+        newValue,
+        dollarImpact,
+        changeHistoryLength: this.changeHistory.length
+      });
+
+      // Deduplicate: keep only one entry per (type + itemId)
+      const existingIndex = this.changeHistory.findIndex(
+        (c) => c.type === type && c.itemId === itemId
+      );
+      if (existingIndex !== -1) {
+        console.log('%c[CHANGE DEBUG] Dedup: removing existing change for same item', 'background: #f1c40f; color: black; padding: 2px 5px;', {
+          removedId: this.changeHistory[existingIndex]?.id,
+          removedType: this.changeHistory[existingIndex]?.type,
+          removedItemId: this.changeHistory[existingIndex]?.itemId,
+        });
+        this.changeHistory.splice(existingIndex, 1);
+      }
+
+      const change = new ChangeRecord(type, category, itemId, itemName, oldValue, newValue, description, dollarImpact);
+
+      console.log('%c[CHANGE DEBUG] Created ChangeRecord:', 'background: #9b59b6; color: white; padding: 2px 5px;', {
+        id: change.id,
+        type: change.type,
+        category: change.category,
+        description: change.description,
+        amount: change.amount,
+        dollarImpact: change.dollarImpact,
+        hasGetDisplayAmount: typeof change.getDisplayAmount === 'function'
+      });
+      
+      // Add to beginning of array
+      this.changeHistory.unshift(change);
+      
+      // Maintain max history size
+      if (this.changeHistory.length > this.maxChangeHistorySize) {
+        this.changeHistory = this.changeHistory.slice(0, this.maxChangeHistorySize);
+      }
+      
+      // Increment version for reactivity
+      this.changeHistoryVersion++;
+      
+      console.log('%c[CHANGE DEBUG] Change added to history:', 'background: #34495e; color: white; padding: 2px 5px;', {
+        newHistoryLength: this.changeHistory.length,
+        newHistoryVersion: this.changeHistoryVersion
+      });
+      
+      devLog(`Added budget change: ${change.description}`);
+    },
+
+    trackRevenueChange(sourceId, oldRate, newRate) {
+      console.log('%c[CHANGE DEBUG] trackRevenueChange called:', 'background: #e74c3c; color: white; padding: 2px 5px;', {
+        sourceId,
+        oldRate,
+        newRate,
+        rateDiff: newRate - oldRate,
+        threshold: 0.001,
+        willTrack: Math.abs(newRate - oldRate) >= 0.001
+      });
+      
+      const source = this.revenueSources[sourceId];
+      if (!source) {
+        console.warn('%c[CHANGE DEBUG] Revenue source not found:', 'background: #e67e22; color: white; padding: 2px 5px;', sourceId);
+        return;
+      }
+      
+      const category = REVENUE_CATEGORY_MAP[sourceId] || CHANGE_CATEGORIES.OTHER_REVENUE;
+      const dollarImpact = source.base * (newRate - oldRate);
+      
+      console.log('%c[CHANGE DEBUG] Revenue change details:', 'background: #3498db; color: white; padding: 2px 5px;', {
+        sourceName: source.name,
+        category,
+        base: source.base,
+        dollarImpact,
+        isBatchMode: this.isBatchUpdateInProgress,
+        REVENUE_CATEGORY_MAP: REVENUE_CATEGORY_MAP[sourceId]
+      });
+      
+      // FIXED: Pass rates for correct descriptions, but calculate dollar impact correctly
+      this.addBudgetChange(
+        CHANGE_TYPES.REVENUE,
+        category,
+        sourceId,
+        source.name,
+        oldRate,        // Rate for description: "21% to 22%"
+        newRate,        // Rate for description: "21% to 22%"
+        null,           // Auto-generate description
+        dollarImpact    // Dollar impact as separate field
+      );
+    },
+
+    trackSpendingChange(categoryId, oldFactor, newFactor) {
+      // Find the category name and base amount
+      let categoryName = 'Unknown Category';
+      let category = CHANGE_CATEGORIES.MAIN_SPENDING;
+      let baseAmount = 0;
+      
+      // Search in main categories
+      Object.values(this.spendingCategories).forEach((cat) => {
+        if (cat.id === categoryId && !cat.isGroup) {
+          categoryName = cat.name;
+          baseAmount = cat.baseAmount || 0;  // Get base amount for dollar calculation
+          category = SPENDING_CATEGORY_MAP[categoryId] || CHANGE_CATEGORIES.MAIN_SPENDING;
+        }
+      });
+      
+      // Search in group children
+      Object.values(this.spendingCategories)
+        .filter((cat) => cat.isGroup && cat.children)
+        .forEach((group) => {
+          const child = Object.values(group.children).find((c) => c.id === categoryId);
+          if (child) {
+            categoryName = child.name;
+            baseAmount = child.baseAmount || 0;  // Get base amount for dollar calculation
+            category = SPENDING_CATEGORY_MAP[categoryId] || CHANGE_CATEGORIES.MAIN_SPENDING;
+          }
+        });
+      
+      // FIXED: Pass factors (for percentage description) and calculate dollar impact
+      const dollarImpact = baseAmount * (newFactor - oldFactor);
+      
+      this.addBudgetChange(
+        CHANGE_TYPES.SPENDING,
+        category,
+        categoryId,
+        categoryName,
+        oldFactor * 100,  // Convert to percentage for display
+        newFactor * 100,  // Convert to percentage for display
+        null,             // Auto-generate description
+        dollarImpact      // Actual dollar impact
+      );
+    },
+
+    trackTaxExpenditureChange(expenditureId, oldAdjustment, newAdjustment) {
+      const expenditure = this.taxExpenditures[expenditureId];
+      if (!expenditure) return;
+      
+      this.addBudgetChange(
+        CHANGE_TYPES.TAX_EXPENDITURE,
+        CHANGE_CATEGORIES.TAX_CREDITS,
+        expenditureId,
+        expenditure.name,
+        oldAdjustment,
+        newAdjustment
+      );
+    },
+
+    trackPresetApplication(presetKey, presetLabel) {
+      this.addBudgetChange(
+        CHANGE_TYPES.PRESET,
+        CHANGE_CATEGORIES.SYSTEM_ACTIONS,
+        presetKey,
+        `Applied Preset: ${presetLabel}`,
+        0,
+        0,
+        `Applied "${presetLabel}" preset configuration`
+      );
+    },
+
+    trackAutoBalance() {
+      this.addBudgetChange(
+        CHANGE_TYPES.AUTO_BALANCE,
+        CHANGE_CATEGORIES.SYSTEM_ACTIONS,
+        'auto_balance',
+        'Auto-Balance Applied',
+        0,
+        0,
+        'Budget automatically balanced'
+      );
+    },
+
+    trackBudgetReset() {
+      this.addBudgetChange(
+        CHANGE_TYPES.RESET,
+        CHANGE_CATEGORIES.SYSTEM_ACTIONS,
+        'budget_reset',
+        'Budget Reset',
+        0,
+        0,
+        'Budget reset to default values'
+      );
+    },
+
+    clearChangeHistory() {
+      this.changeHistory = [];
+      this.changeHistoryVersion++;
+      devLog('Cleared change history');
+    },
+
+    getChangesByCategory() {
+      console.log('%c[CHANGE DEBUG] getChangesByCategory called:', 'background: #16a085; color: white; padding: 2px 5px;', {
+        totalChanges: this.changeHistory.length,
+        historyVersion: this.changeHistoryVersion
+      });
+      
+      const grouped = {};
+      
+      this.changeHistory.forEach(change => {
+        if (!grouped[change.category]) {
+          grouped[change.category] = [];
+        }
+        grouped[change.category].push(change);
+      });
+      
+      console.log('%c[CHANGE DEBUG] Changes grouped by category:', 'background: #8e44ad; color: white; padding: 2px 5px;', {
+        categories: Object.keys(grouped),
+        categoryCounts: Object.entries(grouped).map(([cat, changes]) => ({
+          category: cat,
+          count: changes.length
+        }))
+      });
+      
+      return grouped;
+    },
+
+    getRecentChanges(count = 10) {
+      return this.changeHistory.slice(0, count);
+    },
+
+    getChangesByType(type) {
+      return this.changeHistory.filter(change => change.type === type);
+    },
+
+    getChangesSummary() {
+      const revenueChanges = this.getChangesByType(CHANGE_TYPES.REVENUE);
+      const spendingChanges = this.getChangesByType(CHANGE_TYPES.SPENDING);
+      const taxExpenditureChanges = this.getChangesByType(CHANGE_TYPES.TAX_EXPENDITURE);
+      
+      return {
+        totalRevenueChange: revenueChanges.reduce((sum, change) => sum + (change.dollarImpact || 0), 0),
+        totalSpendingChange: spendingChanges.reduce((sum, change) => sum + (change.dollarImpact || 0), 0),
+        totalTaxExpenditureChange: taxExpenditureChanges.reduce((sum, change) => sum + change.amount, 0),
+        changeCount: this.changeHistory.length,
+        lastChange: this.changeHistory[0] || null
+      };
     },
 
     // Add debounced localStorage sync

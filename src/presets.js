@@ -1,3 +1,5 @@
+// Change tracking is now handled by the store itself
+
 /**
  * Budget Presets for Fiscal Insights Budget Simulator
  * 
@@ -483,6 +485,8 @@ export function setPreset(presetKey, store) {
     'background: #e74c3c; color: white; padding: 2px 5px; border-radius: 3px;',
     presetKey
   );
+  
+  // Change tracking is handled automatically by store during batch operations
 
   const preset = budgetPresets[presetKey];
 
@@ -684,34 +688,70 @@ export function setPreset(presetKey, store) {
         }
       }
 
+      console.log('%c[PRESET DEBUG] Applying revenue rate:', 'background: #e74c3c; color: white; padding: 2px 5px;', {
+        sourceId,
+        originalRate: rate,
+        adjustedRate,
+        presetKey
+      });
+      
       store.updateRevenueRate(sourceId, adjustedRate);
     });
 
     // Apply spending settings with sector-specific adjustments
+    // Map preset spending keys to store category IDs where names differ
+    const spendingAliasMap = {
+      // Top-level main spending
+      supportForSeniors: 'seniors',
+      childrenAndFamilies: 'childrenFamilies',
+      defense: 'defensePublicSafety',
+      // Government operations (children)
+      environmentAndClimateChange: 'environmentalPrograms',
+      scienceAndInnovation: 'researchInnovation',
+      infrastructure: 'transportationInfrastructure',
+      transit: 'transportationInfrastructure',
+      culturalPrograms: 'culturalHeritage',
+      indigenousOperations: 'indigenousServicesOps',
+      // Approximate mappings
+      agriculture: 'agricultureLoans',
+      // carbonPricing appears only as revenue; skip mapping to spending
+    };
+    const mapSpendingKey = (key) => spendingAliasMap[key] || key;
+
     console.log('%c[PRESET DEBUG] Applying spending factors:', 'color: #2ecc71;');
     Object.entries(preset.spending).forEach(([categoryId, value]) => {
       if (typeof value === "object") {
         Object.entries(value).forEach(([subCategoryId, factor]) => {
+          const mappedSubId = mapSpendingKey(subCategoryId);
           const enhancedFactor = enhanceFactorForCategory(
-            subCategoryId,
+            mappedSubId,
             factor,
             presetKey,
             demoMultipliers,
             provMultipliers,
             activeSectorMultipliers
           );
-          store.updateSpendingFactor(subCategoryId, enhancedFactor);
+          if (mappedSubId !== 'carbonPricing') {
+            store.updateSpendingFactor(mappedSubId, enhancedFactor);
+          } else {
+            console.warn('[PRESET DEBUG] Skipping spending key mapped to revenue-only source:', subCategoryId);
+          }
         });
       } else {
+        const mappedId = mapSpendingKey(categoryId);
         const enhancedFactor = enhanceFactorForCategory(
-          categoryId,
+          mappedId,
           value,
           presetKey,
           demoMultipliers,
           provMultipliers,
           activeSectorMultipliers
         );
-        store.updateSpendingFactor(categoryId, enhancedFactor);
+        if (mappedId !== 'carbonPricing') {
+          store.updateSpendingFactor(mappedId, enhancedFactor);
+        } else {
+          console.warn('[PRESET DEBUG] Skipping spending key mapped to revenue-only source:', categoryId);
+        }
       }
     });
 
@@ -736,6 +776,9 @@ export function setPreset(presetKey, store) {
     // Set active preset before completing batch update
     store.activePreset = presetKey;
     
+    // Track the preset application
+    store.trackPresetApplication(presetKey, preset.label);
+    
     // Update badges (part of batch completion)
     store.updateBadges();
     
@@ -750,11 +793,13 @@ export function setPreset(presetKey, store) {
     });
     
     console.log(`Successfully applied "${preset.label}" preset with activePreset: ${presetKey}`);
+    
     return true;
   } catch (error) {
     console.error(`Error applying preset "${presetKey}":`, error);
     // Still complete the batch to avoid leaving the store in an inconsistent state
     store.completeBatchUpdate();
+    
     return false;
   }
 }

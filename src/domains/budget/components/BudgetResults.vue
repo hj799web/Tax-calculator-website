@@ -238,8 +238,8 @@
             <label class="auto-balance-label">
               <input
                 type="checkbox"
-                :checked="autoBalanceActive"
-                @change="$emit('toggle-auto-balance', $event.target.checked)"
+                :checked="simpleAutoBalanceActive"
+                @change="$emit('toggle-simple-auto-balance', $event.target.checked)"
               >
               <span class="auto-balance-text">Auto-Balance Budget</span>
             </label>
@@ -512,6 +512,10 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
+  simpleAutoBalanceActive: {
+    type: Boolean,
+    default: false
+  },
   id: {
     type: String,
     default: 'budget-results'
@@ -535,7 +539,7 @@ const props = defineProps({
 });
 
 // eslint-disable-next-line no-unused-vars
-const emit = defineEmits(['share-budget', 'reset-budget', 'save-budget', 'toggle-auto-balance']);
+const emit = defineEmits(['share-budget', 'reset-budget', 'save-budget', 'toggle-auto-balance', 'toggle-simple-auto-balance']);
 
 const throttledShareBudget = throttle(() => {
   emit('share-budget');

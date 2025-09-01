@@ -11,24 +11,28 @@ This document summarizes the core architecture, logic, known bottlenecks, and im
 - totalSpending, totalRevenue, surplus, matchedBadge, budgetTitle
 
 ### Store Location:
-- /src/stores/budgetSimulator.js
+- /src/domains/budget/store/budgetSimulator.js (migrated to domain-driven structure)
 
-## 🏗️ 2. Module Breakdown
+## 🏗️ 2. Module Breakdown (Domain-Driven Architecture)
 
 | File Path | Purpose |
 |-----------|---------|
-| /composables/useTitleGenerator.js | Generates budget titles based on tag logic |
-| /composables/sentimentConfig.js | Sentiment rules by province, demographic, and sector |
-| /composables/computeSentimentScores.js | Returns 0–4 sentiment score per group |
-| /src/presets.js | Stores predefined slider configurations |
-| /composables/useExportUtils.js | Handles PDF, PNG, and social card exports |
-| /components/budget/ExportPanel.vue | PDF/PNG/iframe export UI |
-| /components/budget/generateSocialCard.vue | Generates downloadable, branded social image |
-| /components/budget/GoalTracker.vue | UI for setting revenue/deficit goals and tracking them |
-| /components/budget/RadarSentiment.vue | Radar chart showing public sentiment by group |
-| /components/budget/CategoryGroup.vue | Collapsible grouped category container (e.g., Spending, Revenue) |
-| /components/budget/SpendingCategory.vue | Tile for individual budget item (e.g., Healthcare, Defense) |
-| /components/budget/PercentageInput.vue | Reusable slider + numeric input used for all % controls |
+| /src/domains/budget/store/budgetSimulator.js | Central Pinia store with dual auto-balance system |
+| /src/domains/budget/components/BudgetResults.vue | Budget summary with simple auto-balance toggle |
+| /src/domains/budget/components/GoalTracker.vue | Goal-based auto-balance and target tracking |
+| /src/domains/budget/components/RevenueSliders.vue | Revenue source controls |
+| /src/domains/budget/components/SpendingControls.vue | Spending category management |
+| /src/domains/budget/components/ChartsPanel.vue | Data visualization (lazy loaded) |
+| /src/domains/budget/components/ExportPanel.vue | PDF/PNG/social card export UI |
+| /src/domains/sentiment/utils/computeSentimentScores.js | 0–4 sentiment score calculation engine |
+| /src/domains/sentiment/config/sentimentConfig.js | Sentiment rules by province, demographic, sector |
+| /src/domains/sentiment/components/CollapsibleSentimentBanner.vue | Fiscal chaos warnings and sentiment display |
+| /src/domains/sentiment/components/RadarSentiment.vue | Radar chart (lazy loaded) |
+| /src/domains/badges/utils/generateBadgesFromBudget.js | Achievement system with tier support |
+| /src/domains/badges/components/AchievementBadge.vue | Badge display component |
+| /src/domains/badges/components/BadgeGalleryModal.vue | Badge collection viewer (lazy loaded) |
+| /src/domains/social/components/SocialShareModal.vue | Social sharing with budget snapshots (lazy loaded) |
+| /src/presets.js | Predefined budget configurations (Conservative, Progressive, etc.) |
 
 ## 🧠 3. Known Bottlenecks + Mitigations
 
@@ -122,13 +126,38 @@ This document summarizes the core architecture, logic, known bottlenecks, and im
 
 ## 🔁 4. How to Add New Features
 
-1. Add new config to /src/stores/budgetSimulator.js
-2. Update or create:
-   - GoalTracker.vue (if logic ties into goals)
-   - CategoryGroup.vue or SpendingCategory.vue (if visual block is new)
+1. **Identify the Domain**: Determine which domain (budget, sentiment, badges, social) the feature belongs to
+2. **Update Store**: Add new config to `/src/domains/budget/store/budgetSimulator.js`
+3. **Create/Update Components**:
+   - BudgetResults.vue (if affects budget display)
+   - GoalTracker.vue (if logic ties into goals or auto-balance)
+   - Auto-balance system (if affects budget balancing)
    - sentimentConfig.js (if public reaction logic is affected)
    - ExportPanel.vue (if results must be downloadable)
-   - Radar or bar chart axes (if adding a new sentiment dimension)
+   - Badge system (if achievement logic is involved)
+4. **Performance Considerations**:
+   - Use lazy loading for heavy components
+   - Implement proper memoization for complex calculations
+   - Add debouncing for real-time updates
+
+## 🆕 5. Recent Major Enhancements
+
+### Dual Auto-Balance System
+- **Simple Auto-Balance**: Direct deficit elimination (BudgetResults.vue)
+- **Goal-Based Auto-Balance**: Target-specific balancing (GoalTracker.vue)
+- **Smart Revenue Prioritization**: PIT → CIT → GST → Others
+- **Real-time Triggering**: Automatic when spending changes
+
+### Achievement System
+- **Badge Tiers**: Bronze, Silver, Gold, Platinum
+- **Preset Integration**: Special badges for budget presets
+- **Real-time Updates**: Badge recalculation on budget changes
+- **Gallery View**: Modal for viewing all earned badges
+
+### Performance Optimization
+- **Lazy Loading**: Charts, sentiment radar, social modals
+- **State Management**: Batch updates, memoization, versioning
+- **Domain Architecture**: Clear separation of concerns
 
 ## 🧪 5. Testing Strategy
 

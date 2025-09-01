@@ -1,0 +1,18 @@
+In src/domains/budget/store/budgetSimulator.js, in the addBudgetChange method, add deduplication logic BEFORE line 2802 ("// Add to beginning of array"):
+
+Add this code after the ChangeRecord creation (after line 2800) and before "// Add to beginning of array":
+
+      // DEDUPLICATION: Remove any existing change for the same item to avoid duplicates
+      const existingIndex = this.changeHistory.findIndex(change => 
+        change.type === type && change.itemId === itemId
+      );
+      
+      if (existingIndex !== -1) {
+        console.log('%c[CHANGE DEBUG] Removing duplicate change for same item:', 'background: #f39c12; color: white; padding: 2px 5px;', {
+          itemId,
+          existingIndex,
+          oldChange: this.changeHistory[existingIndex].description
+        });
+        this.changeHistory.splice(existingIndex, 1);
+      }
+      

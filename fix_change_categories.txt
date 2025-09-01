@@ -1,0 +1,24 @@
+Replace the CHANGE_CATEGORIES constant in src/domains/budget/store/budgetSimulator.js (around line 21):
+
+OLD:
+const CHANGE_CATEGORIES = {
+  INCOME_TAXES: 'Income Taxes',
+  CONSUMPTION_TAXES: 'Consumption Taxes', 
+  OTHER_REVENUE: 'Other Revenue',
+  MAIN_SPENDING: 'Main Spending',
+  LOANS_INVESTMENTS: 'Loans & Investments',
+  GOVERNMENT_OPS: 'Government Operations',
+  TAX_CREDITS: 'Tax Credits & Deductions'
+};
+
+NEW:
+const CHANGE_CATEGORIES = {
+  INCOME_TAXES: 'Income Taxes',
+  CONSUMPTION_TAXES: 'Consumption Taxes', 
+  OTHER_REVENUE: 'Other Revenue',
+  MAIN_SPENDING: 'Main Spending',
+  LOANS_INVESTMENTS: 'Loans & Investments',
+  GOVERNMENT_OPS: 'Government Operations',
+  TAX_CREDITS: 'Tax Credits & Deductions',
+  SYSTEM_ACTIONS: 'System Actions'
+};
