@@ -50,7 +50,25 @@ Features:
 - Revenue targets
 - Deficit/surplus goals
 - Goal status tracking
-- Auto-balance integration
+- Dual auto-balance integration (simple + goal-based)
+
+### Auto-Balance System
+```javascript
+// Dual auto-balance system implemented
+autoBalanceActive: false,        // Goal-based auto-balance
+simpleAutoBalanceActive: false,  // Simple auto-balance (eliminate deficit)
+autoBalanceConfig: {
+  revenueToSpendingRatio: 0.5,
+  minSpendingFactor: 0.1,
+  maxSpendingFactor: 2.0,
+  prioritizePIT: true
+}
+```
+Features:
+- **Simple Auto-Balance**: Direct deficit elimination without goals
+- **Goal-Based Auto-Balance**: Balance to specific revenue/deficit targets
+- Intelligent revenue source prioritization
+- Automatic triggering on spending changes
 
 ## 2. Domain Interactions
 
@@ -84,14 +102,17 @@ Key points:
 // In budget simulator store
 badges: [],
 lastBadgeUpdate: Date.now(),
+activePreset: null,
 updateBadges() {
   // Updates achievements based on budget performance
+  // Includes preset-specific badges and tier system
 }
 ```
 Key points:
-- Budget performance unlocks achievements
-- Fiscal goals trigger badge updates
-- Spending efficiency tracked
+- **Achievement System**: Comprehensive badge system with tiers (Bronze, Silver, Gold, Platinum)
+- **Preset Badges**: Special badges for applying budget presets
+- **Performance Tracking**: Fiscal responsibility, efficiency, and goal achievement
+- **Real-time Updates**: Badge calculations triggered by budget changes
 
 ## 3. Component Hierarchy & Data Flow
 
@@ -221,7 +242,7 @@ This architecture ensures:
 4. Modular component structure
 5. Maintainable codebase
 
-## File Structure
+## File Structure (Domain-Driven Design)
 
 ```
 src/
@@ -229,23 +250,55 @@ src/
 │   ├── budget/
 │   │   ├── components/
 │   │   │   ├── BudgetResults.vue
-│   │   │   ├── ChartsPanel.vue
+│   │   │   ├── ChartsPanel.vue (lazy loaded)
 │   │   │   ├── GoalTracker.vue
 │   │   │   ├── RevenueSliders.vue
-│   │   │   └── SpendingControls.vue
-│   │   └── store/
-│   │       └── budgetSimulator.js
+│   │   │   ├── SpendingControls.vue
+│   │   │   ├── ExportPanel.vue
+│   │   │   └── SharedBudgetDetailModal.vue
+│   │   ├── store/
+│   │   │   └── budgetSimulator.js
+│   │   └── utils/
+│   │       ├── sharedBudget.js
+│   │       └── generateExportPDF.js
 │   ├── calculator/
 │   │   ├── components/
 │   │   │   ├── PresetSelector.vue
-│   │   │   └── SalaryRateSelector.vue
+│   │   │   ├── SalaryRateSelector.vue
+│   │   │   └── IncomeInput.vue
 │   │   └── store/
 │   │       └── calculator.js
-│   └── sentiment/
+│   ├── sentiment/
+│   │   ├── components/
+│   │   │   ├── SentimentSensitivityControl.vue
+│   │   │   ├── CollapsibleSentimentBanner.vue
+│   │   │   └── RadarSentiment.vue (lazy loaded)
+│   │   ├── config/
+│   │   │   ├── sentimentConfig.js
+│   │   │   └── entityImpactFactors.js
+│   │   └── utils/
+│   │       └── computeSentimentScores.js
+│   ├── badges/
+│   │   ├── components/
+│   │   │   ├── AchievementBadge.vue
+│   │   │   └── BadgeGalleryModal.vue (lazy loaded)
+│   │   ├── config/
+│   │   │   └── badgeConfig.js
+│   │   └── utils/
+│   │       └── generateBadgesFromBudget.js
+│   └── social/
 │       ├── components/
-│       │   └── SentimentSensitivityControl.vue
-│       └── store/
-│           └── sentimentSettings.js
+│       │   ├── SocialShareModal.vue (lazy loaded)
+│       │   └── PartyBudgetSharing.vue
+│       └── utils/
+│           └── socialSharing.js
+├── components/ (shared)
+│   ├── MainNavigation.vue
+│   └── OnboardingTour.vue
+├── utils/ (shared)
+│   ├── analytics.js
+│   ├── bannerGrouping.js
+│   └── errorHandler.js
 └── views/
     └── FinanceMinisterSimulator.vue
 ```
