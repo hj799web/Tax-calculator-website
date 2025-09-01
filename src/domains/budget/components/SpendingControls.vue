@@ -776,8 +776,6 @@ function hideTooltip() {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: crisp-edges;
 }
 
 .simulator-card {
@@ -787,11 +785,7 @@ function hideTooltip() {
     0 10px 20px rgba(0, 0, 0, 0.19),
     0 6px 6px rgba(0, 0, 0, 0.23);
   overflow: hidden;
-  transform: translateZ(0);
-  transition: all 0.3s ease;
-  will-change: transform, box-shadow;
-  perspective: 1000px;
-  transform-style: preserve-3d;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
   display: flex;
   flex-direction: column;
   min-height: 1440px;
@@ -801,7 +795,7 @@ function hideTooltip() {
 }
 
 .simulator-card:hover {
-  transform: translateY(-5px) translateZ(20px) rotateX(2deg);
+  transform: translateY(-5px);
   box-shadow: 
     0 15px 30px rgba(0, 0, 0, 0.25),
     0 10px 10px rgba(0, 0, 0, 0.22);
@@ -825,8 +819,7 @@ function hideTooltip() {
   font-size: 1.5rem;
   font-weight: 700;
   color: #2d3748;
-  transform: translateZ(30px);
-  transition: transform 0.3s ease;
+  transition: color 0.3s ease;
   position: relative;
   z-index: 2;
   margin-top: 0;
@@ -848,8 +841,7 @@ function hideTooltip() {
 
 .card-content {
   padding: 1rem;
-  transform: translateZ(10px);
-  transition: transform 0.3s ease;
+  transition: none;
   flex-grow: 1;
   position: relative;
   z-index: 0;
@@ -928,9 +920,7 @@ function hideTooltip() {
   border: 1px solid #e2e8f0;
   border-radius: 0.33rem;
   overflow: hidden;
-  transform: translateZ(0);
-  transition: all 0.3s ease;
-  will-change: transform, box-shadow;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
   /* Improve crispness */
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
@@ -942,7 +932,7 @@ function hideTooltip() {
 .other-category-item:hover,
 .subcategory-item:hover,
 .gov-ops-item:hover {
-  transform: translateY(-2px) translateZ(10px) rotateX(1deg);
+  transform: translateY(-2px);
   box-shadow: 
     0 6px 8px rgba(0, 0, 0, 0.12),
     0 3px 6px rgba(0, 0, 0, 0.1);
@@ -958,8 +948,7 @@ function hideTooltip() {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  transform: translateZ(20px);
-  transition: transform 0.3s ease;
+  transition: color 0.3s ease;
   /* Improve crispness */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -1042,8 +1031,7 @@ function hideTooltip() {
 .subcategory-content,
 .gov-ops-content {
   padding: 0.86rem;
-  transform: translateZ(10px);
-  transition: transform 0.3s ease;
+  transition: none;
   /* Improve crispness */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -1370,9 +1358,7 @@ function hideTooltip() {
     0 10px 20px rgba(0, 0, 0, 0.19),
     0 6px 6px rgba(0, 0, 0, 0.23);
   backdrop-filter: blur(10px);
-  transform: translateZ(0);
-  transition: all 0.3s ease;
-  will-change: transform, box-shadow;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
   contain: content;
   /* Improve crispness */
   backface-visibility: hidden;
@@ -1380,7 +1366,7 @@ function hideTooltip() {
 }
 
 .spending-controls:hover {
-  transform: translateY(-5px) translateZ(0);
+  transform: translateY(-5px);
   box-shadow: 
     0 15px 30px rgba(0, 0, 0, 0.25),
     0 10px 10px rgba(0, 0, 0, 0.22);
@@ -1396,16 +1382,14 @@ function hideTooltip() {
   box-shadow: 
     0 4px 6px rgba(0, 0, 0, 0.1),
     0 2px 4px rgba(0, 0, 0, 0.06);
-  transform: translateZ(0);
-  transition: all 0.3s ease;
-  will-change: transform, box-shadow;
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
   /* Improve crispness */
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
 }
 
 .spending-group:hover {
-  transform: translateY(-2px) translateZ(0);
+  transform: translateY(-2px);
   box-shadow: 
     0 6px 8px rgba(0, 0, 0, 0.12),
     0 3px 6px rgba(0, 0, 0, 0.1);
@@ -1458,9 +1442,7 @@ function hideTooltip() {
   padding: 1rem;
   background: #f7fafc;
   border-radius: 0.5rem;
-  transform: translateZ(0);
-  transition: all 0.3s ease;
-  will-change: transform, background-color;
+  transition: background-color 0.2s ease, transform 0.2s ease;
   /* Improve crispness */
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
@@ -1468,7 +1450,7 @@ function hideTooltip() {
 
 .spending-item:hover {
   background: #edf2f7;
-  transform: translateY(-1px) translateZ(0);
+  transform: translateY(-1px);
 }
 
 .item-info {
@@ -1510,9 +1492,7 @@ function hideTooltip() {
   font-size: 0.875rem;
   color: #2d3748;
   background: white;
-  transform: translateZ(0);
-  transition: all 0.3s ease;
-  will-change: transform, border-color, box-shadow;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
   /* Improve crispness */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -1590,16 +1570,5 @@ h1, h2, h3, h4, h5, h6, p, span, div, label, input, button, select, textarea {
   }
 }
 
-/* Ensure crisp rendering on all browsers */
-@supports (-webkit-appearance: none) {
-  .simulator-card,
-  .tax-expenditure-item,
-  .main-category-item,
-  .other-category-item,
-  .subcategory-item,
-  .gov-ops-item {
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
-  }
-}
+/* Avoid forcing GPU compositing on large text containers */
 </style>

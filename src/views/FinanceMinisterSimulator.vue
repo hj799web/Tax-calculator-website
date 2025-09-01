@@ -1217,17 +1217,13 @@ input:focus, select:focus, textarea:focus {
     0 10px 20px rgba(0, 0, 0, 0.19),
     0 6px 6px rgba(0, 0, 0, 0.23);
   overflow: hidden;
-  transform: translateZ(0);
-  transition: all 0.3s ease;
-  will-change: transform, box-shadow;
-  perspective: 1000px;
-  transform-style: preserve-3d;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
   display: flex;
   flex-direction: column;
 }
 
 .sentiment-card:hover {
-  transform: translateY(-5px) translateZ(20px) rotateX(2deg);
+  transform: translateY(-5px);
   box-shadow: 
     0 15px 30px rgba(0, 0, 0, 0.25),
     0 10px 10px rgba(0, 0, 0, 0.22);
@@ -1242,8 +1238,7 @@ input:focus, select:focus, textarea:focus {
   font-size: 1.5rem;
   font-weight: 700;
   color: #2d3748;
-  transform: translateZ(30px);
-  transition: transform 0.3s ease;
+  transition: color 0.3s ease;
   position: relative;
   z-index: 2;
   margin-top: 0;
@@ -1638,7 +1633,7 @@ input:focus, select:focus, textarea:focus {
   font-weight: 500;
   background: rgba(255, 255, 255, 0.8);
   border-radius: 8px;
-  backdrop-filter: blur(10px);
+  /* Avoid backdrop-filter to preserve text AA */
   animation: pulse 1.5s ease-in-out infinite;
 }
 
@@ -1658,7 +1653,7 @@ input:focus, select:focus, textarea:focus {
   background: rgba(255, 240, 240, 0.9);
   border: 1px solid #e74c3c;
   border-radius: 8px;
-  backdrop-filter: blur(10px);
+  /* Avoid backdrop-filter to preserve text AA */
 }
 
 .error-component::before {

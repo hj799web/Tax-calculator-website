@@ -181,14 +181,11 @@ watch(currentYear, (newYear) => {
   box-shadow: 
     0 10px 20px rgba(0, 0, 0, 0.19),
     0 6px 6px rgba(0, 0, 0, 0.23);
-  backdrop-filter: blur(10px);
-  transform: translateZ(0);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  will-change: transform, box-shadow;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .simulator-header:hover {
-  transform: translateY(-5px) translateZ(0);
+  transform: translateY(-5px);
   box-shadow: 
     0 15px 30px rgba(0, 0, 0, 0.25),
     0 10px 10px rgba(0, 0, 0, 0.22);
@@ -255,18 +252,13 @@ watch(currentYear, (newYear) => {
   box-shadow: 
     0 10px 20px rgba(0, 0, 0, 0.19),
     0 6px 6px rgba(0, 0, 0, 0.23);
-  backdrop-filter: blur(10px);
-  transform: translateZ(0);
-  transition: all 0.3s ease;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  will-change: transform, box-shadow;
   contain: content;
-  perspective: 1000px;
-  transform-style: preserve-3d;
 }
 
 .simulator-card:hover {
-  transform: translateY(-5px) translateZ(0) rotateX(2deg);
+  transform: translateY(-5px);
   box-shadow: 
     0 15px 30px rgba(0, 0, 0, 0.25),
     0 10px 10px rgba(0, 0, 0, 0.22);
@@ -279,8 +271,6 @@ watch(currentYear, (newYear) => {
   margin-bottom: 1rem;
   padding-bottom: 0.75rem;
   border-bottom: 2px solid #e2e8f0;
-  transform: translateZ(20px);
-  transition: transform 0.3s ease;
 }
 
 .card-title {
@@ -290,8 +280,6 @@ watch(currentYear, (newYear) => {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  transform: translateZ(30px);
-  transition: transform 0.3s ease;
 }
 
 .card-title .material-icons {
@@ -302,64 +290,57 @@ watch(currentYear, (newYear) => {
   position: relative;
   min-height: 200px;
   contain: content;
-  transform: translateZ(10px);
-  transition: transform 0.3s ease;
 }
 
 /* Card Grid Layout */
 .goals-card {
   grid-column: span 4;
   grid-row: 1;
-  transform: translateZ(0) rotateX(0deg);
   transition: transform 0.3s ease;
 }
 
 .goals-card:hover {
-  transform: translateY(-5px) translateZ(20px) rotateX(2deg);
+  transform: translateY(-5px);
 }
 
 .results-card {
   grid-column: span 8;
   grid-row: 1;
-  transform: translateZ(0) rotateX(0deg);
   transition: transform 0.3s ease;
 }
 
 .results-card:hover {
-  transform: translateY(-5px) translateZ(20px) rotateX(2deg);
+  transform: translateY(-5px);
 }
 
 .revenue-card {
   grid-column: span 6;
   grid-row: 2;
-  transform: translateZ(0) rotateX(0deg);
   transition: transform 0.3s ease;
 }
 
 .revenue-card:hover {
-  transform: translateY(-5px) translateZ(20px) rotateX(2deg);
+  transform: translateY(-5px);
 }
 
 .spending-card {
   grid-column: span 6;
   grid-row: 2;
-  transform: translateZ(0) rotateX(0deg);
   transition: transform 0.3s ease;
 }
 
 .spending-card:hover {
-  transform: translateY(-5px) translateZ(20px) rotateX(2deg);
+  transform: translateY(-5px);
 }
 
 .charts-card {
   grid-column: span 12;
   grid-row: 3;
-  transform: translateZ(0) rotateX(0deg);
   transition: transform 0.3s ease;
 }
 
 .charts-card:hover {
-  transform: translateY(-5px) translateZ(20px) rotateX(2deg);
+  transform: translateY(-5px);
 }
 
 /* Error Boundary */
@@ -387,8 +368,6 @@ watch(currentYear, (newYear) => {
   box-shadow: 
     0 10px 20px rgba(0, 0, 0, 0.19),
     0 6px 6px rgba(0, 0, 0, 0.23);
-  transform: translateZ(0);
-  will-change: transform;
 }
 
 .error-icon {
@@ -423,7 +402,7 @@ watch(currentYear, (newYear) => {
 
 .error-button:hover {
   background: #3182ce;
-  transform: translateY(-2px) translateZ(0);
+  transform: translateY(-2px);
 }
 
 /* Responsive Design */
