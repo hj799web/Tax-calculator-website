@@ -463,7 +463,7 @@ import CategoryGroup from './CategoryGroup.vue';
 // eslint-disable-next-line no-unused-vars
 import SpendingCategory from './SpendingCategory.vue';
 import PercentageInput from './PercentageInput.vue';
-import CategoryInfo from './CategoryInfo.vue';
+import CategoryInfo from './BudgetCategoryInfo.vue';
 import { createDebouncedFunction } from '@/utils/debounceUtils';
 import LoadingIndicator from '@/components/LoadingIndicator.vue';
 

@@ -52,7 +52,7 @@
 <script setup>
 import { ref, watch } from 'vue';
 import PercentageInput from './PercentageInput.vue';
-import CategoryInfo from './CategoryInfo.vue';
+import CategoryInfo from './BudgetCategoryInfo.vue';
 
 const props = defineProps({
   category: {

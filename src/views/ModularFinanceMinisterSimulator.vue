@@ -24,7 +24,11 @@
         </div>
       </div>
 
-      <div class="simulator-grid">
+      <div v-if="FEATURES.PANEL_NAV" class="mb-4">
+        <PanelHost />
+      </div>
+
+      <div class="simulator-grid" v-if="!FEATURES.PANEL_NAV">
         <ErrorBoundary component-name="GoalTracker">
           <div class="simulator-card goals-card">
             <div class="card-header">
@@ -76,11 +80,15 @@
             </div>
             <div class="card-content">
               <ChartsPanel />
+              <div class="mt-4">
+                <MultiYearProjectionsPanel v-if="FEATURES.MULTI_YEAR_PLANNING" />
+              </div>
             </div>
           </div>
         </ErrorBoundary>
       </div>
     </div>
+    <MultiYearDock v-if="FEATURES.MULTI_YEAR_PLANNING" />
   </ErrorBoundary>
 </template>
 
@@ -90,11 +98,15 @@ import { useBudgetSimulatorStore } from '@/domains/budget/store/budgetSimulator'
 import ErrorBoundary from '@/components/ErrorBoundary.vue';
 import GoalTracker from '@/domains/budget/components/GoalTracker.vue';
 import BudgetResults from '@/domains/budget/components/BudgetResults.vue';
-import RevenueSliders from '@/domains/budget/components/RevenueSliders.vue';
-import SpendingControls from '@/domains/budget/components/SpendingControls.vue';
-import ChartsPanel from '@/domains/budget/components/ChartsPanel.vue';
+import RevenueSliders from '@/domains/budget/components/BudgetRevenueSliders.vue';
+import SpendingControls from '@/domains/budget/components/BudgetSpendingControls.vue';
+import ChartsPanel from '@/domains/budget/components/BudgetChartsPanel.vue';
 import { debounce } from 'lodash-es';
 import { handleError } from '@/utils/errorHandler.js';
+import { FEATURES } from '@/features.js';
+import MultiYearProjectionsPanel from '@/domains/budget/components/MultiYearProjectionsPanel.vue';
+import MultiYearDock from '@/domains/budget/components/MultiYearDock.vue';
+import PanelHost from '@/domains/budget/components/BudgetPanelHost.vue';
 
 const budgetStore = useBudgetSimulatorStore();
 const currentYear = ref(2023);

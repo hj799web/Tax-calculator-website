@@ -21,9 +21,9 @@ This document summarizes the core architecture, logic, known bottlenecks, and im
 | /src/domains/budget/components/BudgetResults.vue | Budget summary with simple auto-balance toggle |
 | /src/domains/budget/components/GoalTracker.vue | Goal-based auto-balance and target tracking |
 | /src/domains/budget/components/RevenueSliders.vue | Revenue source controls |
-| /src/domains/budget/components/SpendingControls.vue | Spending category management |
+| /src/domains/budget/components/BudgetSpendingControls.vue | Spending category management |
 | /src/domains/budget/components/ChartsPanel.vue | Data visualization (lazy loaded) |
-| /src/domains/budget/components/ExportPanel.vue | PDF/PNG/social card export UI |
+| /src/domains/budget/components/BudgetExportPanel.vue | PDF/PNG/social card export UI |
 | /src/domains/sentiment/utils/computeSentimentScores.js | 0–4 sentiment score calculation engine |
 | /src/domains/sentiment/config/sentimentConfig.js | Sentiment rules by province, demographic, sector |
 | /src/domains/sentiment/components/CollapsibleSentimentBanner.vue | Fiscal chaos warnings and sentiment display |
@@ -168,3 +168,4 @@ This document summarizes the core architecture, logic, known bottlenecks, and im
 - ✅ Confirm title and badge accurately reflect computed tags
 - ✅ Test sentiment chart for edge cases (empty, maxed, lopsided)
 - ✅ Run simulator flow end-to-end: input → result → export → embed → restore
+

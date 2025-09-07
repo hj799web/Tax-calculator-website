@@ -205,7 +205,7 @@
 
 <script setup>
 import { reactive } from 'vue';
-import { ref, computed, watch, onMounted, onUnmounted, nextTick } from 'vue';
+import { ref, computed, watch, onMounted, onUnmounted, nextTick, defineProps } from 'vue';
 import { useBudgetSimulatorStore } from '@/domains/budget/store/budgetSimulator';
 import { useSentimentSettingsStore } from '@/domains/sentiment/store/sentimentSettings';
 import { budgetScenarioModifiers } from '@/domains/budget/config/budgetScenarioModifiers';
@@ -231,6 +231,13 @@ const chartInstance = ref(null);
 const isMounted = ref(false);
 const isUpdatingChart = ref(false);
 const activeTab = ref('provinces');
+
+watch(() => props.externalTab, (v) => {
+  if (!v) return;
+  if (v === 'provinces' || v === 'demographics' || v === 'sectors') {
+    activeTab.value = v;
+  }
+});
 const errorMessage = ref('');
 
 // Chart lifecycle state
@@ -671,6 +678,10 @@ function updateChart() {
     hover: {
       animationDuration: 0 // duration of animations when hovering an item
     },
+    interaction: {
+      mode: 'nearest',
+      intersect: false
+    },
     responsiveAnimationDuration: 0, // animation duration after a resize
     scales: {
       r: {
@@ -769,8 +780,9 @@ function updateChart() {
               pointBorderColor: '#fff',
               pointHoverBackgroundColor: '#fff',
               pointHoverBorderColor: colors,
-              pointRadius: 4,
-              pointHoverRadius: 6
+              pointRadius: 6,
+              pointHoverRadius: 10,
+              pointHitRadius: 16
             }]
           },
           options: {

@@ -74,8 +74,13 @@
 
       <MainNavigation />
 
+      <!-- Panel Navigation (feature-gated) -->
+      <div v-if="FEATURES.PANEL_NAV" class="mb-4">
+        <PanelHost />
+      </div>
+
       <!-- Sub Navigation Bar -->
-      <nav class="sub-navigation">
+      <nav class="sub-navigation" v-if="!FEATURES.PANEL_NAV">
         <a @click="scrollToSection('budget-goals')" class="sub-nav-link">
           <span class="material-icons">flag</span>
           Budget Goals
@@ -112,7 +117,7 @@
         </div>
       </nav>
 
-      <p class="description">Experience what it's like to manage Canada's federal budget. Adjust revenue sources and spending priorities to balance the budget while considering public sentiment across different regions and sectors.</p>
+      <p class="description">Experience what it's like to manage Canada's federal budget. Adjust revenue sources and spending priorities to balance the budget while considering public sentiment across different regions and sectors.<br><br><span style="font-size: 0.6em; color: #666;">*The Budget Simulator uses approximate federal budget data from Public Accounts of Canada and Budget 2024 documents.</span></p>
 
       <!-- Year Selector -->
       <YearSelector 
@@ -120,7 +125,7 @@
         @year-selected="selectYear" 
       />
 
-      <div class="simulator-grid">
+      <div class="simulator-grid" v-if="!FEATURES.PANEL_NAV">
         <!-- Budget Goals Section -->
         <section id="budget-goals" class="simulator-card goals-card">
           <h2 class="card-title" @click="toggleSection('budgetGoals')">
@@ -237,6 +242,9 @@
           </h2>
           <div class="card-content" v-show="sectionsExpanded.budgetAnalysis">
             <ChartsPanel />
+            <div class="mt-4">
+              <MultiYearProjectionsPanel v-if="FEATURES.MULTI_YEAR_PLANNING" />
+            </div>
           </div>
         </section>
         
@@ -258,8 +266,8 @@
     </div>
   </div>
 
-  <!-- Budget Changes Banner -->
-  <BudgetChangesBanner :max-recent-changes="10" />
+  <!-- Budget Changes Banner (hidden on mobile, replaced by bottom sheet) -->
+  <BudgetChangesBanner v-if="!isMobile" :max-recent-changes="10" />
 
   <!-- Social Share Modal -->
   <SocialShareModal
@@ -283,6 +291,10 @@
   />
 
   <div v-if="financeMinisterErrorMessage" class="error-message">{{ financeMinisterErrorMessage }}</div>
+  
+  <!-- Mobile Dock + Bottom Sheet -->
+  <MobileDockBar v-if="isMobile" />
+  <MobileBottomSheet v-if="isMobile" />
 </template>
 
 <script setup>
@@ -292,10 +304,16 @@ import { computeSentimentScores, getSentimentLabel, getSentimentEmoji } from '@/
 import MainNavigation from '@/components/MainNavigation.vue'
 import logoImage from '@/assets/fiscal-insights-logo.webp'
 import OnboardingTour from '@/components/OnboardingTour.vue'
+import { FEATURES } from '@/features.js'
+import MultiYearProjectionsPanel from '@/domains/budget/components/MultiYearProjectionsPanel.vue'
+import MobileDockBar from '@/components/MobileDockBar.vue'
+import MobileBottomSheet from '@/components/MobileBottomSheet.vue'
+import PanelHost from '@/domains/budget/components/BudgetPanelHost.vue'
+import { useMobileDock } from '@/composables/useMobileDock'
 
 // Lazy load heavy components for better performance
 const ChartsPanel = defineAsyncComponent({
-  loader: () => import('@/domains/budget/components/ChartsPanel.vue'),
+  loader: () => import('@/domains/budget/components/BudgetChartsPanel.vue'),
   loadingComponent: { template: '<div class="loading-component">Loading charts...</div>' },
   errorComponent: { template: '<div class="error-component">Failed to load charts</div>' },
   delay: 200,
@@ -338,12 +356,15 @@ const SharedBudgetDetailModal = defineAsyncComponent({
 // Import lightweight components normally
 import CollapsibleSentimentBanner from '@/domains/sentiment/components/CollapsibleSentimentBanner.vue'
 import SentimentSensitivityControl from '@/domains/sentiment/components/SentimentSensitivityControl.vue'
-import RevenueSliders from '@/domains/budget/components/RevenueSliders.vue'
+import RevenueSliders from '@/domains/budget/components/BudgetRevenueSliders.vue'
 import GoalTracker from '@/domains/budget/components/GoalTracker.vue'
 import PartyBudgetSharing from '@/domains/social/components/PartyBudgetSharing.vue'
-import YearSelector from '@/domains/budget/components/YearSelector.vue'
+import YearSelector from '@/domains/budget/components/BudgetYearSelector.vue'
 import BudgetResults from '@/domains/budget/components/BudgetResults.vue'
-import SpendingControls from '@/domains/budget/components/SpendingControls.vue'
+
+// Mobile overlay coordination
+const { isMobile } = useMobileDock()
+import SpendingControls from '@/domains/budget/components/BudgetSpendingControls.vue'
 import PresetSelector from '@/domains/calculator/components/PresetSelector.vue'
 import AchievementBadge from '@/domains/badges/components/AchievementBadge.vue'
 import BudgetChangesBanner from '@/domains/budget/components/BudgetChangesBanner.vue'

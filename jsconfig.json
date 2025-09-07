@@ -15,5 +15,20 @@
       "dom.iterable",
       "scripthost"
     ]
-  }
+  },
+  "include": [
+    "src/**/*.js",
+    "src/**/*.vue",
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "tests/**/*.js",
+    "tests/**/*.ts",
+    "*.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/_tmp_*.vue",
+    "_tmp_*.vue"
+  ]
 }

@@ -323,7 +323,7 @@
 
 <script setup>
 import { ref, watch, onMounted, computed, onUnmounted } from 'vue';
-import ExportPanel from './ExportPanel.vue';
+import ExportPanel from './BudgetExportPanel.vue';
 import { useBudgetSimulatorStore } from '@/domains/budget/store/budgetSimulator.js';
 import AchievementBadge from '@/domains/badges/components/AchievementBadge.vue';
 import html2canvas from 'html2canvas';

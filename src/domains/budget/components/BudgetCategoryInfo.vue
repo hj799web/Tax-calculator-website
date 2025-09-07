@@ -4,7 +4,7 @@
       class="info-icon"
       @mouseenter="showTooltip"
       @mouseleave="hideTooltip"
-    >ⓘ</span>
+    >�"~</span>
   </div>
 </template>
 
@@ -105,3 +105,4 @@ function hideTooltip() {
   }
 }
 </style>
+
