@@ -10,16 +10,47 @@ The panel system replaces the traditional scrolling layout with a modern, tabbed
 ```
 PanelHost.vue (Main Container)
 ├── PanelBanner.vue (Navigation Tabs)
-├── panels/
+├── panels/ (Main content panels)
 │   ├── OverviewPanel.vue
-│   ├── ResultsPanel.vue
-│   ├── RevenuePanel.vue
-│   ├── SpendingPanel.vue
 │   ├── AnalysisPanel.vue
 │   ├── GoalsPanel.vue
 │   ├── PresetsPanel.vue
-│   ├── SentimentPanel.vue
-│   └── ExportPanel.vue
+│   ├── AssumptionsPanel.vue
+│   ├── BudgetChartsPanel.vue
+│   ├── BudgetExportPanel.vue
+│   ├── BudgetResultsPanel.vue
+│   ├── BudgetRevenuePanel.vue
+│   ├── ProjectionsPanelLite.vue
+│   └── SpendingPanel.vue
+├── controls/ (Interactive input components)
+│   ├── BudgetRevenueSliders.vue
+│   ├── BudgetSpendingControls.vue
+│   ├── BudgetYearSelector.vue
+│   ├── CategoryGroup.vue
+│   ├── PercentageInput.vue
+│   └── SpendingCategory.vue
+├── overlays/ (Modal and floating components)
+│   ├── BudgetChangesBanner.vue
+│   ├── FiscalChaosAlert.vue
+│   ├── MultiYearDock.vue
+│   ├── MultiYearItemPlanModal.vue
+│   ├── MultiYearPlanner.vue
+│   └── SharedBudgetDetailModal.vue
+├── widgets/ (Reusable display components)
+│   ├── BudgetCategoryInfo.vue
+│   ├── BudgetResults.vue
+│   ├── ExportCard.vue
+│   ├── GoalTracker.vue
+│   └── ItemsPlanList.vue
+├── layout/ (Navigation and container components)
+│   ├── BudgetPanelBanner.vue
+│   ├── BudgetPanelHost.vue
+│   ├── PanelBanner.vue (Legacy)
+│   └── PanelHost.vue (Legacy)
+├── charts/ (Data visualization components)
+│   ├── ChartsPanel.vue
+│   ├── MultiYearProjectionsPanel.vue
+│   └── SpendingPieChart.vue
 └── Mobile Overlay System (≤1024px)
     ├── MobileDockBar.vue (Bottom dock with changes button)
     ├── MobileBottomSheet.vue (Modal sheet for budget changes)
@@ -35,6 +66,63 @@ export const FEATURES = {
 ```
 
 **Rollback Safety**: Set `PANEL_NAV: false` to instantly revert to original scrolling layout.
+
+## 📁 Component Organization
+
+### **Directory Structure & Purpose**
+
+The budget components are organized into logical groups for better maintainability and developer experience:
+
+**`panels/`** - Main content areas that users navigate between
+- Core application panels (Overview, Analysis, Goals, etc.)
+- Budget-specific panels (Revenue, Spending, Results, Export)
+- Projection and planning panels
+
+**`controls/`** - Interactive input components
+- Form controls and sliders
+- Input validation components
+- Category and percentage controls
+
+**`overlays/`** - Modal and floating UI elements
+- Banners and alerts
+- Modal dialogs and planners
+- Floating dock components
+
+**`widgets/`** - Reusable display components
+- Information cards and trackers
+- Results displays and summaries
+- Exportable content widgets
+
+**`layout/`** - Navigation and container components
+- Panel hosts and navigation banners
+- Layout management components
+- Legacy compatibility components
+
+**`charts/`** - Data visualization components
+- Chart panels and interactive visualizations
+- Projection displays and analytics
+- Specialized chart widgets
+
+### **Import Organization**
+
+Each directory includes an `index.js` file that re-exports components for organized imports:
+
+```javascript
+// Organized imports (new approach)
+import { BudgetRevenuePanel, SpendingPanel } from '@/domains/budget/components/panels';
+import { BudgetRevenueSliders, CategoryGroup } from '@/domains/budget/components/controls';
+import { BudgetChangesBanner, MultiYearDock } from '@/domains/budget/components/overlays';
+
+// Traditional imports (still supported)
+import BudgetRevenuePanel from '@/domains/budget/components/BudgetRevenuePanel.vue';
+import BudgetRevenueSliders from '@/domains/budget/components/BudgetRevenueSliders.vue';
+```
+
+**Benefits:**
+- ✅ **Clear separation of concerns** - Easy to find components by purpose
+- ✅ **Better developer experience** - Logical grouping reduces cognitive load
+- ✅ **Backward compatibility** - Existing imports continue to work
+- ✅ **Scalable architecture** - Easy to add new components to appropriate categories
 
 ## 🎨 Panel Design System
 

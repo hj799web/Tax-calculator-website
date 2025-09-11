@@ -1,151 +1,211 @@
 <template>
-  <div class="backdrop" @click.self="$emit('close')">
-    <div class="modal">
-      <header class="header">
-        <h3 class="title">Edit {{ typeLabel }} Plan — {{ itemName }}</h3>
-        <button class="close" @click="$emit('close')">×</button>
-      </header>
-      <div class="content">
-        <div v-if="type==='revenue'" class="section">
-          <label class="field-label">Mode</label>
-          <select v-model="rev.mode">
-            <option value="points">Explicit points</option>
-            <option value="rule">Simple growth rule</option>
-          </select>
-          <div v-if="rev.mode==='points'" class="points">
-            <div class="row" v-for="(val, y) in rev.points" :key="y">
-              <input type="number" v-model.number="rev.points[y]" step="0.1" />
-              <span>@</span>
-              <input type="number" v-model.number="yearKeysMap[y]" @change="renameYear(y, yearKeysMap[y])" />
-              <button class="btn" @click="delPoint(y)">Delete</button>
-            </div>
-            <div class="row">
-              <input type="number" v-model.number="newPoint.rate" placeholder="rate %" step="0.1" />
-              <span>@</span>
-              <input type="number" v-model.number="newPoint.year" placeholder="year" />
-              <button class="btn" @click="addPoint()">Add</button>
-            </div>
+  <div v-if="show" class="modal-backdrop" @click="close">
+    <div class="modal" @click.stop>
+      <div class="header">
+        <h3>Multi-Year Plan: {{ itemName }}</h3>
+        <button @click="close" class="close-btn">&times;</button>
+      </div>
+      <div class="body">
+        <div class="section">
+          <h4>Growth Profile</h4>
+          <div class="row">
+            <label>Baseline growth (%)</label>
+            <input type="number" step="0.1" v-model.number="plan.baselineGrowth" />
+            <label>Demographic adjustment (%)</label>
+            <input type="number" step="0.1" v-model.number="plan.demographicAdjustment" />
           </div>
-          <div v-else class="rule">
-            <label class="field-label">Start rate (%)</label>
-            <input type="number" v-model.number="rev.rule.startRate" step="0.1" />
-            <label class="field-label">Annual delta (pp)</label>
-            <input type="number" v-model.number="rev.rule.annualDeltaPct" step="0.1" />
+        </div>
+        
+        <div class="section">
+          <h4>Level Adjustments</h4>
+          <div class="row">
+            <label>One-time adjustment (%)</label>
+            <input type="number" step="0.1" v-model.number="plan.levelAdjustment" />
+            <label>Apply from year</label>
+            <input type="number" v-model.number="plan.startYear" min="2024" max="2040" />
           </div>
         </div>
 
-        <div v-else class="section">
-          <label class="field-label">Explicit points (factor = 1.00 base)</label>
-          <div class="points">
-            <div class="row" v-for="(val, y) in spend.points" :key="y">
-              <input type="number" v-model.number="spend.points[y]" step="0.01" />
-              <span>@</span>
-              <input type="number" v-model.number="yearKeysMap[y]" @change="renameYear(y, yearKeysMap[y])" />
-              <button class="btn" @click="delPoint(y)">Delete</button>
-            </div>
-            <div class="row">
-              <input type="number" v-model.number="newPoint.factor" placeholder="factor" step="0.01" />
-              <span>@</span>
-              <input type="number" v-model.number="newPoint.year" placeholder="year" />
-              <button class="btn" @click="addPoint()">Add</button>
-            </div>
+        <div class="section">
+          <h4>Policy Options</h4>
+          <div class="row">
+            <label>Policy type</label>
+            <select v-model="plan.policyType">
+              <option value="none">No policy change</option>
+              <option value="expansion">Program expansion</option>
+              <option value="efficiency">Efficiency improvement</option>
+              <option value="reform">Structural reform</option>
+            </select>
+            <label>Impact magnitude (%)</label>
+            <input type="number" step="0.1" v-model.number="plan.policyImpact" />
           </div>
-          <label class="field-label">Ongoing level shift (%)</label>
-          <input type="number" v-model.number="spend.ongoingLevelPct" step="0.1" />
-          <label class="field-label">Growth delta (pp)</label>
-          <input type="number" v-model.number="spend.growthDeltaPp" step="0.1" />
+        </div>
+
+        <div class="section">
+          <h4>Scenario Analysis</h4>
+          <div class="row">
+            <label>Scenario</label>
+            <select v-model="selectedScenario" @change="applyScenario">
+              <option value="baseline">Baseline</option>
+              <option value="conservative">Conservative</option>
+              <option value="optimistic">Optimistic</option>
+              <option value="crisis">Crisis response</option>
+            </select>
+          </div>
         </div>
       </div>
-      <footer class="footer">
-        <button class="btn" @click="onClear">Clear Plan</button>
-        <button class="btn primary" @click="onSave">Save</button>
-      </footer>
+      <div class="footer">
+        <button class="btn" @click="reset">Reset</button>
+        <button class="btn" @click="close">Cancel</button>
+        <button class="btn primary" @click="save">Save Plan</button>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { reactive, computed } from 'vue';
-import { useBudgetSimulatorStore } from '@/domains/budget/store/budgetSimulator';
-import { useMultiYearSettingsStore } from '@/domains/budget/store/multiYearSettings.js';
+import { ref, reactive } from 'vue';
 
-const props = defineProps({ type: { type: String, required: true }, id: { type: String, required: true }, year: { type: Number, required: true } });
-const emit = defineEmits(['close']);
+const props = defineProps({
+  show: Boolean,
+  itemName: String,
+  itemId: String
+});
 
-const budget = useBudgetSimulatorStore();
-const settings = useMultiYearSettingsStore();
+const emit = defineEmits(['close', 'save']);
 
-const typeLabel = computed(() => props.type === 'revenue' ? 'Revenue' : 'Spending');
-const itemName = computed(() => props.type === 'revenue' ? (budget.revenueSources[props.id]?.name || props.id) : (findSpending(props.id)?.name || props.id));
+const selectedScenario = ref('baseline');
 
-function findSpending(id) {
-  const cats = budget.spendingCategories || {};
-  if (cats[id]) return cats[id];
-  for (const g of Object.values(cats)) {
-    if (g?.isGroup && g.children && g.children[id]) return g.children[id];
-  }
-  return null;
-}
+const plan = reactive({
+  baselineGrowth: 2.0,
+  demographicAdjustment: 0.0,
+  levelAdjustment: 0.0,
+  startYear: 2024,
+  policyType: 'none',
+  policyImpact: 0.0
+});
 
-// local editable copies
-const rev = reactive({ mode: 'points', points: {}, rule: { startRate: undefined, annualDeltaPct: 0 } });
-const spend = reactive({ points: {}, ongoingLevelPct: 0, growthDeltaPp: 0 });
-const yearKeysMap = reactive({});
-const newPoint = reactive({ year: props.year, rate: undefined, factor: undefined });
-
-// load existing plan
-if (props.type === 'revenue') {
-  const p = settings.multiYearPlans.revenue[props.id] || {};
-  rev.mode = p.mode || 'points';
-  rev.points = { ...(p.points || {}) };
-  rev.rule = { ...(p.rule || { startRate: undefined, annualDeltaPct: 0 }) };
-  for (const y of Object.keys(rev.points)) yearKeysMap[y] = Number(y);
-} else {
-  const p = settings.multiYearPlans.spending[props.id] || {};
-  spend.points = { ...(p.points || {}) };
-  spend.ongoingLevelPct = p.ongoingLevelPct || 0;
-  spend.growthDeltaPp = p.growthDeltaPp || 0;
-  for (const y of Object.keys(spend.points)) yearKeysMap[y] = Number(y);
-}
-
-function renameYear(oldY, newY) {
-  if (props.type === 'revenue') {
-    const val = rev.points[oldY]; delete rev.points[oldY]; rev.points[newY] = val;
-  } else { const val = spend.points[oldY]; delete spend.points[oldY]; spend.points[newY] = val; }
-}
-function delPoint(y) { if (props.type === 'revenue') delete rev.points[y]; else delete spend.points[y]; }
-function addPoint() {
-  if (props.type === 'revenue') {
-    if (newPoint.year != null && newPoint.rate != null) rev.points[newPoint.year] = Number(newPoint.rate);
-  } else {
-    if (newPoint.year != null && newPoint.factor != null) spend.points[newPoint.year] = Number(newPoint.factor);
-  }
-}
-
-function onClear() { settings.clearPlan(props.id, props.type); emit('close'); }
-function onSave() {
-  if (props.type === 'revenue') {
-    settings.setRevenuePlan(props.id, { mode: rev.mode, points: rev.points, rule: rev.rule });
-  } else {
-    settings.setSpendingPlan(props.id, { points: spend.points, ongoingLevelPct: spend.ongoingLevelPct, growthDeltaPp: spend.growthDeltaPp });
-  }
+function close() {
   emit('close');
+}
+
+function save() {
+  emit('save', { itemId: props.itemId, plan: { ...plan } });
+  close();
+}
+
+function reset() {
+  plan.baselineGrowth = 2.0;
+  plan.demographicAdjustment = 0.0;
+  plan.levelAdjustment = 0.0;
+  plan.startYear = 2024;
+  plan.policyType = 'none';
+  plan.policyImpact = 0.0;
+  selectedScenario.value = 'baseline';
+}
+
+function applyScenario() {
+  switch (selectedScenario.value) {
+    case 'conservative':
+      plan.baselineGrowth = 1.5;
+      plan.demographicAdjustment = 0.5;
+      break;
+    case 'optimistic':
+      plan.baselineGrowth = 3.0;
+      plan.demographicAdjustment = -0.2;
+      break;
+    case 'crisis':
+      plan.baselineGrowth = 5.0;
+      plan.levelAdjustment = 10.0;
+      break;
+    default:
+      reset();
+  }
 }
 </script>
 
 <style scoped>
-.backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.35); display: flex; align-items: center; justify-content: center; z-index: 60; }
-.modal { width: min(720px, 92vw); background: #fff; border-radius: 12px; box-shadow: 0 24px 48px rgba(0,0,0,0.2); overflow: hidden; }
-.header { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; border-bottom: 1px solid #e5e7eb; }
-.title { margin: 0; font-size: 1rem; }
-.close { background: transparent; border: none; font-size: 1.4rem; cursor: pointer; }
-.content { padding: 12px; display: grid; gap: 12px; }
-.section { display: grid; gap: 8px; }
-.field-label { font-size: .85rem; color: #6b7280; }
+.modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+.modal { background: #fff; border-radius: 12px; max-width: 600px; width: 90vw; max-height: 80vh; overflow: hidden; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+.header { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid #e5e7eb; }
+.header h3 { margin: 0; font-size: 1.1rem; }
+.close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #6b7280; }
+.body { padding: 16px; max-height: 60vh; overflow-y: auto; }
+.section { margin-bottom: 16px; }
+.section h4 { margin: 0 0 8px 0; font-size: 0.9rem; color: #374151; }
 .row { display: grid; grid-template-columns: 1fr auto 1fr auto; gap: 6px; align-items: center; }
 input, select { padding: 6px 8px; border: 1px solid #d1d5db; border-radius: 6px; }
 .footer { display: flex; justify-content: end; gap: 8px; padding: 10px 12px; border-top: 1px solid #e5e7eb; }
-.btn { padding: 6px 10px; border: 1px solid #d1d5db; border-radius: 6px; background: #f9fafb; cursor: pointer; }
-.btn.primary { background: #2563eb; border-color: #2563eb; color: #fff; }
-</style>
 
+.btn {
+  padding: 8px 16px;
+  border: 1px solid #3b82f6;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  color: #374151;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(107, 114, 128, 0.15);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s;
+}
+
+.btn:hover {
+  background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+  box-shadow: 0 4px 16px rgba(107, 114, 128, 0.2);
+  transform: translateY(-1px);
+  border-color: #6b7280;
+}
+
+.btn:hover::before {
+  left: 100%;
+}
+
+.btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(107, 114, 128, 0.15);
+}
+
+.btn.primary {
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  color: white;
+  border-color: #3b82f6;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.btn.primary::before {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+}
+
+.btn.primary:hover {
+  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
+  border-color: #2563eb;
+}
+
+.btn:disabled {
+  background: #6b7280;
+  border-color: #6b7280;
+  box-shadow: none;
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+}
+</style>

@@ -74,6 +74,14 @@
 
       <MainNavigation />
 
+      <p class="description">Experience what it's like to manage Canada's federal budget. Adjust revenue sources and spending priorities to balance the budget while considering public sentiment across different regions and sectors.<br><br><span style="font-size: 0.6em; color: #666;">*The Budget Simulator uses approximate federal budget data from Public Accounts of Canada and Budget 2024 documents.</span></p>
+
+      <!-- Year Selector -->
+      <YearSelector 
+        :current-year="currentYear" 
+        @year-selected="selectYear" 
+      />
+
       <!-- Panel Navigation (feature-gated) -->
       <div v-if="FEATURES.PANEL_NAV" class="mb-4">
         <PanelHost />
@@ -116,14 +124,6 @@
           </button>
         </div>
       </nav>
-
-      <p class="description">Experience what it's like to manage Canada's federal budget. Adjust revenue sources and spending priorities to balance the budget while considering public sentiment across different regions and sectors.<br><br><span style="font-size: 0.6em; color: #666;">*The Budget Simulator uses approximate federal budget data from Public Accounts of Canada and Budget 2024 documents.</span></p>
-
-      <!-- Year Selector -->
-      <YearSelector 
-        :current-year="currentYear" 
-        @year-selected="selectYear" 
-      />
 
       <div class="simulator-grid" v-if="!FEATURES.PANEL_NAV">
         <!-- Budget Goals Section -->

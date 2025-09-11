@@ -55,6 +55,18 @@ export const useMultiYearSettingsStore = defineStore('multiYearSettings', () => 
     // Loans & investments group children can be treated similarly if projected
   });
 
+  // Global across-board program spending adjustments (multi-year only)
+  // levelPct: one-time baseline shift applied at base year (excludes interest)
+  // growthDeltaPct: additional annual growth (percentage points) applied each projected year
+  const spendingGlobal = ref({
+    levelPct: 0,
+    growthDeltaPct: 0,
+  });
+
+  // Year-specific overrides for program spending in projections
+  // Example: yearOverrides[2027] = { spending: { levelPct: 2, growthDeltaPct: 0.5 }, applyForward: false }
+  const yearOverrides = ref({});
+
   // User deltas by category (level shift %, growth delta pp, ongoing flag)
   const categoryUserDelta = ref({});
 
@@ -133,8 +145,10 @@ export const useMultiYearSettingsStore = defineStore('multiYearSettings', () => 
     economic,
     revenueElasticity,
     spendingGrowth,
+    spendingGlobal,
     categoryUserDelta,
     multiYearPlans,
+    yearOverrides,
     presets,
     applyPreset,
     setRevenuePlan,

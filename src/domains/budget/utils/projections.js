@@ -55,9 +55,13 @@ export function calcProgramSpending(prev, profiles, userDeltaMap) {
   for (const [k, v] of Object.entries(prev.spendingByCategory)) {
     const prof = profiles?.[k] || { baseline: 0, demographic: 0 };
     const delta = userDeltaMap?.[k] || { level: 0, growthDelta: 0, ongoing: true };
-    const growPct = Math.max(-90, (prof.baseline || 0) + (prof.demographic || 0) + (delta.growthDelta || 0));
+    // Clamp growth delta to reasonable bounds
+    const growthDelta = Math.max(-2, Math.min(2, Number(delta.growthDelta || 0)));
+    const growPct = Math.max(-90, (prof.baseline || 0) + (prof.demographic || 0) + growthDelta);
     const factor = 1 + growPct / 100;
-    const levelAdj = (delta.ongoing ? (1 + (delta.level || 0) / 100) : 1);
+    // Level is a one-time shift unless explicitly flagged ongoing
+    const levelPct = Math.max(-15, Math.min(15, Number(delta.level || 0)));
+    const levelAdj = (delta.ongoing ? (1 + levelPct / 100) : 1);
     const projected = round2(v * factor * levelAdj);
     byCategory[k] = projected;
     total += projected;
@@ -92,6 +96,8 @@ export function projectAll(args) {
   if (!base || !settings) return [];
   const horizon = Math.max(1, Number(settings?.planning?.horizonYears ?? 10));
   const startYear = Number(settings?.planning?.baseYear ?? new Date().getFullYear());
+  const globalLevel = Number(settings?.spendingGlobal?.levelPct || 0);
+  const globalGrowthDelta = Number(settings?.spendingGlobal?.growthDeltaPct || 0);
 
   const first = /** @type {ProjectionYear} */ ({
     year: startYear,
@@ -106,8 +112,10 @@ export function projectAll(args) {
     debt: round2(base.debt),
     debtToGDP: 0,     // to be set
   });
-  first.spendingTotal = round2(first.programSpending + first.interest);
-  first.deficit = round2(first.spendingTotal - first.revenueTotal);
+  // Apply global level shift at base year (program spending only)
+  const baseYearLevelAdj = 1 + Math.max(-15, Math.min(15, globalLevel)) / 100;
+  first.spendingTotal = round2(first.programSpending * baseYearLevelAdj + first.interest);
+  first.deficit = round2(first.revenueTotal - first.spendingTotal);
   first.debt = calcDebt(base.debt, first.deficit);
   first.debtToGDP = safeRatio(first.debt, first.gdp);
 
@@ -117,10 +125,23 @@ export function projectAll(args) {
     const nextYear = startYear + i;
     const gdp = calcNominalGDP(prev.gdp, settings?.economic);
     const rev = calcRevenue(prev, gdp, settings?.revenueElasticity, settings?.economic?.inflation);
-    const spend = calcProgramSpending(prev, settings?.spendingGrowth, settings?.categoryUserDelta);
+    // Build merged user deltas: category deltas + global growthDelta + per-year overrides
+    const yearOv = settings?.yearOverrides?.[nextYear]?.spending || {};
+    const applyYearLevel = Number(yearOv.levelPct || 0);
+    const applyYearGrowth = Number(yearOv.growthDeltaPct || 0);
+    const mergedUserDelta = {};
+    for (const k of Object.keys(prev.spendingByCategory || {})) {
+      const baseDelta = settings?.categoryUserDelta?.[k] || { level: 0, growthDelta: 0, ongoing: true };
+      mergedUserDelta[k] = {
+        level: Number(baseDelta.level || 0) + (i === 0 ? globalLevel : 0) + applyYearLevel,
+        growthDelta: Number(baseDelta.growthDelta || 0) + globalGrowthDelta + applyYearGrowth,
+        ongoing: false, // level shifts are one-time by default in projections
+      };
+    }
+    const spend = calcProgramSpending(prev, settings?.spendingGrowth, mergedUserDelta);
     const interest = calcInterest(prev.debt, settings?.economic?.interestRate);
     const spendingTotal = round2(spend.total + interest);
-    const deficit = round2(spendingTotal - rev.total);
+    const deficit = round2(rev.total - spendingTotal);
     const debt = calcDebt(prev.debt, deficit);
     const debtToGDP = safeRatio(debt, gdp);
 

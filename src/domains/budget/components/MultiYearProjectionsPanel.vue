@@ -32,6 +32,28 @@
           <label>Interest rate (%)</label>
           <input type="number" step="0.1" v-model.number="settingsStore.economic.interestRate" @change="normalize()" min="0" max="20" />
         </div>
+        <div class="row">
+          <label>Program spending (level %)</label>
+          <input
+            type="number"
+            step="0.5"
+            :min="-15"
+            :max="15"
+            v-model.number="settingsStore.spendingGlobal.levelPct"
+            @change="clampGlobal()"
+          />
+        </div>
+        <div class="row">
+          <label>Program spending (growth ±pp)</label>
+          <input
+            type="number"
+            step="0.1"
+            :min="-2"
+            :max="2"
+            v-model.number="settingsStore.spendingGlobal.growthDeltaPct"
+            @change="clampGlobal()"
+          />
+        </div>
         <div class="row preset-row">
           <label>Preset</label>
           <select v-model="selectedPreset" @change="applyPreset()">
@@ -97,7 +119,7 @@
           <tbody>
             <tr v-for="r in rows" :key="r.year">
               <td>
-                <button class="year-link" @click="openYearSimulator(r.year)">{{ r.year }}</button>
+                <button class="year-link" @click="openYearEditor(r.year)">{{ r.year }}</button>
               </td>
               <td>{{ fmt(r.gdp) }}</td>
               <td>{{ fmt(r.revenueTotal) }}</td>
@@ -112,13 +134,32 @@
           No projection data available. Check settings.
         </div>
       </div>
-
-      <YearSimulatorModal
-        :show="showYearModal"
-        :year="selectedYear"
-        :baseline-row="selectedYearRow"
-        @close="showYearModal = false"
-      />
+      <div v-if="showYearModal" class="year-editor">
+        <div class="year-editor-card">
+          <div class="ye-header">
+            <h4>Edit {{ selectedYear }} (program spending)</h4>
+            <button class="btn" @click="closeYearEditor">Close</button>
+          </div>
+          <div class="ye-grid">
+            <div class="row">
+              <label>Level (one-time, %)</label>
+              <input type="number" step="0.5" :min="-15" :max="15" v-model.number="yearLevel" />
+            </div>
+            <div class="row">
+              <label>Growth (±pp per year)</label>
+              <input type="number" step="0.1" :min="-2" :max="2" v-model.number="yearGrowth" />
+            </div>
+            <div class="row">
+              <label>Apply forward</label>
+              <input type="checkbox" v-model="applyForward" />
+            </div>
+          </div>
+          <div class="ye-actions">
+            <button class="btn" @click="resetYearOverrides">Reset year</button>
+            <button class="btn primary" @click="applyYearOverrides">Apply</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -131,7 +172,6 @@ import { makeBaseSnapshotFromStore } from '@/domains/budget/utils/projectionAdap
 import { projectAll } from '@/domains/budget/utils/projections.js';
 import { FEATURES } from '@/features.js';
 import MultiYearPlanner from '@/domains/budget/components/MultiYearPlanner.vue';
-import YearSimulatorModal from '@/domains/budget/components/YearSimulatorModal.vue';
 
 const budget = useBudgetSimulatorStore();
 const settingsStore = useMultiYearSettingsStore();
@@ -139,6 +179,9 @@ const showPlanner = ref(false);
 const selectedPreset = ref('');
 const showYearModal = ref(false);
 const selectedYear = ref(null);
+const yearLevel = ref(0);
+const yearGrowth = ref(0);
+const applyForward = ref(false);
 
 function normalize() {
   settingsStore.planning.baseYear = Math.max(2000, Math.min(2100, settingsStore.planning.baseYear || new Date().getFullYear()));
@@ -156,12 +199,9 @@ const rows = computed(() => {
     revenueElasticity: settingsStore.revenueElasticity,
     spendingGrowth: settingsStore.spendingGrowth,
     categoryUserDelta: settingsStore.categoryUserDelta,
+    spendingGlobal: settingsStore.spendingGlobal,
+    yearOverrides: settingsStore.yearOverrides,
   }});
-});
-
-const selectedYearRow = computed(() => {
-  if (!selectedYear.value) return null;
-  return rows.value.find(r => r.year === selectedYear.value) || null;
 });
 
 function fmt(n) {
@@ -193,9 +233,54 @@ function applyPreset() {
   }
 }
 
-function openYearSimulator(year) {
+function openYearEditor(year) {
   selectedYear.value = year;
+  const ov = settingsStore.yearOverrides?.[year]?.spending || {};
+  yearLevel.value = Number(ov.levelPct || 0);
+  yearGrowth.value = Number(ov.growthDeltaPct || 0);
+  applyForward.value = !!(settingsStore.yearOverrides?.[year]?.applyForward);
   showYearModal.value = true;
+}
+
+function closeYearEditor() {
+  showYearModal.value = false;
+}
+
+function clampGlobal() {
+  settingsStore.spendingGlobal.levelPct = Math.max(-15, Math.min(15, Number(settingsStore.spendingGlobal.levelPct || 0)));
+  settingsStore.spendingGlobal.growthDeltaPct = Math.max(-2, Math.min(2, Number(settingsStore.spendingGlobal.growthDeltaPct || 0)));
+}
+
+function applyYearOverrides() {
+  if (!selectedYear.value) return;
+  const yr = Number(selectedYear.value);
+  const baseYear = Number(settingsStore.planning.baseYear || yr);
+  const horizon = Number(settingsStore.planning.horizonYears || 10);
+  const lastYear = baseYear + horizon - 1;
+  const applyToYears = applyForward.value ? Array.from({ length: lastYear - yr + 1 }, (_, i) => yr + i) : [yr];
+  applyToYears.forEach(y => {
+    const cur = settingsStore.yearOverrides[y] || {};
+    settingsStore.yearOverrides[y] = {
+      ...cur,
+      spending: {
+        ...(cur.spending || {}),
+        levelPct: Math.max(-15, Math.min(15, Number(yearLevel.value || 0))),
+        growthDeltaPct: Math.max(-2, Math.min(2, Number(yearGrowth.value || 0))),
+      },
+      applyForward: applyForward.value,
+    };
+  });
+  showYearModal.value = false;
+}
+
+function resetYearOverrides() {
+  if (!selectedYear.value) return;
+  const yr = Number(selectedYear.value);
+  const cur = settingsStore.yearOverrides[yr] || {};
+  // Remove only spending overrides; keep other potential future fields
+  settingsStore.yearOverrides[yr] = { ...cur, spending: undefined };
+  yearLevel.value = 0;
+  yearGrowth.value = 0;
 }
 
 function prettyKey(k) {
@@ -307,4 +392,10 @@ details.spend-growth > summary { font-weight: 600; color: #374151; cursor: point
 
 .year-link { background: none; border: none; color: #2563eb; cursor: pointer; padding: 0; font-weight: 600; }
 .year-link:hover { text-decoration: underline; }
+
+.year-editor { position: fixed; inset: 0; background: rgba(0,0,0,0.35); display: grid; place-items: center; z-index: 2000; }
+.year-editor-card { width: min(520px, 94vw); background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: grid; gap: 10px; }
+.ye-header { display: flex; justify-content: space-between; align-items: center; }
+.ye-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.ye-actions { display: flex; justify-content: flex-end; gap: 8px; }
 </style>

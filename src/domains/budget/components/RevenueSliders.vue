@@ -1,14 +1,17 @@
 <template>
   <div class="revenue-sliders">
-    <div class="revenue-explanation mb-4 p-4 bg-gray-50 rounded-lg">
-      <p class="text-sm text-gray-700 mb-2">The Budget Simulator uses a simplified approach to tax calculations to help you understand the fiscal impact of tax changes. Instead of detailed tax brackets, it uses average effective rates:</p>
-      <ul class="text-sm text-gray-600 list-disc pl-5 mb-2">
-        <li>Personal Income Tax: Base rate of 21% (2024) with $10 billion in revenue per percentage point</li>
-        <li>Corporate Income Tax: Base rate of 15% (2024) with $5.33 billion in revenue per percentage point</li>
-        <li>Tax credits and expenditures can be adjusted separately to see their impact on revenue</li>
-      </ul>
-      <p class="text-sm text-gray-700">This approach focuses on overall revenue impact rather than individual taxpayer scenarios.</p>
-    </div>
+    <details class="revenue-explanation mb-4 bg-gray-50 rounded-lg">
+      <summary class="p-3 cursor-pointer text-gray-800 font-medium">About these sliders</summary>
+      <div class="p-4 pt-2">
+        <p class="text-sm text-gray-700 mb-2">The Budget Simulator uses a simplified approach to tax calculations to help you understand the fiscal impact of tax changes. Instead of detailed tax brackets, it uses average effective rates:</p>
+        <ul class="text-sm text-gray-600 list-disc pl-5 mb-2">
+          <li>Personal Income Tax: Base rate of 21% (2024) with $10 billion in revenue per percentage point</li>
+          <li>Corporate Income Tax: Base rate of 15% (2024) with $5.33 billion in revenue per percentage point</li>
+          <li>Tax credits and expenditures can be adjusted separately to see their impact on revenue</li>
+        </ul>
+        <p class="text-sm text-gray-700">This approach focuses on overall revenue impact rather than individual taxpayer scenarios.</p>
+      </div>
+    </details>
     <div class="revenue-controls">
       <div class="overflow-y-auto pr-2 max-h-[60vh]">
         <!-- Income Taxes Group -->
@@ -50,7 +53,7 @@
             class="group-content"
             :class="{ 'expanded': expandedGroups.incomeTaxes }"
           >
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div class="revenue-grid">
               <!-- Personal Income Tax -->
               <div
                 class="revenue-tile"
@@ -58,7 +61,16 @@
               >
                 <div class="tile-header">
                   <div class="tile-title">
+                    <span class="material-icons tile-icon">payments</span>
                     Personal Income Tax
+                    <CategoryInfo
+                      :name="budgetStore.revenueSources.personalIncomeTax?.name || 'Personal Income Tax'"
+                      :description="budgetStore.revenueSources.personalIncomeTax?.description || ''"
+                      :base-amount="budgetStore.revenueSources.personalIncomeTax?.base || 0"
+                      :current-setting="revenueRates.personalIncomeTax"
+                      @show-tooltip="showTooltip"
+                      @hide-tooltip="hideTooltip"
+                    />
                   </div>
                   <div class="tile-amount">
                     <div class="total-amount">
@@ -114,7 +126,7 @@
                     :min="getLabel('personalIncomeTax', 'min')" 
                     :max="getLabel('personalIncomeTax', 'max')" 
                     :step="0.1" 
-                    class="slider"
+                    class="slider-input"
                     @input="onSliderInput('personalIncomeTax', localSliderValues.personalIncomeTax)" 
                     /> <!-- 🆕 PERFORMANCE NOTE: Debounced slider commit using localSliderValues -->
                   <div class="input-controls">
@@ -151,7 +163,16 @@
               >
                 <div class="tile-header">
                   <div class="tile-title">
+                    <span class="material-icons tile-icon">payments</span>
                     Corporate Income Tax
+                    <CategoryInfo
+                      :name="budgetStore.revenueSources.corporateIncomeTax?.name || 'Corporate Income Tax'"
+                      :description="budgetStore.revenueSources.corporateIncomeTax?.description || ''"
+                      :base-amount="budgetStore.revenueSources.corporateIncomeTax?.base || 0"
+                      :current-setting="revenueRates.corporateIncomeTax"
+                      @show-tooltip="showTooltip"
+                      @hide-tooltip="hideTooltip"
+                    />
                   </div>
                   <div class="tile-amount">
                     <div class="total-amount">
@@ -207,7 +228,7 @@
                     :min="getLabel('corporateIncomeTax', 'min')" 
                     :max="getLabel('corporateIncomeTax', 'max')" 
                     :step="0.1" 
-                    class="slider"
+                    class="slider-input"
                     @input="onSliderInput('corporateIncomeTax', localSliderValues.corporateIncomeTax)" 
                     /> <!-- 🆕 PERFORMANCE NOTE: Debounced slider commit using localSliderValues -->
                   <div class="input-controls">
@@ -279,7 +300,7 @@
             class="group-content"
             :class="{ 'expanded': expandedGroups.consumptionTaxes }"
           >
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div class="revenue-grid">
               <!-- GST/HST -->
               <div
                 class="revenue-tile"
@@ -287,7 +308,16 @@
               >
                 <div class="tile-header">
                   <div class="tile-title">
+                    <span class="material-icons tile-icon">payments</span>
                     GST/HST
+                    <CategoryInfo
+                      :name="budgetStore.revenueSources.gst?.name || 'GST/HST'"
+                      :description="budgetStore.revenueSources.gst?.description || ''"
+                      :base-amount="budgetStore.revenueSources.gst?.base || 0"
+                      :current-setting="revenueRates.gst"
+                      @show-tooltip="showTooltip"
+                      @hide-tooltip="hideTooltip"
+                    />
                   </div>
                   <div class="tile-amount">
                     <div class="total-amount">
@@ -343,7 +373,7 @@
                     :min="getLabel('gst', 'min')" 
                     :max="getLabel('gst', 'max')" 
                     :step="0.1" 
-                    class="slider"
+                    class="slider-input"
                     @input="onSliderInput('gst', localSliderValues.gst)" 
                     /> <!-- 🆕 PERFORMANCE NOTE: Debounced slider commit using localSliderValues -->
                   <div class="input-controls">
@@ -380,7 +410,16 @@
               >
                 <div class="tile-header">
                   <div class="tile-title">
+                    <span class="material-icons tile-icon">payments</span>
                     Customs Duties
+                    <CategoryInfo
+                      :name="budgetStore.revenueSources.customsDuties?.name || 'Customs Duties'"
+                      :description="budgetStore.revenueSources.customsDuties?.description || ''"
+                      :base-amount="budgetStore.revenueSources.customsDuties?.base || 0"
+                      :current-setting="revenueRates.customsDuties"
+                      @show-tooltip="showTooltip"
+                      @hide-tooltip="hideTooltip"
+                    />
                   </div>
                   <div class="tile-amount">
                     <div class="total-amount">
@@ -436,7 +475,7 @@
                     :min="getLabel('customsDuties', 'min')" 
                     :max="getLabel('customsDuties', 'max')" 
                     :step="0.1" 
-                    class="slider"
+                    class="slider-input"
                     @input="onSliderInput('customsDuties', localSliderValues.customsDuties)" 
                     /> <!-- 🆕 PERFORMANCE NOTE: Debounced slider commit using localSliderValues -->
                   <div class="input-controls">
@@ -467,7 +506,7 @@
               </div>
             </div>
             
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
+            <div class="revenue-grid mt-3">
               <!-- Carbon Pricing -->
               <div
                 class="revenue-tile"
@@ -475,7 +514,16 @@
               >
                 <div class="tile-header">
                   <div class="tile-title">
+                    <span class="material-icons tile-icon">payments</span>
                     Carbon Pricing
+                    <CategoryInfo
+                      :name="budgetStore.revenueSources.carbonPricing?.name || 'Carbon Pricing'"
+                      :description="budgetStore.revenueSources.carbonPricing?.description || ''"
+                      :base-amount="budgetStore.revenueSources.carbonPricing?.base || 0"
+                      :current-setting="revenueRates.carbonPricing"
+                      @show-tooltip="showTooltip"
+                      @hide-tooltip="hideTooltip"
+                    />
                   </div>
                   <div class="tile-amount">
                     <div class="total-amount">
@@ -531,7 +579,7 @@
                     :min="getLabel('carbonPricing', 'min')" 
                     :max="getLabel('carbonPricing', 'max')" 
                     :step="0.1" 
-                    class="slider"
+                    class="slider-input"
                     @input="onSliderInput('carbonPricing', localSliderValues.carbonPricing)" 
                     /> <!-- 🆕 PERFORMANCE NOTE: Debounced slider commit using localSliderValues -->
                   <div class="input-controls">
@@ -568,7 +616,16 @@
               >
                 <div class="tile-header">
                   <div class="tile-title">
+                    <span class="material-icons tile-icon">payments</span>
                     Excise Taxes
+                    <CategoryInfo
+                      :name="budgetStore.revenueSources.exciseTaxes?.name || 'Excise Taxes'"
+                      :description="budgetStore.revenueSources.exciseTaxes?.description || ''"
+                      :base-amount="budgetStore.revenueSources.exciseTaxes?.base || 0"
+                      :current-setting="revenueRates.exciseTaxes"
+                      @show-tooltip="showTooltip"
+                      @hide-tooltip="hideTooltip"
+                    />
                   </div>
                   <div class="tile-amount">
                     <div class="total-amount">
@@ -624,7 +681,7 @@
                     :min="getLabel('exciseTaxes', 'min')" 
                     :max="getLabel('exciseTaxes', 'max')" 
                     :step="0.1" 
-                    class="slider"
+                    class="slider-input"
                     @input="onSliderInput('exciseTaxes', localSliderValues.exciseTaxes)" 
                     /> <!-- 🆕 PERFORMANCE NOTE: Debounced slider commit using localSliderValues -->
                   <div class="input-controls">
@@ -696,7 +753,7 @@
             class="group-content"
             :class="{ 'expanded': expandedGroups.otherRevenues }"
           >
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div class="revenue-grid">
               <!-- Employment Insurance Premiums -->
               <div
                 class="revenue-tile"
@@ -704,7 +761,16 @@
               >
                 <div class="tile-header">
                   <div class="tile-title">
+                    <span class="material-icons tile-icon">payments</span>
                     EI Premiums
+                    <CategoryInfo
+                      :name="budgetStore.revenueSources.eiPremiums?.name || 'EI Premiums'"
+                      :description="budgetStore.revenueSources.eiPremiums?.description || ''"
+                      :base-amount="budgetStore.revenueSources.eiPremiums?.base || 0"
+                      :current-setting="revenueRates.eiPremiums"
+                      @show-tooltip="showTooltip"
+                      @hide-tooltip="hideTooltip"
+                    />
                   </div>
                   <div class="tile-amount">
                     <div class="total-amount">
@@ -760,7 +826,7 @@
                     :min="getLabel('eiPremiums', 'min')" 
                     :max="getLabel('eiPremiums', 'max')" 
                     :step="0.1" 
-                    class="slider"
+                    class="slider-input"
                     @input="onSliderInput('eiPremiums', localSliderValues.eiPremiums)" 
                     /> <!-- 🆕 PERFORMANCE NOTE: Debounced slider commit using localSliderValues -->
                   <div class="input-controls">
@@ -797,7 +863,16 @@
               >
                 <div class="tile-header">
                   <div class="tile-title">
+                    <span class="material-icons tile-icon">payments</span>
                     Crown Corp Profits
+                    <CategoryInfo
+                      :name="budgetStore.revenueSources.crownProfits?.name || 'Crown Corp Profits'"
+                      :description="budgetStore.revenueSources.crownProfits?.description || ''"
+                      :base-amount="budgetStore.revenueSources.crownProfits?.base || 0"
+                      :current-setting="revenueRates.crownProfits"
+                      @show-tooltip="showTooltip"
+                      @hide-tooltip="hideTooltip"
+                    />
                   </div>
                   <div class="tile-amount">
                     <div class="total-amount">
@@ -863,7 +938,7 @@
                     :min="getLabel('crownProfits', 'min')" 
                     :max="getLabel('crownProfits', 'max')" 
                     :step="0.1" 
-                    class="slider"
+                    class="slider-input"
                     @input="onSliderInput('crownProfits', localSliderValues.crownProfits)" 
                     /> <!-- 🆕 PERFORMANCE NOTE: Debounced slider commit using localSliderValues -->
                   <div class="input-controls">
@@ -894,7 +969,7 @@
               </div>
             </div>
             
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
+            <div class="revenue-grid mt-3">
               <!-- Resource Royalties -->
               <div
                 class="revenue-tile"
@@ -902,7 +977,16 @@
               >
                 <div class="tile-header">
                   <div class="tile-title">
+                    <span class="material-icons tile-icon">payments</span>
                     Resource Royalties
+                    <CategoryInfo
+                      :name="budgetStore.revenueSources.resourceRoyalties?.name || 'Resource Royalties'"
+                      :description="budgetStore.revenueSources.resourceRoyalties?.description || ''"
+                      :base-amount="budgetStore.revenueSources.resourceRoyalties?.base || 0"
+                      :current-setting="revenueRates.resourceRoyalties"
+                      @show-tooltip="showTooltip"
+                      @hide-tooltip="hideTooltip"
+                    />
                   </div>
                   <div class="tile-amount">
                     <div class="total-amount">
@@ -958,7 +1042,7 @@
                     :min="getLabel('resourceRoyalties', 'min')" 
                     :max="getLabel('resourceRoyalties', 'max')" 
                     :step="0.1" 
-                    class="slider"
+                    class="slider-input"
                     @input="onSliderInput('resourceRoyalties', localSliderValues.resourceRoyalties)" 
                     /> <!-- 🆕 PERFORMANCE NOTE: Debounced slider commit using localSliderValues -->
                   <div class="input-controls">
@@ -995,7 +1079,16 @@
               >
                 <div class="tile-header">
                   <div class="tile-title">
+                    <span class="material-icons tile-icon">payments</span>
                     Non-Tax Revenue
+                    <CategoryInfo
+                      :name="budgetStore.revenueSources.nonTaxRevenue?.name || 'Non-Tax Revenue'"
+                      :description="budgetStore.revenueSources.nonTaxRevenue?.description || ''"
+                      :base-amount="budgetStore.revenueSources.nonTaxRevenue?.base || 0"
+                      :current-setting="revenueRates.nonTaxRevenue"
+                      @show-tooltip="showTooltip"
+                      @hide-tooltip="hideTooltip"
+                    />
                   </div>
                   <div class="tile-amount">
                     <div class="total-amount">
@@ -1051,7 +1144,7 @@
                     :min="getLabel('nonTaxRevenue', 'min')" 
                     :max="getLabel('nonTaxRevenue', 'max')" 
                     :step="0.1" 
-                    class="slider"
+                    class="slider-input"
                     @input="onSliderInput('nonTaxRevenue', localSliderValues.nonTaxRevenue)" 
                     /> <!-- 🆕 PERFORMANCE NOTE: Debounced slider commit using localSliderValues -->
                   <div class="input-controls">
@@ -1104,15 +1197,29 @@
       </div>
     </div>
   </div>
+  <Teleport to="body">
+    <div 
+      v-if="activeTooltip"
+      class="tooltip-text"
+      :style="{ 
+        visibility: activeTooltip ? 'visible' : 'hidden',
+        opacity: activeTooltip ? 1 : 0
+      }"
+    >
+      {{ activeTooltip }}
+    </div>
+  </Teleport>
 </template>
 
 <script setup>
 import { ref, onMounted, watch, computed, shallowRef, nextTick } from 'vue';
+import CategoryInfo from '@/domains/budget/components/BudgetCategoryInfo.vue';
 import debounce from 'lodash.debounce';
 import throttle from 'lodash.throttle';
 import { useBudgetSimulatorStore } from '../store/budgetSimulator';
 
 const budgetStore = useBudgetSimulatorStore();
+const activeTooltip = ref('');
 
 // Local reactive state
 const expandedGroups = ref({
@@ -1212,6 +1319,14 @@ function getDefaultMax(source) {
     case 'resourceRoyalties': return 5;
     default: return 100;
   }
+}
+
+function showTooltip(text) {
+  activeTooltip.value = text;
+}
+
+function hideTooltip() {
+  activeTooltip.value = '';
 }
 
 // Toggle expansion state of a revenue group.
@@ -1724,7 +1839,7 @@ onMounted(() => {
   min-width: 0;
 }
 .tile-note, .tax-expenditure-note {
-  padding: 0.5rem 1.25rem 0 1.25rem;
+  padding: 0.35rem 0.8rem 0 0.8rem;
   font-size: 0.69rem;
   color: #4a5568;
   opacity: 0.95;
@@ -1797,5 +1912,173 @@ onMounted(() => {
   font-size: 0.85rem;
   pointer-events: none;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* ======================== */
+/* Square card + compact UI */
+/* ======================== */
+
+/* Match spending grid density */
+/* Dedicated grid like spending */
+.revenue-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.75rem;
+}
+
+/* Match spending card chrome */
+.revenue-tile {
+  background: #fbfcfd;
+  border: 1px solid #e6edf3;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+  transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+  min-height: auto;
+  position: relative;
+}
+
+/* Thin accent bar using tile color */
+.revenue-tile::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--tile-color, #4098d7);
+}
+
+.revenue-tile:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 8px 16px rgba(16, 24, 40, 0.08);
+  border-color: var(--tile-color, #4098d7);
+}
+
+/* Header styling similar to spending headers */
+.tile-header {
+  background-color: #f8fafc;
+  padding: 0.55rem 0.8rem; /* tighter */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tile-title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 650;
+  letter-spacing: 0.2px;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.tile-icon {
+  font-size: 18px;
+  color: #64748b;
+}
+
+.tile-amount {
+  font-size: 0.83rem;
+  color: #4a5568;
+}
+
+/* Compact slider row: labels full width, slider left, inputs right */
+.slider-container {
+  padding: 0.7rem; /* tighter */
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto;
+  align-items: center;
+  gap: 0.75rem 0.75rem;
+}
+
+.slider-labels { grid-column: 1 / -1; }
+
+/* Tighten inputs */
+.input-controls {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: min-content;
+  column-gap: 0.5rem;
+  align-items: center;
+}
+
+.percentage-input, .amount-input {
+  width: 56px;
+  padding: 0.25rem 0.4rem;
+  font-size: 0.75rem;
+  border-radius: 0.25rem;
+}
+
+.input-group { max-width: 64px; }
+
+/* Clamp long notes to 3 lines like spending */
+.tile-note > span {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Make slider style override global gradient styles */
+input.slider-input[type="range"] {
+  width: 100%;
+  height: 6px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: linear-gradient(180deg, #e9eef4, #e5ebf1);
+  border-radius: 6px;
+  outline: none;
+}
+
+input.slider-input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: #4098d7;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.18), 0 0 0 2px #fff inset;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+input.slider-input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.06);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+}
+
+input.slider-input[type="range"]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: #4098d7;
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.18);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+input.slider-input[type="range"]::-moz-range-thumb:hover {
+  transform: scale(1.06);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+}
+
+@media (max-width: 600px) {
+  .slider-labels { margin-bottom: 0.25rem; }
+  .slider-container {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+  }
+  .input-controls {
+    grid-column: 1;
+    justify-self: start;
+    grid-auto-flow: column;
+    column-gap: 0.5rem;
+  }
 }
 </style>
