@@ -34,157 +34,268 @@
         </div>
         <div class="row preset-row">
           <label>Preset</label>
-          <select v-model="selectedPreset" @change="applySelectedPreset">
-            <option value="">— Select —</option>
-            <option v-for="(val, key) in settingsStore.presets" :key="key" :value="key">{{ key }}</option>
+          <select v-model="selectedPreset" @change="applyPreset()">
+            <option value="">Custom</option>
+            <option value="conservative">Conservative</option>
+            <option value="moderate">Moderate</option>
+            <option value="optimistic">Optimistic</option>
           </select>
-          <button class="btn" @click="exportCsv" :disabled="rows.length === 0">Export CSV</button>
         </div>
+        <div class="row">
+          <button class="btn" @click="resetToDefaults()">Reset to defaults</button>
+        </div>
+        
+        <details class="spend-growth">
+          <summary>Program Spending Growth (%)</summary>
+          <div class="growth-grid">
+            <div
+              v-for="(profile, key) in settingsStore.spendingGrowth"
+              :key="key"
+              class="growth-row"
+            >
+              <div class="label">{{ prettyKey(key) }}</div>
+              <div class="inputs">
+                <label class="sub">Baseline</label>
+                <input
+                  type="number"
+                  step="0.1"
+                  :min="-10"
+                  :max="15"
+                  v-model.number="settingsStore.spendingGrowth[key].baseline"
+                />
+                <label class="sub">Demographic</label>
+                <input
+                  type="number"
+                  step="0.1"
+                  :min="-5"
+                  :max="10"
+                  v-model.number="settingsStore.spendingGrowth[key].demographic"
+                />
+              </div>
+            </div>
+          </div>
+        </details>
       </div>
 
       <div v-if="showPlanner" class="embedded-planner">
         <MultiYearPlanner />
       </div>
 
-      <div v-if="rows.length === 0" class="empty">No projections computed.</div>
-      <div v-else class="table-wrapper">
+      <div class="table-wrapper">
         <table class="proj-table">
           <thead>
             <tr>
               <th>Year</th>
-              <th>GDP</th>
-              <th>Total Revenue</th>
-              <th>Program Spend</th>
-              <th>Interest</th>
-              <th>Total Spend</th>
-              <th>Deficit</th>
-              <th>Debt</th>
-              <th>Debt/GDP</th>
+              <th>GDP (B$)</th>
+              <th>Revenue (B$)</th>
+              <th>Spending (B$)</th>
+              <th>Surplus/Deficit (B$)</th>
+              <th>Debt (B$)</th>
+              <th>Debt/GDP (%)</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="r in rows" :key="r.year">
-              <td>{{ r.year }}</td>
+              <td>
+                <button class="year-link" @click="openYearSimulator(r.year)">{{ r.year }}</button>
+              </td>
               <td>{{ fmt(r.gdp) }}</td>
               <td>{{ fmt(r.revenueTotal) }}</td>
-              <td>{{ fmt(r.programSpending) }}</td>
-              <td>{{ fmt(r.interest) }}</td>
               <td>{{ fmt(r.spendingTotal) }}</td>
-              <td :class="{ negative: r.deficit > 0, positive: r.deficit <= 0 }">{{ fmt(r.deficit) }}</td>
+              <td :class="{ positive: r.deficit >= 0, negative: r.deficit < 0 }">{{ fmt(r.deficit) }}</td>
               <td>{{ fmt(r.debt) }}</td>
               <td>{{ (r.debtToGDP * 100).toFixed(1) }}%</td>
             </tr>
           </tbody>
         </table>
+        <div v-if="rows.length === 0" class="empty">
+          No projection data available. Check settings.
+        </div>
       </div>
+
+      <YearSimulatorModal
+        :show="showYearModal"
+        :year="selectedYear"
+        :baseline-row="selectedYearRow"
+        @close="showYearModal = false"
+      />
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue';
-import { useBudgetSimulatorStore } from '@/domains/budget';
+import { useBudgetSimulatorStore } from '@/domains/budget/store/budgetSimulator';
 import { useMultiYearSettingsStore } from '@/domains/budget/store/multiYearSettings.js';
-import { FEATURES } from '@/features.js';
-import { projectAll } from '@/domains/budget/utils/projections.js';
 import { makeBaseSnapshotFromStore } from '@/domains/budget/utils/projectionAdapters.js';
+import { projectAll } from '@/domains/budget/utils/projections.js';
+import { FEATURES } from '@/features.js';
 import MultiYearPlanner from '@/domains/budget/components/MultiYearPlanner.vue';
+import YearSimulatorModal from '@/domains/budget/components/YearSimulatorModal.vue';
 
-const budgetStore = useBudgetSimulatorStore();
+const budget = useBudgetSimulatorStore();
 const settingsStore = useMultiYearSettingsStore();
-
-const planning = computed(() => settingsStore.planning);
-const economic = computed(() => settingsStore.economic);
-
-let selectedPreset = '';
-
 const showPlanner = ref(false);
+const selectedPreset = ref('');
+const showYearModal = ref(false);
+const selectedYear = ref(null);
+
+function normalize() {
+  settingsStore.planning.baseYear = Math.max(2000, Math.min(2100, settingsStore.planning.baseYear || new Date().getFullYear()));
+  settingsStore.planning.horizonYears = Math.max(1, Math.min(50, settingsStore.planning.horizonYears || 10));
+  settingsStore.economic.gdpReal = Math.max(-5, Math.min(10, settingsStore.economic.gdpReal || 2));
+  settingsStore.economic.inflation = Math.max(-2, Math.min(20, settingsStore.economic.inflation || 2));
+  settingsStore.economic.interestRate = Math.max(0, Math.min(20, settingsStore.economic.interestRate || 3));
+}
 
 const rows = computed(() => {
-  if (!FEATURES.MULTI_YEAR_PLANNING) return [];
-  const base = makeBaseSnapshotFromStore(budgetStore);
-  const settings = {
-    planning: planning.value,
-    economic: economic.value,
+  const base = makeBaseSnapshotFromStore(budget);
+  return projectAll({ base, settings: {
+    planning: settingsStore.planning,
+    economic: settingsStore.economic,
     revenueElasticity: settingsStore.revenueElasticity,
     spendingGrowth: settingsStore.spendingGrowth,
     categoryUserDelta: settingsStore.categoryUserDelta,
-  };
-  return projectAll({ base, settings });
+  }});
+});
+
+const selectedYearRow = computed(() => {
+  if (!selectedYear.value) return null;
+  return rows.value.find(r => r.year === selectedYear.value) || null;
 });
 
 function fmt(n) {
-  // billions, 1 decimal
-  return `${Number(n || 0).toFixed(1)}B`;
+  return `$${Number(n || 0).toFixed(1)}B`;
 }
 
-function normalize() {
-  // Simple clamps for sanity
-  if (settingsStore.planning.horizonYears < 1) settingsStore.planning.horizonYears = 1;
-  if (settingsStore.planning.horizonYears > 50) settingsStore.planning.horizonYears = 50;
-  if (settingsStore.economic.inflation > 50) settingsStore.economic.inflation = 50;
-  if (settingsStore.economic.inflation < -5) settingsStore.economic.inflation = -5;
-  if (settingsStore.economic.gdpReal < -10) settingsStore.economic.gdpReal = -10;
-  if (settingsStore.economic.gdpReal > 15) settingsStore.economic.gdpReal = 15;
-  if (settingsStore.economic.interestRate < 0) settingsStore.economic.interestRate = 0;
-  if (settingsStore.economic.interestRate > 50) settingsStore.economic.interestRate = 50;
+function resetToDefaults() {
+  settingsStore.planning.baseYear = new Date().getFullYear();
+  settingsStore.planning.horizonYears = 10;
+  settingsStore.economic.gdpReal = 2.0;
+  settingsStore.economic.inflation = 2.0;
+  settingsStore.economic.interestRate = 3.0;
+  selectedPreset.value = '';
 }
 
-function applySelectedPreset() {
-  if (selectedPreset) settingsStore.applyPreset(selectedPreset);
+function applyPreset() {
+  if (selectedPreset.value === 'conservative') {
+    settingsStore.economic.gdpReal = 1.5;
+    settingsStore.economic.inflation = 1.8;
+    settingsStore.economic.interestRate = 3.5;
+  } else if (selectedPreset.value === 'moderate') {
+    settingsStore.economic.gdpReal = 2.0;
+    settingsStore.economic.inflation = 2.0;
+    settingsStore.economic.interestRate = 3.0;
+  } else if (selectedPreset.value === 'optimistic') {
+    settingsStore.economic.gdpReal = 2.5;
+    settingsStore.economic.inflation = 2.2;
+    settingsStore.economic.interestRate = 2.5;
+  }
 }
 
-function exportCsv() {
-  const data = rows.value || [];
-  const headers = ['Year','GDP','Total Revenue','Program Spend','Interest','Total Spend','Deficit','Debt','Debt/GDP'];
-  const csv = [headers.join(',')]
-    .concat(
-      data.map(r => [
-        r.year,
-        num(r.gdp),
-        num(r.revenueTotal),
-        num(r.programSpending),
-        num(r.interest),
-        num(r.spendingTotal),
-        num(r.deficit),
-        num(r.debt),
-        (r.debtToGDP * 100).toFixed(2) + '%'
-      ].join(','))
-    )
-    .join('\n');
-  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `multi_year_projections_${planning.value.baseYear}_${planning.value.horizonYears}y.csv`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+function openYearSimulator(year) {
+  selectedYear.value = year;
+  showYearModal.value = true;
 }
 
-function num(n) { return Number(n || 0).toFixed(2); }
-
+function prettyKey(k) {
+  return String(k)
+    .replace(/([A-Z])/g, ' $1')
+    .replace(/^./, c => c.toUpperCase());
+}
 </script>
 
 <style scoped>
-.multi-year-panel {
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  padding: 12px;
-  background: #fff;
-}
-.header-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.title { margin: 0 0 8px 0; }
-.assumptions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; font-size: 0.9rem; color: #374151; }
+.multi-year-panel { display: grid; gap: 12px; }
+.header-row { display: flex; align-items: center; justify-content: space-between; }
+.title { margin: 0; font-size: 1rem; color: #111827; }
+.assumptions { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 16px; }
 .assumptions.editable { align-items: flex-end; }
 .assumptions .row { display: flex; flex-direction: column; gap: 4px; }
 .assumptions .row input, .assumptions .row select { padding: 6px 8px; border: 1px solid #d1d5db; border-radius: 6px; min-width: 140px; }
 .assumptions .row label { font-size: 0.8rem; color: #6b7280; }
 .assumptions .preset-row { flex-direction: row; align-items: center; gap: 8px; }
-.btn { padding: 6px 10px; border: 1px solid #d1d5db; border-radius: 6px; background: #f9fafb; cursor: pointer; }
-.btn.primary { background: #2563eb; color: #fff; border-color: #2563eb; box-shadow: 0 3px 10px rgba(37,99,235,.25); display: inline-flex; align-items: center; gap: 6px; }
-.btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+details.spend-growth { grid-column: 1 / -1; background: #fafbff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 8px 10px; }
+details.spend-growth > summary { font-weight: 600; color: #374151; cursor: pointer; }
+.growth-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; margin-top: 8px; }
+.growth-row { display: grid; grid-template-columns: 1fr 2fr; gap: 8px; align-items: center; padding: 6px; border: 1px dashed #e5e7eb; border-radius: 8px; background: #fff; }
+.growth-row .label { font-size: 0.85rem; color: #374151; }
+.growth-row .inputs { display: grid; grid-template-columns: auto 1fr auto 1fr; gap: 6px; align-items: center; }
+.growth-row .sub { font-size: 0.75rem; color: #6b7280; }
+
+.btn {
+  padding: 8px 16px;
+  border: 1px solid #3b82f6;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  color: #374151;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(107, 114, 128, 0.15);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s;
+}
+
+.btn:hover {
+  background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+  box-shadow: 0 4px 16px rgba(107, 114, 128, 0.2);
+  transform: translateY(-1px);
+  border-color: #6b7280;
+}
+
+.btn:hover::before {
+  left: 100%;
+}
+
+.btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(107, 114, 128, 0.15);
+}
+
+.btn.primary {
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  color: white;
+  border-color: #3b82f6;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.btn.primary::before {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+}
+
+.btn.primary:hover {
+  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
+  border-color: #2563eb;
+}
+
+.btn:disabled {
+  background: #6b7280;
+  border-color: #6b7280;
+  box-shadow: none;
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+}
+
 .flag-disabled, .empty { color: #6b7280; font-style: italic; }
 .table-wrapper { overflow-x: auto; }
 .embedded-planner { margin: 10px 0 16px 0; border: 1px solid #e5e7eb; border-radius: 8px; padding: 8px; background: #fafbff; }
@@ -193,4 +304,7 @@ function num(n) { return Number(n || 0).toFixed(2); }
 .proj-table th:first-child, .proj-table td:first-child { text-align: left; }
 .negative { color: #b91c1c; }
 .positive { color: #047857; }
+
+.year-link { background: none; border: none; color: #2563eb; cursor: pointer; padding: 0; font-weight: 600; }
+.year-link:hover { text-decoration: underline; }
 </style>
