@@ -128,7 +128,7 @@ const { sortOrder } = storeToRefs(configStore)
 }
 
 .section-title {
-  font-size: 2rem;
+  font-size: clamp(1.2rem, 2.2vw + 0.8rem, 2rem);
   font-weight: 700;
   color: #2c3e50;
   margin-bottom: 1.5rem;
@@ -154,7 +154,7 @@ const { sortOrder } = storeToRefs(configStore)
 }
 
 .allocation-description, .budget-explanation {
-  font-size: 1.1rem;
+  font-size: clamp(0.95rem, 0.6vw + 0.85rem, 1.1rem);
   line-height: 1.8;
   color: #4a5568;
   margin-bottom: 1.5rem;
@@ -174,8 +174,8 @@ const { sortOrder } = storeToRefs(configStore)
 
 .charts-wrapper {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
   margin-top: 1.5rem;
 }
 
@@ -215,7 +215,7 @@ const { sortOrder } = storeToRefs(configStore)
   margin: 1rem 0;
   background: rgba(52, 152, 219, 0.1);
   border-radius: 12px;
-  font-size: 1.2rem;
+  font-size: clamp(1rem, 0.8vw + 0.95rem, 1.2rem);
   font-weight: 600;
   color: #2c3e50;
 }
@@ -247,7 +247,7 @@ const { sortOrder } = storeToRefs(configStore)
 
 .allocation-table th,
 .allocation-table td {
-  padding: 1rem;
+  padding: 0.85rem 1rem;
   text-align: left;
   border-bottom: 1px solid rgba(226, 232, 240, 0.8);
 }
@@ -275,5 +275,17 @@ const { sortOrder } = storeToRefs(configStore)
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* Mobile refinements */
+@media (max-width: 768px) {
+  .federal-budget-section, .allocation-table-section { padding: 1.25rem; border-radius: 14px; }
+  .allocation-insulated { padding: 1rem; }
+}
+
+@media (max-width: 480px) {
+  .charts-wrapper { grid-template-columns: 1fr; gap: 1rem; }
+  .sort-button { padding: 0.6rem 1rem; border-radius: 6px; }
+  .allocation-table th, .allocation-table td { padding: 0.75rem; }
 }
 </style>

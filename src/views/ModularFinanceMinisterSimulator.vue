@@ -204,7 +204,7 @@ watch(currentYear, (newYear) => {
 }
 
 .simulator-title {
-  font-size: 2.5rem;
+  font-size: clamp(1.6rem, 2.4vw + 1rem, 2.5rem);
   font-weight: 700;
   color: #1a365d;
   margin-bottom: 1rem;
@@ -286,7 +286,7 @@ watch(currentYear, (newYear) => {
 }
 
 .card-title {
-  font-size: 1.25rem;
+  font-size: clamp(1rem, 1vw + 0.85rem, 1.25rem);
   font-weight: 600;
   color: #2d3748;
   display: flex;

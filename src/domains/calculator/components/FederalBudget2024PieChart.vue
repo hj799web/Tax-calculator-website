@@ -135,30 +135,30 @@
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
   }
   
-  .pie-chart-inner-container {
-    width: 329px;
-    height: 329px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0 auto;
-    position: relative;
-  }
+.pie-chart-inner-container {
+  width: 100%;
+  height: clamp(220px, 60vw, 360px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  position: relative;
+}
   
-  .legend-container {
-    width: 100%;
-    max-width: 329px;
-    font-size: 10px;
-    text-align: left;
-    margin: 5px auto;
-    padding: 10px;
-    background: #f8f9fa;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    transition: transform 0.3s ease;
-    overflow-y: auto;
-    max-height: 200px;
-  }
+.legend-container {
+  width: 100%;
+  max-width: 420px;
+  font-size: clamp(10px, 0.4vw + 9px, 12px);
+  text-align: left;
+  margin: 5px auto;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease;
+  overflow-y: auto;
+  max-height: 200px;
+}
   
   .legend-container:hover {
     transform: scale(1.01);
@@ -188,16 +188,8 @@
       padding: 8px;
     }
     
-    .pie-chart-inner-container {
-      width: 296px;
-      height: 296px;
-    }
-    
-    .legend-container {
-      max-width: 296px;
-      font-size: 9px;
-      padding: 8px;
-    }
-  }
+  .pie-chart-inner-container { height: clamp(200px, 70vw, 300px); }
+  .legend-container { font-size: clamp(9px, 0.5vw + 8px, 11px); }
+}
   </style>
   

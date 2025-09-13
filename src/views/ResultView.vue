@@ -118,6 +118,12 @@ const throttledExportToPDF = throttle(async () => {
 </script>
 
 <style scoped>
+/* Typography and spacing improvements */
+.result-title { font-size: clamp(1.2rem, 1.4vw + 0.9rem, 1.75rem); text-align: center; margin-bottom: 1rem; }
+.result-box { background: rgba(255,255,255,0.75); border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.25rem; box-shadow: 0 8px 24px rgba(0,0,0,0.05); }
+.result-item { display: flex; justify-content: space-between; gap: 12px; padding: 6px 0; }
+.result-item span { word-break: break-word; }
+
 @media (max-width: 600px) {
   .card-title, .card-content, .summary-card, .main-category-header, .other-category-header, .subcategory-header, .gov-ops-header, .tax-expenditure-header, .tile-title, .tile-amount, .slider-labels {
     writing-mode: initial !important;
@@ -127,5 +133,7 @@ const throttledExportToPDF = throttle(async () => {
     white-space: normal !important;
     word-break: break-word !important;
   }
+  .result-box { padding: 1rem; }
+  .result-item { flex-direction: column; align-items: flex-start; }
 }
 </style>

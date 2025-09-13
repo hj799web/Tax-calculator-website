@@ -524,7 +524,7 @@ export default {
 
 .main-title {
   color: #34495e;
-  font-size: 32px;
+  font-size: clamp(1.4rem, 2.2vw + 1rem, 2rem);
   margin-bottom: 10px;
   text-align: center;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
@@ -546,7 +546,7 @@ export default {
 
 h2 {
   color: #27ae60;
-  font-size: 24px;
+  font-size: clamp(1.1rem, 1.6vw + 0.9rem, 1.5rem);
   margin-top: 30px;
   margin-bottom: 15px;
   border-bottom: 1px solid #ddd;
@@ -578,7 +578,7 @@ h2:hover {
 
 h3 {
   color: #2980b9;
-  font-size: 20px;
+  font-size: clamp(1rem, 1.2vw + 0.85rem, 1.25rem);
   margin-top: 25px;
   transition: all 0.3s ease;
   transform-style: preserve-3d;
@@ -741,6 +741,24 @@ ul, ol {
   background-color: #219a52;
   transform: translateY(-2px);
   box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Mobile refinements */
+@media (max-width: 768px) {
+  .how-it-works-container { padding: 16px; }
+  .section { padding: 16px; margin-bottom: 24px; border-radius: 12px; }
+  .toc { padding: 14px; }
+}
+
+@media (max-width: 480px) {
+  .how-it-works-container { padding: 12px; }
+  .section { padding: 14px; margin-bottom: 20px; }
+  .toc { padding: 12px; }
+}
+
+/* Disable hover transforms on touch devices */
+@media (hover: none) and (pointer: coarse) {
+  h2:hover, h3:hover, .toc:hover, .section:hover, p:hover, li:hover { transform: none; box-shadow: none; }
 }
 
 /* Animation for sections to appear with a staggered effect */

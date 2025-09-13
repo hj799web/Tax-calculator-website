@@ -126,23 +126,25 @@ const chartOptions = computed(() => {
 
 <style scoped>
 .pie-chart-container {
-  max-width: 400px;
-  margin: 20px auto;
+  width: 100%;
+  max-width: 420px;
+  margin: 16px auto;
   position: relative;
-  height: 400px;
-  width: 400px;
 }
 
 .pie-chart-inner-container {
-  height: 300px;
+  width: 100%;
+  height: clamp(220px, 60vw, 360px);
   display: flex;
   justify-content: center;
-  margin-bottom: 20px;
+  align-items: center;
+  margin: 0 auto 16px;
 }
 
 #taxlegend {
-  max-width: 400px;
-  font-size: 14px;
+  max-width: 420px;
+  font-size: clamp(12px, 0.6vw + 10px, 14px);
+  line-height: 1.4;
 }
 
 /* Optional: Styling for no data message */
@@ -157,17 +159,7 @@ const chartOptions = computed(() => {
 }
 
 /* Responsive adjustments */
-@media (max-width: 768px) {
-  .pie-chart-container {
-    height: 500px;
-    width: 500px;
-  }
-}
-
 @media (max-width: 480px) {
-  .pie-chart-container {
-    height: 400px;
-    width: 400px;
-  }
+  .pie-chart-inner-container { height: clamp(200px, 70vw, 300px); }
 }
 </style> 

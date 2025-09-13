@@ -61,7 +61,7 @@ import DeductionsAndCreditsInputs from '@/domains/calculator/components/Deductio
 }
 
 .title {
-  font-size: 2.5rem;
+  font-size: clamp(1.6rem, 2.5vw + 1rem, 2.5rem);
   font-weight: 700;
   color: #2c3e50;
   margin-bottom: 1rem;
@@ -74,7 +74,7 @@ import DeductionsAndCreditsInputs from '@/domains/calculator/components/Deductio
 }
 
 .description {
-  font-size: 1.125rem;
+  font-size: clamp(1rem, 0.6vw + 0.9rem, 1.125rem);
   color: #4a5568;
   margin-bottom: 2rem;
   text-align: center;
@@ -82,7 +82,7 @@ import DeductionsAndCreditsInputs from '@/domains/calculator/components/Deductio
 }
 
 .section-title {
-  font-size: 1.5rem;
+  font-size: clamp(1.1rem, 1.2vw + 0.9rem, 1.5rem);
   font-weight: 600;
   color: #2d3748;
   margin: 2rem 0 1rem;
@@ -157,10 +157,23 @@ import DeductionsAndCreditsInputs from '@/domains/calculator/components/Deductio
 
 .input-group {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
   margin-bottom: 2rem;
   animation: fadeIn 0.6s ease-out forwards;
+}
+
+/* Mobile refinements */
+@media (max-width: 768px) {
+  .calculator-container { padding: 1.25rem; }
+  .input-group { grid-template-columns: 1fr; gap: 1rem; }
+  .simulator-button { padding: 0.8rem 1.2rem; font-size: 1rem; }
+}
+
+@media (max-width: 480px) {
+  .calculator-container { padding: 1rem; border-radius: 14px; }
+  .input-group { gap: 0.85rem; }
+  .simulator-button { padding: 0.7rem 1rem; font-size: 0.95rem; border-radius: 20px; }
 }
 
 @keyframes fadeIn {

@@ -168,8 +168,9 @@ const chartOptions = computed(() => ({
 }
 
 .pie-chart-container {
-  width: 329px;
-  height: 329px;
+  width: 100%;
+  max-width: 420px;
+  height: clamp(220px, 60vw, 360px);
   position: relative;
   display: flex;
   justify-content: center;
@@ -188,8 +189,8 @@ const chartOptions = computed(() => ({
 
 .legend-container {
   width: 100%;
-  max-width: 329px;
-  font-size: 10px;
+  max-width: 420px;
+  font-size: clamp(10px, 0.4vw + 9px, 12px);
   text-align: left;
   margin: 5px auto;
   padding: 10px;
@@ -231,15 +232,7 @@ const chartOptions = computed(() => ({
     gap: 8px;
   }
   
-  .pie-chart-container {
-    width: 257px;
-    height: 257px;
-  }
-  
-  .legend-container {
-    max-width: 257px;
-    font-size: 9px;
-    padding: 8px;
-  }
+  .pie-chart-container { height: clamp(200px, 70vw, 300px); }
+  .legend-container { font-size: clamp(9px, 0.5vw + 8px, 11px); }
 }
 </style> 

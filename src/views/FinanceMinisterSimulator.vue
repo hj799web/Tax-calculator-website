@@ -806,7 +806,7 @@ const collapseAllSections = () => {
   margin-bottom: 0.5rem;
 }
 .card-title {
-  font-size: 1.35rem;
+  font-size: clamp(1rem, 1.25vw + 0.85rem, 1.35rem);
   display: flex;
   align-items: center;
   gap: 10px;
@@ -1172,7 +1172,7 @@ input:focus, select:focus, textarea:focus {
   padding: 0.7rem 2rem;
   box-shadow: 0 2px 8px rgba(52, 152, 219, 0.08);
   color: #222;
-  font-size: 1.75rem;
+  font-size: clamp(1.2rem, 2.2vw + 0.8rem, 1.75rem);
   font-weight: 700;
   text-align: center;
   margin-bottom: 1rem;
@@ -1362,6 +1362,11 @@ input:focus, select:focus, textarea:focus {
   .finance-minister-simulator {
     padding: 1.5rem;
   }
+  /* Reserve space for MobileDockBar/BottomSheet so content isn't obscured */
+  .finance-minister-simulator,
+  .finance-minister-simulator.panel-collapsed {
+    padding-bottom: calc(env(safe-area-inset-bottom) + 72px);
+  }
   
   .simulator-grid {
     display: flex;
@@ -1486,6 +1491,18 @@ input:focus, select:focus, textarea:focus {
   margin: 1rem auto 1.5rem;
   max-width: 800px;
   color: #222;
+  font-size: clamp(0.9rem, 0.5vw + 0.85rem, 1rem);
+}
+
+/* Extra-tight layout on very small screens */
+@media (max-width: 480px) {
+  .simulator-grid { gap: 0.9rem; }
+  .simulator-card, .sentiment-card { padding: 0.6rem 0.5rem; margin-bottom: 0.75rem; }
+  .card-title { padding: 0.75rem 0.9rem; margin-bottom: 0.6rem; }
+  .sub-navigation { gap: 6px; padding: 6px; }
+  .sub-nav-link { font-size: 0.78rem; padding: 5px 10px; }
+  .section-control-btn { font-size: 0.7rem; padding: 4px 8px; }
+  .badges-title { font-size: clamp(0.95rem, 0.6rem + 1vw, 1.05rem); }
 }
 
 .main-navigation {
