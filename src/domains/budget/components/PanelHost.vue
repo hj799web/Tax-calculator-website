@@ -40,7 +40,7 @@ onMounted(() => { handleResize(); window.addEventListener('resize', handleResize
 onUnmounted(() => { window.removeEventListener('resize', handleResize); });
 
 const AssumptionsPanel = defineAsyncComponent(() => import('@/domains/budget/components/AssumptionsPanel.vue'));
-const ProjectionsPanelLite = defineAsyncComponent(() => import('@/domains/budget/components/ProjectionsPanelLite.vue'));
+const MultiYearProjectionsPanel = defineAsyncComponent(() => import('@/domains/budget/components/MultiYearProjectionsPanel.vue'));
 const OverviewPanel = defineAsyncComponent(() => import('@/domains/budget/components/panels/OverviewPanel.vue'));
 const AnalysisPanel = defineAsyncComponent(() => import('@/domains/budget/components/panels/AnalysisPanel.vue'));
 const GoalsPanel = defineAsyncComponent(() => import('@/domains/budget/components/panels/GoalsPanel.vue'));
@@ -67,7 +67,7 @@ const panelDefs = [
   { key: 'analysis',    label: 'Analysis',   icon: 'bar_chart',              comp: AnalysisPanel,        group: 'insights' },
   { key: 'sentiment',   label: 'Sentiment',  icon: 'sentiment_satisfied',    comp: SentimentPanel,       group: 'insights' },
 
-  { key: 'projections', label: 'Projections',icon: 'stacked_line_chart',     comp: ProjectionsPanelLite, group: 'planning' },
+  { key: 'projections', label: 'Projections',icon: 'stacked_line_chart',     comp: MultiYearProjectionsPanel, group: 'planning' },
   { key: 'export',      label: 'Export',     icon: 'ios_share',              comp: BudgetExportPanel,    group: 'share' },
 ];
 

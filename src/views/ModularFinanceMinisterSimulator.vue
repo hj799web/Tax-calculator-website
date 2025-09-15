@@ -182,6 +182,8 @@ watch(currentYear, (newYear) => {
   min-height: 100vh;
   background: linear-gradient(135deg, #f6f8fc 0%, #e9f0f7 100%);
   container-type: inline-size;
+  transform: scale(0.8);
+  transform-origin: top center;
 }
 
 .simulator-header {

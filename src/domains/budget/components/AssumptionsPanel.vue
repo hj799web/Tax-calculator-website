@@ -30,12 +30,32 @@
       </select>
       <button class="btn" @click="reset()">Reset</button>
     </div>
+
+    <details class="planning-controls" open>
+      <summary>Program Spending Controls</summary>
+      <div class="controls-grid">
+        <div class="row">
+          <label title="One-time adjustment to all program spending levels">Program spending boost (%)
+            <span class="info-icon" title="Applies a one-time level change to program spending in the base year (and carried through).">info</span>
+          </label>
+          <input type="number" step="0.5" :min="-15" :max="15" v-model.number="settings.spendingGlobal.levelPct" />
+        </div>
+        <div class="row">
+          <label title="Adjusts how fast program spending grows each year. +0.5 means all categories grow 0.5 percentage points faster annually.">Speed up spending growth (pp)
+            <span class="info-icon" title="Adds or subtracts percentage points to the annual growth rate applied to all categories.">info</span>
+          </label>
+          <input type="number" step="0.1" v-model.number="settings.spendingGlobal.growthDeltaPct" />
+        </div>
+      </div>
+      <SpendingGrowthControls />
+    </details>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
 import { useMultiYearSettingsStore } from '@/domains/budget/store/multiYearSettings.js';
+import SpendingGrowthControls from '@/domains/budget/components/SpendingGrowthControls.vue';
 
 const settings = useMultiYearSettingsStore();
 const selectedPreset = ref('');
@@ -72,6 +92,14 @@ function reset() {
 label { font-size: .85rem; color: #6b7280; }
 input, select { width: 100%; padding: 8px 10px; border: 1px solid #d1d5db; border-radius: 10px; }
 .row.preset { grid-template-columns: 1fr 1fr auto; align-items: end; gap: 10px; }
+
+details.planning-controls { grid-column: 1 / -1; border: 1px solid #e5e7eb; border-radius: 12px; background: linear-gradient(180deg, #fafbff 0%, #ffffff 60%); padding: 10px 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); }
+details.planning-controls > summary { font-weight: 700; color: #111827; cursor: pointer; }
+.controls-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin: 10px 0 6px; }
+.controls-grid input { padding: 8px 10px; border: 1px solid #d1d5db; border-radius: 10px; transition: border-color .15s, box-shadow .15s; }
+.controls-grid input:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.15); outline: none; }
+.info-icon { font-family: 'Material Icons'; font-size: 16px; line-height: 1; color: #6b7280; border: 1px solid #e5e7eb; border-radius: 50%; width: 16px; height: 16px; display: inline-grid; place-items: center; margin-left: 6px; cursor: help; }
+.info-icon:hover { color: #1d4ed8; border-color: #c7d2fe; }
 
 .btn {
   padding: 8px 16px;

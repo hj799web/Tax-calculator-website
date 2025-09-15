@@ -58,6 +58,8 @@ import DeductionsAndCreditsInputs from '@/domains/calculator/components/Deductio
   box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.18);
   animation: fadeIn 0.6s ease-out forwards;
+  transform: scale(0.8);
+  transform-origin: top center;
 }
 
 .title {

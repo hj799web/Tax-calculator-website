@@ -1,16 +1,7 @@
 <template>
   <div class="planner">
-    <div class="tabs">
-      <button :class="{active: tab==='categories'}" @click="tab='categories'">Categories</button>
-      <button :class="{active: tab==='projections'}" @click="tab='projections'">Projections</button>
-    </div>
-    <div class="tab-body">
-      <div v-if="tab==='categories'">
-        <ItemsPlanList />
-      </div>
-      <div v-else-if="tab==='projections'">
-        <ProjectionsPanelLite />
-      </div>
+    <div class="content">
+      <ProjectionsPanelLite :show-controls="false" />
     </div>
     <div class="apply-bar">
       <div class="toggle">
@@ -24,10 +15,8 @@
 
 <script setup>
 import { ref } from 'vue';
-import ItemsPlanList from '@/domains/budget/components/ItemsPlanList.vue';
 import ProjectionsPanelLite from '@/domains/budget/components/ProjectionsPanelLite.vue';
 
-const tab = ref('categories');
 const autoApply = ref(false);
 
 function applyChanges() {
@@ -37,19 +26,16 @@ function applyChanges() {
 </script>
 
 <style scoped>
-.planner { 
-  display: grid; 
-  grid-template-rows: auto 1fr auto; 
-  height: 400px; 
-  border: 1px solid #e5e7eb; 
-  border-radius: 10px; 
-  background: #fff; 
-  overflow: hidden; 
+.planner {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  height: 400px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #fff;
+  overflow: hidden;
 }
-.tabs { display: flex; gap: 6px; border-bottom: 1px solid #e5e7eb; position: sticky; top: 64px; background: rgba(255,255,255,0.8); z-index: 1; backdrop-filter: blur(6px); }
-.tabs button { padding: 8px 10px; font-weight: 600; border: 1px solid transparent; border-radius: 8px 8px 0 0; background: transparent; color: #374151; cursor: pointer; }
-.tabs button.active { border-color: #e5e7eb; background: #fff; color: #111827; }
-.tab-body { min-height: 0; height: 100%; overflow: auto; padding-right: 4px; }
+.content { min-height: 0; height: 100%; overflow: auto; padding-right: 4px; }
 .apply-bar { position: sticky; bottom: 0; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 8px; background: linear-gradient(to top, rgba(255,255,255,0.95), rgba(255,255,255,0.8)); border-top: 1px solid #e5e7eb; backdrop-filter: blur(6px); }
 
 .btn {

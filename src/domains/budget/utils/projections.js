@@ -36,15 +36,15 @@ export function calcNominalGDP(prevGDP, economic) {
 export function calcRevenue(prev, nextGDP, elasticityMap, inflationPct) {
   const bySource = {};
   let total = 0;
-  const prevGDP = prev.gdp > 0 ? prev.gdp : nextGDP; // fallback
-  const gdpRatio = prevGDP > 0 ? nextGDP / prevGDP : 1;
-  const inflation = 1 + Math.max(-0.99, (inflationPct ?? 0) / 100);
-  for (const [k, v] of Object.entries(prev.revenueBySource)) {
-    const eps = Number(elasticityMap?.[k] ?? 1);
-    const projected = round2(v * inflation * Math.pow(gdpRatio || 1, eps));
+  for (const [k, v] of Object.entries(prev.revenueBySource || {})) {
+    const elastic = Number(elasticityMap?.[k] ?? 1);
+    const gdpFactor = Math.pow(nextGDP / prev.gdp, elastic);
+    const inflFactor = 1 + Number(inflationPct ?? 0) / 100;
+    const projected = round2(v * gdpFactor * inflFactor);
     bySource[k] = projected;
     total += projected;
   }
+
   return { total: round2(total), bySource };
 }
 
@@ -71,13 +71,14 @@ export function calcProgramSpending(prev, profiles, userDeltaMap) {
 
 /** Simple interest cost given beginning-of-period debt and average rate. */
 export function calcInterest(debtBop, avgRatePct) {
-  const rate = Math.max(0, Number(avgRatePct ?? 0) / 100);
+  const rate = Math.max(0, Number(avgRatePct ?? 0)) / 100;
   return round2(debtBop * rate);
 }
 
-/** Update debt with deficit (positive deficit increases debt). */
+/** Update debt with deficit (deficit increases debt, surplus decreases debt). */
 export function calcDebt(debtBop, deficit) {
-  return round2(debtBop + deficit);
+  // Deficit is negative when spending > revenue, so we subtract it to increase debt
+  return round2(debtBop - deficit);
 }
 
 /**
@@ -116,7 +117,7 @@ export function projectAll(args) {
   const baseYearLevelAdj = 1 + Math.max(-15, Math.min(15, globalLevel)) / 100;
   first.spendingTotal = round2(first.programSpending * baseYearLevelAdj + first.interest);
   first.deficit = round2(first.revenueTotal - first.spendingTotal);
-  first.debt = calcDebt(base.debt, first.deficit);
+
   first.debtToGDP = safeRatio(first.debt, first.gdp);
 
   const out = [first];
@@ -168,16 +169,10 @@ function sumValues(obj) {
   return Object.values(obj).reduce((a, b) => a + Number(b || 0), 0);
 }
 
-function safeRatio(n, d) {
-  if (!d || d === 0) return 0;
-  return round4(n / d);
-}
-
 function round2(n) {
-  return Math.round((Number(n) + Number.EPSILON) * 100) / 100;
+  return Math.round((Number(n || 0) + Number.EPSILON) * 100) / 100;
 }
 
-function round4(n) {
-  return Math.round((Number(n) + Number.EPSILON) * 10000) / 10000;
+function safeRatio(num, den) {
+  return den && den !== 0 ? round2(num / den) : 0;
 }
-

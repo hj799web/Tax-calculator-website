@@ -32,7 +32,7 @@ export const useMultiYearSettingsStore = defineStore('multiYearSettings', () => 
   });
 
   // Program spending growth profiles (percentage points added annually)
-  const spendingGrowth = ref({
+  const spendingGrowthDefaults = Object.freeze({
     healthcare: { baseline: 3.5, demographic: 1.2 },
     education: { baseline: 2.0, demographic: 0.3 },
     seniors: { baseline: 4.2, demographic: 2.1 },
@@ -54,6 +54,7 @@ export const useMultiYearSettingsStore = defineStore('multiYearSettings', () => 
     diplomaticRepresentation: { baseline: 2.0, demographic: 0.0 },
     // Loans & investments group children can be treated similarly if projected
   });
+  const spendingGrowth = ref(JSON.parse(JSON.stringify(spendingGrowthDefaults)));
 
   // Global across-board program spending adjustments (multi-year only)
   // levelPct: one-time baseline shift applied at base year (excludes interest)
@@ -97,6 +98,15 @@ export const useMultiYearSettingsStore = defineStore('multiYearSettings', () => 
     if (!p) return;
     planning.value = { ...planning.value, ...p.planning };
     economic.value = { ...economic.value, ...p.economic };
+  }
+
+  function resetSpendingGrowthKey(key) {
+    const def = spendingGrowthDefaults[key];
+    if (def) spendingGrowth.value[key] = { ...def };
+  }
+
+  function resetAllSpendingGrowth() {
+    spendingGrowth.value = JSON.parse(JSON.stringify(spendingGrowthDefaults));
   }
 
   // --- Planning helpers ---
@@ -156,5 +166,7 @@ export const useMultiYearSettingsStore = defineStore('multiYearSettings', () => 
     clearPlan,
     getPlannedRateForYear,
     getPlannedFactorForYear,
+    resetSpendingGrowthKey,
+    resetAllSpendingGrowth,
   };
 });

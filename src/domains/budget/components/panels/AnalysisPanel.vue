@@ -3,15 +3,12 @@
     <section class="charts">
       <AsyncChartsPanel />
     </section>
-    <section class="projections">
-      <MultiYearProjectionsPanel />
-    </section>
+    <!-- Multi-year projections moved to Projections and Assumptions tabs -->
   </div>
 </template>
 
 <script setup>
 import { defineAsyncComponent } from 'vue';
-import MultiYearProjectionsPanel from '@/domains/budget/components/MultiYearProjectionsPanel.vue';
 
 const AsyncChartsPanel = defineAsyncComponent({
   loader: () => import('@/domains/budget/components/BudgetChartsPanel.vue'),

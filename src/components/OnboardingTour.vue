@@ -234,25 +234,49 @@ export default {
         buttons: [ { text: 'Back', action: tour.value.back }, { text: 'Next', action: tour.value.next } ]
       })
 
+      // Projections: Multi-year planning lives here
       tour.value.addStep({
-        id: 'analysis',
-        text: '<div class="tour-head">Analysis</div><div>Dive into charts and breakdowns.</div><div class="wiggle-arrow"/>',
-        attachTo: { element: '[data-panel-key="analysis"]', on: 'bottom' },
-        beforeShowPromise: () => new Promise((res) => { clickTab('analysis'); setTimeout(res, 150); }),
+        id: 'projections',
+        text: '<div class="tour-head">Projections</div><div>Plan across years. Adjust assumptions and program spending growth, then review the table.</div><div class="wiggle-arrow"/>',
+        attachTo: { element: '[data-panel-key="projections"]', on: 'bottom' },
+        beforeShowPromise: () => new Promise((res) => { clickTab('projections'); setTimeout(res, 150); }),
         buttons: [ { text: 'Back', action: tour.value.back }, { text: 'Next', action: tour.value.next } ]
       })
       tour.value.addStep({
-        id: 'analysis-toggle',
-        text: '<div class="tour-head">Display mode</div><div>Switch between amounts and percentages.</div>',
-        attachTo: { element: '.display-toggle', on: 'bottom' },
-        beforeShowPromise: () => new Promise((res) => { clickTab('analysis'); setTimeout(res, 120); }),
+        id: 'proj-controls',
+        text: '<div class="tour-head">Planning controls</div><div>Edit base year, horizon, economic assumptions, and per‑category growth. Use tooltips for guidance.</div>',
+        attachTo: { element: '.assumptions.editable', on: 'top' },
+        beforeShowPromise: () => new Promise((res) => { clickTab('projections'); setTimeout(res, 140); }),
         buttons: [ { text: 'Back', action: tour.value.back }, { text: 'Next', action: tour.value.next } ]
       })
       tour.value.addStep({
-        id: 'analysis-legend',
-        text: '<div class="tour-head">Legend</div><div>See category values and percentages; hover for full names.</div>',
-        attachTo: { element: '.chart-legend', on: 'top' },
-        beforeShowPromise: () => new Promise((res) => { clickTab('analysis'); setTimeout(res, 120); }),
+        id: 'proj-growth',
+        text: '<div class="tour-head">Program Spending Growth</div><div>Filter categories and tweak Baseline vs Demographic growth.</div>',
+        attachTo: { element: 'details.spend-growth', on: 'top' },
+        beforeShowPromise: () => new Promise((res) => { clickTab('projections'); setTimeout(res, 140); }),
+        buttons: [ { text: 'Back', action: tour.value.back }, { text: 'Next', action: tour.value.next } ]
+      })
+      tour.value.addStep({
+        id: 'proj-table',
+        text: '<div class="tour-head">Projection table</div><div>Click a year to open the year editor and apply overrides.</div>',
+        attachTo: { element: '.proj-table', on: 'top' },
+        beforeShowPromise: () => new Promise((res) => { clickTab('projections'); setTimeout(res, 140); }),
+        buttons: [ { text: 'Back', action: tour.value.back }, { text: 'Next', action: tour.value.next } ]
+      })
+
+      // Assumptions: mirrors key planning controls
+      tour.value.addStep({
+        id: 'assumptions',
+        text: '<div class="tour-head">Assumptions</div><div>Adjust global program spending controls and the same per‑category growth.</div><div class="wiggle-arrow"/>',
+        attachTo: { element: '[data-panel-key="assumptions"]', on: 'bottom' },
+        beforeShowPromise: () => new Promise((res) => { clickTab('assumptions'); setTimeout(res, 150); }),
+        buttons: [ { text: 'Back', action: tour.value.back }, { text: 'Next', action: tour.value.next } ]
+      })
+      tour.value.addStep({
+        id: 'assumptions-controls',
+        text: '<div class="tour-head">Program Spending Controls</div><div>Use Boost for a one‑time level change; Growth (pp) speeds or slows annual growth across categories.</div>',
+        attachTo: { element: 'details.planning-controls', on: 'top' },
+        beforeShowPromise: () => new Promise((res) => { clickTab('assumptions'); setTimeout(res, 140); }),
         buttons: [ { text: 'Back', action: tour.value.back }, { text: 'Next', action: tour.value.next } ]
       })
 
@@ -439,7 +463,7 @@ export default {
         }
         // Skip non-quick steps if user chose Quick Tour
         const id = event?.step?.id
-        const quickAllowed = new Set(['welcome','pinned','revenue','spending','results','export'])
+        const quickAllowed = new Set(['welcome','pinned','revenue','spending','projections','results'])
         if (selectedMode.value === 'quick' && id && !quickAllowed.has(id)) {
           setTimeout(() => { try { tour.value.next() } catch (e) { void e } }, 0)
         }

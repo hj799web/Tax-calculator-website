@@ -10,6 +10,40 @@ This project is actively evolving. This log highlights user‑visible and develo
   - Panel bar supports multi‑row wrapping, compact mode (icon‑only with tooltips), and a mobile "More" collapse.
   - Pinned tabs: `revenue` and `spending` are surfaced first; can be expanded later to user‑selectable pins.
 
+## 2025‑01‑15 – Mobile optimization + UI scaling
+
+- **Mobile UX overhaul**
+  - **Removed global scaling hack**: Eliminated the `transform: scale(0.9)` on `#app` in mobile media queries to prevent blurry text and mismatched touch targets.
+  - **Enhanced panel navigation**: Broadened mobile detection from ≤640px to ≤768px; added horizontal scroll for tab overflow with `-webkit-overflow-scrolling: touch`.
+  - **Bottom spacing protection**: Added `padding-bottom: calc(env(safe-area-inset-bottom) + 72px)` to prevent MobileDockBar/BottomSheet from covering content.
+  - **Touch accessibility**: Ensured minimum 44px touch targets for panel tabs on small screens.
+
+- **Responsive typography**
+  - **Fluid text scaling**: Implemented `clamp()` for smooth font-size scaling across all viewport widths:
+    - Main titles: `clamp(1.2rem, 2.2vw + 0.8rem, 1.75rem)`
+    - Section headings: `clamp(1rem, 1.25vw + 0.85rem, 1.35rem)`
+    - Body text: `clamp(0.9rem, 0.5vw + 0.85rem, 1rem)`
+    - Tab labels: `clamp(0.78rem, 0.6rem + 0.4vw, 0.9rem)`
+  - **Applied across views**: Calculator, Results, Federal Budget, Budget Categories, How It Works, and both simulator views.
+
+- **Chart responsiveness**
+  - **Fluid chart containers**: Replaced fixed pixel heights with `clamp()` for responsive scaling.
+  - **Legend optimization**: Chart legends use fluid font sizing and improved line-height for readability.
+  - **Touch-friendly interactions**: Enhanced hover states and touch targets for mobile chart interactions.
+
+- **Compact mobile layouts**
+  - **Tighter spacing**: Added `@media (max-width: 480px)` rules for ultra-compact layouts:
+    - Reduced grid gaps, card padding, and margins
+    - Smaller button sizes and input padding
+    - Single-column layouts where appropriate
+  - **Input optimization**: Full-width selects and improved form layouts on narrow screens.
+
+- **UI scaling implementation**
+  - **20% downscale**: Applied `transform: scale(0.8)` with `transform-origin: top center` to:
+    - Tax calculator page (`CalculatorView.vue`)
+    - Budget simulator pages (`FinanceMinisterSimulator.vue`, `ModularFinanceMinisterSimulator.vue`)
+  - **Consistent scaling**: Maintains visual hierarchy while reducing overall footprint across desktop and mobile.
+
 - Components (names and shims)
   - New: `BudgetExportPanel.vue`, `BudgetSpendingControls.vue`, `BudgetCategoryInfo.vue`.
   - Aliases for consistency and grouping: `BudgetRevenuePanel.vue`, `BudgetResultsPanel.vue`, `BudgetYearSelector.vue`, `BudgetPanelHost.vue`, `BudgetPanelBanner.vue`, `BudgetChartsPanel.vue`, `BudgetRevenueSliders.vue`.

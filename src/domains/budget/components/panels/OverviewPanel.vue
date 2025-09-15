@@ -24,7 +24,7 @@
     </header>
 
     <section class="mini-projections">
-      <ProjectionsPanelLite />
+      <ProjectionsPanelLite :show-controls="false" />
     </section>
   </div>
 </template>
@@ -53,4 +53,3 @@ function safeRatio(n, d) { const N = Number(n || 0), D = Number(d || 0); return 
 .pos { color: #047857; }
 .mini-projections { border: 1px solid #e5e7eb; border-radius: 12px; padding: 12px; background: #fff; }
 </style>
-

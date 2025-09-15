@@ -242,9 +242,6 @@
           </h2>
           <div class="card-content" v-show="sectionsExpanded.budgetAnalysis">
             <ChartsPanel />
-            <div class="mt-4">
-              <MultiYearProjectionsPanel v-if="FEATURES.MULTI_YEAR_PLANNING" />
-            </div>
           </div>
         </section>
         
@@ -305,7 +302,6 @@ import MainNavigation from '@/components/MainNavigation.vue'
 import logoImage from '@/assets/fiscal-insights-logo.webp'
 import OnboardingTour from '@/components/OnboardingTour.vue'
 import { FEATURES } from '@/features.js'
-import MultiYearProjectionsPanel from '@/domains/budget/components/MultiYearProjectionsPanel.vue'
 import MobileDockBar from '@/components/MobileDockBar.vue'
 import MobileBottomSheet from '@/components/MobileBottomSheet.vue'
 import PanelHost from '@/domains/budget/components/BudgetPanelHost.vue'
@@ -1164,6 +1160,8 @@ input:focus, select:focus, textarea:focus {
   padding-top: 10px;
   box-sizing: border-box;
   width: 100%;
+  transform: scale(0.8);
+  transform-origin: top center;
 }
 
 .main-title {

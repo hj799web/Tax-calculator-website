@@ -4,7 +4,7 @@
       <h3 class="title">Multi-Year Projections</h3>
       <button class="btn primary" @click="showPlanner = !showPlanner">
         <span class="material-icons" aria-hidden="true">timeline</span>
-        {{ showPlanner ? 'Hide Planner' : 'Open Planner' }}
+        {{ showPlanner ? 'Hide Charts' : 'Show Charts' }}
       </button>
     </div>
     <div v-if="!FEATURES.MULTI_YEAR_PLANNING" class="flag-disabled">
@@ -33,7 +33,7 @@
           <input type="number" step="0.1" v-model.number="settingsStore.economic.interestRate" @change="normalize()" min="0" max="20" />
         </div>
         <div class="row">
-          <label>Program spending (level %)</label>
+          <label title="One-time adjustment to all program spending levels">Program spending boost (%)</label>
           <input
             type="number"
             step="0.5"
@@ -44,12 +44,10 @@
           />
         </div>
         <div class="row">
-          <label>Program spending (growth ±pp)</label>
+          <label title="Adjusts how fast program spending grows each year. +0.5 means all categories grow 0.5 percentage points faster annually.">Speed up spending growth (pp)</label>
           <input
             type="number"
             step="0.1"
-            :min="-2"
-            :max="2"
             v-model.number="settingsStore.spendingGlobal.growthDeltaPct"
             @change="clampGlobal()"
           />
@@ -67,40 +65,82 @@
           <button class="btn" @click="resetToDefaults()">Reset to defaults</button>
         </div>
         
-        <details class="spend-growth">
-          <summary>Program Spending Growth (%)</summary>
+        <details class="spend-growth" open>
+          <summary>Annual Program Spending Growth Rates (%)</summary>
+          
+          <div class="growth-explanation">
+            <p><strong>How spending grows each year:</strong></p>
+            <ul>
+              <li><strong>Baseline:</strong> Normal program cost increases (inflation, policy changes, etc.)</li>
+              <li><strong>Demographic:</strong> Extra growth due to population aging and demographic changes</li>
+              <li><strong>Total Growth = Baseline + Demographic</strong> (e.g., Healthcare: 3.5% + 1.2% = 4.7% per year)</li>
+            </ul>
+          </div>
+
+          <div class="growth-toolbar">
+            <input
+              class="filter"
+              v-model="growthFilter"
+              placeholder="Filter categories (e.g., health, seniors)…"
+            />
+            <div class="spacer"></div>
+            <button class="btn" @click="onResetAll()">Reset all</button>
+          </div>
+
+          <div class="growth-head">
+            <div class="label">Category</div>
+            <div class="inputs-head">
+              <span title="Normal program cost increases (inflation, policy changes, etc.)">
+                Baseline
+                <span class="help-icon">ⓘ</span>
+              </span>
+              <span title="Extra growth due to population aging and demographic changes">
+                Demographic
+                <span class="help-icon">ⓘ</span>
+              </span>
+            </div>
+            <div class="actions"></div>
+          </div>
+
           <div class="growth-grid">
             <div
-              v-for="(profile, key) in settingsStore.spendingGrowth"
+              v-for="key in filteredKeys"
               :key="key"
               class="growth-row"
             >
               <div class="label">{{ prettyKey(key) }}</div>
               <div class="inputs">
-                <label class="sub">Baseline</label>
+                <label class="sub" title="Normal program cost increases">Baseline</label>
                 <input
                   type="number"
                   step="0.1"
                   :min="-10"
                   :max="15"
                   v-model.number="settingsStore.spendingGrowth[key].baseline"
+                  :title="`Baseline growth rate for ${prettyKey(key)}`"
                 />
-                <label class="sub">Demographic</label>
+                <label class="sub" title="Extra growth due to population aging">Demographic</label>
                 <input
                   type="number"
                   step="0.1"
                   :min="-5"
                   :max="10"
                   v-model.number="settingsStore.spendingGrowth[key].demographic"
+                  :title="`Demographic growth rate for ${prettyKey(key)}`"
                 />
+              </div>
+              <div class="actions">
+                <button class="icon-btn" :title="`Reset ${prettyKey(key)}`" @click="onResetRow(key)">
+                  <span class="material-icons" aria-hidden="true">restart_alt</span>
+                </button>
               </div>
             </div>
           </div>
         </details>
       </div>
 
-      <div v-if="showPlanner" class="embedded-planner">
-        <MultiYearPlanner />
+      <div v-if="showPlanner" class="charts-section">
+        <ProjectionsPanelLite :show-controls="false" />
       </div>
 
       <div class="table-wrapper">
@@ -135,29 +175,27 @@
         </div>
       </div>
       <div v-if="showYearModal" class="year-editor">
-        <div class="year-editor-card">
-          <div class="ye-header">
-            <h4>Edit {{ selectedYear }} (program spending)</h4>
-            <button class="btn" @click="closeYearEditor">Close</button>
+        <div class="ye-header">
+          <h4>Edit {{ selectedYear }} (program spending)</h4>
+          <button class="btn" @click="closeYearEditor">Close</button>
+        </div>
+        <div class="ye-grid">
+          <div class="row">
+            <label title="One-time adjustment to program spending for this year">Spending boost (%)</label>
+            <input type="number" step="0.5" :min="-15" :max="15" v-model.number="yearLevel" />
           </div>
-          <div class="ye-grid">
-            <div class="row">
-              <label>Level (one-time, %)</label>
-              <input type="number" step="0.5" :min="-15" :max="15" v-model.number="yearLevel" />
-            </div>
-            <div class="row">
-              <label>Growth (±pp per year)</label>
-              <input type="number" step="0.1" :min="-2" :max="2" v-model.number="yearGrowth" />
-            </div>
-            <div class="row">
-              <label>Apply forward</label>
-              <input type="checkbox" v-model="applyForward" />
-            </div>
+          <div class="row">
+            <label title="Adjusts growth rate for this year and forward. +0.5 means spending grows 0.5 percentage points faster.">Growth rate boost (pp)</label>
+            <input type="number" step="0.1" v-model.number="yearGrowth" />
           </div>
-          <div class="ye-actions">
-            <button class="btn" @click="resetYearOverrides">Reset year</button>
-            <button class="btn primary" @click="applyYearOverrides">Apply</button>
+          <div class="row">
+            <label>Apply forward</label>
+            <input type="checkbox" v-model="applyForward" />
           </div>
+        </div>
+        <div class="ye-actions">
+          <button class="btn" @click="resetYearOverrides">Reset year</button>
+          <button class="btn primary" @click="applyYearOverrides">Apply</button>
         </div>
       </div>
     </div>
@@ -171,29 +209,44 @@ import { useMultiYearSettingsStore } from '@/domains/budget/store/multiYearSetti
 import { makeBaseSnapshotFromStore } from '@/domains/budget/utils/projectionAdapters.js';
 import { projectAll } from '@/domains/budget/utils/projections.js';
 import { FEATURES } from '@/features.js';
-import MultiYearPlanner from '@/domains/budget/components/MultiYearPlanner.vue';
+import ProjectionsPanelLite from '@/domains/budget/components/ProjectionsPanelLite.vue';
 
 const budget = useBudgetSimulatorStore();
 const settingsStore = useMultiYearSettingsStore();
-const showPlanner = ref(false);
+const showPlanner = ref(true); // Changed from false to true - planner open by default
 const selectedPreset = ref('');
 const showYearModal = ref(false);
 const selectedYear = ref(null);
 const yearLevel = ref(0);
 const yearGrowth = ref(0);
 const applyForward = ref(false);
+const growthFilter = ref('');
+
+const filteredKeys = computed(() => {
+  const q = growthFilter.value.trim().toLowerCase();
+  const keys = Object.keys(settingsStore.spendingGrowth || {});
+  if (!q) return keys;
+  return keys.filter(k => prettyKey(k).toLowerCase().includes(q));
+});
 
 function normalize() {
-  settingsStore.planning.baseYear = Math.max(2000, Math.min(2100, settingsStore.planning.baseYear || new Date().getFullYear()));
-  settingsStore.planning.horizonYears = Math.max(1, Math.min(50, settingsStore.planning.horizonYears || 10));
-  settingsStore.economic.gdpReal = Math.max(-5, Math.min(10, settingsStore.economic.gdpReal || 2));
-  settingsStore.economic.inflation = Math.max(-2, Math.min(20, settingsStore.economic.inflation || 2));
-  settingsStore.economic.interestRate = Math.max(0, Math.min(20, settingsStore.economic.interestRate || 3));
+  // Ensure base year is reasonable
+  if (settingsStore.planning.baseYear < 2000) settingsStore.planning.baseYear = 2000;
+  if (settingsStore.planning.baseYear > 2100) settingsStore.planning.baseYear = 2100;
+  
+  // Ensure horizon is reasonable
+  if (settingsStore.planning.horizonYears < 1) settingsStore.planning.horizonYears = 1;
+  if (settingsStore.planning.horizonYears > 50) settingsStore.planning.horizonYears = 50;
+  
+  // Clamp economic assumptions
+  settingsStore.economic.gdpReal = Math.max(-5, Math.min(10, Number(settingsStore.economic.gdpReal || 0)));
+  settingsStore.economic.inflation = Math.max(-2, Math.min(20, Number(settingsStore.economic.inflation || 0)));
+  settingsStore.economic.interestRate = Math.max(0, Math.min(20, Number(settingsStore.economic.interestRate || 0)));
 }
 
 const rows = computed(() => {
   const base = makeBaseSnapshotFromStore(budget);
-  return projectAll({ base, settings: {
+  const settings = {
     planning: settingsStore.planning,
     economic: settingsStore.economic,
     revenueElasticity: settingsStore.revenueElasticity,
@@ -201,92 +254,111 @@ const rows = computed(() => {
     categoryUserDelta: settingsStore.categoryUserDelta,
     spendingGlobal: settingsStore.spendingGlobal,
     yearOverrides: settingsStore.yearOverrides,
-  }});
+  };
+  return projectAll({ base, settings });
 });
 
-function fmt(n) {
-  return `$${Number(n || 0).toFixed(1)}B`;
+function applyPreset() {
+  if (!selectedPreset.value) return;
+  
+  const presets = {
+    conservative: {
+      gdpReal: 1.5,
+      inflation: 2.0,
+      interestRate: 3.5,
+    },
+    moderate: {
+      gdpReal: 2.0,
+      inflation: 2.5,
+      interestRate: 4.0,
+    },
+    optimistic: {
+      gdpReal: 2.5,
+      inflation: 2.0,
+      interestRate: 3.0,
+    },
+  };
+  
+  const preset = presets[selectedPreset.value];
+  if (preset) {
+    settingsStore.economic.gdpReal = preset.gdpReal;
+    settingsStore.economic.inflation = preset.inflation;
+    settingsStore.economic.interestRate = preset.interestRate;
+  }
 }
 
 function resetToDefaults() {
-  settingsStore.planning.baseYear = new Date().getFullYear();
-  settingsStore.planning.horizonYears = 10;
   settingsStore.economic.gdpReal = 2.0;
   settingsStore.economic.inflation = 2.0;
-  settingsStore.economic.interestRate = 3.0;
+  settingsStore.economic.interestRate = 4.0;
+  settingsStore.spendingGlobal.levelPct = 0;
+  settingsStore.spendingGlobal.growthDeltaPct = 0;
   selectedPreset.value = '';
 }
 
-function applyPreset() {
-  if (selectedPreset.value === 'conservative') {
-    settingsStore.economic.gdpReal = 1.5;
-    settingsStore.economic.inflation = 1.8;
-    settingsStore.economic.interestRate = 3.5;
-  } else if (selectedPreset.value === 'moderate') {
-    settingsStore.economic.gdpReal = 2.0;
-    settingsStore.economic.inflation = 2.0;
-    settingsStore.economic.interestRate = 3.0;
-  } else if (selectedPreset.value === 'optimistic') {
-    settingsStore.economic.gdpReal = 2.5;
-    settingsStore.economic.inflation = 2.2;
-    settingsStore.economic.interestRate = 2.5;
-  }
+function clampGlobal() {
+  settingsStore.spendingGlobal.levelPct = Math.max(-15, Math.min(15, Number(settingsStore.spendingGlobal.levelPct || 0)));
+  // Removed growth rate restrictions - users can set any value they want
+  settingsStore.spendingGlobal.growthDeltaPct = Number(settingsStore.spendingGlobal.growthDeltaPct || 0);
 }
 
 function openYearEditor(year) {
   selectedYear.value = year;
-  const ov = settingsStore.yearOverrides?.[year]?.spending || {};
+  const ov = settingsStore.yearOverrides[year]?.spending || {};
   yearLevel.value = Number(ov.levelPct || 0);
   yearGrowth.value = Number(ov.growthDeltaPct || 0);
-  applyForward.value = !!(settingsStore.yearOverrides?.[year]?.applyForward);
+  applyForward.value = Boolean(ov.applyForward);
   showYearModal.value = true;
 }
 
 function closeYearEditor() {
   showYearModal.value = false;
-}
-
-function clampGlobal() {
-  settingsStore.spendingGlobal.levelPct = Math.max(-15, Math.min(15, Number(settingsStore.spendingGlobal.levelPct || 0)));
-  settingsStore.spendingGlobal.growthDeltaPct = Math.max(-2, Math.min(2, Number(settingsStore.spendingGlobal.growthDeltaPct || 0)));
+  selectedYear.value = null;
+  yearLevel.value = 0;
+  yearGrowth.value = 0;
+  applyForward.value = false;
 }
 
 function applyYearOverrides() {
   if (!selectedYear.value) return;
   const yr = Number(selectedYear.value);
-  const baseYear = Number(settingsStore.planning.baseYear || yr);
-  const horizon = Number(settingsStore.planning.horizonYears || 10);
-  const lastYear = baseYear + horizon - 1;
-  const applyToYears = applyForward.value ? Array.from({ length: lastYear - yr + 1 }, (_, i) => yr + i) : [yr];
-  applyToYears.forEach(y => {
-    const cur = settingsStore.yearOverrides[y] || {};
-    settingsStore.yearOverrides[y] = {
-      ...cur,
-      spending: {
-        ...(cur.spending || {}),
-        levelPct: Math.max(-15, Math.min(15, Number(yearLevel.value || 0))),
-        growthDeltaPct: Math.max(-2, Math.min(2, Number(yearGrowth.value || 0))),
-      },
-      applyForward: applyForward.value,
-    };
+  
+  const cur = settingsStore.yearOverrides[yr] || {};
+  settingsStore.setYearSpendingOverride(yr, {
+    spending: {
+      ...(cur.spending || {}),
+      levelPct: Math.max(-15, Math.min(15, Number(yearLevel.value || 0))),
+      // Removed growth rate restrictions - users can set any value they want
+      growthDeltaPct: Number(yearGrowth.value || 0),
+    },
+    applyForward: applyForward.value,
   });
-  showYearModal.value = false;
+  
+  closeYearEditor();
 }
 
 function resetYearOverrides() {
   if (!selectedYear.value) return;
-  const yr = Number(selectedYear.value);
-  const cur = settingsStore.yearOverrides[yr] || {};
-  // Remove only spending overrides; keep other potential future fields
-  settingsStore.yearOverrides[yr] = { ...cur, spending: undefined };
-  yearLevel.value = 0;
-  yearGrowth.value = 0;
+  settingsStore.clearYearSpendingOverride(Number(selectedYear.value));
+  closeYearEditor();
 }
 
-function prettyKey(k) {
-  return String(k)
+function fmt(n) {
+  return typeof n === 'number' ? n.toFixed(1) : '0.0';
+}
+
+function prettyKey(key) {
+  return key
     .replace(/([A-Z])/g, ' $1')
     .replace(/^./, c => c.toUpperCase());
+}
+
+function onResetRow(key) {
+  if (settingsStore.resetSpendingGrowthKey) settingsStore.resetSpendingGrowthKey(key);
+}
+
+function onResetAll() {
+  if (settingsStore.resetAllSpendingGrowth) settingsStore.resetAllSpendingGrowth();
 }
 </script>
 
@@ -298,16 +370,38 @@ function prettyKey(k) {
 .assumptions.editable { align-items: flex-end; }
 .assumptions .row { display: flex; flex-direction: column; gap: 4px; }
 .assumptions .row input, .assumptions .row select { padding: 6px 8px; border: 1px solid #d1d5db; border-radius: 6px; min-width: 140px; }
-.assumptions .row label { font-size: 0.8rem; color: #6b7280; }
+.assumptions .row label { 
+  font-size: 0.8rem; 
+  color: #6b7280; 
+  cursor: help;
+  position: relative;
+}
+.assumptions .row label:hover {
+  color: #374151;
+}
 .assumptions .preset-row { flex-direction: row; align-items: center; gap: 8px; }
 
-details.spend-growth { grid-column: 1 / -1; background: #fafbff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 8px 10px; }
-details.spend-growth > summary { font-weight: 600; color: #374151; cursor: pointer; }
-.growth-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; margin-top: 8px; }
-.growth-row { display: grid; grid-template-columns: 1fr 2fr; gap: 8px; align-items: center; padding: 6px; border: 1px dashed #e5e7eb; border-radius: 8px; background: #fff; }
-.growth-row .label { font-size: 0.85rem; color: #374151; }
-.growth-row .inputs { display: grid; grid-template-columns: auto 1fr auto 1fr; gap: 6px; align-items: center; }
+.growth-toolbar { position: sticky; top: 0; z-index: 1; display: flex; gap: 8px; align-items: center; padding: 8px 6px; margin: 6px -6px 8px; background: rgba(255,255,255,0.92); backdrop-filter: blur(6px); border-bottom: 1px solid #e5e7eb; }
+.growth-toolbar .filter { width: min(380px, 50vw); padding: 6px 10px; border: 1px solid #e5e7eb; border-radius: 10px; }
+.growth-toolbar .spacer { flex: 1 1 auto; }
+
+details.spend-growth { grid-column: 1 / -1; background: linear-gradient(180deg, #fafbff 0%, #ffffff 60%); border: 1px solid #e5e7eb; border-radius: 12px; padding: 8px 10px 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); }
+details.spend-growth > summary { font-weight: 700; color: #111827; cursor: pointer; }
+
+.growth-head { display: grid; grid-template-columns: 1fr 2fr auto; gap: 8px; align-items: center; padding: 4px 6px; color: #6b7280; font-size: .75rem; }
+.growth-head .inputs-head { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; justify-items: start; }
+
+.growth-grid { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 4px; }
+.growth-row { display: grid; grid-template-columns: 1fr 2fr auto; gap: 10px; align-items: center; padding: 10px; border: 1px solid #e5e7eb; border-radius: 12px; background: #fff; transition: box-shadow .15s ease, border-color .15s ease; }
+.growth-row:hover { border-color: #c7d2fe; box-shadow: 0 4px 14px rgba(29,78,216,0.08); }
+.growth-row .label { font-size: 0.9rem; color: #111827; font-weight: 600; }
+.growth-row .inputs { display: grid; grid-template-columns: auto 1fr auto 1fr; gap: 8px; align-items: center; }
+.growth-row .inputs input { padding: 8px 10px; border: 1px solid #d1d5db; border-radius: 10px; transition: border-color .15s, box-shadow .15s; }
+.growth-row .inputs input:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.15); outline: none; }
 .growth-row .sub { font-size: 0.75rem; color: #6b7280; }
+.actions { display: flex; justify-content: flex-end; }
+.icon-btn { border: 1px solid #e5e7eb; background: #f9fafb; color: #374151; border-radius: 8px; width: 36px; height: 32px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; }
+.icon-btn:hover { background: #eef2ff; border-color: #c7d2fe; color: #1d4ed8; }
 
 .btn {
   padding: 8px 16px;
@@ -334,68 +428,159 @@ details.spend-growth > summary { font-weight: 600; color: #374151; cursor: point
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
   transition: left 0.5s;
-}
-
-.btn:hover {
-  background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
-  box-shadow: 0 4px 16px rgba(107, 114, 128, 0.2);
-  transform: translateY(-1px);
-  border-color: #6b7280;
 }
 
 .btn:hover::before {
   left: 100%;
 }
 
-.btn:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 8px rgba(107, 114, 128, 0.15);
-}
-
 .btn.primary {
   background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
   color: white;
-  border-color: #3b82f6;
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-}
-
-.btn.primary::before {
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  border-color: #1d4ed8;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 }
 
 .btn.primary:hover {
-  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
-  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
-  border-color: #2563eb;
+  background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
 }
 
-.btn:disabled {
-  background: #6b7280;
-  border-color: #6b7280;
-  box-shadow: none;
-  cursor: not-allowed;
-  opacity: 0.6;
-  transform: none;
+.table-wrapper { overflow-x: auto; border: 1px solid #e5e7eb; border-radius: 8px; }
+.proj-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+.proj-table th, .proj-table td { padding: 8px 12px; text-align: left; border-bottom: 1px solid #e5e7eb; }
+.proj-table th { background: #f9fafb; font-weight: 600; color: #374151; }
+.proj-table .positive { color: #059669; font-weight: 600; }
+.proj-table .negative { color: #dc2626; font-weight: 600; }
+.year-link { background: none; border: none; color: #3b82f6; cursor: pointer; text-decoration: underline; }
+.year-link:hover { color: #1d4ed8; }
+
+.year-editor {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  z-index: 1000;
+  min-width: 400px;
+  max-width: 90vw;
 }
 
-.flag-disabled, .empty { color: #6b7280; font-style: italic; }
-.table-wrapper { overflow-x: auto; }
-.embedded-planner { margin: 10px 0 16px 0; border: 1px solid #e5e7eb; border-radius: 8px; padding: 8px; background: #fafbff; }
-.proj-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-.proj-table th, .proj-table td { border-bottom: 1px solid #e5e7eb; padding: 6px 8px; text-align: right; }
-.proj-table th:first-child, .proj-table td:first-child { text-align: left; }
-.negative { color: #b91c1c; }
-.positive { color: #047857; }
+.ye-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e5e7eb;
+}
 
-.year-link { background: none; border: none; color: #2563eb; cursor: pointer; padding: 0; font-weight: 600; }
-.year-link:hover { text-decoration: underline; }
+.ye-header h4 {
+  margin: 0;
+  font-size: 1.125rem;
+  color: #111827;
+}
 
-.year-editor { position: fixed; inset: 0; background: rgba(0,0,0,0.35); display: grid; place-items: center; z-index: 2000; }
-.year-editor-card { width: min(520px, 94vw); background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: grid; gap: 10px; }
-.ye-header { display: flex; justify-content: space-between; align-items: center; }
-.ye-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
-.ye-actions { display: flex; justify-content: flex-end; gap: 8px; }
+.ye-grid {
+  padding: 20px;
+  display: grid;
+  gap: 16px;
+}
+
+.ye-grid .row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  align-items: center;
+}
+
+.ye-grid label {
+  font-size: 0.875rem;
+  color: #374151;
+  font-weight: 500;
+}
+
+.ye-grid input {
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.875rem;
+}
+
+.ye-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  padding: 16px 20px;
+  border-top: 1px solid #e5e7eb;
+  background: #f9fafb;
+  border-radius: 0 0 12px 12px;
+}
+
+.charts-section {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 0;
+}
+
+.embedded-planner {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+  background: #fafbff;
+}
+
+.flag-disabled {
+  padding: 16px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  color: #dc2626;
+  text-align: center;
+}
+
+.empty {
+  padding: 32px;
+  text-align: center;
+  color: #6b7280;
+  font-style: italic;
+}
+
+.growth-explanation {
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin: 8px 0 12px 0;
+  font-size: 0.875rem;
+}
+
+.growth-explanation p {
+  margin: 0 0 8px 0;
+  color: #0c4a6e;
+  font-weight: 600;
+}
+
+.growth-explanation ul {
+  margin: 0;
+  padding-left: 16px;
+  color: #0369a1;
+}
+
+.growth-explanation li {
+  margin-bottom: 4px;
+}
+
+.help-icon {
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-left: 4px;
+  cursor: help;
+}
 </style>
