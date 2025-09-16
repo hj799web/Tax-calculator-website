@@ -10,6 +10,7 @@ The mobile optimization effort addressed several key areas:
 - **Responsive typography**: Implemented fluid scaling across viewport widths
 - **Navigation improvements**: Enhanced panel tabs for mobile interaction
 - **Chart responsiveness**: Optimized data visualization for small screens
+- **Data transparency**: Added data source attribution for user confidence
 
 ## Key Changes
 
@@ -143,6 +144,26 @@ Applied 20% downscale to main application pages:
 - Tax calculator page (`CalculatorView.vue`)
 - Budget simulator pages (`FinanceMinisterSimulator.vue`, `ModularFinanceMinisterSimulator.vue`)
 
+### 8. Data Source Attribution
+
+Added transparent data source information to build user trust:
+
+```html
+<p class="description">
+  Experience what it's like to manage Canada's federal budget...
+  <br><br>
+  <span style="font-size: 0.6em; color: #666;">
+    *The Budget Simulator uses approximate federal budget data from Public Accounts of Canada and Budget 2024 documents.
+  </span>
+</p>
+```
+
+**Features**:
+- **Integrated placement**: Within the main description paragraph for better context
+- **Subtle styling**: Small font size (0.6em) with muted color (#666)
+- **Clear attribution**: References official government sources
+- **Responsive design**: Scales appropriately across all device sizes
+
 ## Technical Implementation
 
 ### Files Modified
@@ -242,3 +263,4 @@ Applied 20% downscale to main application pages:
 - [Panel System Architecture](dev-notes/panel-system-architecture.md)
 - [Onboarding Tour Implementation](docs/internal/onboarding-tour.md)
 - [Changelog](docs/CHANGELOG.md)
+

@@ -31,6 +31,7 @@ The Budget Simulator received a navigation and onboarding overhaul:
 - Grouped tabs with simplified labels, compact mode, and pinned tabs
 - Budget‑prefixed panels for consistent naming
 - Refocused Shepherd tour with Quick/Full modes and a stronger spotlight
+- Data source attribution for transparency and credibility
 
 ## Mobile optimization (2025‑01‑15)
 

@@ -10,7 +10,11 @@ This project is actively evolving. This log highlights user‑visible and develo
   - Panel bar supports multi‑row wrapping, compact mode (icon‑only with tooltips), and a mobile "More" collapse.
   - Pinned tabs: `revenue` and `spending` are surfaced first; can be expanded later to user‑selectable pins.
 
-## 2025‑01‑15 – Mobile optimization + UI scaling
+## 2025‑01‑15 – Mobile optimization + UI scaling + Data attribution
+
+- **Data source attribution**
+  - Added data source footnote to budget simulator description: "*The Budget Simulator uses approximate federal budget data from Public Accounts of Canada and Budget 2024 documents."
+  - Positioned within the main description paragraph for better visibility and context.
 
 - **Mobile UX overhaul**
   - **Removed global scaling hack**: Eliminated the `transform: scale(0.9)` on `#app` in mobile media queries to prevent blurry text and mismatched touch targets.

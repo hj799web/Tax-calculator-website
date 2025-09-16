@@ -74,7 +74,7 @@
 
       <MainNavigation />
 
-      <p class="description">Experience what it's like to manage Canada's federal budget. Adjust revenue sources and spending priorities to balance the budget while considering public sentiment across different regions and sectors.<br><br><span style="font-size: 0.6em; color: #666;">*The Budget Simulator uses approximate federal budget data from Public Accounts of Canada and Budget 2024 documents.</span></p>
+      <p class="description">Experience what it's like to manage Canada's federal budget. Adjust revenue sources and spending priorities to balance the budget while considering public sentiment across different regions and sectors.<br><span class="disclaimer">*The Budget Simulator uses federal budget data from the Public Accounts of Canada and Budget 2024, deficit figures from the Department of Finance’s Fiscal Reference Tables, debt-to-GDP ratios from the FRED/World Bank series, and projections from the Parliamentary Budget Officer.</span></p>
 
       <!-- Year Selector -->
       <YearSelector 
@@ -1490,6 +1490,14 @@ input:focus, select:focus, textarea:focus {
   max-width: 800px;
   color: #222;
   font-size: clamp(0.9rem, 0.5vw + 0.85rem, 1rem);
+}
+
+.description .disclaimer {
+  display: inline-block;
+  margin-top: 0.35rem;
+  font-size: 0.78em;
+  line-height: 1.15;
+  color: #666;
 }
 
 /* Extra-tight layout on very small screens */
