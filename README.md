@@ -33,6 +33,16 @@ The Budget Simulator received a navigation and onboarding overhaul:
 - Refocused Shepherd tour with Quick/Full modes and a stronger spotlight
 - Data source attribution for transparency and credibility
 
+## Calculator Tab System (2025‑01‑15)
+
+Implemented a comprehensive tab-based navigation system for the calculator:
+
+- **Accessible tab component**: Full WCAG 2.1 AA compliance with keyboard navigation
+- **Content organization**: Calculator and Results share a panel, other sections in separate tabs
+- **Global controls**: Year/salary selectors remain above tabs as universal controls
+- **Mobile optimization**: Horizontal scrolling tabs with responsive design
+- **Dark mode support**: Pill-style design with backdrop blur and proper contrast
+
 ## Mobile optimization (2025‑01‑15)
 
 Comprehensive mobile experience improvements:

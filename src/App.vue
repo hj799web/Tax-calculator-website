@@ -78,136 +78,156 @@
           <ErrorBoundary component-name="SalaryRateSelector">
             <SalaryRateSelector />
           </ErrorBoundary>
-          
-          <section class="calculator-section budget-simulator">
-            <div class="calculator-wrapper">
-              <!-- Calculator and Results Section -->
-              <ErrorBoundary component-name="CalculatorView">
-                <CalculatorView />
-              </ErrorBoundary>
-              <!-- End of calculator-section -->
 
-              <ErrorBoundary component-name="ResultView">
-                <ResultView />
-              </ErrorBoundary>
-              <!-- End of calculator-container -->
-            </div>
-          </section>
-
-          <!-- Understanding Your Tax Breakdown Section -->
-          <section id="how-it-works" class="income-section">
-            <h2 class="section-title section-title--highlight">
-              Understanding Your Tax Breakdown
-            </h2>
-            <p class="section-description section-description--highlight">
-              See how your tax dollars are allocated across different government spending categories. This visualization helps you 
-              understand exactly where your money goes and how it contributes to various public services.
-            </p>
-            <ErrorBoundary component-name="FederalBudgetView">
-              <FederalBudgetView />
-            </ErrorBoundary>
-          </section>
-
-          <!-- Budget Categories Section - Now Collapsible -->
-          <section class="budget-categories-section expenses-section">
-            <div class="section-header">
-              <h2 class="section-title">
-                Budget Categories
-              </h2>
-              <button
-                class="toggle-section-button"
-                @click="toggleBudgetCategories"
+          <Tabs
+            class="calculator-tabs"
+            variant="primary"
+            :items="tabItems"
+            v-model="activeTab"
+          >
+            <template #default="{ activeTab: currentTab, getPanelProps }">
+              <section
+                v-bind="getPanelProps('calculator')"
+                class="calculator-section budget-simulator"
+                v-show="currentTab === 'calculator'"
               >
-                {{ showBudgetCategories ? 'Hide' : 'Show' }}
-              </button>
-            </div>
-            <transition name="fade">
-              <div v-if="showBudgetCategories">
-                <p class="section-description">
-                  <template v-if="yearStore.selectedTaxYear === '2023'">
-                  These budget categories are for the 2022–2023 fiscal year. Data is sourced from the Public Accounts of Canada offering a view of how federal funds are allocated across key sectors such as healthcare, defense, infrastructure, and more.
-                  </template>
-                  <template v-else-if="yearStore.selectedTaxYear === '2024'">
-                    These budget categories are for the 2023–2024 fiscal year. The allocations reflect the proposed spending outlined in the 2023–2024 federal budget.
-                  </template>
-                  <template v-else-if="yearStore.selectedTaxYear === '2025'">
-                    These budget categories are for the 2025–2026 fiscal year. The allocations reflect projected federal spending estimates for 2025–2026.
-                  </template>
-                  <template v-else>
-                    These budget categories are based on the most recent available data.
-                  </template>
+                <div class="calculator-wrapper">
+                  <ErrorBoundary component-name="CalculatorView">
+                    <CalculatorView />
+                  </ErrorBoundary>
+                  <ErrorBoundary component-name="ResultView">
+                    <ResultView />
+                  </ErrorBoundary>
+                </div>
+              </section>
+
+              <section
+                v-bind="getPanelProps('breakdown')"
+                class="income-section"
+                v-show="currentTab === 'breakdown'"
+              >
+                <h2 class="section-title section-title--highlight">
+                  Understanding Your Tax Breakdown
+                </h2>
+                <p class="section-description section-description--highlight">
+                  See how your tax dollars are allocated across different government spending categories. This visualization helps you 
+                  understand exactly where your money goes and how it contributes to various public services.
                 </p>
-                <ErrorBoundary component-name="BudgetCategoriesView">
-                  <BudgetCategoriesView />
+                <ErrorBoundary component-name="FederalBudgetView">
+                  <FederalBudgetView />
                 </ErrorBoundary>
-              </div>
-            </transition>
-          </section>
-          <!-- End of budget-categories-section -->
+              </section>
 
-          <!-- FAQ Section - Now Collapsible -->
-          <section class="faq-section summary-section">
-            <div class="section-header">
-              <h2 class="section-title">
-                Taxpayer FAQs
-              </h2>
-              <button
-                class="toggle-section-button"
-                @click="toggleFAQs"
+              <section
+                v-bind="getPanelProps('categories')"
+                class="budget-categories-section expenses-section"
+                v-show="currentTab === 'categories'"
               >
-                {{ showFAQs ? 'Hide' : 'Show' }}
-              </button>
-            </div>
-            <transition name="fade">
-              <div v-if="showFAQs">
-                <ErrorBoundary component-name="FAQSection">
-                  <FAQSection />
-                </ErrorBoundary>
-              </div>
-            </transition>
-          </section>
+                <div class="section-header">
+                  <h2 class="section-title">
+                    Budget Categories
+                  </h2>
+                  <button
+                    class="toggle-section-button"
+                    @click="toggleBudgetCategories"
+                  >
+                    {{ showBudgetCategories ? 'Hide' : 'Show' }}
+                  </button>
+                </div>
+                <transition name="fade">
+                  <div v-if="showBudgetCategories">
+                    <p class="section-description">
+                      <template v-if="yearStore.selectedTaxYear === '2023'">
+                      These budget categories are for the 2022??"2023 fiscal year. Data is sourced from the Public Accounts of Canada offering a view of how federal funds are allocated across key sectors such as healthcare, defense, infrastructure, and more.
+                      </template>
+                      <template v-else-if="yearStore.selectedTaxYear === '2024'">
+                        These budget categories are for the 2023??"2024 fiscal year. The allocations reflect the proposed spending outlined in the 2023??"2024 federal budget.
+                      </template>
+                      <template v-else-if="yearStore.selectedTaxYear === '2025'">
+                        These budget categories are for the 2025??"2026 fiscal year. The allocations reflect projected federal spending estimates for 2025??"2026.
+                      </template>
+                      <template v-else>
+                        These budget categories are based on the most recent available data.
+                      </template>
+                    </p>
+                    <ErrorBoundary component-name="BudgetCategoriesView">
+                      <BudgetCategoriesView />
+                    </ErrorBoundary>
+                  </div>
+                </transition>
+              </section>
 
-          <!-- Resources Section -->
-          <section class="resources-section">
-            <h2 class="section-title">
-              Additional Tax Resources
-            </h2>
-            <p class="resources-description">
-              Access these trusted resources to learn more about Canadian taxes, government spending, and financial planning.
-            </p>
-            <div class="resources-links">
-              <router-link
-                to="/how-it-works"
-                class="resource-link"
+              <section
+                v-bind="getPanelProps('faqs')"
+                class="faq-section summary-section"
+                v-show="currentTab === 'faqs'"
               >
-                How It Works
-              </router-link>
-              <a
-                href="https://www.canada.ca/en/revenue-agency.html"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="resource-link"
-              >Canada Revenue Agency</a>
-              <a
-                href="https://www.canada.ca/en/department-finance.html"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="resource-link"
-              >Department of Finance Canada</a>
-              <a
-                href="https://www.budget.canada.ca/2024/home-accueil-en.html"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="resource-link"
-              >Budget 2024</a>
-              <a
-                href="https://www.tpsgc-pwgsc.gc.ca/recgen/cpc-pac/index-eng.html"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="resource-link"
-              >Public Accounts of Canada</a>
-            </div>
-          </section>
+                <div class="section-header">
+                  <h2 class="section-title">
+                    Taxpayer FAQs
+                  </h2>
+                  <button
+                    class="toggle-section-button"
+                    @click="toggleFAQs"
+                  >
+                    {{ showFAQs ? 'Hide' : 'Show' }}
+                  </button>
+                </div>
+                <transition name="fade">
+                  <div v-if="showFAQs">
+                    <ErrorBoundary component-name="FAQSection">
+                      <FAQSection />
+                    </ErrorBoundary>
+                  </div>
+                </transition>
+              </section>
+
+              <section
+                v-bind="getPanelProps('resources')"
+                class="resources-section"
+                v-show="currentTab === 'resources'"
+              >
+                <h2 class="section-title">
+                  Additional Tax Resources
+                </h2>
+                <p class="resources-description">
+                  Access these trusted resources to learn more about Canadian taxes, government spending, and financial planning.
+                </p>
+                <div class="resources-links">
+                  <router-link
+                    to="/how-it-works"
+                    class="resource-link"
+                  >
+                    How It Works
+                  </router-link>
+                  <a
+                    href="https://www.canada.ca/en/revenue-agency.html"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="resource-link"
+                  >Canada Revenue Agency</a>
+                  <a
+                    href="https://www.canada.ca/en/department-finance.html"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="resource-link"
+                  >Department of Finance Canada</a>
+                  <a
+                    href="https://www.budget.canada.ca/2024/home-accueil-en.html"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="resource-link"
+                  >Budget 2024</a>
+                  <a
+                    href="https://www.tpsgc-pwgsc.gc.ca/recgen/cpc-pac/index-eng.html"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="resource-link"
+                  >Public Accounts of Canada</a>
+                </div>
+              </section>
+            </template>
+          </Tabs>
         </div>
       </main>
 
@@ -292,9 +312,10 @@
 </template>
 
 <script>
-import { ref, computed, defineAsyncComponent } from 'vue'
+import { ref, computed, defineAsyncComponent, watch } from 'vue'
 import { useYearStore } from '@/domains/calculator/store/year.js'
 import ErrorBoundary from '@/components/ErrorBoundary.vue'
+import Tabs from '@/components/Tabs.vue'
 
 // Lazy load heavy components for better initial page load
 const CalculatorView = defineAsyncComponent({
@@ -343,6 +364,7 @@ import SalaryRateSelector from '@/domains/calculator/components/SalaryRateSelect
 export default {
   name: 'App',
   components: {
+    Tabs,
     CalculatorView,
     ResultView,
     FederalBudgetView,
@@ -355,6 +377,14 @@ export default {
     const yearStore = useYearStore()
     const showBudgetCategories = ref(false)
     const showFAQs = ref(false)
+    const activeTab = ref('calculator')
+    const tabItems = [
+      { id: 'calculator', label: 'Calculator', panelId: 'calculator-panel' },
+      { id: 'breakdown', label: 'Budget Breakdown', panelId: 'how-it-works' },
+      { id: 'categories', label: 'Categories', panelId: 'budget-categories-section' },
+      { id: 'faqs', label: 'FAQs', panelId: 'faq-section' },
+      { id: 'resources', label: 'Resources', panelId: 'resources-section' }
+    ]
 
     const logoUrl = computed(() => {
       return new URL('@/assets/fiscal-insights-logo.webp', import.meta.url).href
@@ -368,10 +398,21 @@ export default {
       showFAQs.value = !showFAQs.value
     }
 
+    watch(activeTab, (value) => {
+      if (value === 'categories' && !showBudgetCategories.value) {
+        showBudgetCategories.value = true
+      }
+      if (value === 'faqs' && !showFAQs.value) {
+        showFAQs.value = true
+      }
+    })
+
     return {
       yearStore,
       showBudgetCategories,
       showFAQs,
+      activeTab,
+      tabItems,
       logoUrl,
       toggleBudgetCategories,
       toggleFAQs
@@ -1800,6 +1841,10 @@ button::before, .button::before {
 }
 
 /* Background is handled by public/index.html */
+
+.calculator-tabs {
+  margin-top: 2.5rem;
+}
 
 /* Loading and Error States for Lazy Components */
 .loading-view {

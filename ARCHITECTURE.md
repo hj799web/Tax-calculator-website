@@ -825,6 +825,226 @@ notifyStateChange() {
 
 ## 3. Component Hierarchy & Data Flow
 
+### Main Application Component (`src/App.vue`)
+
+#### Tab-Based Navigation System
+The main application now uses a tab-based navigation system to organize long-form content and improve user experience. The tab system mirrors the simulator's structure and makes content easier to scan.
+
+```vue
+<template>
+  <div class="app">
+    <!-- Global Controls (Year/Salary Selectors) -->
+    <div class="global-controls">
+      <!-- Year and salary selectors remain above tabs -->
+    </div>
+
+    <!-- Tab Navigation -->
+    <Tabs
+      class="calculator-tabs"
+      variant="primary"
+      :items="tabItems"
+      v-model="activeTab"
+    >
+      <template #default="{ activeTab: currentTab, getPanelProps }">
+        <!-- Calculator + Results Panel -->
+        <section
+          v-bind="getPanelProps('calculator')"
+          class="calculator-section budget-simulator"
+          v-show="currentTab === 'calculator'"
+        >
+          <CalculatorView />
+          <ResultView />
+        </section>
+
+        <!-- Other Tab Panels -->
+        <section
+          v-bind="getPanelProps('breakdown')"
+          v-show="currentTab === 'breakdown'"
+        >
+          <!-- Budget Breakdown Content -->
+        </section>
+      </template>
+    </Tabs>
+  </div>
+</template>
+
+<script setup>
+import { ref, watch } from 'vue'
+import Tabs from '@/components/Tabs.vue'
+
+// Tab configuration
+const activeTab = ref('calculator')
+const tabItems = [
+  { id: 'calculator', label: 'Calculator', panelId: 'calculator-panel' },
+  { id: 'breakdown', label: 'Budget Breakdown', panelId: 'how-it-works' },
+  { id: 'categories', label: 'Categories', panelId: 'budget-categories-section' },
+  { id: 'faqs', label: 'FAQs', panelId: 'faq-section' },
+  { id: 'resources', label: 'Resources', panelId: 'resources-section' }
+]
+
+// Auto-expand sections when tabs are first viewed
+watch(activeTab, (value) => {
+  if (value === 'categories' && !showBudgetCategories.value) {
+    showBudgetCategories.value = true
+  }
+  if (value === 'faqs' && !showFAQs.value) {
+    showFAQs.value = true
+  }
+})
+</script>
+```
+
+#### Tab System Features
+
+1. **Accessible Navigation**
+   - Full keyboard navigation (arrow keys, home, end, enter, space)
+   - Proper ARIA attributes (`role="tablist"`, `aria-controls`, `aria-labelledby`)
+   - Focus management and screen reader support
+
+2. **Content Organization**
+   - Calculator and Results share the same panel for better UX
+   - Other sections (Breakdown, Categories, FAQs, Resources) in separate panels
+   - Global controls (year/salary selectors) remain above tabs
+
+3. **State Management**
+   - Local tab state with reactive updates
+   - Auto-expansion of sections when first viewed
+   - Maintains scroll position and section state
+
+4. **Styling & Responsiveness**
+   - Pill-style tab bar with backdrop blur
+   - Dark mode support with appropriate contrast
+   - Mobile-optimized with horizontal scrolling
+   - Consistent spacing and typography
+
+### Shared Tabs Component (`src/components/Tabs.vue`)
+
+#### Component Structure
+```vue
+<template>
+  <div :class="classes">
+    <div
+      class="tabs__list"
+      role="tablist"
+      :aria-orientation="orientation"
+    >
+      <button
+        v-for="(tab, index) in normalizedItems"
+        :key="tab.id"
+        type="button"
+        class="tabs__tab"
+        :class="{ 'is-active': tab.id === activeTab }"
+        :id="getTabId(tab.id)"
+        role="tab"
+        :aria-selected="tab.id === activeTab"
+        :aria-controls="tab.panelId"
+        :tabindex="tab.id === activeTab ? 0 : -1"
+        @click="onClickTab(tab.id)"
+        @keydown="onKeydown($event, index)"
+        :ref="(el) => setTabRef(el, index)"
+      >
+        <span class="tabs__label">{{ tab.label }}</span>
+      </button>
+    </div>
+    <div class="tabs__panels">
+      <slot v-bind="slotBinding" />
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { computed, onBeforeUpdate, ref, watch } from 'vue'
+
+defineOptions({
+  name: 'TabsComponent'
+})
+
+const props = defineProps({
+  items: {
+    type: Array,
+    required: true,
+    validator: (value) => Array.isArray(value) && value.every(item => 
+      item && typeof item.id === 'string' && typeof item.label === 'string'
+    )
+  },
+  modelValue: {
+    type: String,
+    default: ''
+  },
+  variant: {
+    type: String,
+    default: 'default'
+  },
+  orientation: {
+    type: String,
+    default: 'horizontal',
+    validator: (value) => ['horizontal', 'vertical'].includes(value)
+  }
+})
+
+const emit = defineEmits(['update:modelValue', 'change'])
+
+// Keyboard navigation and accessibility features
+const onKeydown = (event, index) => {
+  const { key } = event
+  const total = normalizedItems.value.length
+  if (!total) return
+
+  const isHorizontal = props.orientation === 'horizontal'
+  const prevKey = isHorizontal ? 'ArrowLeft' : 'ArrowUp'
+  const nextKey = isHorizontal ? 'ArrowRight' : 'ArrowDown'
+
+  if (key === nextKey) {
+    event.preventDefault()
+    const nextIndex = (index + 1) % total
+    selectByIndex(nextIndex)
+  } else if (key === prevKey) {
+    event.preventDefault()
+    const prevIndex = (index - 1 + total) % total
+    selectByIndex(prevIndex)
+  } else if (key === 'Home') {
+    event.preventDefault()
+    selectByIndex(0)
+  } else if (key === 'End') {
+    event.preventDefault()
+    selectByIndex(total - 1)
+  } else if (key === 'Enter' || key === ' ') {
+    event.preventDefault()
+    const item = normalizedItems.value[index]
+    if (item) {
+      setActive(item.id, { emitChange: true })
+    }
+  }
+}
+</script>
+```
+
+#### Tab Component Features
+
+1. **Accessibility Compliance**
+   - WCAG 2.1 AA compliant keyboard navigation
+   - Proper ARIA relationships between tabs and panels
+   - Focus management and screen reader support
+   - Unique IDs for all interactive elements
+
+2. **Flexible Configuration**
+   - Support for horizontal and vertical orientations
+   - Multiple styling variants (default, primary)
+   - Customizable tab items with validation
+   - Two-way data binding with v-model
+
+3. **Performance Optimizations**
+   - Efficient reactivity with computed properties
+   - Debounced updates to prevent excessive re-renders
+   - Lazy panel loading support
+   - Memory-efficient ref management
+
+4. **Styling System**
+   - Pill-style design with backdrop blur
+   - Dark mode support with appropriate contrast ratios
+   - Mobile-responsive with horizontal scrolling
+   - Consistent spacing and typography
+
 ### Main Simulator Component (`src/views/FinanceMinisterSimulator.vue`)
 
 #### Component Structure

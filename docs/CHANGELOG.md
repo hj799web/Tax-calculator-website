@@ -10,6 +10,33 @@ This project is actively evolving. This log highlights user‑visible and develo
   - Panel bar supports multi‑row wrapping, compact mode (icon‑only with tooltips), and a mobile "More" collapse.
   - Pinned tabs: `revenue` and `spending` are surfaced first; can be expanded later to user‑selectable pins.
 
+## 2025‑01‑15 – Calculator Tab System Implementation
+
+- **Tab-based navigation system**
+  - Implemented shared `TabsComponent` with full accessibility compliance (WCAG 2.1 AA)
+  - Added keyboard navigation (arrow keys, home, end, enter, space) with proper ARIA relationships
+  - Created pill-style tab bar with backdrop blur and dark mode support
+  - Mobile-optimized with horizontal scrolling and responsive design
+
+- **Calculator content reorganization**
+  - Wrapped calculator content in tab host for better content organization
+  - Calculator and Results now share the same panel for improved UX
+  - Global year/salary selectors remain above tabs as universal controls
+  - Added auto-expansion for Categories and FAQs sections when first viewed
+
+- **Tab configuration**
+  - Calculator: Combined calculator and results in single panel
+  - Budget Breakdown: How-it-works content
+  - Categories: Budget categories section
+  - FAQs: Frequently asked questions
+  - Resources: Additional resources and documentation
+
+- **Accessibility improvements**
+  - Proper `role="tablist"` and `aria-controls` attributes
+  - Focus management and screen reader support
+  - Unique IDs for all interactive elements
+  - Maintains focus order and keyboard navigation consistency
+
 ## 2025‑01‑15 – Mobile optimization + UI scaling + Data attribution
 
 - **Data source attribution**
