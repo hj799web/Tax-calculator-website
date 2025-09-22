@@ -166,8 +166,8 @@ if (locale === 'fr') {
 ```vue
 <template>
   <div>
-    <h1>{{ t('simulator.header.title') }}</h1>
-    <p>{{ t('simulator.description.intro') }}</p>
+    <h1>{% raw %}{{ t('simulator.header.title') }}{% endraw %}</h1>
+    <p>{% raw %}{{ t('simulator.description.intro') }}{% endraw %}</p>
   </div>
 </template>
 
@@ -182,8 +182,8 @@ const { t, locale } = useI18n()
 ```vue
 <template>
   <div>
-    <h2>{{ t('simulator.sections.revenue.title') }}</h2>
-    <p>{{ t('simulator.sections.revenue.description', { year: 2024 }) }}</p>
+    <h2>{% raw %}{{ t('simulator.sections.revenue.title') }}{% endraw %}</h2>
+    <p>{% raw %}{{ t('simulator.sections.revenue.description', { year: 2024 }) }}{% endraw %}</p>
   </div>
 </template>
 ```
@@ -297,3 +297,4 @@ test('interpolates parameters', () => {
 - [CHANGELOG](CHANGELOG.md) - i18n refactoring entry
 - [Architecture Overview](ARCHITECTURE.md) - i18n system integration
 - [Component Guide](tabs-component-guide.md) - i18n usage in components
+

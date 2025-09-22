@@ -173,3 +173,4 @@ const categoryName = t(`budgetCategories.y2024.${categoryId}.name`)
 - **Context awareness**: Consider cultural differences in translations
 - **Testing**: Verify translations in both languages
 - **Documentation**: Keep this reference updated
+
