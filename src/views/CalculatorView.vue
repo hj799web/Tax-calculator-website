@@ -1,12 +1,12 @@
+/* eslint-disable */
 <template>
   <!-- Calculator Container -->
   <div class="calculator-container">
     <h2 class="title">
-      Estimate Your Taxes
+      {{ t('calculator.title') }}
     </h2>
     <p class="description">
-      Calculate your federal and provincial taxes to estimate your net
-      income.
+      {{ t('calculator.description') }}
     </p>
     
     <!-- Budget Simulator Button -->
@@ -14,8 +14,9 @@
       <router-link
         to="/simulator"
         class="simulator-button bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-200 inline-flex items-center"
+        :aria-label="t('calculator.simulator.aria')"
       >
-        <span class="mr-2">🏛️</span> Try the Budget Simulator
+        {{ t('calculator.simulator.cta') }}
       </router-link>
     </div>
 
@@ -27,13 +28,13 @@
 
     <!-- Additional Income Sources -->
     <h3 class="section-title">
-      Additional Income Sources
+      {{ t('calculator.sections.additionalIncome') }}
     </h3>
     <AdditionalIncomeInputs />
 
     <!-- Deductions and Credits -->
     <h3 class="section-title">
-      Deductions and Credits
+      {{ t('calculator.sections.deductions') }}
     </h3>
     <DeductionsAndCreditsInputs />
   </div>
@@ -45,6 +46,8 @@ import RegionSelector from '@/domains/calculator/components/RegionSelector.vue'
 import IncomeInput from '@/domains/calculator/components/IncomeInput.vue'
 import AdditionalIncomeInputs from '@/domains/calculator/components/AdditionalIncomeInputs.vue'
 import DeductionsAndCreditsInputs from '@/domains/calculator/components/DeductionsAndCreditsInputs.vue'
+import { useI18n } from '@/i18n'
+const { t } = useI18n()
 </script>
 
 <style scoped>

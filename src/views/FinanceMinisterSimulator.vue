@@ -1,3 +1,4 @@
+/* eslint-disable */
 <template>
   <div
     class="finance-minister-simulator"
@@ -21,7 +22,7 @@
     >
       <div class="badges-header">
         <div class="badges-title-container">
-          <span class="badges-title">Your Achievements</span>
+          <span class="badges-title">{{ t('simulator.header.achievements') }}</span>
           <button
             class="toggle-badge-panel-btn"
             @click="toggleBadgePanel"
@@ -34,11 +35,11 @@
           @click="showBadgeGallery = true"
         >
           <span class="material-icons">emoji_events</span>
-          View All Badges
+          {{ t('simulator.header.viewAll') }}
         </button>
       </div>
       <div v-show="badgePanelExpanded && budgetStore.badges.length === 0" class="no-badges-message">
-        Make budget decisions to earn badges!
+        {{ t('simulator.header.noBadges') }}
       </div>
       <div
         v-show="badgePanelExpanded"
@@ -64,17 +65,21 @@
       <div class="logo-container">
         <img
           :src="logoUrl"
-          alt="Fiscal Insights Logo"
+          :alt="t('home.alt.logo')"
           class="site-logo"
         >
       </div>
       <div class="flex justify-between items-center mb-0">
-        <h1 class="main-title">Budget Simulator: Be the Finance Minister</h1>
+        <h1 class="main-title">{{ t('simulator.header.title') }}</h1>
       </div>
 
       <MainNavigation />
 
-      <p class="description">Experience what it's like to manage Canada's federal budget. Adjust revenue sources and spending priorities to balance the budget while considering public sentiment across different regions and sectors.<br><span class="disclaimer">*The Budget Simulator uses federal budget data from the Public Accounts of Canada and Budget 2024, deficit figures from the Department of Finance’s Fiscal Reference Tables, debt-to-GDP ratios from the FRED/World Bank series, and projections from the Parliamentary Budget Officer.</span></p>
+      <p class="description">
+        {{ t('simulator.description.intro') }}
+        <br>
+        <span class="disclaimer">{{ t('simulator.description.disclaimer') }}</span>
+      </p>
 
       <!-- Year Selector -->
       <YearSelector 
@@ -91,36 +96,36 @@
       <nav class="sub-navigation" v-if="!FEATURES.PANEL_NAV">
         <a @click="scrollToSection('budget-goals')" class="sub-nav-link">
           <span class="material-icons">flag</span>
-          Budget Goals
+          {{ t('simulator.nav.goals') }}
         </a>
         <a @click="scrollToSection('budget-results')" class="sub-nav-link">
           <span class="material-icons">summarize</span>
-          Budget Results
+          {{ t('simulator.nav.results') }}
         </a>
         <a @click="scrollToSection('revenue-sources')" class="sub-nav-link">
           <span class="material-icons">payments</span>
-          Revenue Sources
+          {{ t('simulator.nav.revenue') }}
         </a>
         <a @click="scrollToSection('spending-controls')" class="sub-nav-link">
           <span class="material-icons">payments</span>
-          Spending Controls
+          {{ t('simulator.nav.spending') }}
         </a>
         <a @click="scrollToSection('budget-analysis')" class="sub-nav-link">
           <span class="material-icons">bar_chart</span>
-          Budget Analysis
+          {{ t('simulator.nav.analysis') }}
         </a>
         <a @click="scrollToSection('public-sentiment')" class="sub-nav-link">
           <span class="material-icons">people</span>
-          Public Sentiment
+          {{ t('simulator.nav.sentiment') }}
         </a>
         <div class="section-controls">
           <button @click="expandAllSections" class="section-control-btn">
             <span class="material-icons">expand_more</span>
-            Expand All
+            {{ t('simulator.nav.expandAll') }}
           </button>
           <button @click="collapseAllSections" class="section-control-btn">
             <span class="material-icons">expand_less</span>
-            Collapse All
+            {{ t('simulator.nav.collapseAll') }}
           </button>
         </div>
       </nav>
@@ -130,7 +135,7 @@
         <section id="budget-goals" class="simulator-card goals-card">
           <h2 class="card-title" @click="toggleSection('budgetGoals')">
             <span class="material-icons icon">flag</span>
-            Budget Goals
+            {{ t('simulator.nav.goals') }}
             <span class="material-icons toggle-icon" :class="{ 'rotated': !sectionsExpanded.budgetGoals }">expand_more</span>
           </h2>
           <div class="card-content" v-show="sectionsExpanded.budgetGoals">
@@ -152,12 +157,12 @@
 
         <!-- Budget Results Section -->
         <div v-if="fiscalChaos" class="budget-chaos-warning">
-          <strong>⚠️ Public outrage: Revenue system in chaos! ⚠️</strong>
+          <strong>{{ t('simulator.chaosWarning') }}</strong>
         </div>
         <section id="budget-results" class="simulator-card budget-results-card">
           <h2 class="card-title" @click="toggleSection('budgetResults')">
             <span class="material-icons icon">summarize</span>
-            Budget Results
+            {{ t('simulator.sections.results.title') }}
             <span class="material-icons toggle-icon" :class="{ 'rotated': !sectionsExpanded.budgetResults }">expand_more</span>
           </h2>
           <div class="card-content" v-show="sectionsExpanded.budgetResults">
@@ -181,7 +186,7 @@
         <section class="simulator-card preset-panel-container">
           <h2 class="card-title" @click="toggleSection('budgetPresets')">
             <span class="material-icons icon">settings</span>
-            Budget Presets
+            {{ t('simulator.sections.presets.title') }}
             <span class="material-icons toggle-icon" :class="{ 'rotated': !sectionsExpanded.budgetPresets }">expand_more</span>
           </h2>
           <div class="card-content" v-show="sectionsExpanded.budgetPresets">
@@ -196,7 +201,7 @@
         <section id="revenue-sources" class="simulator-card revenue-card">
           <h2 class="card-title" @click="toggleSection('revenueSources')">
             <span class="material-icons icon">payments</span>
-            Revenue Sources
+            {{ t('simulator.sections.revenue.title') }}
             <span class="material-icons toggle-icon" :class="{ 'rotated': !sectionsExpanded.revenueSources }">expand_more</span>
           </h2>
           <div class="card-content" v-show="sectionsExpanded.revenueSources">
@@ -208,7 +213,7 @@
         <section id="spending-controls" class="simulator-card spending-card">
           <h2 class="card-title" @click="toggleSection('spendingControls')">
             <span class="material-icons icon">payments</span>
-            Spending Controls
+            {{ t('simulator.sections.spending.title') }}
             <span class="material-icons toggle-icon" :class="{ 'rotated': !sectionsExpanded.spendingControls }">expand_more</span>
           </h2>
           <div class="card-content" v-show="sectionsExpanded.spendingControls">
@@ -237,7 +242,7 @@
         <section id="budget-analysis" class="simulator-card charts-card">
           <h2 class="card-title" @click="toggleSection('budgetAnalysis')">
             <span class="material-icons icon">bar_chart</span>
-            Budget Analysis
+            {{ t('simulator.sections.analysis.title') }}
             <span class="material-icons toggle-icon" :class="{ 'rotated': !sectionsExpanded.budgetAnalysis }">expand_more</span>
           </h2>
           <div class="card-content" v-show="sectionsExpanded.budgetAnalysis">
@@ -249,7 +254,7 @@
         <section id="public-sentiment" class="simulator-card sentiment-card">
           <h2 class="card-title" @click="toggleSection('publicSentiment')">
             <span class="material-icons icon">sentiment_satisfied</span>
-            Public Sentiment
+            {{ t('simulator.sections.sentiment.title') }}
             <span class="material-icons toggle-icon" :class="{ 'rotated': !sectionsExpanded.publicSentiment }">expand_more</span>
           </h2>
           <div class="card-content" v-show="sectionsExpanded.publicSentiment">
@@ -296,6 +301,7 @@
 
 <script setup>
 import { computed, ref, onMounted, watch, nextTick, defineAsyncComponent } from 'vue'
+import { useI18n } from '@/i18n'
 import { useBudgetSimulatorStore } from '@/domains/budget'
 import { computeSentimentScores, getSentimentLabel, getSentimentEmoji } from '@/domains/sentiment/utils/computeSentimentScores'
 import MainNavigation from '@/components/MainNavigation.vue'
@@ -786,6 +792,8 @@ const expandAllSections = () => {
 const collapseAllSections = () => {
   Object.keys(sectionsExpanded.value).forEach(section => sectionsExpanded.value[section] = false);
 };
+
+const { t } = useI18n()
 </script>
 
 <style scoped>

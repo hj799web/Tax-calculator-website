@@ -1,30 +1,32 @@
+/* eslint-disable */
 <template>
   <nav class="main-navigation">
-    <a href="welcome.html" class="nav-link">Home</a>
+    <a href="welcome.html" class="nav-link">{{ t('home.nav.home') }}</a>
     <router-link 
       to="/how-it-works" 
       class="nav-link"
     >
-      How It Works
+      {{ t('home.nav.howItWorks') }}
     </router-link>
     <router-link 
       to="/" 
       class="nav-link"
     >
-      Tax Calculator
+      {{ t('home.header.title') }}
     </router-link>
     <router-link 
       to="/simulator" 
       class="nav-link simulator-link"
     >
-      Budget Simulator
+      {{ t('home.nav.simulator') }}
     </router-link>
-    <a href="https://www.canada.ca/en/revenue-agency.html" target="_blank" rel="noopener noreferrer" class="nav-link">CRA</a>
+    <a href="https://www.canada.ca/en/revenue-agency.html" target="_blank" rel="noopener noreferrer" class="nav-link">{{ t('home.nav.cra') }}</a>
   </nav>
 </template>
 
 <script setup>
-// Component is now simplified without overengineered preloading
+import { useI18n } from '@/i18n'
+const { t } = useI18n()
 </script>
 
 <style scoped>

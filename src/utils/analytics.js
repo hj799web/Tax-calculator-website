@@ -15,14 +15,13 @@ export const useAnalytics = () => {
     }
   }
 
-  const trackPopupClicked = (deviceType) => {
-    // Track popup clicked event
+  const trackPopupClicked = (deviceType, destination = 'breakdown') => {
     // eslint-disable-next-line no-undef
     if (typeof gtag !== 'undefined') {
       // eslint-disable-next-line no-undef
       gtag('event', 'popup_clicked', {
         event_category: 'user_engagement',
-        event_label: `tax_breakdown_popup_${deviceType}`,
+        event_label: `tax_breakdown_popup_${deviceType}_${destination}`,
         value: 1
       })
     }

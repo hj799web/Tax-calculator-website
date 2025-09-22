@@ -5,7 +5,7 @@
         class="input-label"
         for="rrspDeduction"
       >
-        RRSP Deduction
+        {{ t('calculator.inputs.deductions.rrsp.label') }}
       </label>
       <input
         id="rrspDeduction"
@@ -15,8 +15,8 @@
         pattern="[0-9]*\.?[0-9]*"
         class="input-field"
         :class="{ 'input-error-field': v$.rrspDeduction.$invalid }"
-        placeholder="Enter your RRSP deduction"
-        aria-label="RRSP Deduction"
+        :placeholder="t('calculator.inputs.deductions.rrsp.placeholder')"
+        :aria-label="t('calculator.inputs.deductions.rrsp.aria')"
         autocomplete="off"
         @input="setRrspDeduction"
         @keypress="preventInvalidInput"
@@ -27,16 +27,16 @@
         class="input-error"
       >
         <template v-if="v$.rrspDeduction.minValue.$invalid">
-          Value must be greater than 0
+          {{ t('calculator.validation.minValue') }}
         </template>
         <template v-else-if="v$.rrspDeduction.maxValue.$invalid">
-          Value cannot exceed $29,210 (2024 RRSP limit)
+          {{ t('calculator.validation.rrspLimit') }}
         </template>
         <template v-else-if="v$.rrspDeduction.maxDecimalPlaces.$invalid">
-          Maximum 2 decimal places allowed
+          {{ t('calculator.validation.maxDecimal') }}
         </template>
         <template v-else>
-          Please enter a valid number
+          {{ t('calculator.validation.validNumber') }}
         </template>
       </div>
     </div>
@@ -46,26 +46,26 @@
         class="input-label"
         for="maritalStatus"
       >
-        Marital Status
+        {{ t('calculator.inputs.deductions.maritalStatus.label') }}
       </label>
       <select
         id="maritalStatus"
         v-model="maritalStatus"
         class="input-field"
-        aria-label="Select Marital Status"
+        :aria-label="t('calculator.inputs.deductions.maritalStatus.aria')"
       >
         <option
           disabled
           value=""
           style="font-style: italic;"
         >
-          Select Marital Status
+          {{ t('calculator.inputs.deductions.maritalStatus.placeholder') }}
         </option>
-        <option>Single</option>
-        <option>Married or Common-Law</option>
-        <option>Separated</option>
-        <option>Divorced</option>
-        <option>Widowed</option>
+        <option value="Single">{{ t('calculator.inputs.deductions.maritalStatus.options.single') }}</option>
+        <option value="Married or Common-Law">{{ t('calculator.inputs.deductions.maritalStatus.options.married') }}</option>
+        <option value="Separated">{{ t('calculator.inputs.deductions.maritalStatus.options.separated') }}</option>
+        <option value="Divorced">{{ t('calculator.inputs.deductions.maritalStatus.options.divorced') }}</option>
+        <option value="Widowed">{{ t('calculator.inputs.deductions.maritalStatus.options.widowed') }}</option>
       </select>
     </div>
 
@@ -74,7 +74,7 @@
         class="input-label"
         for="numberOfDependents"
       >
-        Number of Dependents
+        {{ t('calculator.inputs.deductions.dependents.label') }}
       </label>
       <input
         id="numberOfDependents"
@@ -84,8 +84,8 @@
         pattern="[0-9]*"
         class="input-field"
         :class="{ 'input-error-field': v$.numberOfDependents.$invalid }"
-        placeholder="Enter number of dependents"
-        aria-label="Number of Dependents"
+        :placeholder="t('calculator.inputs.deductions.dependents.placeholder')"
+        :aria-label="t('calculator.inputs.deductions.dependents.aria')"
         autocomplete="off"
         @input="setNumberOfDependents"
         @keypress="preventWholeNumberInput"
@@ -96,16 +96,16 @@
         class="input-error"
       >
         <template v-if="v$.numberOfDependents.minValue.$invalid">
-          Value must be greater than 0
+          {{ t('calculator.validation.minValue') }}
         </template>
         <template v-else-if="v$.numberOfDependents.maxValue.$invalid">
-          Value cannot exceed 20
+          {{ t('calculator.validation.dependentsLimit') }}
         </template>
         <template v-else-if="v$.numberOfDependents.maxDecimalPlaces.$invalid">
-          Must be a whole number
+          {{ t('calculator.validation.wholeNumber') }}
         </template>
         <template v-else>
-          Please enter a valid number
+          {{ t('calculator.validation.validNumber') }}
         </template>
       </div>
     </div>
@@ -115,7 +115,7 @@
         class="input-label"
         for="numberOfChildrenUnder18"
       >
-        Number of Children Under 18
+        {{ t('calculator.inputs.deductions.children.label') }}
       </label>
       <input
         id="numberOfChildrenUnder18"
@@ -125,8 +125,8 @@
         pattern="[0-9]*"
         class="input-field"
         :class="{ 'input-error-field': v$.numberOfChildrenUnder18.$invalid }"
-        placeholder="Enter number of children under 18"
-        aria-label="Number of Children Under 18"
+        :placeholder="t('calculator.inputs.deductions.children.placeholder')"
+        :aria-label="t('calculator.inputs.deductions.children.aria')"
         autocomplete="off"
         @input="setNumberOfChildrenUnder18"
         @keypress="preventWholeNumberInput"
@@ -137,16 +137,16 @@
         class="input-error"
       >
         <template v-if="v$.numberOfChildrenUnder18.minValue.$invalid">
-          Value must be greater than 0
+          {{ t('calculator.validation.minValue') }}
         </template>
         <template v-else-if="v$.numberOfChildrenUnder18.maxValue.$invalid">
-          Value cannot exceed 20
+          {{ t('calculator.validation.dependentsLimit') }}
         </template>
         <template v-else-if="v$.numberOfChildrenUnder18.maxDecimalPlaces.$invalid">
-          Must be a whole number
+          {{ t('calculator.validation.wholeNumber') }}
         </template>
         <template v-else>
-          Please enter a valid number
+          {{ t('calculator.validation.validNumber') }}
         </template>
       </div>
     </div>
@@ -156,7 +156,7 @@
         class="input-label"
         for="numberOfDependentsWithDisabilities"
       >
-        Dependents with Disabilities
+        {{ t('calculator.inputs.deductions.dependentsDisability.label') }}
       </label>
       <input
         id="numberOfDependentsWithDisabilities"
@@ -166,8 +166,8 @@
         pattern="[0-9]*"
         class="input-field"
         :class="{ 'input-error-field': v$.numberOfDependentsWithDisabilities.$invalid }"
-        placeholder="Enter number of dependents with disabilities"
-        aria-label="Dependents with Disabilities"
+        :placeholder="t('calculator.inputs.deductions.dependentsDisability.placeholder')"
+        :aria-label="t('calculator.inputs.deductions.dependentsDisability.aria')"
         autocomplete="off"
         @input="setNumberOfDependentsWithDisabilities"
         @keypress="preventWholeNumberInput"
@@ -178,16 +178,16 @@
         class="input-error"
       >
         <template v-if="v$.numberOfDependentsWithDisabilities.minValue.$invalid">
-          Value must be greater than 0
+          {{ t('calculator.validation.minValue') }}
         </template>
         <template v-else-if="v$.numberOfDependentsWithDisabilities.maxValue.$invalid">
-          Value cannot exceed 20
+          {{ t('calculator.validation.dependentsLimit') }}
         </template>
         <template v-else-if="v$.numberOfDependentsWithDisabilities.maxDecimalPlaces.$invalid">
-          Must be a whole number
+          {{ t('calculator.validation.wholeNumber') }}
         </template>
         <template v-else>
-          Please enter a valid number
+          {{ t('calculator.validation.validNumber') }}
         </template>
       </div>
     </div>
@@ -195,12 +195,15 @@
 </template>
 
 <script setup>
+/* eslint-disable */
 import { useCalculatorStore } from '@/domains/calculator/store/calculator.js'
 import { storeToRefs } from 'pinia'
 import { useCalculator } from '@/domains/calculator/composables/calculator.js'
+import { useI18n } from '@/i18n'
 
 const calculatorStore = useCalculatorStore()
 const { v$, sanitizeNumericInput } = useCalculator()
+const { t } = useI18n()
 
 const {
   maritalStatus,

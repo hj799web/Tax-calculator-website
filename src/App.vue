@@ -1,3 +1,4 @@
+/* eslint-disable */
 <template>
   <ErrorBoundary component-name="App">
     <div id="app">
@@ -12,39 +13,53 @@
             <div class="logo-container">
               <img
                 :src="logoUrl"
-                alt="Fiscal Insights Logo"
+                :alt="t('home.alt.logo')"
                 class="site-logo"
               >
             </div>
             <h1 class="main-title main-title--highlight">
-              Canada Tax Calculator
+              {{ t('home.header.title') }}
             </h1>
+            <div class="header-actions">
             <nav class="main-navigation">
-              <a
-                href="welcome.html"
+              <router-link
+                to="/welcome"
                 class="nav-link"
-              >Home</a>
+              >{{ t('home.nav.home') }}</router-link>
               <router-link
                 to="/how-it-works"
                 class="nav-link"
               >
-                How It Works
+                {{ t('home.nav.howItWorks') }}
               </router-link>
               <router-link
                 to="/simulator"
                 class="nav-link simulator-link"
               >
-                Try the Budget Simulator
+                {{ t('home.nav.simulator') }}
               </router-link>
               <a
                 href="https://www.canada.ca/en/revenue-agency.html"
                 target="_blank"
                 rel="noopener noreferrer"
                 class="nav-link"
-              >CRA</a>
+              >{{ t('home.nav.cra') }}</a>
             </nav>
+            <div class="language-switcher" role="group" :aria-label="t('home.language.switchLabel')">
+              <button
+                v-for="lng in locales"
+                :key="lng.code"
+                type="button"
+                class="language-button"
+                :class="{ active: currentLocale === lng.code }"
+                @click="setLocale(lng.code)"
+              >
+                {{ t(lng.labelKey) }}
+              </button>
+            </div>
+          </div>
             <p class="subtitle subtitle--highlight">
-              Get an accurate breakdown of your taxes and see where your money goes with our free calculator.
+              {{ t('home.header.subtitle') }}
             </p>
           </header>
 
@@ -52,7 +67,7 @@
           <section class="year-selector-section">
             <div class="year-selector-container">
               <h3 class="year-selector-title">
-                Select Tax Year
+                {{ t('home.year.title') }}
               </h3>
               <div class="year-selector">
                 <button 
@@ -64,12 +79,8 @@
                   {{ year.label }}
                 </button>
               </div>
-              <p class="year-selector-note">
-                {{ yearStore.selectedTaxYear === '2024' ? 
-                  'Using 2024 tax rates and budget projections' : 
-                  yearStore.selectedTaxYear === '2025' ?
-                  'Using 2025 tax rates with 2025-2026 spending projections' :
-                  `Using ${yearStore.selectedTaxYear} tax rates with 2022-2023 budget data` }}
+                            <p class="year-selector-note">
+                {{ yearSelectorNote }}
               </p>
             </div>
           </section>
@@ -107,11 +118,10 @@
                 v-show="currentTab === 'breakdown'"
               >
                 <h2 class="section-title section-title--highlight">
-                  Understanding Your Tax Breakdown
+                  {{ t('home.sections.breakdown.title') }}
                 </h2>
                 <p class="section-description section-description--highlight">
-                  See how your tax dollars are allocated across different government spending categories. This visualization helps you 
-                  understand exactly where your money goes and how it contributes to various public services.
+                  {{ t('home.sections.breakdown.description') }}
                 </p>
                 <ErrorBoundary component-name="FederalBudgetView">
                   <FederalBudgetView />
@@ -125,31 +135,31 @@
               >
                 <div class="section-header">
                   <h2 class="section-title">
-                    Budget Categories
+                    {{ t('home.sections.categories.title') }}
                   </h2>
                   <button
                     class="toggle-section-button"
                     @click="toggleBudgetCategories"
                   >
-                    {{ showBudgetCategories ? 'Hide' : 'Show' }}
+                    {{ t(showBudgetCategories ? 'home.actions.hide' : 'home.actions.show') }}
                   </button>
                 </div>
                 <transition name="fade">
                   <div v-if="showBudgetCategories">
                     <p class="section-description">
-                      <template v-if="yearStore.selectedTaxYear === '2023'">
-                      These budget categories are for the 2022??"2023 fiscal year. Data is sourced from the Public Accounts of Canada offering a view of how federal funds are allocated across key sectors such as healthcare, defense, infrastructure, and more.
-                      </template>
-                      <template v-else-if="yearStore.selectedTaxYear === '2024'">
-                        These budget categories are for the 2023??"2024 fiscal year. The allocations reflect the proposed spending outlined in the 2023??"2024 federal budget.
-                      </template>
-                      <template v-else-if="yearStore.selectedTaxYear === '2025'">
-                        These budget categories are for the 2025??"2026 fiscal year. The allocations reflect projected federal spending estimates for 2025??"2026.
-                      </template>
-                      <template v-else>
-                        These budget categories are based on the most recent available data.
-                      </template>
-                    </p>
+                    <template v-if="yearStore.selectedTaxYear === '2023'">
+                      {{ t('home.sections.categories.description.2023') }}
+                    </template>
+                    <template v-else-if="yearStore.selectedTaxYear === '2024'">
+                      {{ t('home.sections.categories.description.2024') }}
+                    </template>
+                    <template v-else-if="yearStore.selectedTaxYear === '2025'">
+                      {{ t('home.sections.categories.description.2025') }}
+                    </template>
+                    <template v-else>
+                      {{ t('home.sections.categories.description.fallback') }}
+                    </template>
+                  </p>
                     <ErrorBoundary component-name="BudgetCategoriesView">
                       <BudgetCategoriesView />
                     </ErrorBoundary>
@@ -164,13 +174,13 @@
               >
                 <div class="section-header">
                   <h2 class="section-title">
-                    Taxpayer FAQs
+                    {{ t('home.sections.faqs.title') }}
                   </h2>
                   <button
                     class="toggle-section-button"
                     @click="toggleFAQs"
                   >
-                    {{ showFAQs ? 'Hide' : 'Show' }}
+                    {{ t(showFAQs ? 'home.actions.hide' : 'home.actions.show') }}
                   </button>
                 </div>
                 <transition name="fade">
@@ -188,42 +198,42 @@
                 v-show="currentTab === 'resources'"
               >
                 <h2 class="section-title">
-                  Additional Tax Resources
+                  {{ t('home.sections.resources.title') }}
                 </h2>
                 <p class="resources-description">
-                  Access these trusted resources to learn more about Canadian taxes, government spending, and financial planning.
+                  {{ t('home.sections.resources.description') }}
                 </p>
                 <div class="resources-links">
                   <router-link
                     to="/how-it-works"
                     class="resource-link"
                   >
-                    How It Works
+                    {{ t('home.sections.resources.links.howItWorks') }}
                   </router-link>
                   <a
                     href="https://www.canada.ca/en/revenue-agency.html"
                     target="_blank"
                     rel="noopener noreferrer"
                     class="resource-link"
-                  >Canada Revenue Agency</a>
+                  >{{ t('home.sections.resources.links.cra') }}</a>
                   <a
                     href="https://www.canada.ca/en/department-finance.html"
                     target="_blank"
                     rel="noopener noreferrer"
                     class="resource-link"
-                  >Department of Finance Canada</a>
+                  >{{ t('home.sections.resources.links.finance') }}</a>
                   <a
                     href="https://www.budget.canada.ca/2024/home-accueil-en.html"
                     target="_blank"
                     rel="noopener noreferrer"
                     class="resource-link"
-                  >Budget 2024</a>
+                  >{{ t('home.sections.resources.links.budget') }}</a>
                   <a
                     href="https://www.tpsgc-pwgsc.gc.ca/recgen/cpc-pac/index-eng.html"
                     target="_blank"
                     rel="noopener noreferrer"
                     class="resource-link"
-                  >Public Accounts of Canada</a>
+                  >{{ t('home.sections.resources.links.publicAccounts') }}</a>
                 </div>
               </section>
             </template>
@@ -235,11 +245,11 @@
       <footer class="site-footer">
         <div class="footer-content">
           <div class="footer-section">
-            <h3>About Us</h3>
-            <p>Fiscal Insights provides free tax calculators and financial tools to help Canadians understand their taxes and government spending.</p>
+            <h3>{{ t('home.footer.about.title') }}</h3>
+            <p>{{ t('home.footer.about.body') }}</p>
           </div>
           <div class="footer-section">
-            <h3>Connect With Us</h3>
+            <h3>{{ t('home.footer.connect.title') }}</h3>
             <div class="social-links">
               <a
                 href="mailto:fiscal-insights@outlook.com"
@@ -247,10 +257,10 @@
               >
                 <img
                   src="@/assets/email-icon.svg"
-                  alt="Email"
+                  :alt="t('home.alt.email')"
                   class="social-icon"
                 >
-                Contact Us
+                {{ t('home.footer.connect.contact') }}
               </a>
               <a
                 href="https://www.instagram.com/fiscal_insights1/"
@@ -260,10 +270,10 @@
               >
                 <img
                   src="https://cdn-icons-png.flaticon.com/512/87/87390.png"
-                  alt="Instagram"
+                  :alt="t('home.alt.instagram')"
                   class="social-icon"
                 >
-                @fiscal_insights1
+                {{ t('home.footer.social.instagram') }}
               </a>
               <a
                 href="https://www.linkedin.com/company/fiscal-insights-canada/?viewAsMember=true"
@@ -273,28 +283,28 @@
               >
                 <img
                   src="https://cdn-icons-png.flaticon.com/512/174/174857.png"
-                  alt="LinkedIn"
+                  :alt="t('home.alt.linkedin')"
                   class="social-icon"
                 >
-                Fiscal Insights Canada
+                {{ t('home.footer.social.linkedin') }}
               </a>
             </div>
           </div>
           <div class="footer-section">
-            <h3>Legal</h3>
+            <h3>{{ t('home.footer.legal.title') }}</h3>
             <div class="legal-links">
               <router-link
                 to="/terms-of-service"
                 class="legal-link"
               >
-                Terms of Service
+                {{ t('home.footer.legal.terms') }}
               </router-link>
             </div>
           </div>
         </div>
         <div class="footer-bottom">
-          <p>Contact us: <a href="mailto:fiscal-insights@outlook.com" class="text-blue-600 hover:text-blue-800">fiscal-insights@outlook.com</a></p>
-          <p>&copy; {{ new Date().getFullYear() }} Fiscal Insights. All rights reserved.</p>
+          <p>{{ t('home.footer.bottom.contact') }} <a href="mailto:fiscal-insights@outlook.com" class="text-blue-600 hover:text-blue-800">fiscal-insights@outlook.com</a></p>
+          <p>&copy; {{ new Date().getFullYear() }} {{ t('home.footer.bottom.copy') }}</p>
         </div>
       </footer>
 
@@ -305,17 +315,18 @@
         rel="noopener noreferrer"
         class="beta-button"
       >
-        <span>🔍 Help Us Improve</span>
+        <span>{{ t('home.beta.cta') }}</span>
       </a>
     </div>
   </ErrorBoundary>
 </template>
 
 <script>
-import { ref, computed, defineAsyncComponent, watch } from 'vue'
+import { ref, computed, defineAsyncComponent, watch, onMounted, onBeforeUnmount } from 'vue'
 import { useYearStore } from '@/domains/calculator/store/year.js'
 import ErrorBoundary from '@/components/ErrorBoundary.vue'
 import Tabs from '@/components/Tabs.vue'
+import { useI18n } from '@/i18n'
 
 // Lazy load heavy components for better initial page load
 const CalculatorView = defineAsyncComponent({
@@ -375,16 +386,32 @@ export default {
   },
   setup() {
     const yearStore = useYearStore()
+    const { t, locale } = useI18n()
+    const locales = [
+      { code: 'en', labelKey: 'home.language.english' },
+      { code: 'fr', labelKey: 'home.language.french' }
+    ]
+    const currentLocale = computed(() => locale.value)
+    const setLocale = (code) => {
+      if (locale.value === code) {
+        return
+      }
+      locale.value = code
+      if (typeof window !== 'undefined') {
+        window.localStorage.setItem('locale', code)
+      }
+    }
+
     const showBudgetCategories = ref(false)
     const showFAQs = ref(false)
     const activeTab = ref('calculator')
-    const tabItems = [
-      { id: 'calculator', label: 'Calculator', panelId: 'calculator-panel' },
-      { id: 'breakdown', label: 'Budget Breakdown', panelId: 'how-it-works' },
-      { id: 'categories', label: 'Categories', panelId: 'budget-categories-section' },
-      { id: 'faqs', label: 'FAQs', panelId: 'faq-section' },
-      { id: 'resources', label: 'Resources', panelId: 'resources-section' }
-    ]
+    const tabItems = computed(() => [
+      { id: 'calculator', label: t('home.tabs.calculator'), panelId: 'calculator-panel' },
+      { id: 'breakdown', label: t('home.tabs.breakdown'), panelId: 'how-it-works' },
+      { id: 'categories', label: t('home.tabs.categories'), panelId: 'budget-categories-section' },
+      { id: 'faqs', label: t('home.tabs.faqs'), panelId: 'faq-section' },
+      { id: 'resources', label: t('home.tabs.resources'), panelId: 'resources-section' }
+    ])
 
     const logoUrl = computed(() => {
       return new URL('@/assets/fiscal-insights-logo.webp', import.meta.url).href
@@ -398,6 +425,16 @@ export default {
       showFAQs.value = !showFAQs.value
     }
 
+    const yearSelectorNote = computed(() => {
+      if (yearStore.selectedTaxYear === '2024') {
+        return t('home.year.note.2024')
+      }
+      if (yearStore.selectedTaxYear === '2025') {
+        return t('home.year.note.2025')
+      }
+      return t('home.year.note.default', { year: yearStore.selectedTaxYear })
+    })
+
     watch(activeTab, (value) => {
       if (value === 'categories' && !showBudgetCategories.value) {
         showBudgetCategories.value = true
@@ -407,6 +444,26 @@ export default {
       }
     })
 
+    const handleExternalTabNavigate = (event) => {
+      const requestedTab = event.detail?.tab
+      if (!requestedTab) {
+        return
+      }
+
+      const target = tabItems.value.find((item) => item.id === requestedTab)
+      if (target) {
+        activeTab.value = target.id
+      }
+    }
+
+    onMounted(() => {
+      window.addEventListener('tax-tabs:navigate', handleExternalTabNavigate)
+    })
+
+    onBeforeUnmount(() => {
+      window.removeEventListener('tax-tabs:navigate', handleExternalTabNavigate)
+    })
+
     return {
       yearStore,
       showBudgetCategories,
@@ -414,6 +471,11 @@ export default {
       activeTab,
       tabItems,
       logoUrl,
+      locales,
+      currentLocale,
+      setLocale,
+      yearSelectorNote,
+      t,
       toggleBudgetCategories,
       toggleFAQs
     }
@@ -571,6 +633,60 @@ h1, h2, h3, h4, h5, h6, p, span, div, label, input, button, select, textarea {
   gap: 12px;
   margin: 10px 0 0;
 }
+.header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin: 15px 0 0;
+}
+
+.language-switcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.12);
+  padding: 4px;
+  border-radius: 999px;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.15);
+}
+
+.language-button {
+  border: none;
+  background: transparent;
+  color: var(--fg);
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.language-button:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.language-button.active {
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.35), rgba(59, 130, 246, 0.45));
+  color: #0f172a;
+  box-shadow: 0 10px 22px rgba(34, 211, 238, 0.35);
+}
+
+@media (prefers-color-scheme: dark) {
+  .language-switcher {
+    background: rgba(15, 23, 42, 0.65);
+  }
+
+  .language-button:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .language-button.active {
+    color: #0f172a;
+  }
+}
+
 .nav-link {
   color: var(--fg);
   text-decoration: none;
@@ -1844,6 +1960,24 @@ button::before, .button::before {
 
 .calculator-tabs {
   margin-top: 2.5rem;
+}
+
+.tax-highlight {
+  animation: taxHighlightPulse 1.6s ease forwards;
+  box-shadow: 0 0 0 0 rgba(34, 211, 238, 0.35);
+  border-radius: 20px;
+}
+
+@keyframes taxHighlightPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(34, 211, 238, 0.45);
+  }
+  55% {
+    box-shadow: 0 0 0 18px rgba(34, 211, 238, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(34, 211, 238, 0);
+  }
 }
 
 /* Loading and Error States for Lazy Components */

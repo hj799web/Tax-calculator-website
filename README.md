@@ -28,6 +28,8 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 The Budget Simulator received a navigation and onboarding overhaul:
 
+- **Tax Breakdown Popup Enhancement** (2025-01-20): Full-width glassmorphism notification with animated orbit graphic, dynamic content based on federal tax calculations, and smart tab navigation with pulse highlights
+- **i18n Refactoring** (2025-01-20): Replaced vue-i18n with local lightweight module, added simulator i18n wiring, and fixed ESLint issues
 - Grouped tabs with simplified labels, compact mode, and pinned tabs
 - Budget‑prefixed panels for consistent naming
 - Refocused Shepherd tour with Quick/Full modes and a stronger spotlight

@@ -1,0 +1,262 @@
+{
+  "y2022": {
+    "healthcare": {
+      "name": "Healthcare",
+      "description": "The federal government contributes to provincial and territorial healthcare systems through the Canada Health Transfer (CHT). This funding is used to support hospitals, healthcare workers, and ensure access to medical services. The 2022-2023 federal spending on healthcare was $58.2 billion, representing approximately 10% of total federal spending."
+    },
+    "supportForSeniors": {
+      "name": "Support for Seniors",
+      "description": "Programs like Old Age Security (OAS) and the Guaranteed Income Supplement (GIS) ensure basic income for seniors. This is a major component of the budget, driven by Canada's aging population. In 2022-2023, the federal government spent $69.1 billion on senior support programs."
+    },
+    "childrenAndFamilies": {
+      "name": "Children and Families",
+      "description": "The Canada Child Benefit (CCB) provides tax-free monthly payments to eligible families to help with the cost of raising children. This category also includes childcare initiatives and family support programs. Total spending in this area was $26.9 billion."
+    },
+    "indigenousServices": {
+      "name": "Indigenous Services",
+      "description": "This allocation supports Indigenous services, including clean drinking water, housing, healthcare, and educational programs for Indigenous communities. It also funds reconciliation efforts, including land claim settlements. The federal government spent $39.8 billion in this area."
+    },
+    "employmentInsuranceAndBenefits": {
+      "name": "Employment Insurance and Benefits",
+      "description": "Employment Insurance (EI) provides temporary financial assistance to unemployed Canadians while they look for work or upgrade their skills. This category also includes worker training and skill development programs. Total spending was $35.6 billion."
+    },
+    "defense": {
+      "name": "Defense",
+      "description": "Covers spending on the Canadian Armed Forces, military procurement (ships, aircraft, vehicles), and defense operations. The 2022-2023 federal budget allocated $36.4 billion to national defense."
+    },
+    "publicSafetyAndEmergencyPreparedness": {
+      "name": "Public Safety and Emergency Preparedness",
+      "description": "This category funds police services, border security, correctional services, and emergency preparedness. It includes agencies like the RCMP and Canada Border Services Agency. Total spending was $11.6 billion."
+    },
+    "internationalAffairsAndDevelopment": {
+      "name": "International Affairs and Development",
+      "description": "Includes foreign aid, diplomatic missions, and contributions to international organizations. Canada's international development assistance and global engagement initiatives totaled $9.8 billion."
+    },
+    "publicDebtCharges": {
+      "name": "Public Debt Charges",
+      "description": "Interest payments on the federal government's debt. As interest rates rose in 2022-2023, debt servicing costs increased to $42.7 billion."
+    },
+    "loansInvestmentsAndAdvances": {
+      "name": "Loans, Investments, and Advances",
+      "description": "This category represents various financial assistance programs totaling $10 billion, supporting different sectors of the economy. The $10 billion listed under \\",
+      "subsections": {
+        "studentLoans": {
+          "name": "Student Loans",
+          "description": "The Canada Student Financial Assistance Program provides loans to enhance access to post-secondary education. While the total loan portfolio exceeds $24 billion, annual allocations reflect the government's commitment to supporting students."
+        },
+        "agricultureLoans": {
+          "name": "Agriculture Loans",
+          "description": "The Agri-Recovery Program helps farmers affected by disasters. This support helps stabilize the agricultural sector, especially during unforeseen events like natural disasters."
+        },
+        "internationalDevelopmentLoans": {
+          "name": "International Development Loans",
+          "description": "Canada contributes to global development through loans and grants to international organizations and developing countries, including commitments to the Asian Infrastructure Investment Bank (AIIB), European Bank for Reconstruction and Development (EBRD), and the World Bank."
+        },
+        "businessAndInnovationLoans": {
+          "name": "Business and Innovation Loans",
+          "description": "The government provides financial backing to innovation and infrastructure projects, including funding for broadband development and investments in Canadian businesses."
+        },
+        "defenseSectorLoansAndInvestments": {
+          "name": "Defense Sector Loans and Investments",
+          "description": "Loans and advances to the defense sector support the procurement of military equipment and technology, maintaining and upgrading Canada's defense capabilities."
+        },
+        "economicDevelopmentLoans": {
+          "name": "Economic Development Loans",
+          "description": "These loans support various economic development projects across Canada, including regional development programs and small business investments. For example, Canada Economic Development for Quebec Regions (CED) invested $481.6 million in 1,325 projects and contributed projects supporting regional economic growth."
+        }
+      }
+    },
+    "otherGovernmentOperations": {
+      "name": "Other Government Operations",
+      "description": "This category includes operational expenses necessary for the federal government's day-to-day functioning, totaling $242 billion.",
+      "subsections": {
+        "transportationInfrastructure": {
+          "name": "Transportation Infrastructure",
+          "description": "Investments in national transportation infrastructure, including roadways, bridges, ports, and rail systems. This supports trade routes and infrastructure expansion."
+        },
+        "publicSafetyAndEmergencyPreparedness": {
+          "name": "Public Safety and Emergency Preparedness",
+          "description": "Funding for police services and emergency response enhances Canada's ability to respond to emergencies, disasters, and public safety threats."
+        },
+        "governmentBuildingsAndProperties": {
+          "name": "Government Buildings and Properties",
+          "description": "Maintenance and construction of government buildings supports essential services and public sector functions."
+        },
+        "federalEmployeeSalariesAndBenefits": {
+          "name": "Federal Employee Salaries and Benefits",
+          "description": "Funds the salaries, pensions, and benefits of federal employees, ensuring the government operates smoothly across departments."
+        },
+        "legalAndJusticeSystem": {
+          "name": "Legal and Justice System",
+          "description": "Supports the functioning of the national legal and justice system, ensuring access to justice for all Canadians."
+        },
+        "indigenousServicesOperationalExpenses": {
+          "name": "Indigenous Services Operational Expenses",
+          "description": "Covers operational costs for Indigenous Services Canada, overseeing programs for Indigenous communities."
+        },
+        "culturalAndHeritagePrograms": {
+          "name": "Cultural and Heritage Programs",
+          "description": "Funding for national cultural institutions supports Canada's arts, culture, and heritage preservation efforts."
+        },
+        "diplomaticAndInternationalRepresentation": {
+          "name": "Diplomatic and International Representation",
+          "description": "Covers operational costs of Global Affairs Canada, including embassies, consulates, and diplomatic missions, supporting Canada's global diplomatic presence and international relations."
+        },
+        "internationalFinancialCommitments": {
+          "name": "International Financial Commitments",
+          "description": "Supports Canada's international obligations, including contributions to international institutions. These funds help support global development, financial stability, and multilateral cooperation."
+        },
+        "environmentAndClimateChange": {
+          "name": "Environment and Climate Change",
+          "description": "Funds environmental protection, conservation efforts, and climate action initiatives. This includes programs to reduce greenhouse gas emissions and protect biodiversity."
+        },
+        "agricultureAndAgriFood": {
+          "name": "Agriculture and Agri-Food",
+          "description": "Supports farmers, agricultural research, food safety, and market development. This includes programs like the Agricultural Policy Framework and various risk management tools."
+        },
+        "scienceInnovationAndTechnology": {
+          "name": "Science, Innovation and Technology",
+          "description": "Funds scientific research, innovation programs, and technology development across Canada. This includes support for universities, research institutions, and commercial innovation."
+        },
+        "economicDevelopmentPrograms": {
+          "name": "Economic Development Programs",
+          "description": "Supports regional economic growth initiatives, innovation efforts, and business development. This includes programs to enhance productivity and competitiveness."
+        },
+        "infrastructureInvestments": {
+          "name": "Infrastructure Investments",
+          "description": "Supports investments in public infrastructure, including roads, bridges, public transit, green infrastructure, and community facilities."
+        },
+        "immigrationRefugeesAndCitizenship": {
+          "name": "Immigration, Refugees and Citizenship",
+          "description": "Supports Canada's immigration system, refugee resettlement programs, and citizenship services."
+        },
+        "generalPublicServices": {
+          "name": "General Public Services",
+          "description": "This encompasses expenditures related to the overall administration of the government, including legislative bodies, executive offices, financial and fiscal affairs, external affairs, and foreign economic aid. According to Statistics Canada, spending on general public services was a significant portion of government expenditures in 2022û2023."
+        },
+        "socialProtectionPrograms": {
+          "name": "Social Protection Programs",
+          "description": "This includes programs such as social exclusion initiatives, disability payments, and unemployment benefits. Notably, in 2023, there was a significant increase in spending on social protection, making it the highest spending category by function, accounting for 26.4% of total spending."
+        },
+        "economicAffairs": {
+          "name": "Economic Affairs",
+          "description": "This covers expenditures related to general economic, commercial, and labor affairs, including subsidies and support to specific industries, trade, and labor market programs. In 2022û2023, spending on economic affairs experienced a notable decrease, reflecting changes in government priorities."
+        }
+      }
+    }
+  },
+  "y2024": {
+    "healthcareCanadaHealthTransfer": {
+      "name": "Healthcare (Canada Health Transfer)",
+      "description": "The federal government supports provincial and territorial healthcare systems through the Canada Health Transfer (CHT). This funding assists in delivering universal healthcare, including hospitals, healthcare professionals, and public health initiatives. Healthcare expenditures represent approximately 10% of total federal spending."
+    },
+    "supportForSeniors": {
+      "name": "Support for Seniors",
+      "description": "This allocation funds programs like Old Age Security (OAS) and the Guaranteed Income Supplement (GIS), providing basic income support to seniors. Driven by Canada's aging population, these programs account for around 14% of total federal spending."
+    },
+    "childrenAndFamilies": {
+      "name": "Children and Families",
+      "description": "The Canada Child Benefit (CCB) offers income support to low- and middle-income families to assist with child-rearing costs. This initiative plays a crucial role in reducing child poverty and constitutes about 6% of federal spending."
+    },
+    "indigenousServicesAndReconciliation": {
+      "name": "Indigenous Services and Reconciliation",
+      "description": "This funding supports Indigenous communities through initiatives in healthcare, education, infrastructure, and reconciliation efforts, including land claim settlements. Indigenous services represent around 7% of the total federal budget."
+    },
+    "employmentInsuranceAndOtherBenefits": {
+      "name": "Employment Insurance and Other Benefits",
+      "description": "Funding for Employment Insurance (EI) provides income support to temporarily unemployed workers, new parents, and seasonal employees. This category also includes retraining and skill development programs, making up around 5% of federal spending."
+    },
+    "defenseAndPublicSafety": {
+      "name": "Defense and Public Safety",
+      "description": "Expenditures cover the Canadian Armed Forces, military procurement (e.g., ships, aircraft), and public safety programs like border security and cybersecurity. This reflects Canada's defense commitments and represents about 6% of the total budget."
+    },
+    "debtServicingPublicDebtCharges": {
+      "name": "Debt Servicing (Public Debt Charges)",
+      "description": "Payments for interest on Canada's national debt, which totaled $1.173 trillion by the end of the fiscal year. Rising interest rates have increased debt servicing costs, accounting for around 9% of total spending."
+    },
+    "loansInvestmentsAndAdvances": {
+      "name": "Loans, Investments, and Advances",
+      "description": "This category encompasses various financial assistance programs to support different sectors of the economy.",
+      "subsections": {
+        "studentLoans": {
+          "name": "Student Loans",
+          "description": "The Canada Student Financial Assistance Program provides loans to enhance access to post-secondary education. While the total loan portfolio exceeds $24 billion, annual allocations reflect the government's commitment to supporting students."
+        },
+        "agricultureLoans": {
+          "name": "Agriculture Loans",
+          "description": "Programs like AgriRecovery offer loans to farmers affected by unforeseen events, stabilizing the agricultural sector."
+        },
+        "internationalDevelopmentAndLoans": {
+          "name": "International Development and Loans",
+          "description": "Canada contributes to global development through loans and grants to international organizations and developing countries, including commitments to the Asian Infrastructure Investment Bank (AIIB), European Bank for Reconstruction and Development (EBRD), and the World Bank."
+        },
+        "businessAndInnovationLoans": {
+          "name": "Business and Innovation Loans",
+          "description": "Financial backing is provided to innovation and infrastructure projects, supporting technological advancements and economic growth."
+        },
+        "defenseSectorLoansAndInvestments": {
+          "name": "Defense Sector Loans and Investments",
+          "description": "In the 2022û2023 fiscal year, the Department of National Defence had $1.57 billion in lapsed funding, with $1.45 billion (92%) available for future defense spending. These funds support the procurement of military equipment and technology, maintaining and enhancing Canada's defense capabilities."
+        },
+        "economicDevelopmentLoans": {
+          "name": "Economic Development Loans",
+          "description": "These loans support various economic development projects across Canada, including regional development programs and small business loans. For instance, the Canada Economic Development for Quebec Regions (CED) invested $491.6 million in 1,325 grant and contribution projects, potentially generating total investments of $5.8 billion."
+        }
+      }
+    },
+    "otherGovernmentOperations": {
+      "name": "Other Government Operations",
+      "description": "This category encompasses operational spending necessary for the federal government's day-to-day functions.",
+      "subsections": {
+        "transportationInfrastructure": {
+          "name": "Transportation Infrastructure",
+          "description": "Investments in national transportation infrastructure, including roadways, bridges, ports, and rail systems, ensure efficient mobility for goods and people."
+        },
+        "environmentalPrograms": {
+          "name": "Environmental Programs",
+          "description": "Funds dedicated to climate change initiatives, conservation efforts, and environmental protection, aligning with international commitments."
+        },
+        "publicSafetyAndEmergencyPreparedness": {
+          "name": "Public Safety and Emergency Preparedness",
+          "description": "Funding for national security agencies ensures Canada's ability to respond to emergencies and public safety threats."
+        },
+        "governmentBuildingsAndProperties": {
+          "name": "Government Buildings and Properties",
+          "description": "Maintenance and construction of government buildings support essential services and public sector functions."
+        },
+        "researchAndInnovation": {
+          "name": "Research and Innovation",
+          "description": "Investments in research and development across various sectors contribute to scientific and technological advances."
+        },
+        "digitalGovernmentAndItInfrastructure": {
+          "name": "Digital Government and IT Infrastructure",
+          "description": "Investments modernize federal digital services and IT infrastructure, enhancing cybersecurity and public services."
+        },
+        "federalEmployeeSalariesAndBenefits": {
+          "name": "Federal Employee Salaries and Benefits",
+          "description": "Funds the salaries, pensions, and benefits of federal employees, ensuring smooth government operations."
+        },
+        "legalAndJusticeSystem": {
+          "name": "Legal and Justice System",
+          "description": "Supports the functioning of the national legal and justice system, ensuring access to justice for all Canadians."
+        },
+        "indigenousServicesOperationalExpenses": {
+          "name": "Indigenous Services Operational Expenses",
+          "description": "Covers operational costs for Indigenous Services Canada, overseeing programs for Indigenous communities."
+        },
+        "culturalAndHeritagePrograms": {
+          "name": "Cultural and Heritage Programs",
+          "description": "Funding for national cultural institutions supports Canada's arts, culture, and heritage preservation efforts."
+        },
+        "scientificResearchAndDevelopmentRD": {
+          "name": "Scientific Research and Development (R&D)",
+          "description": "Funding for scientific research, including agriculture, biotechnology, healthcare, and environmental sustainability, supports innovation and knowledge advancement."
+        },
+        "diplomaticAndInternationalRepresentation": {
+          "name": "Diplomatic and International Representation",
+          "description": "Covers operational costs of Global Affairs Canada, including embassies, consulates, and diplomatic missions, supporting Canada's global diplomatic presence and international relations."
+        }
+      }
+    }
+  }
+}

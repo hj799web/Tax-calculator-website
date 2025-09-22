@@ -4,7 +4,7 @@
       class="input-label"
       for="employmentIncome"
     >
-      Employment Income
+      {{ t('calculator.inputs.employment.label') }}
     </label>
     <input
       id="employmentIncome"
@@ -14,8 +14,8 @@
       pattern="[0-9]*\.?[0-9]*"
       class="input-field"
       :class="{ 'input-error-field': v$.income.$invalid }"
-      :placeholder="'Enter your ' + selectedSalaryRate.toLowerCase() + ' employment income'"
-      aria-label="Employment Income"
+      :placeholder="employmentPlaceholder"
+      :aria-label="t('calculator.inputs.employment.aria')"
       autocomplete="off"
       @input="setIncome"
       @keypress="preventInvalidInput"
@@ -26,16 +26,16 @@
       class="input-error"
     >
       <template v-if="v$.income.minValue.$invalid">
-        Value must be greater than 0
+        {{ t('calculator.validation.minValue') }}
       </template>
       <template v-else-if="v$.income.maxValue.$invalid">
-        Value cannot exceed $1 billion
+        {{ t('calculator.validation.maxBillion') }}
       </template>
       <template v-else-if="v$.income.maxDecimalPlaces.$invalid">
-        Maximum 2 decimal places allowed
+        {{ t('calculator.validation.maxDecimal') }}
       </template>
       <template v-else>
-        Please enter a valid number
+        {{ t('calculator.validation.validNumber') }}
       </template>
     </div>
   </div>
@@ -43,64 +43,93 @@
   <!-- Tax Breakdown Popup -->
   <TaxBreakdownPopup
     v-model="showTaxBreakdownPopup"
+    :tax-amount="netFederalTaxAnnual"
     @navigate="handleNavigateToBreakdown"
   />
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+/* eslint-disable */
+import { ref, watch, computed } from 'vue'
 import { useCalculatorStore } from '@/domains/calculator/store/calculator.js'
 import { useSalaryStore } from '@/domains/calculator/store/salary.js'
 import { storeToRefs } from 'pinia'
 import { useCalculator } from '@/domains/calculator/composables/calculator.js'
 import { useTaxBreakdownPopup } from '@/utils/taxBreakdownPopup.js'
 import TaxBreakdownPopup from '@/components/TaxBreakdownPopup.vue'
+import { useI18n } from '@/i18n'
 
 const calculatorStore = useCalculatorStore()
 const salaryStore = useSalaryStore()
 const { selectedSalaryRate } = storeToRefs(salaryStore)
-const { income } = storeToRefs(calculatorStore)
+const { income, selectedRegion, netFederalTaxAnnual } = storeToRefs(calculatorStore)
 const { v$, sanitizeNumericInput } = useCalculator()
+const { t } = useI18n()
+
+const salaryKeyMap = {
+  Annual: 'annual',
+  Monthly: 'monthly',
+  'Bi-weekly': 'biweekly',
+  Weekly: 'weekly',
+  Daily: 'daily',
+  Hourly: 'hourly'
+}
+
+const salaryLabel = computed(() => {
+  const key = salaryKeyMap[selectedSalaryRate.value]
+  return key ? t(`calculator.salary.options.${key}`) : (selectedSalaryRate.value || '')
+})
+
+const employmentPlaceholder = computed(() => {
+  const rate = salaryLabel.value ? salaryLabel.value.toLowerCase() : ''
+  return t('calculator.inputs.employment.placeholder', { rate })
+})
 
 // Popup state
 const showTaxBreakdownPopup = ref(false)
-const hasShownPopup = ref(false)
 
 const popupUtils = useTaxBreakdownPopup()
 
-// Watch for income changes to trigger popup
-watch(income, (newIncome, oldIncome) => {
-  console.log('Income changed:', { newIncome, oldIncome, hasShownPopup: hasShownPopup.value })
-  console.log('Should show popup:', popupUtils.shouldShowPopup())
-  
-  // TEMPORARY: Force show notification for testing
-  if (newIncome && newIncome > 0) {
-    console.log('Forcing notification to show for testing')
+// Watch for key calculator inputs to trigger popup
+watch(
+  [income, selectedRegion, netFederalTaxAnnual],
+  ([newIncome, newRegion, newFederalTax], [, _prevRegion, prevFederalTax]) => {
+    const incomeValue = Number(newIncome)
+    const regionValue = typeof newRegion === 'string' ? newRegion.trim() : ''
+    const federalTaxValue = Number(newFederalTax)
+
+    if (!Number.isFinite(incomeValue) || incomeValue <= 0) {
+      return
+    }
+
+    if (!regionValue) {
+      return
+    }
+
+    // Check if region has been set (any non-empty value)
+    const regionChanged = Boolean(regionValue)
+
+    if (!Number.isFinite(federalTaxValue) || federalTaxValue <= 0) {
+      return
+    }
+
+    if (!popupUtils.shouldShowPopup()) {
+      return
+    }
+
+    const previousTax = Number(prevFederalTax)
+    const taxChanged = !Number.isFinite(previousTax) || Math.abs(previousTax - federalTaxValue) > 0.009
+
+    if (!taxChanged && !regionChanged) {
+      return
+    }
+
     setTimeout(() => {
       showTaxBreakdownPopup.value = true
-      console.log('Notification should be visible now')
-    }, 1000)
-    return
-  }
-  
-  // Only show popup if:
-  // 1. User hasn't seen it yet in this session
-  // 2. Income changed from empty/undefined to a valid number
-  // 3. Popup should be shown according to storage preferences
-  if (
-    !hasShownPopup.value &&
-    popupUtils.shouldShowPopup() &&
-    (!oldIncome || oldIncome === 0) &&
-    newIncome && newIncome > 0
-  ) {
-    // Small delay to ensure the input is processed
-    setTimeout(() => {
-      showTaxBreakdownPopup.value = true
-      hasShownPopup.value = true
       popupUtils.markPopupShown()
-    }, 500)
+    }, 350)
   }
-})
+)
 
 const preventInvalidInput = (event) => {
   const char = String.fromCharCode(event.keyCode);
@@ -132,8 +161,8 @@ const setIncome = ($event) => {
   }
 }
 
-const handleNavigateToBreakdown = () => {
-  popupUtils.navigateToTaxBreakdown()
+const handleNavigateToBreakdown = (targetTab = 'breakdown') => {
+  popupUtils.navigateToTaxBreakdown(targetTab)
 }
 </script>
 
@@ -207,4 +236,4 @@ const handleNavigateToBreakdown = () => {
     transform: translateY(0);
   }
 }
-</style> 
+</style>

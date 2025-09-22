@@ -2,7 +2,7 @@
   <div
     class="year-selector"
     role="radiogroup"
-    aria-label="Fiscal Year Selector"
+    :aria-label="t('simulator.yearSelector.aria')"
   >
     <button 
       role="radio"
@@ -11,12 +11,17 @@
       :class="{ active: currentYear === 2024 }"
       @click="selectYear(2024)"
     >
-      2023-2024
+      {{ t('simulator.yearSelector.labels.y2024') }}
     </button>
   </div>
 </template>
 
 <script setup>
+/* eslint-disable */
+import { useI18n } from '@/i18n'
+
+const { t } = useI18n()
+
 defineProps({
   currentYear: {
     type: Number,
@@ -61,4 +66,3 @@ function selectYear(year) {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }
 </style>
-

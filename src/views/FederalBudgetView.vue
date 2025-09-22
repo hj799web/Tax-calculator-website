@@ -2,31 +2,31 @@
   <!-- Federal Budget Breakdown Section -->
   <section class="federal-budget-section">
     <h2 class="section-title">
-      Federal Budget Allocation
+      {{ translate('federalBudget.title', 'Federal Budget Allocation') }}
     </h2>
     <p
       v-if="yearStore.budgetYear === '2023-2024'"
       class="allocation-description"
     >
-      The <strong>Budget 2023-2024 Allocation Chart</strong> represents the proposed spending allocations presented by the Canadian federal government for the 2023-2024 fiscal year.
+      {{ translate('federalBudget.descriptions.budget2024', 'The Budget 2023-2024 Allocation Chart represents the proposed spending allocations presented by the Canadian federal government for the 2023-2024 fiscal year.') }}
     </p>
     <p
       v-else-if="yearStore.selectedTaxYear === '2025'"
       class="allocation-description"
     >
-      The <strong>2025-2026 Federal Estimates Allocation Chart</strong> shows the projected breakdown of major allocations for the 2025-2026 fiscal year, based on current economic forecasts and government projections.
+      {{ translate('federalBudget.descriptions.estimates2025', 'The 2025-2026 Federal Estimates Allocation Chart shows the projected breakdown of major allocations for the 2025-2026 fiscal year, based on current economic forecasts and government projections.') }}
     </p>
     <p
       v-else
       class="allocation-description"
     >
-      The <strong>2022–2023 Canada's Federal Budget Allocation Chart</strong> offers a detailed yet simplified breakdown of how the Canadian federal government spent its money during the 2022–2023 fiscal year—data sourced from the Public Accounts of Canada financial report.
+      {{ translate('federalBudget.descriptions.historic', 'The 2022–2023 Canada\'s Federal Budget Allocation Chart offers a detailed yet simplified breakdown of how the Canadian federal government spent its money during the 2022–2023 fiscal year—data sourced from the Public Accounts of Canada financial report.') }}
     </p>
     <p
       v-if="yearStore.budgetYear === '2023-2024'"
       class="budget-explanation"
     >
-      The <strong>2023-2024 Canada Federal Budget Allocation Chart</strong> shows the comprehensive breakdown of major allocations in the 2023-2024 federal budget. In contrast, the <strong>Budget 2023-2024 Pie Chart</strong> represents the proposed spending allocations presented by the Canadian federal government for 2023-2024.
+      {{ translate('federalBudget.explanations.budget2024', 'The 2023-2024 Canada Federal Budget Allocation Chart shows the comprehensive breakdown of major allocations in the 2023-2024 federal budget. In contrast, the Budget 2023-2024 Pie Chart represents the proposed spending allocations presented by the Canadian federal government for 2023-2024.') }}
     </p>
     <p
       v-else-if="yearStore.selectedTaxYear === '2025'"
@@ -38,7 +38,7 @@
     <!-- Charts Section -->
     <section class="charts-section">
       <h2 class="section-title">
-        Budget Visualizations
+        {{ translate('federalBudget.chartsTitle', 'Budget Visualizations') }}
       </h2>
       <div
         v-if="netFederalTaxPerPeriod > 0"
@@ -53,7 +53,7 @@
         v-else
         class="no-federal-taxes"
       >
-        No federal taxes to visualize
+        {{ translate('federalBudget.noData', 'No federal taxes to visualize') }}
       </div>
     </section>
   </section>
@@ -62,10 +62,10 @@
   <section class="allocation-table-section total-federal-tax-allocated">
     <div class="allocation-insulated">
       <h2 class="section-title">
-        Total Federal Tax Allocated
+        {{ translate('federalBudget.total.title', 'Total Federal Tax Allocated') }}
       </h2>
       <div class="allocation-total">
-        <span>Total Federal Tax Allocated:</span>
+        <span>{{ translate('federalBudget.total.label', 'Total Federal Tax Allocated:') }}</span>
         <span>{{ formatCurrency(netFederalTaxPerPeriod) }}</span>
       </div>
       <!-- Normal-sized sort button -->
@@ -73,14 +73,14 @@
         class="sort-button"
         @click="toggleSortAmount"
       >
-        Sort by Amount ({{ sortOrder.toUpperCase() }})
+        {{ translate('federalBudget.sortButton', 'Sort by Amount ({order})', { 'order': sortOrder.toUpperCase() }) }}
       </button>
       <table class="allocation-table">
         <thead>
           <tr>
-            <th>Category</th>
-            <th>Amount</th>
-            <th>Percentage</th>
+            <th>{{ translate('federalBudget.table.category', 'Category') }}</th>
+            <th>{{ translate('federalBudget.table.amount', 'Amount') }}</th>
+            <th>{{ translate('federalBudget.table.percentage', 'Percentage') }}</th>
           </tr>
         </thead>
         <tbody>
@@ -107,6 +107,14 @@ import { storeToRefs } from 'pinia'
 import FederalBudgetPieChart from '@/domains/calculator/components/FederalBudgetPieChart.vue'
 import Budget2024PieChart from '@/domains/calculator/components/Budget2024PieChart.vue'
 import FederalBudget2024PieChart from '@/domains/calculator/components/FederalBudget2024PieChart.vue'
+import { useI18n } from '@/i18n'
+
+
+const { t } = useI18n()
+const translate = (key, fallback = '', params) => {
+  const value = t(key, params)
+  return value === key ? fallback : value
+}
 
 const { netFederalTaxPerPeriod, sortedBudgetCategories } = storeToRefs(useCalculatorStore())
 const configStore = useConfigStore()

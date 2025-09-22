@@ -5,7 +5,7 @@
         class="input-label"
         for="selfEmploymentIncome"
       >
-        Self-Employment Income
+        {{ t('calculator.inputs.additionalIncome.selfEmployment.label') }}
       </label>
       <input
         id="selfEmploymentIncome"
@@ -15,8 +15,8 @@
         pattern="[0-9]*\.?[0-9]*"
         class="input-field"
         :class="{ 'input-error-field': v$.selfEmploymentIncome.$invalid }"
-        placeholder="Enter your self-employment income"
-        aria-label="Self-Employment Income"
+        :placeholder="t('calculator.inputs.additionalIncome.selfEmployment.placeholder')"
+        :aria-label="t('calculator.inputs.additionalIncome.selfEmployment.aria')"
         autocomplete="off"
         @input="setSelfEmploymentIncome"
         @keypress="preventInvalidInput"
@@ -27,16 +27,16 @@
         class="input-error"
       >
         <template v-if="v$.selfEmploymentIncome.minValue.$invalid">
-          Value must be greater than 0
+          {{ t('calculator.validation.minValue') }}
         </template>
         <template v-else-if="v$.selfEmploymentIncome.maxValue.$invalid">
-          Value cannot exceed $1 billion
+          {{ t('calculator.validation.maxBillion') }}
         </template>
         <template v-else-if="v$.selfEmploymentIncome.maxDecimalPlaces.$invalid">
-          Maximum 2 decimal places allowed
+          {{ t('calculator.validation.maxDecimal') }}
         </template>
         <template v-else>
-          Please enter a valid number
+          {{ t('calculator.validation.validNumber') }}
         </template>
       </div>
     </div>
@@ -46,7 +46,7 @@
         class="input-label"
         for="capitalGainsBeforeJune25"
       >
-        Capital Gains Before June 25, 2024
+        {{ t('calculator.inputs.additionalIncome.capitalGainsBefore.label') }}
       </label>
       <input
         id="capitalGainsBeforeJune25"
@@ -56,8 +56,8 @@
         pattern="[0-9]*\.?[0-9]*"
         class="input-field"
         :class="{ 'input-error-field': v$.capitalGainsBeforeJune25.$invalid }"
-        placeholder="Enter your capital gains before June 25, 2024"
-        aria-label="Capital Gains Before June 25, 2024"
+        :placeholder="t('calculator.inputs.additionalIncome.capitalGainsBefore.placeholder')"
+        :aria-label="t('calculator.inputs.additionalIncome.capitalGainsBefore.aria')"
         autocomplete="off"
         @input="setCapitalGainsBeforeJune25"
         @keypress="preventInvalidInput"
@@ -68,16 +68,16 @@
         class="input-error"
       >
         <template v-if="v$.capitalGainsBeforeJune25.minValue.$invalid">
-          Value must be greater than 0
+          {{ t('calculator.validation.minValue') }}
         </template>
         <template v-else-if="v$.capitalGainsBeforeJune25.maxValue.$invalid">
-          Value cannot exceed $1 billion
+          {{ t('calculator.validation.maxBillion') }}
         </template>
         <template v-else-if="v$.capitalGainsBeforeJune25.maxDecimalPlaces.$invalid">
-          Maximum 2 decimal places allowed
+          {{ t('calculator.validation.maxDecimal') }}
         </template>
         <template v-else>
-          Please enter a valid number
+          {{ t('calculator.validation.validNumber') }}
         </template>
       </div>
     </div>
@@ -87,7 +87,7 @@
         class="input-label"
         for="capitalGainsAfterJune25"
       >
-        Capital Gains On/After June 25, 2024
+        {{ t('calculator.inputs.additionalIncome.capitalGainsAfter.label') }}
       </label>
       <input
         id="capitalGainsAfterJune25"
@@ -97,8 +97,8 @@
         pattern="[0-9]*\.?[0-9]*"
         class="input-field"
         :class="{ 'input-error-field': v$.capitalGainsAfterJune25.$invalid }"
-        placeholder="Enter your capital gains on/after June 25, 2024"
-        aria-label="Capital Gains On/After June 25, 2024"
+        :placeholder="t('calculator.inputs.additionalIncome.capitalGainsAfter.placeholder')"
+        :aria-label="t('calculator.inputs.additionalIncome.capitalGainsAfter.aria')"
         autocomplete="off"
         @input="setCapitalGainsAfterJune25"
         @keypress="preventInvalidInput"
@@ -109,16 +109,16 @@
         class="input-error"
       >
         <template v-if="v$.capitalGainsAfterJune25.minValue.$invalid">
-          Value must be greater than 0
+          {{ t('calculator.validation.minValue') }}
         </template>
         <template v-else-if="v$.capitalGainsAfterJune25.maxValue.$invalid">
-          Value cannot exceed $1 billion
+          {{ t('calculator.validation.maxBillion') }}
         </template>
         <template v-else-if="v$.capitalGainsAfterJune25.maxDecimalPlaces.$invalid">
-          Maximum 2 decimal places allowed
+          {{ t('calculator.validation.maxDecimal') }}
         </template>
         <template v-else>
-          Please enter a valid number
+          {{ t('calculator.validation.validNumber') }}
         </template>
       </div>
     </div>
@@ -128,7 +128,7 @@
         class="input-label"
         for="eligibleDividends"
       >
-        Eligible Dividends
+        {{ t('calculator.inputs.additionalIncome.eligibleDividends.label') }}
       </label>
       <input
         id="eligibleDividends"
@@ -138,8 +138,8 @@
         pattern="[0-9]*\.?[0-9]*"
         class="input-field"
         :class="{ 'input-error-field': v$.eligibleDividends.$invalid }"
-        placeholder="Enter your eligible dividends"
-        aria-label="Eligible Dividends"
+        :placeholder="t('calculator.inputs.additionalIncome.eligibleDividends.placeholder')"
+        :aria-label="t('calculator.inputs.additionalIncome.eligibleDividends.aria')"
         autocomplete="off"
         @input="setEligibleDividends"
         @keypress="preventInvalidInput"
@@ -150,16 +150,16 @@
         class="input-error"
       >
         <template v-if="v$.eligibleDividends.minValue.$invalid">
-          Value must be greater than 0
+          {{ t('calculator.validation.minValue') }}
         </template>
         <template v-else-if="v$.eligibleDividends.maxValue.$invalid">
-          Value cannot exceed $1 billion
+          {{ t('calculator.validation.maxBillion') }}
         </template>
         <template v-else-if="v$.eligibleDividends.maxDecimalPlaces.$invalid">
-          Maximum 2 decimal places allowed
+          {{ t('calculator.validation.maxDecimal') }}
         </template>
         <template v-else>
-          Please enter a valid number
+          {{ t('calculator.validation.validNumber') }}
         </template>
       </div>
     </div>
@@ -169,7 +169,7 @@
         class="input-label"
         for="ineligibleDividends"
       >
-        Ineligible Dividends
+        {{ t('calculator.inputs.additionalIncome.ineligibleDividends.label') }}
       </label>
       <input
         id="ineligibleDividends"
@@ -179,8 +179,8 @@
         pattern="[0-9]*\.?[0-9]*"
         class="input-field"
         :class="{ 'input-error-field': v$.ineligibleDividends.$invalid }"
-        placeholder="Enter your ineligible dividends"
-        aria-label="Ineligible Dividends"
+        :placeholder="t('calculator.inputs.additionalIncome.ineligibleDividends.placeholder')"
+        :aria-label="t('calculator.inputs.additionalIncome.ineligibleDividends.aria')"
         autocomplete="off"
         @input="setIneligibleDividends"
         @keypress="preventInvalidInput"
@@ -191,16 +191,16 @@
         class="input-error"
       >
         <template v-if="v$.ineligibleDividends.minValue.$invalid">
-          Value must be greater than 0
+          {{ t('calculator.validation.minValue') }}
         </template>
         <template v-else-if="v$.ineligibleDividends.maxValue.$invalid">
-          Value cannot exceed $1 billion
+          {{ t('calculator.validation.maxBillion') }}
         </template>
         <template v-else-if="v$.ineligibleDividends.maxDecimalPlaces.$invalid">
-          Maximum 2 decimal places allowed
+          {{ t('calculator.validation.maxDecimal') }}
         </template>
         <template v-else>
-          Please enter a valid number
+          {{ t('calculator.validation.validNumber') }}
         </template>
       </div>
     </div>
@@ -210,7 +210,7 @@
         class="input-label"
         for="otherIncome"
       >
-        Other Income
+        {{ t('calculator.inputs.additionalIncome.otherIncome.label') }}
       </label>
       <input
         id="otherIncome"
@@ -220,8 +220,8 @@
         pattern="[0-9]*\.?[0-9]*"
         class="input-field"
         :class="{ 'input-error-field': v$.otherIncome.$invalid }"
-        placeholder="Enter your other income"
-        aria-label="Other Income"
+        :placeholder="t('calculator.inputs.additionalIncome.otherIncome.placeholder')"
+        :aria-label="t('calculator.inputs.additionalIncome.otherIncome.aria')"
         autocomplete="off"
         @input="setOtherIncome"
         @keypress="preventInvalidInput"
@@ -232,16 +232,16 @@
         class="input-error"
       >
         <template v-if="v$.otherIncome.minValue.$invalid">
-          Value must be greater than 0
+          {{ t('calculator.validation.minValue') }}
         </template>
         <template v-else-if="v$.otherIncome.maxValue.$invalid">
-          Value cannot exceed $1 billion
+          {{ t('calculator.validation.maxBillion') }}
         </template>
         <template v-else-if="v$.otherIncome.maxDecimalPlaces.$invalid">
-          Maximum 2 decimal places allowed
+          {{ t('calculator.validation.maxDecimal') }}
         </template>
         <template v-else>
-          Please enter a valid number
+          {{ t('calculator.validation.validNumber') }}
         </template>
       </div>
     </div>
@@ -249,12 +249,16 @@
 </template>
 
 <script setup>
+/* eslint-disable */
 import { useCalculatorStore } from '@/domains/calculator/store/calculator.js'
 import { storeToRefs } from 'pinia'
 import { useCalculator } from '@/domains/calculator/composables/calculator.js'
+import { useI18n } from '@/i18n'
 
 const calculatorStore = useCalculatorStore()
 const { v$, sanitizeNumericInput } = useCalculator()
+
+const { t } = useI18n()
 
 const {
   selfEmploymentIncome,

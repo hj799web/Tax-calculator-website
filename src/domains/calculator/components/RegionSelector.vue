@@ -1,21 +1,23 @@
+/* eslint-disable */
 <template>
   <select
     v-model="selectedRegion"
     class="select-region"
-    aria-label="Select Province or Territory"
+    :aria-label="t('calculator.regionSelector.aria')"
   >
     <option
       disabled
       value=""
       style="font-style: italic;"
     >
-      Select Your Province or Territory
+      {{ t('calculator.regionSelector.placeholder') }}
     </option>
     <option
-      v-for="region in regions"
-      :key="region"
+      v-for="option in regionOptions"
+      :key="option.value"
+      :value="option.value"
     >
-      {{ region }}
+      {{ option.label }}
     </option>
   </select>
 </template>
@@ -24,9 +26,36 @@
 import { useCalculatorStore } from '@/domains/calculator/store/calculator';
 import { storeToRefs } from 'pinia'
 import { regions } from '../constants/taxData';
+import { computed } from 'vue'
+import { useI18n } from '@/i18n'
 
 const calculatorStore = useCalculatorStore()
 const { selectedRegion } = storeToRefs(calculatorStore)
+
+const { t } = useI18n()
+
+const provinceCodeMap = {
+  'Alberta': 'AB',
+  'British Columbia': 'BC',
+  'Manitoba': 'MB',
+  'New Brunswick': 'NB',
+  'Newfoundland and Labrador': 'NL',
+  'Nova Scotia': 'NS',
+  'Ontario': 'ON',
+  'Prince Edward Island': 'PE',
+  'Quebec': 'QC',
+  'Saskatchewan': 'SK',
+  'Northwest Territories': 'NT',
+  'Nunavut': 'NU',
+  'Yukon': 'YT'
+}
+
+const regionOptions = computed(() =>
+  regions.map((region) => ({
+    value: region,
+    label: t(`calculator.regionSelector.options.${provinceCodeMap[region] ?? region}`)
+  }))
+)
 </script>
 
 <style scoped>

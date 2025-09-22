@@ -1,33 +1,33 @@
 <template>
   <div class="revenue-sliders">
     <details class="revenue-explanation mb-4 bg-gray-50 rounded-lg">
-      <summary class="p-3 cursor-pointer text-gray-800 font-medium">About these sliders</summary>
+      <summary class="p-3 cursor-pointer text-gray-800 font-medium">{{ i18nText('simulator.controls.revenue.summaryTitle', 'About these sliders') }}</summary>
       <div class="p-4 pt-2">
-        <p class="text-sm text-gray-700 mb-2">The Budget Simulator uses a simplified approach to tax calculations to help you understand the fiscal impact of tax changes. Instead of detailed tax brackets, it uses average effective rates:</p>
+        <p class="text-sm text-gray-700 mb-2">{{ i18nText('simulator.controls.revenue.summaryBody', 'The Budget Simulator uses a simplified approach to tax calculations to help you understand the fiscal impact of tax changes. Instead of detailed tax brackets, it uses average effective rates:') }}</p>
         <ul class="text-sm text-gray-600 list-disc pl-5 mb-2">
-          <li>Personal Income Tax: Base rate of 21% (2024) with $10 billion in revenue per percentage point</li>
-          <li>Corporate Income Tax: Base rate of 15% (2024) with $5.33 billion in revenue per percentage point</li>
-          <li>Tax credits and expenditures can be adjusted separately to see their impact on revenue</li>
+          <li>{{ i18nText('simulator.controls.revenue.summaryItems.personal', 'Personal Income Tax: Base rate of 21% (2024) with $10 billion in revenue per percentage point') }}</li>
+          <li>{{ i18nText('simulator.controls.revenue.summaryItems.corporate', 'Corporate Income Tax: Base rate of 15% (2024) with $5.33 billion in revenue per percentage point') }}</li>
+          <li>{{ i18nText('simulator.controls.revenue.summaryItems.credits', 'Tax credits and expenditures can be adjusted separately to see their impact on revenue') }}</li>
         </ul>
-        <p class="text-sm text-gray-700">This approach focuses on overall revenue impact rather than individual taxpayer scenarios.</p>
+        <p class="text-sm text-gray-700">{{ i18nText('simulator.controls.revenue.summaryFooter', 'This approach focuses on overall revenue impact rather than individual taxpayer scenarios.') }}</p>
       </div>
     </details>
     <div class="revenue-controls">
       <div class="overflow-y-auto pr-2 max-h-[60vh]">
-        <!-- Income Taxes Group -->
+        <!-- {{ i18nText('simulator.controls.revenue.groupTitle.incomeTaxes', 'Income Taxes') }} Group -->
         <div class="mb-4">
           <div
             class="group-header"
             @click="toggleGroupExpansion('incomeTaxes')"
           >
             <h3 class="text-sm font-medium text-gray-700">
-              Income Taxes
+              {{ i18nText('simulator.controls.revenue.groupTitle.incomeTaxes', 'Income Taxes') }}
             </h3>
             <div class="group-total">
               ${{ formatCurrency(incomeTaxTotal, 1) }}B
             </div>
             <div class="toggle-button">
-              {{ expandedGroups.incomeTaxes ? 'Collapse' : 'Expand' }}
+              {{ expandedGroups.incomeTaxes ? i18nText('simulator.controls.common.collapse', 'Collapse') : i18nText('simulator.controls.common.expand', 'Expand') }}
               <span
                 class="icon ml-1"
                 :class="{ 'rotated': expandedGroups.incomeTaxes }"
@@ -54,7 +54,7 @@
             :class="{ 'expanded': expandedGroups.incomeTaxes }"
           >
             <div class="revenue-grid">
-              <!-- Personal Income Tax -->
+              <!-- {{ i18nText('simulator.controls.revenue.labels.personal', 'Personal Income Tax') }} -->
               <div
                 class="revenue-tile"
                 :style="{ '--tile-color': budgetStore.revenueSources.personalIncomeTax?.color || '#4299E1' }"
@@ -62,9 +62,9 @@
                 <div class="tile-header">
                   <div class="tile-title">
                     <span class="material-icons tile-icon">payments</span>
-                    Personal Income Tax
+                    {{ i18nText('simulator.controls.revenue.labels.personal', 'Personal Income Tax') }}
                     <CategoryInfo
-                      :name="budgetStore.revenueSources.personalIncomeTax?.name || 'Personal Income Tax'"
+                      :name="budgetStore.revenueSources.personalIncomeTax?.name || i18nText('simulator.controls.revenue.labels.personal', 'Personal Income Tax')"
                       :description="budgetStore.revenueSources.personalIncomeTax?.description || ''"
                       :base-amount="budgetStore.revenueSources.personalIncomeTax?.base || 0"
                       :current-setting="revenueRates.personalIncomeTax"
@@ -87,13 +87,13 @@
                       </span>
                     </div>
                     <div class="base-amount">
-                      Base: ${{ formatCurrency(budgetStore.revenueSources.personalIncomeTax?.base * budgetStore.revenueSources.personalIncomeTax?.rateByYear[budgetStore.currentYear], 1) }}B
+                      {{ i18nText('simulator.controls.common.base', 'Base:') }} ${{ formatCurrency(budgetStore.revenueSources.personalIncomeTax?.base * budgetStore.revenueSources.personalIncomeTax?.rateByYear[budgetStore.currentYear], 1) }}B
                     </div>
                     <div
                       v-if="budgetStore.revenueSources.personalIncomeTax?.expenditureImpact !== 0"
                       class="tax-expenditure-impact"
                     >
-                      <span class="impact-label">Tax Expenditure Impact:</span>
+                      <span class="impact-label">{{ i18nText('simulator.controls.common.taxImpact', 'Tax Expenditure Impact:') }}</span>
                       <span
                         class="impact-value"
                         :class="{'positive': budgetStore.revenueSources.personalIncomeTax?.expenditureImpact > 0, 'negative': budgetStore.revenueSources.personalIncomeTax?.expenditureImpact < 0}"
@@ -105,19 +105,19 @@
                 </div>
                 <div class="tile-note">
                   <span>
-                    Personal Income Tax represents the federal income tax collected from individuals and households, including employment income, investment income, and other taxable sources. This is the largest source of federal revenue and is represented as 'personalIncomeTax' in all calculations.
+                    {{ i18nText('simulator.controls.revenue.notes.personalIncomeTax', 'Personal Income Tax represents the federal income tax collected from individuals and households, including employment income, investment income, and other taxable sources. This is the largest source of federal revenue and is represented as "personalIncomeTax" in all calculations.') }}
                   </span>
                 </div>
                 <div
                   v-if="budgetStore.revenueSources.personalIncomeTax?.expenditureImpact !== 0"
                   class="tax-expenditure-note"
                 >
-                  This revenue figure includes the impact of personal tax credit and deferral adjustments.
+                  {{ i18nText('simulator.controls.revenue.personal.expenditureNote', 'This revenue figure includes the impact of personal tax credit and deferral adjustments.') }}
                 </div>
                 <div class="slider-container">
                   <div class="slider-labels">
                     <span>{{ getLabel('personalIncomeTax', 'min') }}%</span>
-                    <span class="current-rate">Current: {{ revenueRates.personalIncomeTax }}%</span>
+                    <span class="current-rate">{{ i18nText('simulator.controls.common.current', 'Current:') }} {{ revenueRates.personalIncomeTax }}%</span>
                     <span>{{ getLabel('personalIncomeTax', 'max') }}%</span>
                   </div>
                   <input 
@@ -156,7 +156,7 @@
                 </div>
               </div>
               
-              <!-- Corporate Income Tax -->
+              <!-- {{ i18nText('simulator.controls.revenue.labels.corporate', 'Corporate Income Tax') }} -->
               <div
                 class="revenue-tile"
                 :style="{ '--tile-color': budgetStore.revenueSources.corporateIncomeTax?.color || '#48BB78' }"
@@ -164,9 +164,9 @@
                 <div class="tile-header">
                   <div class="tile-title">
                     <span class="material-icons tile-icon">payments</span>
-                    Corporate Income Tax
+                    {{ i18nText('simulator.controls.revenue.labels.corporate', 'Corporate Income Tax') }}
                     <CategoryInfo
-                      :name="budgetStore.revenueSources.corporateIncomeTax?.name || 'Corporate Income Tax'"
+                      :name="budgetStore.revenueSources.corporateIncomeTax?.name || i18nText('simulator.controls.revenue.labels.corporate', 'Corporate Income Tax')"
                       :description="budgetStore.revenueSources.corporateIncomeTax?.description || ''"
                       :base-amount="budgetStore.revenueSources.corporateIncomeTax?.base || 0"
                       :current-setting="revenueRates.corporateIncomeTax"
@@ -189,13 +189,13 @@
                       </span>
                     </div>
                     <div class="base-amount">
-                      Base: ${{ formatCurrency(budgetStore.revenueSources.corporateIncomeTax?.base * budgetStore.revenueSources.corporateIncomeTax?.rateByYear[budgetStore.currentYear], 1) }}B
+                      {{ i18nText('simulator.controls.common.base', 'Base:') }} ${{ formatCurrency(budgetStore.revenueSources.corporateIncomeTax?.base * budgetStore.revenueSources.corporateIncomeTax?.rateByYear[budgetStore.currentYear], 1) }}B
                     </div>
                     <div
                       v-if="budgetStore.revenueSources.corporateIncomeTax?.expenditureImpact !== 0"
                       class="tax-expenditure-impact"
                     >
-                      <span class="impact-label">Tax Expenditure Impact:</span>
+                      <span class="impact-label">{{ i18nText('simulator.controls.common.taxImpact', 'Tax Expenditure Impact:') }}</span>
                       <span
                         class="impact-value"
                         :class="{'positive': budgetStore.revenueSources.corporateIncomeTax?.expenditureImpact > 0, 'negative': budgetStore.revenueSources.corporateIncomeTax?.expenditureImpact < 0}"
@@ -207,19 +207,19 @@
                 </div>
                 <div class="tile-note">
                   <span>
-                    Corporate Income Tax is a federal tax levied on the taxable income of corporations operating in Canada. It includes both the general corporate tax rate (15%) and the small business rate (9%), with various deductions and credits available.
+                    {{ i18nText('simulator.controls.revenue.notes.corporateIncomeTax', 'Corporate Income Tax is a federal tax levied on the taxable income of corporations operating in Canada. It includes both the general corporate tax rate (15%) and the small business rate (9%), with various deductions and credits available.') }}
                   </span>
                 </div>
                 <div
                   v-if="budgetStore.revenueSources.corporateIncomeTax?.expenditureImpact !== 0"
                   class="tax-expenditure-note"
                 >
-                  This revenue figure includes the impact of corporate tax expenditure adjustments.
+                  {{ i18nText('simulator.controls.revenue.corporate.expenditureNote', 'This revenue figure includes the impact of corporate tax expenditure adjustments.') }}
                 </div>
                 <div class="slider-container">
                   <div class="slider-labels">
                     <span>{{ getLabel('corporateIncomeTax', 'min') }}%</span>
-                    <span class="current-rate">Current: {{ revenueRates.corporateIncomeTax }}%</span>
+                    <span class="current-rate">{{ i18nText('simulator.controls.common.current', 'Current:') }} {{ revenueRates.corporateIncomeTax }}%</span>
                     <span>{{ getLabel('corporateIncomeTax', 'max') }}%</span>
                   </div>
                   <input 
@@ -261,20 +261,20 @@
           </div>
         </div>
 
-        <!-- Consumption Taxes Group -->
+        <!-- {{ i18nText('simulator.controls.revenue.groupTitle.consumptionTaxes', 'Consumption Taxes') }} Group -->
         <div class="mb-4">
           <div
             class="group-header"
             @click="toggleGroupExpansion('consumptionTaxes')"
           >
             <h3 class="text-sm font-medium text-gray-700">
-              Consumption Taxes
+              {{ i18nText('simulator.controls.revenue.groupTitle.consumptionTaxes', 'Consumption Taxes') }}
             </h3>
             <div class="group-total">
               ${{ formatCurrency(consumptionTaxTotal, 1) }}B
             </div>
             <div class="toggle-button">
-              {{ expandedGroups.consumptionTaxes ? 'Collapse' : 'Expand' }}
+              {{ expandedGroups.consumptionTaxes ? i18nText('simulator.controls.common.collapse', 'Collapse') : i18nText('simulator.controls.common.expand', 'Expand') }}
               <span
                 class="icon ml-1"
                 :class="{ 'rotated': expandedGroups.consumptionTaxes }"
@@ -334,13 +334,13 @@
                       </span>
                     </div>
                     <div class="base-amount">
-                      Base: ${{ formatCurrency(budgetStore.revenueSources.gst?.base * budgetStore.revenueSources.gst?.rateByYear[budgetStore.currentYear], 1) }}B
+                      {{ i18nText('simulator.controls.common.base', 'Base:') }} ${{ formatCurrency(budgetStore.revenueSources.gst?.base * budgetStore.revenueSources.gst?.rateByYear[budgetStore.currentYear], 1) }}B
                     </div>
                     <div
                       v-if="budgetStore.revenueSources.gst?.expenditureImpact !== 0"
                       class="tax-expenditure-impact"
                     >
-                      <span class="impact-label">Tax Expenditure Impact:</span>
+                      <span class="impact-label">{{ i18nText('simulator.controls.common.taxImpact', 'Tax Expenditure Impact:') }}</span>
                       <span
                         class="impact-value"
                         :class="{'positive': budgetStore.revenueSources.gst?.expenditureImpact > 0, 'negative': budgetStore.revenueSources.gst?.expenditureImpact < 0}"
@@ -364,7 +364,7 @@
                 <div class="slider-container">
                   <div class="slider-labels">
                     <span>{{ getLabel('gst', 'min') }}%</span>
-                    <span class="current-rate">Current: {{ revenueRates.gst }}%</span>
+                    <span class="current-rate">{{ i18nText('simulator.controls.common.current', 'Current:') }} {{ revenueRates.gst }}%</span>
                     <span>{{ getLabel('gst', 'max') }}%</span>
                   </div>
                   <input 
@@ -436,13 +436,13 @@
                       </span>
                     </div>
                     <div class="base-amount">
-                      Base: ${{ formatCurrency(budgetStore.revenueSources.customsDuties?.base * budgetStore.revenueSources.customsDuties?.rateByYear[budgetStore.currentYear], 1) }}B
+                      {{ i18nText('simulator.controls.common.base', 'Base:') }} ${{ formatCurrency(budgetStore.revenueSources.customsDuties?.base * budgetStore.revenueSources.customsDuties?.rateByYear[budgetStore.currentYear], 1) }}B
                     </div>
                     <div
                       v-if="budgetStore.revenueSources.customsDuties?.expenditureImpact !== 0"
                       class="tax-expenditure-impact"
                     >
-                      <span class="impact-label">Tax Expenditure Impact:</span>
+                      <span class="impact-label">{{ i18nText('simulator.controls.common.taxImpact', 'Tax Expenditure Impact:') }}</span>
                       <span
                         class="impact-value"
                         :class="{'positive': budgetStore.revenueSources.customsDuties?.expenditureImpact > 0, 'negative': budgetStore.revenueSources.customsDuties?.expenditureImpact < 0}"
@@ -466,7 +466,7 @@
                 <div class="slider-container">
                   <div class="slider-labels">
                     <span>{{ getLabel('customsDuties', 'min') }}%</span>
-                    <span class="current-rate">Current: {{ revenueRates.customsDuties }}%</span>
+                    <span class="current-rate">{{ i18nText('simulator.controls.common.current', 'Current:') }} {{ revenueRates.customsDuties }}%</span>
                     <span>{{ getLabel('customsDuties', 'max') }}%</span>
                   </div>
                   <input 
@@ -540,13 +540,13 @@
                       </span>
                     </div>
                     <div class="base-amount">
-                      Base: ${{ formatCurrency(budgetStore.revenueSources.carbonPricing?.base * budgetStore.revenueSources.carbonPricing?.rateByYear[budgetStore.currentYear], 1) }}B
+                      {{ i18nText('simulator.controls.common.base', 'Base:') }} ${{ formatCurrency(budgetStore.revenueSources.carbonPricing?.base * budgetStore.revenueSources.carbonPricing?.rateByYear[budgetStore.currentYear], 1) }}B
                     </div>
                     <div
                       v-if="budgetStore.revenueSources.carbonPricing?.expenditureImpact !== 0"
                       class="tax-expenditure-impact"
                     >
-                      <span class="impact-label">Tax Expenditure Impact:</span>
+                      <span class="impact-label">{{ i18nText('simulator.controls.common.taxImpact', 'Tax Expenditure Impact:') }}</span>
                       <span
                         class="impact-value"
                         :class="{'positive': budgetStore.revenueSources.carbonPricing?.expenditureImpact > 0, 'negative': budgetStore.revenueSources.carbonPricing?.expenditureImpact < 0}"
@@ -570,7 +570,7 @@
                 <div class="slider-container">
                   <div class="slider-labels">
                     <span>{{ getLabel('carbonPricing', 'min') }}%</span>
-                    <span class="current-rate">Current: {{ revenueRates.carbonPricing }}%</span>
+                    <span class="current-rate">{{ i18nText('simulator.controls.common.current', 'Current:') }} {{ revenueRates.carbonPricing }}%</span>
                     <span>{{ getLabel('carbonPricing', 'max') }}%</span>
                   </div>
                   <input 
@@ -642,13 +642,13 @@
                       </span>
                     </div>
                     <div class="base-amount">
-                      Base: ${{ formatCurrency(budgetStore.revenueSources.exciseTaxes?.base * budgetStore.revenueSources.exciseTaxes?.rateByYear[budgetStore.currentYear], 1) }}B
+                      {{ i18nText('simulator.controls.common.base', 'Base:') }} ${{ formatCurrency(budgetStore.revenueSources.exciseTaxes?.base * budgetStore.revenueSources.exciseTaxes?.rateByYear[budgetStore.currentYear], 1) }}B
                     </div>
                     <div
                       v-if="budgetStore.revenueSources.exciseTaxes?.expenditureImpact !== 0"
                       class="tax-expenditure-impact"
                     >
-                      <span class="impact-label">Tax Expenditure Impact:</span>
+                      <span class="impact-label">{{ i18nText('simulator.controls.common.taxImpact', 'Tax Expenditure Impact:') }}</span>
                       <span
                         class="impact-value"
                         :class="{'positive': budgetStore.revenueSources.exciseTaxes?.expenditureImpact > 0, 'negative': budgetStore.revenueSources.exciseTaxes?.expenditureImpact < 0}"
@@ -672,7 +672,7 @@
                 <div class="slider-container">
                   <div class="slider-labels">
                     <span>{{ getLabel('exciseTaxes', 'min') }}%</span>
-                    <span class="current-rate">Current: {{ revenueRates.exciseTaxes }}%</span>
+                    <span class="current-rate">{{ i18nText('simulator.controls.common.current', 'Current:') }} {{ revenueRates.exciseTaxes }}%</span>
                     <span>{{ getLabel('exciseTaxes', 'max') }}%</span>
                   </div>
                   <input 
@@ -714,20 +714,20 @@
           </div>
         </div>
 
-        <!-- Other Revenue Sources Group -->
+        <!-- {{ i18nText('simulator.controls.revenue.groupTitle.otherRevenues', 'Other Revenue Sources') }} Group -->
         <div class="mb-4">
           <div
             class="group-header"
             @click="toggleGroupExpansion('otherRevenues')"
           >
             <h3 class="text-sm font-medium text-gray-700">
-              Other Revenue Sources
+              {{ i18nText('simulator.controls.revenue.groupTitle.otherRevenues', 'Other Revenue Sources') }}
             </h3>
             <div class="group-total">
               ${{ formatCurrency(otherRevenueTotal, 1) }}B
             </div>
             <div class="toggle-button">
-              {{ expandedGroups.otherRevenues ? 'Collapse' : 'Expand' }}
+              {{ expandedGroups.otherRevenues ? i18nText('simulator.controls.common.collapse', 'Collapse') : i18nText('simulator.controls.common.expand', 'Expand') }}
               <span
                 class="icon ml-1"
                 :class="{ 'rotated': expandedGroups.otherRevenues }"
@@ -787,13 +787,13 @@
                       </span>
                     </div>
                     <div class="base-amount">
-                      Base: ${{ formatCurrency(budgetStore.revenueSources.eiPremiums?.base * budgetStore.revenueSources.eiPremiums?.rateByYear[budgetStore.currentYear], 1) }}B
+                      {{ i18nText('simulator.controls.common.base', 'Base:') }} ${{ formatCurrency(budgetStore.revenueSources.eiPremiums?.base * budgetStore.revenueSources.eiPremiums?.rateByYear[budgetStore.currentYear], 1) }}B
                     </div>
                     <div
                       v-if="budgetStore.revenueSources.eiPremiums?.expenditureImpact !== 0"
                       class="tax-expenditure-impact"
                     >
-                      <span class="impact-label">Tax Expenditure Impact:</span>
+                      <span class="impact-label">{{ i18nText('simulator.controls.common.taxImpact', 'Tax Expenditure Impact:') }}</span>
                       <span
                         class="impact-value"
                         :class="{'positive': budgetStore.revenueSources.eiPremiums?.expenditureImpact > 0, 'negative': budgetStore.revenueSources.eiPremiums?.expenditureImpact < 0}"
@@ -817,7 +817,7 @@
                 <div class="slider-container">
                   <div class="slider-labels">
                     <span>{{ getLabel('eiPremiums', 'min') }}%</span>
-                    <span class="current-rate">Current: {{ revenueRates.eiPremiums }}%</span>
+                    <span class="current-rate">{{ i18nText('simulator.controls.common.current', 'Current:') }} {{ revenueRates.eiPremiums }}%</span>
                     <span>{{ getLabel('eiPremiums', 'max') }}%</span>
                   </div>
                   <input 
@@ -889,7 +889,7 @@
                       </span>
                     </div>
                     <div class="base-amount">
-                      Base: ${{ formatCurrency(budgetStore.revenueSources.crownProfits?.base * budgetStore.revenueSources.crownProfits?.rateByYear[budgetStore.currentYear], 1) }}B
+                      {{ i18nText('simulator.controls.common.base', 'Base:') }} ${{ formatCurrency(budgetStore.revenueSources.crownProfits?.base * budgetStore.revenueSources.crownProfits?.rateByYear[budgetStore.currentYear], 1) }}B
                     </div>
                     <div
                       v-if="getAdditionalRevenue('crownProfits') !== 0"
@@ -905,7 +905,7 @@
                       v-if="budgetStore.revenueSources.crownProfits?.expenditureImpact !== 0"
                       class="tax-expenditure-impact"
                     >
-                      <span class="impact-label">Tax Expenditure Impact:</span>
+                      <span class="impact-label">{{ i18nText('simulator.controls.common.taxImpact', 'Tax Expenditure Impact:') }}</span>
                       <span
                         class="impact-value"
                         :class="{'positive': budgetStore.revenueSources.crownProfits?.expenditureImpact > 0, 'negative': budgetStore.revenueSources.crownProfits?.expenditureImpact < 0}"
@@ -929,7 +929,7 @@
                 <div class="slider-container">
                   <div class="slider-labels">
                     <span>{{ getLabel('crownProfits', 'min') }}%</span>
-                    <span class="current-rate">Current: {{ revenueRates.crownProfits }}%</span>
+                    <span class="current-rate">{{ i18nText('simulator.controls.common.current', 'Current:') }} {{ revenueRates.crownProfits }}%</span>
                     <span>{{ getLabel('crownProfits', 'max') }}%</span>
                   </div>
                   <input 
@@ -1003,13 +1003,13 @@
                       </span>
                     </div>
                     <div class="base-amount">
-                      Base: ${{ formatCurrency(budgetStore.revenueSources.resourceRoyalties?.base * budgetStore.revenueSources.resourceRoyalties?.rateByYear[budgetStore.currentYear], 1) }}B
+                      {{ i18nText('simulator.controls.common.base', 'Base:') }} ${{ formatCurrency(budgetStore.revenueSources.resourceRoyalties?.base * budgetStore.revenueSources.resourceRoyalties?.rateByYear[budgetStore.currentYear], 1) }}B
                     </div>
                     <div
                       v-if="budgetStore.revenueSources.resourceRoyalties?.expenditureImpact !== 0"
                       class="tax-expenditure-impact"
                     >
-                      <span class="impact-label">Tax Expenditure Impact:</span>
+                      <span class="impact-label">{{ i18nText('simulator.controls.common.taxImpact', 'Tax Expenditure Impact:') }}</span>
                       <span
                         class="impact-value"
                         :class="{'positive': budgetStore.revenueSources.resourceRoyalties?.expenditureImpact > 0, 'negative': budgetStore.revenueSources.resourceRoyalties?.expenditureImpact < 0}"
@@ -1033,7 +1033,7 @@
                 <div class="slider-container">
                   <div class="slider-labels">
                     <span>{{ getLabel('resourceRoyalties', 'min') }}%</span>
-                    <span class="current-rate">Current: {{ revenueRates.resourceRoyalties }}%</span>
+                    <span class="current-rate">{{ i18nText('simulator.controls.common.current', 'Current:') }} {{ revenueRates.resourceRoyalties }}%</span>
                     <span>{{ getLabel('resourceRoyalties', 'max') }}%</span>
                   </div>
                   <input 
@@ -1105,13 +1105,13 @@
                       </span>
                     </div>
                     <div class="base-amount">
-                      Base: ${{ formatCurrency(budgetStore.revenueSources.nonTaxRevenue?.base * budgetStore.revenueSources.nonTaxRevenue?.rateByYear[budgetStore.currentYear], 1) }}B
+                      {{ i18nText('simulator.controls.common.base', 'Base:') }} ${{ formatCurrency(budgetStore.revenueSources.nonTaxRevenue?.base * budgetStore.revenueSources.nonTaxRevenue?.rateByYear[budgetStore.currentYear], 1) }}B
                     </div>
                     <div
                       v-if="budgetStore.revenueSources.nonTaxRevenue?.expenditureImpact !== 0"
                       class="tax-expenditure-impact"
                     >
-                      <span class="impact-label">Tax Expenditure Impact:</span>
+                      <span class="impact-label">{{ i18nText('simulator.controls.common.taxImpact', 'Tax Expenditure Impact:') }}</span>
                       <span
                         class="impact-value"
                         :class="{'positive': budgetStore.revenueSources.nonTaxRevenue?.expenditureImpact > 0, 'negative': budgetStore.revenueSources.nonTaxRevenue?.expenditureImpact < 0}"
@@ -1135,7 +1135,7 @@
                 <div class="slider-container">
                   <div class="slider-labels">
                     <span>{{ getLabel('nonTaxRevenue', 'min') }}%</span>
-                    <span class="current-rate">Current: {{ revenueRates.nonTaxRevenue }}%</span>
+                    <span class="current-rate">{{ i18nText('simulator.controls.common.current', 'Current:') }} {{ revenueRates.nonTaxRevenue }}%</span>
                     <span>{{ getLabel('nonTaxRevenue', 'max') }}%</span>
                   </div>
                   <input 
@@ -1214,11 +1214,17 @@
 <script setup>
 import { ref, onMounted, watch, computed, shallowRef, nextTick } from 'vue';
 import CategoryInfo from '@/domains/budget/components/BudgetCategoryInfo.vue';
+import { useI18n } from '@/i18n'
 import debounce from 'lodash.debounce';
 import throttle from 'lodash.throttle';
 import { useBudgetSimulatorStore } from '../store/budgetSimulator';
 
 const budgetStore = useBudgetSimulatorStore();
+const { t } = useI18n();
+const i18nText = (key, fallback = '') => {
+  const value = t(key)
+  return value == key ? fallback : value
+};
 const activeTooltip = ref('');
 
 // Local reactive state

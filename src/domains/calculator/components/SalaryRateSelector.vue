@@ -1,23 +1,23 @@
 <template>
   <section class="salary-selector-section">
     <h3 class="section-title">
-      Salary Rate Selector
+      {{ t('calculator.salary.title') }}
     </h3>
     <div class="salary-selector-wrapper">
       <div class="salary-selector">
         <div
-          v-for="option in salaryOptions"
+          v-for="option in localizedSalaryOptions"
           :key="option.value"
           :class="['salary-option', { active: selectedSalaryRate === option.value }]"
           role="button"
           tabindex="0"
           :aria-pressed="selectedSalaryRate === option.value"
-          :aria-label="'Select ' + option.label + ' salary rate'"
+          :aria-label="t('calculator.salary.aria', { label: t(`calculator.salary.options.${option.key}`) })"
           @click="selectSalaryRate(option.value)"
           @keydown.enter.prevent="selectSalaryRate(option.value)"
           @keydown.space.prevent="selectSalaryRate(option.value)"
         >
-          {{ option.label }}
+          {{ t(`calculator.salary.options.${option.key}`) }}
         </div>
       </div>
     </div>
@@ -25,14 +25,33 @@
 </template>
 
 <script setup>
+/* eslint-disable */
 import { useSalaryStore } from '@/domains/calculator/store/salary.js'
-import { salaryOptions } from '@/domains/calculator/constants/taxData.js'
-import { storeToRefs } from 'pinia';
+import { salaryOptions as salaryOptionsRaw } from '@/domains/calculator/constants/taxData.js'
+import { storeToRefs } from 'pinia'
+import { computed } from 'vue'
+import { useI18n } from '@/i18n'
 
-const salaryStore = useSalaryStore();
+const salaryStore = useSalaryStore()
+const { selectSalaryRate } = salaryStore
+const { selectedSalaryRate } = storeToRefs(salaryStore)
+const { t } = useI18n()
 
-const { selectSalaryRate } = salaryStore;
-const { selectedSalaryRate } = storeToRefs(salaryStore);
+const optionKeyMap = {
+  Annual: 'annual',
+  Monthly: 'monthly',
+  'Bi-weekly': 'biweekly',
+  Weekly: 'weekly',
+  Daily: 'daily',
+  Hourly: 'hourly'
+}
+
+const localizedSalaryOptions = computed(() =>
+  salaryOptionsRaw.map((option) => ({
+    ...option,
+    key: optionKeyMap[option.value] || option.value.toLowerCase()
+  }))
+)
 </script>
 
 <style scoped>

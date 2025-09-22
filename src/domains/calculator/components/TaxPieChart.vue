@@ -22,6 +22,13 @@ import { storeToRefs } from 'pinia'
 import { useCalculatorStore } from '@/domains/calculator/store/calculator.js'
 import { htmlLegendPlugin } from '@/domains/calculator/utils/htmlLegendPlugin.js'
 import { useCalculator } from '@/domains/calculator/composables/calculator.js'
+import { useI18n } from '@/i18n'
+
+const { t } = useI18n()
+const translate = (key, fallback = '', params) => {
+  const value = t(key, params)
+  return value === key ? fallback : value
+}
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 
@@ -43,15 +50,15 @@ const chartData = computed(() => {
   }
   return {
     labels: [
-      'Federal Tax',
-      'Provincial Tax',
-      'CPP/QPP',
-      'EI',
-      'Net Income',
+      translate('result.federalTax', 'Federal Tax'),
+      translate('result.provincialTax', 'Provincial Tax'),
+      translate('result.cppQpp', 'CPP/QPP'),
+      translate('result.ei', 'EI'),
+      translate('result.netIncome', 'Net Income'),
     ],
     datasets: [
       {
-        label: 'Tax Breakdown',
+        label: translate('result.taxBreakdown', 'Tax Breakdown'),
         data: [
           netFederalTaxPerPeriod.value,
           netProvincialTaxPerPeriod.value,

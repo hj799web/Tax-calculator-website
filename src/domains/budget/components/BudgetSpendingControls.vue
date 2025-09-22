@@ -6,7 +6,7 @@
     <!-- Add loading indicator -->
     <LoadingIndicator 
       :show="isUpdating" 
-      message="Updating budget calculations..."
+      :message="i18nText('simulator.controls.spending.updating', 'Updating budget calculations...')"
       size="medium"
       variant="overlay"
     />
@@ -21,14 +21,14 @@
       >
         <!-- Main Categories Group -->
         <CategoryGroup
-          title="Main Categories"
+          :title="i18nText('simulator.controls.spending.groupTitle.main', 'Main Categories')"
           :total-amount="totalMainCategories"
           :expanded="expandedGroups.mainCategories"
           group-id="mainCategories"
           @toggle="toggleGroup"
         >
           <div class="main-categories-info">
-            <p>Adjust spending for major federal budget categories. Increasing percentages raises spending, while decreasing them reduces spending.</p>
+            <p>{{ i18nText('simulator.controls.spending.mainIntro', 'Adjust spending for major federal budget categories. Increasing percentages raises spending, while decreasing them reduces spending.') }}</p>
           </div>
           <div class="main-categories-grid">
             <div
@@ -39,7 +39,7 @@
               <div class="main-category-header">
                 <h4>{{ category.name }}</h4>
                 <div class="main-category-base">
-                  Base: ${{ formatAmount(category.baseAmount) }}B
+                  {{ i18nText('simulator.controls.common.base', 'Base:') }} ${{ formatAmount(category.baseAmount) }}B
                   <CategoryInfo
                     :name="category.name"
                     :description="category.description || ''"
@@ -62,15 +62,15 @@
                   />
                   <button 
                     class="reset-button" 
-                    title="Reset to baseline"
+                    :title="i18nText('simulator.controls.common.resetTooltip', 'Reset to baseline')"
                     @click="updateCategoryAdjustment(category.id, 100)"
                   >
-                    Reset
+                    {{ i18nText('simulator.controls.common.reset', 'Reset') }}
                   </button>
                 </div>
                 <div class="main-category-impact">
                   <div class="impact-label">
-                    Current:
+                    {{ i18nText('simulator.controls.common.current', 'Current:') }}
                   </div>
                   <div
                     class="impact-value"
@@ -87,7 +87,7 @@
 
         <!-- Other Categories Group -->
         <CategoryGroup
-          title="Other Categories"
+          :title="i18nText('simulator.controls.spending.groupTitle.other', 'Other Categories')"
           :total-amount="totalOtherCategories"
           :expanded="expandedGroups.otherCategories"
           group-id="otherCategories"
@@ -98,7 +98,7 @@
             class="w-full"
           >
             <div class="other-categories-info">
-              <p>Adjust spending for additional federal budget categories. These categories represent specialized programs and investments.</p>
+              <p>{{ i18nText('simulator.controls.spending.otherIntro', 'Adjust spending for additional federal budget categories. These categories represent specialized programs and investments.') }}</p>
             </div>
             <div class="other-categories-grid">
               <div
@@ -109,7 +109,7 @@
                 <div class="other-category-header">
                   <h4>{{ group.name }}</h4>
                   <div class="other-category-base">
-                    Base: ${{ formatAmount(group.baseAmount) }}B
+                    {{ i18nText('simulator.controls.common.base', 'Base:') }} ${{ formatAmount(group.baseAmount) }}B
                     <CategoryInfo
                       :name="group.name"
                       :description="group.description || ''"
@@ -132,7 +132,7 @@
                     />
                     <button 
                       class="reset-button" 
-                      title="Reset to baseline"
+                      :title="i18nText('simulator.controls.common.resetTooltip', 'Reset to baseline')"
                       @click="updateCategoryAdjustment(group.id, 100)"
                     >
                       <span
@@ -143,7 +143,7 @@
                   </div>
                   <div class="other-category-impact">
                     <div class="impact-label">
-                      Current:
+                      {{ i18nText('simulator.controls.common.current', 'Current:') }}
                     </div>
                     <div
                       class="impact-value"
@@ -160,13 +160,13 @@
             <!-- Subcategories in a separate grid below -->
             <div class="mt-4 w-full">
               <h4 class="text-sm font-medium text-gray-700 mb-2">
-                Subcategories
+                {{ i18nText('simulator.controls.spending.subcategoriesTitle', 'Subcategories') }}
               </h4>
               <div class="grid grid-cols-1 gap-4 w-full">
                 <!-- Display Loans, Investments & Advances subcategories -->
                 <div class="w-full mb-4">
                   <div class="text-sm font-medium text-gray-700 mb-3 border-b border-gray-200 pb-1">
-                    Loans, Investments & Advances Subcategories
+                    {{ i18nText('simulator.controls.spending.loansSubTitle', 'Loans, Investments & Advances Subcategories') }}
                   </div>
                   <div class="subcategories-grid">
                     <div
@@ -177,7 +177,7 @@
                       <div class="subcategory-header">
                         <h4>{{ child.name }}</h4>
                         <div class="subcategory-base">
-                          Base: ${{ formatAmount(child.baseAmount) }}B
+                          {{ i18nText('simulator.controls.common.base', 'Base:') }} ${{ formatAmount(child.baseAmount) }}B
                           <CategoryInfo
                             :name="child.name"
                             :description="child.description || ''"
@@ -200,7 +200,7 @@
                           />
                           <button 
                             class="reset-button" 
-                            title="Reset to baseline"
+                            :title="i18nText('simulator.controls.common.resetTooltip', 'Reset to baseline')"
                             @click="updateCategoryAdjustment(child.id, 100)"
                           >
                             <span
@@ -211,7 +211,7 @@
                         </div>
                         <div class="subcategory-impact">
                           <div class="impact-label">
-                            Current:
+                            {{ i18nText('simulator.controls.common.current', 'Current:') }}
                           </div>
                           <div
                             class="impact-value"
@@ -230,13 +230,13 @@
               </div>
             </div>
             
-            <!-- Reset button for Other Categories -->
+            <!-- {{ i18nText('simulator.controls.common.reset', 'Reset') }} button for Other Categories -->
             <div class="mt-2 flex justify-end">
               <button
                 class="action-button reset-button"
                 @click="resetOtherCategories"
               >
-                Reset Other Categories
+                {{ i18nText('simulator.controls.common.reset', 'Reset') }} Other Categories
               </button>
             </div>
           </div>
@@ -269,7 +269,7 @@
                     {{ child.name }}
                   </h4>
                   <div class="gov-ops-base">
-                    Base: ${{ formatAmount(child.baseAmount) }}B
+                    {{ i18nText('simulator.controls.common.base', 'Base:') }} ${{ formatAmount(child.baseAmount) }}B
                     <CategoryInfo
                       :name="child.name"
                       :description="''"
@@ -298,7 +298,7 @@
                     />
                     <button 
                       class="reset-button gov-ops-reset" 
-                      title="Reset to baseline"
+                      :title="i18nText('simulator.controls.common.resetTooltip', 'Reset to baseline')"
                       @click="updateCategoryAdjustment(child.id, 100)"
                     >
                       <span
@@ -309,7 +309,7 @@
                   </div>
                   <div class="gov-ops-impact">
                     <div class="impact-label">
-                      Current:
+                      {{ i18nText('simulator.controls.common.current', 'Current:') }}
                     </div>
                     <div
                       class="impact-value"
@@ -323,13 +323,13 @@
               </div>
             </div>
             
-            <!-- Reset button for Government Operations -->
+            <!-- {{ i18nText('simulator.controls.common.reset', 'Reset') }} button for Government Operations -->
             <div class="mt-4 flex justify-end">
               <button
                 class="action-button reset-button"
                 @click="resetGovernmentOperations"
               >
-                Reset Government Ops
+                {{ i18nText('simulator.controls.common.reset', 'Reset') }} Government Ops
               </button>
             </div>
           </div>
@@ -355,7 +355,7 @@
               <div class="tax-expenditure-header">
                 <h4>{{ expenditure.name }}</h4>
                 <div class="tax-expenditure-base">
-                  Base: ${{ formatAmount(expenditure.netAmount) }}B
+                  {{ i18nText('simulator.controls.common.base', 'Base:') }} ${{ formatAmount(expenditure.netAmount) }}B
                   <CategoryInfo
                     :name="expenditure.name"
                     :description="expenditure.description || 'No description available.'"
@@ -380,10 +380,10 @@
                   />
                   <button 
                     class="reset-button" 
-                    title="Reset to baseline"
+                    :title="i18nText('simulator.controls.common.resetTooltip', 'Reset to baseline')"
                     @click="resetTaxExpenditure(expenditure.id)"
                   >
-                    Reset
+                    {{ i18nText('simulator.controls.common.reset', 'Reset') }}
                   </button>
                 </div>
                 <div class="tax-expenditure-impact">
@@ -407,7 +407,7 @@
                 class="reset-all-button"
                 @click="resetAllTaxExpenditures"
               >
-                Reset All
+                {{ i18nText('simulator.controls.common.reset', 'Reset') }} All
               </button>
             </div>
             <div class="stacked-bar">
@@ -458,6 +458,7 @@
 
 <script setup>
 import { computed, defineEmits, defineProps, ref } from 'vue';
+import { useI18n } from '@/i18n'
 import { useBudgetSimulatorStore } from '@/domains/budget/store/budgetSimulator';
 import CategoryGroup from './CategoryGroup.vue';
 // eslint-disable-next-line no-unused-vars
@@ -545,6 +546,11 @@ const emit = defineEmits([
 
 // Use store for additional data if needed
 const budgetStore = useBudgetSimulatorStore();
+const { t } = useI18n();
+const i18nText = (key, fallback = '') => {
+  const value = t(key)
+  return value == key ? fallback : value
+};
 
 // Add loading state
 const isUpdating = ref(false);
@@ -657,7 +663,7 @@ function updateCategoryAdjustment(categoryId, value) {
 
 function resetOtherCategories() {
   console.log('SpendingControls: resetOtherCategories called');
-  // Reset all other categories directly in the store
+  // {{ i18nText('simulator.controls.common.reset', 'Reset') }} all other categories directly in the store
   Object.values(budgetStore.spendingCategories)
     .filter(category => category.group === 'other' && !category.isGroup)
     .forEach(category => {
@@ -681,7 +687,7 @@ function resetOtherCategories() {
 
 function resetGovernmentOperations() {
   console.log('SpendingControls: resetGovernmentOperations called');
-  // Reset government operations directly in the store
+  // {{ i18nText('simulator.controls.common.reset', 'Reset') }} government operations directly in the store
   const govOps = budgetStore.spendingCategories.governmentOperations;
   if (govOps && govOps.children) {
     Object.values(govOps.children).forEach(child => {

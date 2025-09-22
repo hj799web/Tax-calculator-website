@@ -340,4 +340,71 @@ src/
 ### sentimentSettings.js
 - Manages public opinion
 - Controls sensitivity settings
-- Tracks regional variations 
+- Tracks regional variations
+
+### i18n System (`src/i18n/index.js`)
+
+#### Local i18n Module
+The application uses a custom, dependency-free i18n utility instead of vue-i18n:
+
+```javascript
+// Local i18n implementation
+export function useI18n() {
+  return {
+    t: (key, params = {}) => {
+      // Key lookup with parameter interpolation
+      const message = getMessage(key, currentLocale.value);
+      return interpolate(message, params);
+    },
+    locale: currentLocale
+  };
+}
+
+// Plugin interface for Vue app
+export default {
+  install(app) {
+    app.config.globalProperties.$t = (key, params) => t(key, params);
+    app.provide('i18n', { t, locale: currentLocale });
+  }
+};
+```
+
+#### Features
+- **Dependency-Free**: No external vue-i18n dependency
+- **LocalStorage Integration**: Persists locale selection across sessions
+- **Parameter Interpolation**: Supports `{param}` syntax for dynamic content
+- **Fallback System**: Falls back to EN if translation key not found
+- **Mojibake Fix**: Special handling for French language labels
+
+#### Translation Structure
+```javascript
+// EN translations
+{
+  "simulator": {
+    "header": {
+      "title": "Budget Simulator",
+      "subtitle": "Experience fiscal planning"
+    },
+    "nav": {
+      "overview": "Overview",
+      "results": "Results"
+    },
+    "sections": {
+      "revenue": { "title": "Revenue Sources" },
+      "spending": { "title": "Spending Categories" }
+    }
+  }
+}
+```
+
+#### Component Integration
+```javascript
+// In components
+import { useI18n } from '@/i18n'
+
+const { t } = useI18n()
+
+// Usage
+const title = t('simulator.header.title')
+const description = t('simulator.description.intro', { year: 2024 })
+``` 

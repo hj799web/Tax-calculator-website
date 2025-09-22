@@ -4,16 +4,17 @@
       @click="openOptions" 
       class="tour-button"
       v-if="!isTourActive"
+      :aria-label="t('tour.buttons.open')"
     >
       <span class="material-icons">lightbulb</span>
-      Interactive Tour
+      {{ t('tour.buttons.open') }}
     </button>
     <button 
       @click="resetTour"
       class="tour-reset-button"
       v-if="!isTourActive"
-      title="Reset and replay the tour"
-      aria-label="Reset and replay the tour"
+      :title="t('tour.buttons.resetTooltip')"
+      :aria-label="t('tour.buttons.resetTooltip')"
     >
       <span class="material-icons">restart_alt</span>
     </button>
@@ -22,20 +23,20 @@
       <div class="tour-options">
         <div class="tour-header">
           <span class="material-icons">explore</span>
-          <h3 id="tour-title">Pick a Tour</h3>
+          <h3 id="tour-title">{{ t('tour.options.title') }}</h3>
         </div>
-        <p class="tour-sub">Learn the tabs with a quick spotlight tour or go deeper.</p>
+        <p class="tour-sub">{{ t('tour.options.subtitle') }}</p>
         <div class="tour-actions">
           <button class="tour-action primary" @click="startTour('quick')">
             <span class="material-icons">bolt</span>
-            Quick Tour
+            {{ t('tour.options.quick') }}
           </button>
           <button class="tour-action" @click="startTour('full')">
             <span class="material-icons">tour</span>
-            Full Tour
+            {{ t('tour.options.full') }}
           </button>
         </div>
-        <button class="tour-skip" @click="dismissOptions">Skip for now</button>
+        <button class="tour-skip" @click="dismissOptions">{{ t('tour.options.skip') }}</button>
       </div>
     </div>
 
@@ -44,7 +45,9 @@
 </template>
 
 <script>
+/* eslint-disable */
 import { ref, onMounted, onUnmounted } from 'vue'
+import { useI18n } from '@/i18n'
 import Shepherd from 'shepherd.js'
 import 'shepherd.js/dist/css/shepherd.css'
 import { handleError } from '@/utils/errorHandler.js';
@@ -52,6 +55,7 @@ import { handleError } from '@/utils/errorHandler.js';
 export default {
   name: 'OnboardingTour',
   setup() {
+    const { t } = useI18n()
     const tour = ref(null)
     const isTourActive = ref(false)
     const isInitialized = ref(false)
@@ -132,18 +136,18 @@ export default {
       // Tab-focused tour steps
       tour.value.addStep({
         id: 'welcome',
-        text: '<div class="tour-head">Welcome!</div><div>Let\'s explore the tabs. We\'ll highlight each area while dimming the rest.</div>',
+        text: `<div class="tour-head">${t('tour.steps.welcome.title')}</div><div>${t('tour.steps.welcome.body')}</div>`,
         classes: 'shepherd-welcome-step',
         attachTo: { element: '.panel-banner', on: 'bottom' },
         buttons: [
-          { text: 'Skip', action: tour.value.cancel },
-          { text: 'Next', action: tour.value.next }
+          { text: t('tour.actions.skip'), action: tour.value.cancel },
+          { text: t('tour.actions.next'), action: tour.value.next }
         ]
       })
 
       tour.value.addStep({
         id: 'pinned',
-        text: '<div class="tour-head">Pinned</div><div>Your most-used tabs appear here for quick access.</div>',
+        text: `<div class="tour-head">${t('tour.steps.pinned.title')}</div><div>${t('tour.steps.pinned.body')}</div>`,
         attachTo: { element: '[data-panel-group="pinned"]', on: 'right' },
         popperOptions: {
           placement: 'right',
@@ -154,93 +158,93 @@ export default {
           ]
         },
         when: { show() { ensureExpandedMobile() } },
-        buttons: [ { text: 'Back', action: tour.value.back }, { text: 'Next', action: tour.value.next } ]
+        buttons: [ { text: t('tour.actions.back'), action: tour.value.back }, { text: t('tour.actions.next'), action: tour.value.next } ]
       })
 
       tour.value.addStep({
         id: 'revenue',
-        text: '<div class="tour-head">Revenue</div><div>Adjust federal revenue sources.</div><div class="wiggle-arrow"/>',
+        text: `<div class="tour-head">${t('tour.steps.revenue.title')}</div><div>${t('tour.steps.revenue.body')}</div><div class="wiggle-arrow"/>`,
         attachTo: { element: '[data-panel-key="revenue"]', on: 'bottom' },
         beforeShowPromise: () => new Promise((res) => { clickTab('revenue'); setTimeout(res, 150); }),
-        buttons: [ { text: 'Back', action: tour.value.back }, { text: 'Next', action: tour.value.next } ]
+        buttons: [ { text: t('tour.actions.back'), action: tour.value.back }, { text: t('tour.actions.next'), action: tour.value.next } ]
       })
 
       // Full: Revenue details
       tour.value.addStep({
         id: 'revenue-explainer',
-        text: '<div class="tour-head">How revenue works</div><div>We use simplified effective rates. This section explains assumptions.</div>',
+        text: `<div class="tour-head">${t('tour.steps.revenueExplainer.title')}</div><div>${t('tour.steps.revenueExplainer.body')}</div>`,
         attachTo: { element: '.revenue-explanation', on: 'bottom' },
         beforeShowPromise: () => new Promise((res) => { clickTab('revenue'); setTimeout(res, 120); }),
-        buttons: [ { text: 'Back', action: tour.value.back }, { text: 'Next', action: tour.value.next } ]
+        buttons: [ { text: t('tour.actions.back'), action: tour.value.back }, { text: t('tour.actions.next'), action: tour.value.next } ]
       })
       tour.value.addStep({
         id: 'revenue-controls',
-        text: '<div class="tour-head">Sliders</div><div>Adjust rates and see immediate revenue impact. Each group can be expanded.</div>',
+        text: `<div class="tour-head">${t('tour.steps.revenueControls.title')}</div><div>${t('tour.steps.revenueControls.body')}</div>`,
         attachTo: { element: '.revenue-controls', on: 'top' },
         beforeShowPromise: () => new Promise((res) => { clickTab('revenue'); setTimeout(res, 120); }),
-        buttons: [ { text: 'Back', action: tour.value.back }, { text: 'Next', action: tour.value.next } ]
+        buttons: [ { text: t('tour.actions.back'), action: tour.value.back }, { text: t('tour.actions.next'), action: tour.value.next } ]
       })
 
       tour.value.addStep({
         id: 'spending',
-        text: '<div class="tour-head">Spending</div><div>Prioritize spending categories and tax expenditures.</div><div class="wiggle-arrow"/>',
+        text: `<div class="tour-head">${t('tour.steps.spending.title')}</div><div>${t('tour.steps.spending.body')}</div><div class="wiggle-arrow"/>`,
         attachTo: { element: '[data-panel-key="spending"]', on: 'bottom' },
         beforeShowPromise: () => new Promise((res) => { clickTab('spending'); setTimeout(res, 150); }),
-        buttons: [ { text: 'Back', action: tour.value.back }, { text: 'Next', action: tour.value.next } ]
+        buttons: [ { text: t('tour.actions.back'), action: tour.value.back }, { text: t('tour.actions.next'), action: tour.value.next } ]
       })
 
       // Full: Spending details
       tour.value.addStep({
         id: 'spending-main',
-        text: '<div class="tour-head">Main categories</div><div>Adjust big-ticket programs here. Use Reset to return to baseline.</div>',
+        text: `<div class="tour-head">${t('tour.steps.spendingMain.title')}</div><div>${t('tour.steps.spendingMain.body')}</div>`,
         attachTo: { element: '.main-categories-grid', on: 'top' },
         beforeShowPromise: () => new Promise((res) => { clickTab('spending'); setTimeout(res, 120); }),
-        buttons: [ { text: 'Back', action: tour.value.back }, { text: 'Next', action: tour.value.next } ]
+        buttons: [ { text: t('tour.actions.back'), action: tour.value.back }, { text: t('tour.actions.next'), action: tour.value.next } ]
       })
       tour.value.addStep({
         id: 'spending-taxexp',
-        text: '<div class="tour-head">Tax expenditures</div><div>These reduce revenue via credits/deductions. Tweak cautiously.</div>',
+        text: `<div class="tour-head">${t('tour.steps.spendingTaxExp.title')}</div><div>${t('tour.steps.spendingTaxExp.body')}</div>`,
         attachTo: { element: '.tax-expenditures-grid', on: 'top' },
         beforeShowPromise: () => new Promise((res) => { clickTab('spending'); setTimeout(res, 120); }),
-        buttons: [ { text: 'Back', action: tour.value.back }, { text: 'Next', action: tour.value.next } ]
+        buttons: [ { text: t('tour.actions.back'), action: tour.value.back }, { text: t('tour.actions.next'), action: tour.value.next } ]
       })
       tour.value.addStep({
         id: 'spending-reset',
-        text: '<div class="tour-head">Reset controls</div><div>Each tile includes a Reset to baseline. Handy for exploring.</div>',
+        text: `<div class="tour-head">${t('tour.steps.spendingReset.title')}</div><div>${t('tour.steps.spendingReset.body')}</div>`,
         attachTo: { element: '.reset-button', on: 'top' },
         beforeShowPromise: () => new Promise((res) => { clickTab('spending'); setTimeout(res, 120); }),
-        buttons: [ { text: 'Back', action: tour.value.back }, { text: 'Next', action: tour.value.next } ]
+        buttons: [ { text: t('tour.actions.back'), action: tour.value.back }, { text: t('tour.actions.next'), action: tour.value.next } ]
       })
 
       tour.value.addStep({
         id: 'results',
-        text: '<div class="tour-head">Results</div><div>See surplus/deficit, debt-to-GDP, and export.</div><div class="wiggle-arrow"/>',
+        text: `<div class="tour-head">${t('tour.steps.results.title')}</div><div>${t('tour.steps.results.body')}</div><div class="wiggle-arrow"/>`,
         attachTo: { element: '[data-panel-key="results"]', on: 'bottom' },
         beforeShowPromise: () => new Promise((res) => { clickTab('results'); setTimeout(res, 150); }),
-        buttons: [ { text: 'Back', action: tour.value.back }, { text: 'Next', action: tour.value.next } ]
+        buttons: [ { text: t('tour.actions.back'), action: tour.value.back }, { text: t('tour.actions.next'), action: tour.value.next } ]
       })
       tour.value.addStep({
         id: 'results-deficit',
-        text: '<div class="tour-head">Warnings</div><div>When deficits are large, a banner explains risk levels.</div>',
+        text: `<div class="tour-head">${t('tour.steps.resultsDeficit.title')}</div><div>${t('tour.steps.resultsDeficit.body')}</div>`,
         attachTo: { element: '.deficit-warning-banner', on: 'bottom' },
         beforeShowPromise: () => new Promise((res) => { clickTab('results'); setTimeout(res, 120); }),
-        buttons: [ { text: 'Back', action: tour.value.back }, { text: 'Next', action: tour.value.next } ]
+        buttons: [ { text: t('tour.actions.back'), action: tour.value.back }, { text: t('tour.actions.next'), action: tour.value.next } ]
       })
       tour.value.addStep({
         id: 'results-download',
-        text: '<div class="tour-head">Download</div><div>Save charts as images using the download button.</div>',
+        text: `<div class="tour-head">${t('tour.steps.resultsDownload.title')}</div><div>${t('tour.steps.resultsDownload.body')}</div>`,
         attachTo: { element: '.download-button', on: 'bottom' },
         beforeShowPromise: () => new Promise((res) => { clickTab('results'); setTimeout(res, 120); }),
-        buttons: [ { text: 'Back', action: tour.value.back }, { text: 'Next', action: tour.value.next } ]
+        buttons: [ { text: t('tour.actions.back'), action: tour.value.back }, { text: t('tour.actions.next'), action: tour.value.next } ]
       })
 
       // Projections: Multi-year planning lives here
       tour.value.addStep({
         id: 'projections',
-        text: '<div class="tour-head">Projections</div><div>Plan across years. Adjust assumptions and program spending growth, then review the table.</div><div class="wiggle-arrow"/>',
+        text: `<div class="tour-head">${t('tour.steps.projectionsOverview.title')}</div><div>${t('tour.steps.projectionsOverview.body')}</div><div class="wiggle-arrow"/>`,
         attachTo: { element: '[data-panel-key="projections"]', on: 'bottom' },
         beforeShowPromise: () => new Promise((res) => { clickTab('projections'); setTimeout(res, 150); }),
-        buttons: [ { text: 'Back', action: tour.value.back }, { text: 'Next', action: tour.value.next } ]
+        buttons: [ { text: t('tour.actions.back'), action: tour.value.back }, { text: t('tour.actions.next'), action: tour.value.next } ]
       })
       tour.value.addStep({
         id: 'proj-controls',
@@ -282,21 +286,21 @@ export default {
 
       tour.value.addStep({
         id: 'sentiment',
-        text: '<div class="tour-head">Sentiment</div><div>Track how groups react to your budget.</div><div class="wiggle-arrow"/>',
+        text: `<div class=\"tour-head\">${t('tour.steps.sentiment.title')}</div><div>${t('tour.steps.sentiment.body')}</div><div class=\"wiggle-arrow\"/>`,
         attachTo: { element: '[data-panel-key="sentiment"]', on: 'bottom' },
         beforeShowPromise: () => new Promise((res) => { clickTab('sentiment'); setTimeout(res, 150); }),
         buttons: [ { text: 'Back', action: tour.value.back }, { text: 'Next', action: tour.value.next } ]
       })
       tour.value.addStep({
         id: 'sentiment-control',
-        text: '<div class="tour-head">Sensitivity</div><div>Adjust sentiment sensitivity to see more/less impact.</div>',
+        text: `<div class=\"tour-head\">${t('tour.steps.sentimentControl.title')}</div><div>${t('tour.steps.sentimentControl.body')}</div>`,
         attachTo: { element: '.sentiment-panel .controls', on: 'bottom' },
         beforeShowPromise: () => new Promise((res) => { clickTab('sentiment'); setTimeout(res, 120); }),
         buttons: [ { text: 'Back', action: tour.value.back }, { text: 'Next', action: tour.value.next } ]
       })
       tour.value.addStep({
         id: 'sentiment-groups',
-        text: '<div class="tour-head">Groups</div><div>Toggle between regions, demographics, and sectors.</div>',
+        text: `<div class=\"tour-head\">${t('tour.steps.sentimentGroups.title')}</div><div>${t('tour.steps.sentimentGroups.body')}</div>`,
         attachTo: { element: '.sentiment-panel .group-tabs', on: 'top' },
         beforeShowPromise: () => new Promise((res) => { clickTab('sentiment'); setTimeout(res, 120); }),
         buttons: [ { text: 'Back', action: tour.value.back }, { text: 'Next', action: tour.value.next } ]
@@ -304,21 +308,21 @@ export default {
 
       tour.value.addStep({
         id: 'projections',
-        text: '<div class="tour-head">Projections</div><div>Plan multiple years ahead.</div><div class="wiggle-arrow"/>',
+        text: `<div class=\"tour-head\">${t('tour.steps.projectionsShort.title')}</div><div>${t('tour.steps.projectionsShort.body')}</div><div class=\"wiggle-arrow\"/>`,
         attachTo: { element: '[data-panel-key="projections"]', on: 'bottom' },
         beforeShowPromise: () => new Promise((res) => { clickTab('projections'); setTimeout(res, 150); }),
         buttons: [ { text: 'Back', action: tour.value.back }, { text: 'Next', action: tour.value.next } ]
       })
       tour.value.addStep({
         id: 'projections-assumptions',
-        text: '<div class="tour-head">Assumptions</div><div>Edit growth, inflation, rates and horizon. Presets available.</div>',
+        text: `<div class=\"tour-head\">${t('tour.steps.projectionsAssumptions.title')}</div><div>${t('tour.steps.projectionsAssumptions.body')}</div>`,
         attachTo: { element: '.multi-year-panel .assumptions', on: 'bottom' },
         beforeShowPromise: () => new Promise((res) => { clickTab('projections'); setTimeout(res, 120); }),
         buttons: [ { text: 'Back', action: tour.value.back }, { text: 'Next', action: tour.value.next } ]
       })
       tour.value.addStep({
         id: 'projections-table',
-        text: '<div class="tour-head">Outcomes</div><div>Review GDP, revenue, spend, deficit, debt, and debt/GDP by year.</div>',
+        text: `<div class=\"tour-head\">${t('tour.steps.projectionsTable.title')}</div><div>${t('tour.steps.projectionsTable.body')}</div>`,
         attachTo: { element: '.multi-year-panel .proj-table', on: 'top' },
         beforeShowPromise: () => new Promise((res) => { clickTab('projections'); setTimeout(res, 120); }),
         buttons: [ { text: 'Back', action: tour.value.back }, { text: 'Next', action: tour.value.next } ]
@@ -334,10 +338,10 @@ export default {
 
       tour.value.addStep({
         id: 'export',
-        text: '<div class="tour-head">Export</div><div>Save your budget to PDF and share.</div><div class="wiggle-arrow"/>',
+        text: `<div class="tour-head">${t('tour.steps.export.title')}</div><div>${t('tour.steps.export.body')}</div><div class="wiggle-arrow"/>`,
         attachTo: { element: '[data-panel-key="export"]', on: 'bottom' },
         beforeShowPromise: () => new Promise((res) => { clickTab('export'); setTimeout(res, 150); }),
-        buttons: [ { text: 'Back', action: tour.value.back }, { text: 'Finish', action: tour.value.complete } ]
+        buttons: [ { text: t('tour.actions.back'), action: tour.value.back }, { text: t('tour.actions.finish'), action: tour.value.complete } ]
       })
       tour.value.addStep({
         id: 'export-options',
@@ -349,7 +353,7 @@ export default {
 
       tour.value.addStep({
         id: 'revenue-sources',
-        text: 'Adjust revenue sources like taxes and fees to generate income for the government.',
+        text: t('tour.steps.revenueSources.body'),
         attachTo: {
           element: '#revenue-sources',
           on: 'top'
@@ -360,11 +364,11 @@ export default {
         },
         buttons: [
           {
-            text: 'Back',
+            text: t('tour.actions.back'),
             action: tour.value.back
           },
           {
-            text: 'Next',
+            text: t('tour.actions.next'),
             action: tour.value.next
           }
         ]
@@ -372,7 +376,7 @@ export default {
 
       tour.value.addStep({
         id: 'spending-controls',
-        text: 'Manage government spending across different sectors and programs.',
+        text: t('tour.steps.spendingControls.body'),
         attachTo: {
           element: '#spending-controls',
           on: 'top'
@@ -383,11 +387,11 @@ export default {
         },
         buttons: [
           {
-            text: 'Back',
+            text: t('tour.actions.back'),
             action: tour.value.back
           },
           {
-            text: 'Next',
+            text: t('tour.actions.next'),
             action: tour.value.next
           }
         ]
@@ -395,7 +399,7 @@ export default {
 
       tour.value.addStep({
         id: 'budget-results',
-        text: 'View your budget results and see how your decisions affect the overall financial picture.',
+        text: t('tour.steps.budgetResults.body'),
         attachTo: {
           element: '#budget-results',
           on: 'top'
@@ -406,11 +410,11 @@ export default {
         },
         buttons: [
           {
-            text: 'Back',
+            text: t('tour.actions.back'),
             action: tour.value.back
           },
           {
-            text: 'Next',
+            text: t('tour.actions.next'),
             action: tour.value.next
           }
         ]
@@ -418,7 +422,7 @@ export default {
 
       tour.value.addStep({
         id: 'public-sentiment',
-        text: 'Monitor public sentiment to understand how your budget decisions are received by different groups.',
+        text: t('tour.steps.publicSentiment.body'),
         attachTo: {
           element: '#public-sentiment',
           on: 'top'
@@ -429,11 +433,11 @@ export default {
         },
         buttons: [
           {
-            text: 'Back',
+            text: t('tour.actions.back'),
             action: tour.value.back
           },
           {
-            text: 'Finish',
+            text: t('tour.actions.finish'),
             action: tour.value.complete
           }
         ]
@@ -461,8 +465,41 @@ export default {
             })
           })
         }
+        // Generic i18n relabel for legacy button texts
+        try {
+          const btns = event?.step?.options?.buttons
+          if (Array.isArray(btns)) {
+            const relabeled = btns.map((b) => {
+              const txt = typeof b.text === 'string' ? b.text : ''
+              if (txt === 'Back') return { ...b, text: t('tour.actions.back') }
+              if (txt === 'Next') return { ...b, text: t('tour.actions.next') }
+              if (txt === 'Finish') return { ...b, text: t('tour.actions.finish') }
+              if (txt === 'Skip') return { ...b, text: t('tour.actions.skip') }
+              return b
+            })
+            event.step.updateStepOptions({ buttons: relabeled })
+          }
+        } catch (e) { void e }
+
         // Skip non-quick steps if user chose Quick Tour
         const id = event?.step?.id
+        // Patch any legacy hard-coded steps at runtime to i18n
+        if (id === 'proj-controls') {
+          try {
+            event.step.updateStepOptions({
+              text: `<div class=\"tour-head\">${t('tour.steps.projControls.title')}</div><div>${t('tour.steps.projControls.body')}</div>`,
+              buttons: [ { text: t('tour.actions.back'), action: tour.value.back }, { text: t('tour.actions.next'), action: tour.value.next } ]
+            })
+          } catch (e) { void e }
+        }
+        if (id === 'export-options') {
+          try {
+            event.step.updateStepOptions({
+              text: `<div class=\"tour-head\">${t('tour.steps.exportOptions.title')}</div><div>${t('tour.steps.exportOptions.body')}</div>`,
+              buttons: [ { text: t('tour.actions.back'), action: tour.value.back }, { text: t('tour.actions.finish'), action: tour.value.complete } ]
+            })
+          } catch (e) { void e }
+        }
         const quickAllowed = new Set(['welcome','pinned','revenue','spending','projections','results'])
         if (selectedMode.value === 'quick' && id && !quickAllowed.has(id)) {
           setTimeout(() => { try { tour.value.next() } catch (e) { void e } }, 0)

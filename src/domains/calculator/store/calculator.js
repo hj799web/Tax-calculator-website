@@ -4,6 +4,7 @@ import { useSalaryStore } from '@/domains/calculator/store/salary.js'
 import { useYearStore } from '@/domains/calculator/store/year.js'
 import { useConfigStore } from "@/domains/calculator/store/config.js";
 import { createValidatedAction } from '@/utils/storeActionWrapper.js';
+import { useI18n } from '@/i18n';
 import {
   calculateBracketTax,
   calculateDividendTaxCredit,
@@ -61,6 +62,12 @@ export const useCalculatorStore = defineStore('calculator', () => {
   } = storeToRefs(useConfigStore())
   
   const yearStore = useYearStore();
+  const { t } = useI18n();
+  
+  const translate = (key, fallback = '', params) => {
+    const value = t(key, params)
+    return value === key ? fallback : value
+  }
 
   const selectedRegion = ref('')
   const income = ref(undefined)
@@ -316,16 +323,52 @@ export const useCalculatorStore = defineStore('calculator', () => {
     }));
   });
 
+  // Function to get translated category name
+  const getTranslatedCategoryName = (categoryId, year) => {
+    const categoryKey = `budgetCategories.y${year}.${getCategoryKeyById(categoryId)}.name`;
+    return translate(categoryKey, getCategoryNameById(categoryId));
+  };
+
+  // Helper function to get category key by ID
+  const getCategoryKeyById = (id) => {
+    const keyMap = {
+      1: 'healthcare',
+      2: 'childrenAndFamilies', 
+      3: 'indigenousServices',
+      4: 'employmentInsuranceAndBenefits',
+      5: 'supportForSeniors',
+      6: 'defense',
+      7: 'publicSafetyAndEmergencyPreparedness',
+      8: 'internationalAffairsAndDevelopment',
+      9: 'publicDebtCharges',
+      10: 'loansInvestmentsAndAdvances',
+      11: 'otherGovernmentOperations'
+    };
+    return keyMap[id] || 'unknown';
+  };
+
+  // Helper function to get original category name by ID
+  const getCategoryNameById = (id) => {
+    const budgetCats = yearStore.budgetYear === '2024' ? budgetCategories2024 : budgetCategories2022;
+    const category = budgetCats.find(cat => cat.id === id);
+    return category ? category.name : 'Unknown Category';
+  };
+
   const sortedBudgetCategories = computed(() => {
     const budgetCats = yearStore.budgetYear === '2024' ? budgetCategories2024 : budgetCategories2022;
-    const categoriesCopy = budgetCats;
+    const year = yearStore.budgetYear === '2024' ? '2024' : '2022';
+    const categoriesCopy = budgetCats.map(cat => ({ ...cat }));
+    
     categoriesCopy.forEach(cat => {
       const allocated = (netFederalTaxPerPeriod.value * cat.amount) / totalBudget.value;
       cat.allocatedAmount = allocated || 0;
       cat.percentage = netFederalTaxPerPeriod.value
         ? (allocated / netFederalTaxPerPeriod.value) * 100
         : 0;
+      // Replace the name with translated version
+      cat.name = getTranslatedCategoryName(cat.id, year);
     });
+    
     return categoriesCopy.sort((a, b) =>
       sortOrder.value === 'asc'
         ? a.allocatedAmount - b.allocatedAmount
@@ -426,6 +469,7 @@ export const useCalculatorStore = defineStore('calculator', () => {
     totalCapitalGains,
     grossedUpEligibleDividends,
     grossedUpIneligibleDividends,
+    netFederalTaxAnnual,
     netFederalTaxPerPeriod,
     federalTaxPercentage,
     netProvincialTaxPerPeriod,

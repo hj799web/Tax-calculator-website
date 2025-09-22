@@ -1,0 +1,1381 @@
+{
+  "home": {
+    "language": {
+      "switchLabel": "Changer de langue",
+      "english": "Anglais",
+      "french": "Français"
+    },
+    "nav": {
+      "home": "Accueil",
+      "howItWorks": "Comment ça fonctionne",
+      "simulator": "Essayer le simulateur budgétaire",
+      "cra": "ARC"
+    },
+    "alt": {
+      "logo": "Logo de Fiscal Insights",
+      "email": "Courriel",
+      "instagram": "Instagram",
+      "linkedin": "LinkedIn"
+    },
+    "header": {
+      "title": "Calculateur d’impôt du Canada",
+      "subtitle": "Obtenez un portrait précis de vos impôts et découvrez où vont vos dollars grâce à notre calculateur gratuit."
+    },
+    "year": {
+      "title": "Choisissez l’année d’imposition",
+      "note": {
+        "2024": "Utilise les taux d’imposition 2024 et les projections budgétaires associées",
+        "2025": "Utilise les taux d’imposition 2025 avec les projections de dépenses 2025-2026",
+        "default": "Utilise les taux d’imposition {year} avec les données budgétaires 2022-2023"
+      }
+    },
+    "tabs": {
+      "calculator": "Calculateur",
+      "breakdown": "Répartition du budget",
+      "categories": "Catégories",
+      "faqs": "FAQ",
+      "resources": "Ressources"
+    },
+    "sections": {
+      "breakdown": {
+        "title": "Comprendre la répartition de vos impôts",
+        "description": "Voyez comment vos dollars d’impôt sont répartis entre les différents postes de dépenses du gouvernement. Cette visualisation explique exactement où va votre argent et comment il finance les services publics."
+      },
+      "categories": {
+        "title": "Catégories budgétaires",
+        "description": {
+          "2023": "Ces catégories budgétaires correspondent à l’exercice 2022-2023. Les données des Comptes publics du Canada illustrent l’allocation des fonds fédéraux pour la santé, la défense, l’infrastructure et plus encore.",
+          "2024": "Ces catégories budgétaires correspondent à l’exercice 2023-2024. Les allocations reflètent les dépenses proposées dans le budget fédéral 2023-2024.",
+          "2025": "Ces catégories budgétaires correspondent à l’exercice 2025-2026 et reflètent les dépenses fédérales projetées pour 2025-2026.",
+          "fallback": "Ces catégories budgétaires reposent sur les données les plus récentes disponibles."
+        }
+      },
+      "faqs": {
+        "title": "Questions fréquentes des contribuables"
+      },
+      "resources": {
+        "title": "Ressources fiscales complémentaires",
+        "description": "Consultez ces sources fiables pour approfondir vos connaissances sur la fiscalité canadienne, les dépenses gouvernementales et la planification financière.",
+        "links": {
+          "howItWorks": "Comment ça fonctionne",
+          "cra": "Agence du revenu du Canada",
+          "finance": "Ministère des Finances du Canada",
+          "budget": "Budget 2024",
+          "publicAccounts": "Comptes publics du Canada"
+        }
+      }
+    },
+    "actions": {
+      "hide": "Masquer",
+      "show": "Afficher"
+    },
+    "footer": {
+      "about": {
+        "title": "À propos de nous",
+        "body": "Fiscal Insights offre gratuitement des calculateurs d’impôt et des outils financiers pour aider les Canadiennes et Canadiens à comprendre leurs impôts et les dépenses gouvernementales."
+      },
+      "connect": {
+        "title": "Nous joindre",
+        "contact": "Nous contacter"
+      },
+      "legal": {
+        "title": "Informations légales",
+        "terms": "Conditions d’utilisation"
+      },
+      "bottom": {
+        "contact": "Nous écrire :",
+        "copy": "Fiscal Insights. Tous droits réservés."
+      },
+      "social": {
+        "instagram": "@fiscal_insights1",
+        "linkedin": "Fiscal Insights Canada"
+      }
+    },
+    "beta": {
+      "cta": "Aidez-nous à nous améliorer"
+    }
+  },
+  "welcome": {
+    "meta": {
+      "title": "Calculateur d'impôt du Canada 2025 | Voyez vos impôts et les dépenses gouvernementales",
+      "description": "Utilisez notre calculateur d'impôt du Canada gratuit pour obtenir une répartition précise de vos impôts 2025 et voir comment le gouvernement canadien dépense vos dollars d'impôt dans différentes catégories."
+    },
+    "header": {
+      "title": "Calculateur d'impôt du Canada",
+      "subtitle": "Obtenez une répartition précise de vos impôts 2024 et découvrez comment votre argent est dépensé par le gouvernement canadien grâce à notre calculateur gratuit et facile à utiliser.",
+      "cta": "Commencer le calcul maintenant"
+    },
+    "nav": {
+      "howItWorks": "Comment ça fonctionne",
+      "cra": "ARC"
+    },
+    "features": {
+      "accurate": {
+        "title": "Répartition précise des impôts",
+        "description": "Obtenez une répartition détaillée des impôts fédéraux et provinciaux basée sur votre revenu et votre province de résidence, en utilisant les derniers taux d'imposition 2024."
+      },
+      "spending": {
+        "title": "Visualisation des dépenses gouvernementales",
+        "description": "Voyez exactement comment vos dollars d'impôt sont alloués entre les différentes catégories de dépenses gouvernementales comme la santé, l'éducation et la défense."
+      },
+      "income": {
+        "title": "Multiples types de revenus",
+        "description": "Calculez les impôts pour le revenu d'emploi, le travail autonome, les gains en capital, les dividendes et plus encore avec notre calculateur complet."
+      }
+    },
+    "about": {
+      "title": "Comprendre les impôts canadiens en 2025",
+      "intro": "Le système fiscal canadien est basé sur une structure d'impôt progressive, où les niveaux de revenus plus élevés sont imposés à des taux plus élevés. Les gouvernements fédéral et provinciaux/territoriaux perçoivent des impôts sur le revenu des particuliers.",
+      "federal": {
+        "title": "Tranches d'imposition fédérales (2024)",
+        "brackets": [
+          "15 % sur les premiers 53 359 $ de revenu imposable",
+          "20,5 % sur le revenu imposable de plus de 53 359 $ jusqu'à 106 717 $",
+          "26 % sur le revenu imposable de plus de 106 717 $ jusqu'à 165 430 $",
+          "29 % sur le revenu imposable de plus de 165 430 $ jusqu'à 235 675 $",
+          "33 % sur le revenu imposable de plus de 235 675 $"
+        ]
+      },
+      "credits": {
+        "title": "Principaux crédits d'impôt et déductions",
+        "items": [
+          "Montant personnel de base : 15 000 $ (2024)",
+          "Cotisations REER : Jusqu'à 18 % du revenu de l'année précédente",
+          "Frais médicaux : Dépenses admissibles dépassant le moindre de 2 635 $ ou 3 % du revenu net",
+          "Dons de charité : Crédits d'impôt pour les dons aux organismes de bienfaisance enregistrés"
+        ]
+      },
+      "conclusion": "Notre calculateur vous aide à comprendre comment ces taux et crédits s'appliquent à votre situation spécifique, vous donnant une image claire de vos obligations fiscales et de la façon dont vos dollars d'impôt contribuent aux services gouvernementaux."
+    },
+    "faq": {
+      "title": "Questions fréquemment posées",
+      "items": [
+        {
+          "question": "Combien d'impôt je paie au Canada ?",
+          "answer": "Le montant d'impôt que vous payez au Canada dépend de votre niveau de revenu, de votre province de résidence et des déductions admissibles. Le Canada utilise un système d'imposition progressive où les niveaux de revenus plus élevés sont imposés à des taux plus élevés. Notre calculateur vous aide à estimer les impôts fédéraux et provinciaux basés sur votre situation spécifique, vous donnant une image claire de votre obligation fiscale totale pour 2024."
+        },
+        {
+          "question": "Comment le gouvernement canadien dépense-t-il mes impôts ?",
+          "answer": "Vos dollars d'impôt financent un large éventail de services et programmes gouvernementaux. Les principales catégories de dépenses incluent les transferts de santé aux provinces, les programmes sociaux comme la Sécurité de la vieillesse et l'Allocation canadienne pour enfants, la défense nationale, les projets d'infrastructure et le service de la dette. Notre calculateur fournit une répartition visuelle de la façon dont votre contribution fiscale spécifique est distribuée à travers ces catégories, vous aidant à comprendre exactement où va votre argent."
+        },
+        {
+          "question": "Mes données sont-elles sécurisées lors de l'utilisation du calculateur ?",
+          "answer": "Oui ! Tous les calculs sont effectués dans votre navigateur. Nous ne stockons aucune de vos informations personnelles ou financières sur nos serveurs. Votre confidentialité et la sécurité de vos données sont nos priorités absolues."
+        },
+        {
+          "question": "À quelle fréquence le calculateur est-il mis à jour ?",
+          "answer": "Nous mettons à jour le calculateur annuellement pour refléter les changements dans les taux d'imposition, les tranches et les allocations de dépenses gouvernementales. La version actuelle utilise les taux d'imposition 2024 et les dernières données de dépenses gouvernementales disponibles."
+        },
+        {
+          "question": "Puis-je utiliser le calculateur pour les impôts d'entreprise ?",
+          "answer": "Le calculateur est conçu pour les impôts sur le revenu des particuliers. Les impôts d'entreprise impliquent des règles et considérations différentes. Pour les calculs d'impôts d'entreprise, nous recommandons de consulter un comptable professionnel ou un spécialiste fiscal."
+        }
+      ]
+    },
+    "simulator": {
+      "title": "Essayez le simulateur budgétaire du ministre des Finances",
+      "description": "Mettez-vous dans la peau du ministre des Finances du Canada ! Créez votre propre budget fédéral en ajustant les taux d'imposition et les priorités de dépenses. Voyez comment vos décisions impactent l'économie, les niveaux de dette et les différents segments de la société.",
+      "cta": "Lancer le simulateur",
+      "features": [
+        {
+          "icon": "trending_up",
+          "title": "Suivre l'impact économique",
+          "description": "Surveillez la croissance du PIB, le ratio dette/PIB et l'équilibre fiscal au fur et à mesure que vous prenez des décisions budgétaires."
+        },
+        {
+          "icon": "people",
+          "title": "Opinion publique",
+          "description": "Voyez comment différents groupes démographiques réagissent à vos choix budgétaires."
+        },
+        {
+          "icon": "emoji_events",
+          "title": "Gagnez des badges",
+          "description": "Obtenez des badges spéciaux pour avoir créé des budgets équilibrés et pris des décisions impactantes."
+        }
+      ]
+    },
+    "footer": {
+      "cta": "Essayez le calculateur d'impôt du Canada maintenant",
+      "links": {
+        "howItWorks": "Comment ça fonctionne",
+        "contact": "Nous contacter",
+        "feedback": "Commentaires",
+        "cra": "ARC"
+      },
+      "copyright": "© 2025 Fiscal Insights. Tous droits réservés. | Dernière mise à jour : mai 2025"
+    }
+  },
+  "calculator": {
+    "title": "Estimez vos impôts",
+    "description": "Calculez vos impôts fédéraux et provinciaux pour estimer votre revenu net.",
+    "simulator": {
+      "cta": "Essayer le simulateur budgétaire",
+      "aria": "Ouvrir le simulateur budgétaire"
+    },
+    "sections": {
+      "additionalIncome": "Sources de revenus supplémentaires",
+      "deductions": "Déductions et crédits"
+    },
+    "regionSelector": {
+      "aria": "Sélectionnez une province ou un territoire",
+      "placeholder": "Choisissez votre province ou territoire",
+      "options": {
+        "AB": "Alberta",
+        "BC": "Colombie-Britannique",
+        "MB": "Manitoba",
+        "NB": "Nouveau-Brunswick",
+        "NL": "Terre-Neuve-et-Labrador",
+        "NS": "Nouvelle-Écosse",
+        "ON": "Ontario",
+        "PE": "Île-du-Prince-Édouard",
+        "QC": "Québec",
+        "SK": "Saskatchewan",
+        "NT": "Territoires du Nord-Ouest",
+        "NU": "Nunavut",
+        "YT": "Yukon"
+      }
+    },
+    "salary": {
+      "title": "Sélecteur de fréquence salariale",
+      "aria": "Choisir la fréquence {label} du revenu",
+      "options": {
+        "annual": "Annuel",
+        "monthly": "Mensuel",
+        "biweekly": "Aux deux semaines",
+        "weekly": "Hebdomadaire",
+        "daily": "Quotidien",
+        "hourly": "Horaire"
+      }
+    },
+    "income": {
+      "label": "Revenu d’emploi",
+      "aria": "Revenu d’emploi",
+      "placeholder": "Indiquez votre revenu d’emploi {rate}"
+    },
+    "inputs": {
+      "employment": {
+        "label": "Revenu d’emploi",
+        "aria": "Revenu d’emploi",
+        "placeholder": "Indiquez votre revenu d’emploi {rate}"
+      },
+      "additionalIncome": {
+        "selfEmployment": {
+          "label": "Revenu de travail autonome",
+          "placeholder": "Indiquez votre revenu de travail autonome",
+          "aria": "Revenu de travail autonome"
+        },
+        "capitalGainsBefore": {
+          "label": "Gains en capital avant le 25 juin 2024",
+          "placeholder": "Indiquez vos gains en capital avant le 25 juin 2024",
+          "aria": "Gains en capital avant le 25 juin 2024"
+        },
+        "capitalGainsAfter": {
+          "label": "Gains en capital à partir du 25 juin 2024",
+          "placeholder": "Indiquez vos gains en capital à partir du 25 juin 2024",
+          "aria": "Gains en capital le ou après le 25 juin 2024"
+        },
+        "eligibleDividends": {
+          "label": "Dividendes déterminés",
+          "placeholder": "Indiquez vos dividendes déterminés",
+          "aria": "Dividendes déterminés"
+        },
+        "ineligibleDividends": {
+          "label": "Dividendes ordinaires",
+          "placeholder": "Indiquez vos dividendes ordinaires",
+          "aria": "Dividendes ordinaires"
+        },
+        "otherIncome": {
+          "label": "Autres revenus",
+          "placeholder": "Indiquez les autres revenus imposables",
+          "aria": "Autres revenus"
+        }
+      },
+      "deductions": {
+        "rrsp": {
+          "label": "Déduction REER",
+          "placeholder": "Indiquez votre déduction REER",
+          "aria": "Déduction REER"
+        },
+        "maritalStatus": {
+          "label": "État civil",
+          "aria": "Sélectionnez l’état civil",
+          "placeholder": "Sélectionnez l’état civil",
+          "options": {
+            "single": "Célibataire",
+            "married": "Marié(e) ou conjoint(e) de fait",
+            "separated": "Séparé(e)",
+            "divorced": "Divorcé(e)",
+            "widowed": "Veuf / veuve"
+          }
+        },
+        "dependents": {
+          "label": "Nombre de personnes à charge",
+          "placeholder": "Indiquez le nombre de personnes à charge",
+          "aria": "Nombre de personnes à charge"
+        },
+        "children": {
+          "label": "Enfants de moins de 18 ans",
+          "placeholder": "Indiquez le nombre d’enfants de moins de 18 ans",
+          "aria": "Nombre d’enfants de moins de 18 ans"
+        },
+        "dependentsDisability": {
+          "label": "Personnes à charge avec handicap",
+          "placeholder": "Indiquez le nombre de personnes à charge avec handicap",
+          "aria": "Nombre de personnes à charge avec handicap"
+        }
+      }
+    },
+    "validation": {
+      "minValue": "La valeur doit être supérieure à 0",
+      "maxBillion": "La valeur ne peut pas dépasser 1 milliard $",
+      "maxDecimal": "Maximum de 2 décimales autorisées",
+      "validNumber": "Veuillez saisir un nombre valide",
+      "wholeNumber": "Doit être un nombre entier",
+      "rrspLimit": "La valeur ne peut pas dépasser la limite annuelle du REER",
+      "dependentsLimit": "La valeur ne peut pas dépasser 20"
+    }
+  },
+  "simulator": {
+    "header": {
+      "title": "Simulateur budgétaire : devenez Ministre des Finances",
+      "achievements": "Vos réalisations",
+      "viewAll": "Voir tous les badges",
+      "noBadges": "Prenez des décisions budgétaires pour gagner des badges !"
+    },
+    "nav": {
+      "goals": "Objectifs budgétaires",
+      "results": "Résultats budgétaires",
+      "revenue": "Sources de revenus",
+      "spending": "Contrôles des dépenses",
+      "analysis": "Analyse budgétaire",
+      "sentiment": "Opinion publique",
+      "expandAll": "Tout développer",
+      "collapseAll": "Tout réduire"
+    },
+    "sections": {
+      "results": {
+        "title": "Résultats budgétaires"
+      },
+      "presets": {
+        "title": "Préréglages budgétaires"
+      },
+      "revenue": {
+        "title": "Sources de revenus"
+      },
+      "spending": {
+        "title": "Contrôles des dépenses"
+      },
+      "analysis": {
+        "title": "Analyse budgétaire"
+      },
+      "sentiment": {
+        "title": "Opinion publique"
+      }
+    },
+    "controls": {
+      "common": {
+        "base": "Base :",
+        "current": "Actuel :",
+        "reset": "Réinitialiser",
+        "resetTooltip": "Revenir à la valeur de référence",
+        "expand": "Développer",
+        "collapse": "Réduire",
+        "taxImpact": "Impact des recettes :"
+      },
+      "revenue": {
+        "summaryTitle": "À propos de ces curseurs",
+        "summaryBody": "Le simulateur budgétaire utilise une approche simplifiée des calculs fiscaux pour expliquer l'impact financier des modifications. Plutôt que d'appliquer chaque palier, il s'appuie sur des taux effectifs moyens :",
+        "summaryItems": {
+          "personal": "Impôt sur le revenu des particuliers : taux de base de 21 % (2024) générant 10 milliards $ par point de pourcentage",
+          "corporate": "Impôt sur le revenu des sociétés : taux de base de 15 % (2024) générant 5,33 milliards $ par point de pourcentage",
+          "credits": "Les crédits et dépenses fiscales peuvent être ajustés séparément pour mesurer leur effet sur les recettes"
+        },
+        "summaryFooter": "Cette approche met l'accent sur l'impact global sur les recettes plutôt que sur les situations individuelles des contribuables.",
+        "groupTitle": {
+          "incomeTaxes": "Impôts sur le revenu",
+          "consumptionTaxes": "Taxes à la consommation",
+          "otherRevenues": "Autres sources de revenus"
+        },
+        "labels": {
+          "personal": "Impôt sur le revenu des particuliers",
+          "corporate": "Impôt sur le revenu des sociétés"
+        },
+        "notes": {
+          "personalIncomeTax": "L'impôt sur le revenu des particuliers englobe les impôts fédéraux perçus auprès des personnes et des ménages, incluant revenus d'emploi, revenus d'investissement et autres sources imposables.",
+          "corporateIncomeTax": "L'impôt sur le revenu des sociétés s'applique au revenu imposable des entreprises opérant au Canada et inclut le taux général (15 %) ainsi que le taux pour petites entreprises (9 %), plus diverses mesures fiscales."
+        },
+        "personal": {
+          "expenditureNote": "Ce montant intègre l'impact d'ajustements liés aux crédits et aux reports d'impôt des particuliers."
+        },
+        "corporate": {
+          "expenditureNote": "Ce montant intègre l'impact d'ajustements liés aux dépenses fiscales des sociétés."
+        }
+      },
+      "spending": {
+        "updating": "Mise à jour des calculs budgétaires…",
+        "groupTitle": {
+          "main": "Catégories principales",
+          "other": "Autres catégories"
+        },
+        "mainIntro": "Ajustez les dépenses des grandes catégories du budget fédéral. Augmenter un pourcentage accroît la dépense correspondante ; le réduire la diminue.",
+        "otherIntro": "Ajustez les autres catégories du budget fédéral : programmes et investissements spécialisés.",
+        "subcategoriesTitle": "Sous-catégories",
+        "loansSubTitle": "Sous-catégories : prêts, investissements et avances"
+      }
+    },
+    "presets": {
+      "title": "Préréglages budgétaires",
+      "hide": "Masquer",
+      "show": "Afficher",
+      "label": "Préréglages",
+      "ariaGroup": "Préréglages budgétaires",
+      "hoverHint": "Survolez un préréglage pour voir les détails ou cliquez pour l'appliquer au budget.",
+      "activeLabel": "Préréglage actif :",
+      "resetAria": "Réinitialiser le préréglage actif",
+      "reset": "Réinitialiser",
+      "applyAria": "Appliquer le préréglage {label}",
+      "badge": {
+        "balanced": "Équilibré",
+        "surplus": "Excédent",
+        "deficit": "Déficit",
+        "neutral": "Neutre"
+      },
+      "items": {
+        "balancedBudget": "⚖️ Budget équilibré",
+        "austerityPlan": "🔻 Plan d'austérité",
+        "progressiveExpansion": "🌿 Stimulus de croissance verte",
+        "businessFriendly": "💼 Budget pro-entreprises",
+        "infrastructureBuilder": "🏗️ Bâtisseur d'infrastructures",
+        "greenGrowthStimulus": "🌱 Expansion progressive",
+        "securityFirst": "🛡️ Budget sécurité d'abord"
+      },
+      "descriptions": {
+        "balancedBudget": "Approche responsable équilibrant recettes et dépenses tout en maintenant les services essentiels. Conçu pour obtenir les badges Fiscal Hawk et Centrist Pragmatist.",
+        "austerityPlan": "Approche axée sur la réduction du déficit via coupes budgétaires et ajustements fiscaux. Permet d'obtenir les badges Austerity Champion et Surplus Architect.",
+        "progressiveExpansion": "Approche de croissance utilisant déficits stratégiques pour stimuler l'économie tout en limitant le déficit sous 50 G$. Vise les badges Stimulus Commander et Stimulus Engineer.",
+        "businessFriendly": "Approche pro-entreprises réduisant l'impôt des sociétés et la réglementation pour stimuler croissance et création d'emplois. Conçu pour obtenir les badges Corporate Catalyst et Business Friendly.",
+        "infrastructureBuilder": "Investissements majeurs dans infrastructures physiques (transports, haut débit, réseaux d'eau, résilience climatique), financés par déficits modérés et réaffectation de dépenses fiscales.",
+        "greenGrowthStimulus": "Approche sociale-démocrate investissant dans services publics et programmes sociaux, financée par fiscalité accrue pour entreprises et hauts revenus. Active badges sociaux tels que Progressive Moderate, Urban Optimizer, Welfare Architect, Senior Ally, Family Champion, Equity Champion et Social Safety Weaver.",
+        "securityFirst": "Approche priorisant défense et sécurité nationale. Conçu pour obtenir les badges National Security Guardian et Peace Through Strength."
+      }
+    },
+    "chaosWarning": "Indignation publique : système de recettes en désordre !",
+    "description": {
+      "intro": "Découvrez ce que signifie gérer le budget fédéral du Canada. Ajustez les sources de revenus et les priorités de dépenses pour équilibrer le budget tout en tenant compte de l'opinion publique selon les régions et les secteurs.",
+      "disclaimer": "*Le simulateur budgétaire utilise les données des Comptes publics du Canada et du Budget 2024, les chiffres du déficit du Ministère des Finances, les ratios dette/PIB des séries FRED et de la Banque mondiale, ainsi que les projections du Directeur parlementaire du budget.*"
+    }
+  },
+  "how": {
+    "title": "Comment ça fonctionne",
+    "toc": {
+      "title": "Table des matières",
+      "items": {
+        "calculatorMethodology": "Méthodologie du calculateur",
+        "taxCalculationProcess": "Processus de calcul de l’impôt",
+        "incomeTypesAndDeductions": "Types de revenus et déductions",
+        "governmentSpendingVisualization": "Visualisation des dépenses gouvernementales",
+        "benefits": "Avantages du calculateur",
+        "technicalImplementation": "Mise en œuvre technique",
+        "dataSourcesAndAccuracy": "Sources de données et exactitude",
+        "budgetSimulator": "Simulateur budgétaire",
+        "faq": "FAQ"
+      }
+    },
+    "intro": "Le Calculateur d’impôt du Canada est un outil convivial qui vous aide à comprendre vos obligations fiscales et la destination de vos dollars d’impôt. Cette page explique sa méthodologie, ses fonctionnalités et ses avantages.",
+    "sections": {
+      "calculatorMethodology": {
+        "title": "Méthodologie du calculateur",
+        "taxRates": {
+          "title": "Taux et paliers d’impôt",
+          "body": "Le calculateur utilise les taux fédéraux et provinciaux les plus récents pour fournir des estimations fiables. Il couvre :",
+          "items": {
+            "federal": "Paliers fédéraux progressifs par niveau de revenu",
+            "provincial": "Paliers provinciaux et territoriaux pour les 13 régions",
+            "cppqpp": "Cotisations RPC/RRQ calculées selon les maximums applicables",
+            "ei": "Primes d’assurance-emploi calculées jusqu’au maximum admissible"
+          }
+        },
+        "bpa": {
+          "title": "Montants personnels de base",
+          "body": "Les montants personnels de base fédéraux et provinciaux sont appliqués comme crédits non remboursables :",
+          "items": {
+            "federal": "Montant personnel de base fédéral",
+            "provincial": "Montants personnels provinciaux/territoriaux",
+            "marital": "Ajustements possibles selon la situation familiale"
+          }
+        }
+      },
+      "taxProcess": {
+        "title": "Processus de calcul de l’impôt",
+        "body": "Le calculateur suit ces étapes pour déterminer vos obligations fiscales :",
+        "steps": {
+          "collect": {
+            "title": "1. Collecter les informations sur le revenu",
+            "items": {
+              "employment": "Revenu d’emploi",
+              "self": "Revenu de travail autonome",
+              "gains": "Gains en capital (avant/après le 25 juin 2024)",
+              "dividends": "Dividendes déterminés et ordinaires",
+              "other": "Autres sources de revenus"
+            }
+          },
+          "apply": {
+            "title": "2. Appliquer les déductions et crédits",
+            "items": {
+              "rrsp": "Déductions REER",
+              "bpa": "Montants personnels de base",
+              "dependents": "Crédits pour personnes à charge",
+              "childCredits": "Crédits pour enfants",
+              "dividendCredits": "Crédits d’impôt pour dividendes"
+            }
+          },
+          "federal": {
+            "title": "3. Calculer l’impôt fédéral",
+            "items": {
+              "determineTaxable": "Déterminer le revenu imposable",
+              "applyRates": "Appliquer les taux fédéraux par palier",
+              "subtractCredits": "Soustraire les crédits fédéraux applicables"
+            }
+          },
+          "provincial": {
+            "title": "4. Calculer l’impôt provincial/territorial",
+            "items": {
+              "applyRates": "Appliquer les taux provinciaux ou territoriaux",
+              "subtractCredits": "Soustraire les crédits provinciaux applicables"
+            }
+          },
+          "payroll": {
+            "title": "5. Ajouter les cotisations liées à la paie",
+            "items": {
+              "cppqpp": "RPC ou RRQ : 5,7 % (11,4 % pour les travailleurs autonomes) jusqu’au maximum",
+              "ei": "Assurance-emploi : 1,63 % du revenu d’emploi jusqu’au maximum"
+            }
+          },
+          "net": {
+            "title": "6. Calculer le revenu net",
+            "items": {
+              "subtractTotal": "Soustraire l’impôt total (fédéral + provincial + RPC/RRQ + AE) du revenu brut"
+            }
+          }
+        }
+      },
+      "income": {
+        "title": "Types de revenus et déductions",
+        "body": "Différents types de revenus sont soumis à des règles fiscales particulières au Canada.",
+        "employment": {
+          "title": "Revenu d’emploi",
+          "items": {
+            "taxed": "Imposé aux taux usuels",
+            "cppEi": "Soumis aux cotisations RPC/RRQ et aux primes d’assurance-emploi"
+          }
+        },
+        "self": {
+          "title": "Travail autonome",
+          "items": {
+            "taxed": "Imposé aux taux usuels",
+            "bothCpp": "Assujetti aux parts employeur et employé du RPC/RRQ",
+            "noEi": "Non assujetti aux primes d’AE sauf adhésion volontaire"
+          }
+        },
+        "gains": {
+          "title": "Gains en capital",
+          "items": {
+            "halfTaxable": "50 % des gains en capital sont imposables",
+            "dateTreatment": "Traitement différent avant et après le 25 juin 2024"
+          }
+        },
+        "dividends": {
+          "title": "Dividendes",
+          "items": {
+            "eligible": "Dividendes déterminés majorés de 38 % et crédit fédéral de 15,02 %",
+            "ineligible": "Dividendes ordinaires majorés de 15 % et crédit fédéral de 9 %"
+          }
+        },
+        "rrsp": {
+          "title": "REER",
+          "items": {
+            "reduces": "Les cotisations REER réduisent le revenu imposable"
+          }
+        }
+      },
+      "spendingViz": {
+        "title": "Visualisation des dépenses gouvernementales",
+        "body": "Visualisez comment chaque dollar d’impôt est utilisé par le gouvernement fédéral.",
+        "federal": {
+          "title": "Répartition du budget fédéral",
+          "body": "Les dépenses fédérales incluent :",
+          "items": {
+            "health": "Santé",
+            "seniors": "Soutien aux aînés",
+            "families": "Enfants et familles",
+            "indigenous": "Services aux peuples autochtones",
+            "ei": "Assurance-emploi et prestations",
+            "defense": "Défense et sécurité publique",
+            "debtService": "Service de la dette",
+            "publicDebt": "Charge de la dette publique",
+            "operations": "Fonctionnement du gouvernement",
+            "other": "Autres catégories"
+          }
+        },
+        "visualization": {
+          "title": "Différentes vues budgétaires",
+          "body": "Passez d’une vue à l’autre pour voir différentes périodes :",
+          "items": {
+            "y2023": "Historique 2022-2023 (Comptes publics)",
+            "y2024": "Proposition 2023-2024 (Budget 2024)",
+            "y2026": "Estimations projetées 2025-2026"
+          }
+        },
+        "personal": {
+          "title": "Ventilation de votre contribution",
+          "body": "La vue personnelle montre la part de vos impôts pour chaque programme."
+        }
+      },
+      "benefits": {
+        "title": "Avantages du calculateur",
+        "accuracy": {
+          "title": "Estimation précise",
+          "items": {
+            "upToDate": "Taux d’imposition à jour partout au pays",
+            "incomeTypes": "Compatible avec plusieurs types de revenus",
+            "credits": "Inclut les principales déductions et crédits"
+          }
+        },
+        "planning": {
+          "title": "Planification financière",
+          "items": {
+            "rate": "Mettez en lumière votre taux effectif d’imposition",
+            "periods": "Comparez les périodes de paie (annuelle à horaire)",
+            "rrsp": "Visualisez l’impact des cotisations REER"
+          }
+        },
+        "transparency": {
+          "title": "Transparence fiscale",
+          "items": {
+            "allocation": "Montre l’affectation de vos impôts",
+            "priorities": "Explique les priorités de dépenses",
+            "connection": "Relie impôts et services publics"
+          }
+        },
+        "education": {
+          "title": "Dimension éducative",
+          "items": {
+            "literacy": "Renforce la littératie financière",
+            "demystify": "Démystifie le système fiscal",
+            "decisions": "Aide à prendre des décisions éclairées"
+          }
+        },
+        "accessibility": {
+          "title": "Accessibilité",
+          "items": {
+            "free": "Gratuit et accessible en ligne",
+            "noReg": "Aucun compte requis",
+            "mobile": "Optimisé pour le mobile",
+            "export": "Exportez vos résultats en PDF"
+          }
+        }
+      },
+      "tech": {
+        "title": "Mise en œuvre technique",
+        "body": "Le calculateur et le simulateur reposent sur une pile moderne :",
+        "items": {
+          "frontend": "Interface : Vue.js",
+          "state": "État : Pinia",
+          "viz": "Visualisation : Chart.js et composants personnalisés",
+          "styling": "Styles adaptatifs en CSS/SCSS",
+          "validation": "Validation côté client robuste",
+          "export": "Export PDF et images",
+          "realtime": "Calculs en temps réel",
+          "controls": "Commandes interactives",
+          "tooltips": "Info-bulles contextuelles",
+          "autobalance": "Équilibrage automatique du budget"
+        }
+      },
+      "data": {
+        "title": "Sources de données et exactitude",
+        "body": "Les résultats s’appuient sur des sources publiques canadiennes reconnues.",
+        "items": {
+          "rates": "Taux et paliers : Agence du revenu du Canada et gouvernements provinciaux",
+          "publicAccounts": "Affectations : Comptes publics du Canada",
+          "budget2024": "Budget 2024 : documents officiels du gouvernement du Canada"
+        },
+        "note": "Le calculateur est conçu à des fins éducatives. Consultez un professionnel pour des conseils personnalisés."
+      },
+      "simulator": {
+        "title": "Simulateur budgétaire",
+        "body": "Le simulateur vous permet d’explorer comment vos décisions en matière de recettes et de dépenses influencent le budget fédéral.",
+        "features": {
+          "title": "Fonctionnalités clés",
+          "items": {
+            "controls": "Commandes interactives pour les dépenses et recettes",
+            "realtime": "Calcul du solde en temps réel",
+            "viz": "Visualisations détaillées des impacts",
+            "autobalance": "Option d’équilibrage automatique",
+            "tooltips": "Info-bulles détaillées pour chaque contrôle"
+          }
+        },
+        "mainCats": {
+          "title": "Catégories principales",
+          "items": {
+            "social": "Programmes sociaux et transferts",
+            "economic": "Développement économique et infrastructure",
+            "security": "Défense et sécurité publique",
+            "environment": "Environnement et climat",
+            "international": "Affaires internationales et diplomatie"
+          }
+        },
+        "howTo": {
+          "title": "Comment utiliser le simulateur",
+          "items": {
+            "adjust": "Ajustez les curseurs de recettes et dépenses",
+            "monitor": "Surveillez le solde budgétaire en direct",
+            "autobalance": "Activez l’équilibrage automatique pour stabiliser le solde",
+            "details": "Consultez les icônes d’information pour comprendre chaque poste",
+            "export": "Exportez ou partagez votre plan budgétaire"
+          }
+        },
+        "results": {
+          "title": "Comprendre les résultats",
+          "items": {
+            "totalRevenue": "Recettes totales : somme de toutes les sources",
+            "totalSpending": "Dépenses totales : dépenses combinées",
+            "surplusDeficit": "Solde budgétaire : surplus ou déficit",
+            "debtToGdp": "Ratio dette/PIB : indicateur clé",
+            "categoryImpacts": "Impacts par catégorie : variation par programme"
+          }
+        },
+        "tips": {
+          "title": "Astuces pour un usage efficace",
+          "items": {
+            "startSmall": "Commencez par de petits ajustements",
+            "autoBalance": "Utilisez l’équilibrage automatique pour stabiliser vos décisions",
+            "watchDeficit": "Surveillez les avertissements de déficit",
+            "interconnected": "Gardez en tête les liens entre les catégories",
+            "reviewTooltips": "Lisez les info-bulles pour plus de contexte"
+          }
+        },
+        "taxCalc": {
+          "title": "Comprendre les calculs d’impôt",
+          "body": "Le simulateur utilise des taux effectifs simplifiés pour illustrer l’impact global, plutôt que des déclarations individuelles."
+        },
+        "personal": {
+          "title": "Impôt des particuliers",
+          "items": {
+            "method": "Taux effectif moyen utilisé",
+            "baseRate": "Taux de base 21 % (2024)",
+            "baseAmount": "Variation de 10 G$ par point de pourcentage",
+            "totalRevenue": "Recettes totales d’environ 210 G$",
+            "range": "Plage de 0 % à 50 %",
+            "credits": "Crédits et reports ajustables"
+          }
+        },
+        "corporate": {
+          "title": "Impôt des sociétés",
+          "items": {
+            "method": "Structure simplifiée avec taux effectifs",
+            "baseRate": "Taux de base 15 % (2024)",
+            "baseAmount": "Variation de 5,33 G$ par point de pourcentage",
+            "totalRevenue": "Recettes totales d’environ 80 G$",
+            "range": "Plage de 0 % à 40 %",
+            "expenditures": "Dépenses fiscales ajustables"
+          }
+        },
+        "taxExpenditures": {
+          "title": "Dépenses fiscales et crédits",
+          "personal": {
+            "title": "Crédits personnels",
+            "items": {
+              "baseAmount": "Montant brut d’environ 120 G$",
+              "netAmount": "Montant net d’environ 102 G$",
+              "impact": "Ajustements possibles sur les recettes des particuliers"
+            }
+          },
+          "corporate": {
+            "title": "Dépenses fiscales des sociétés",
+            "items": {
+              "baseAmount": "Montant brut d’environ 25 G$",
+              "netAmount": "Montant net d’environ 23,75 G$",
+              "impact": "Ajustements possibles sur les recettes des sociétés"
+            }
+          }
+        },
+        "summary": "Une approche simplifiée pour comprendre rapidement l’impact fiscal global."
+      },
+      "faq": {
+        "title": "FAQ",
+        "q1": "Quelle est la précision du calculateur ?",
+        "a1": "Les résultats sont des estimations simplifiées basées sur vos données.",
+        "q2": "Mes données sont-elles enregistrées ?",
+        "a2": "Non. Les calculs se font localement dans votre navigateur et ne sont pas stockés.",
+        "q3": "À quelle fréquence le calculateur est-il mis à jour ?",
+        "a3": "Le contenu est mis à jour chaque année selon les nouveaux taux.",
+        "q4": "Puis-je utiliser ce calculateur pour les impôts des entreprises ?",
+        "a4": "Le calculateur cible l’impôt des particuliers, pas celui des entreprises.",
+        "q5": "Comment les allocations de dépenses sont-elles déterminées ?",
+        "a5": "Les allocations proviennent des Comptes publics du Canada et du Budget 2024.",
+        "q6": "Tous les crédits d’impôt sont-ils inclus ?",
+        "a6": "Les principaux crédits sont inclus, mais pas toutes les situations possibles.",
+        "q7": "Comment fonctionne le simulateur budgétaire ?",
+        "a7": "Il montre l’effet de vos choix sur le déficit, l’excédent et la dette/PIB.",
+        "q8": "Qu’est-ce que la fonction d’équilibrage automatique ?",
+        "a8": "Elle ajuste automatiquement les recettes pour stabiliser le budget.",
+        "q9": "Puis-je sauvegarder mes simulations ?",
+        "a9": "Oui, exportez vos plans budgétaires en PDF.",
+        "q10": "Quelle est la précision des projections budgétaires ?",
+        "a10": "Les modèles sont simplifiés et n’incluent pas toutes les interactions économiques.",
+        "q11": "Que montrent les info-bulles ?",
+        "a11": "Elles offrent un contexte détaillé pour chaque catégorie.",
+        "q12": "Comment les taux et recettes sont-ils calculés dans le simulateur ?",
+        "a12": "Le simulateur utilise des taux effectifs simplifiés. Les effets sont globaux plutôt que par contribuable."
+      }
+    },
+    "footer": {
+      "updated": "Documentation mise à jour : mai 2025",
+      "contact": "Questions ou commentaires :",
+      "back": "Retour au calculateur"
+    }
+  },
+  "tour": {
+    "buttons": {
+      "open": "Visite interactive",
+      "resetTooltip": "Réinitialiser et relancer la visite"
+    },
+    "options": {
+      "skip": "Passer pour l’instant",
+      "title": "Choisissez une visite",
+      "quick": "Visite rapide",
+      "subtitle": "Découvrez les onglets avec un court tour guidé ou explorez plus en détail.",
+      "full": "Visite complète"
+    },
+    "actions": {
+      "skip": "Passer",
+      "back": "Retour",
+      "next": "Suivant",
+      "finish": "Terminer"
+    },
+    "steps": {
+      "welcome": {
+        "title": "Bienvenue !",
+        "body": "Explorons les onglets. Nous mettrons chaque zone en évidence en atténuant le reste."
+      },
+      "pinned": {
+        "title": "Épinglés",
+        "body": "Vos onglets les plus utilisés apparaissent ici pour un accès rapide."
+      },
+      "revenue": {
+        "title": "Recettes",
+        "body": "Ajustez les différentes sources de recettes fédérales."
+      },
+      "revenueExplainer": {
+        "title": "Fonctionnement des recettes",
+        "body": "Nous utilisons des taux effectifs simplifiés. Cette section explique les hypothèses."
+      },
+      "revenueControls": {
+        "title": "Curseurs",
+        "body": "Modifiez les taux et voyez instantanément l’impact sur les recettes. Chaque groupe peut être développé."
+      },
+      "spending": {
+        "title": "Dépenses",
+        "body": "Priorisez les catégories de dépenses et les dépenses fiscales."
+      },
+      "spendingMain": {
+        "title": "Catégories principales",
+        "body": "Ajustez les grands programmes ici. Utilisez Réinitialiser pour revenir à la base."
+      },
+      "results": {
+        "title": "Résultats",
+        "body": "Consultez le surplus/déficit, la dette/PIB et exportez vos données."
+      },
+      "projectionsOverview": {
+        "title": "Projections",
+        "body": "Planifiez sur plusieurs années. Ajustez les hypothèses et examinez le tableau."
+      },
+      "export": {
+        "title": "Exportation",
+        "body": "Enregistrez votre budget en PDF ou partagez-le."
+      },
+      "spendingTaxExp": {
+        "title": "Dépenses fiscales",
+        "body": "Ces crédits et déductions réduisent les recettes. Ajustez-les avec prudence."
+      },
+      "spendingReset": {
+        "title": "Réinitialiser les contrôles",
+        "body": "Chaque tuile possède un bouton Réinitialiser à la valeur de référence."
+      },
+      "resultsDeficit": {
+        "title": "Avertissements",
+        "body": "De grands déficits déclenchent un message expliquant les risques."
+      },
+      "resultsDownload": {
+        "title": "Téléchargement",
+        "body": "Enregistrez les graphiques via le bouton de téléchargement."
+      },
+      "projControls": {
+        "title": "Contrôles de planification",
+        "body": "Modifiez l’année de base, l’horizon et les hypothèses économiques."
+      },
+      "projGrowth": {
+        "title": "Croissance des programmes",
+        "body": "Filtrez les catégories et ajustez la croissance de base ou démographique."
+      },
+      "projTable": {
+        "title": "Tableau des projections",
+        "body": "Cliquez sur une année pour ouvrir l’éditeur et appliquer des ajustements."
+      },
+      "assumptions": {
+        "title": "Hypothèses",
+        "body": "Ajustez les contrôles globaux et la croissance par catégorie."
+      },
+      "assumptionsControls": {
+        "title": "Commandes de dépenses",
+        "body": "Utilisez « Hausse » pour un ajustement ponctuel; « Croissance » pour modifier la tendance."
+      },
+      "sentiment": {
+        "title": "Opinion publique",
+        "body": "Suivez la réaction des groupes à votre budget."
+      },
+      "sentimentControl": {
+        "title": "Sensibilité",
+        "body": "Ajustez la sensibilité pour voir un impact plus ou moins marqué."
+      },
+      "sentimentGroups": {
+        "title": "Groupes",
+        "body": "Alternez entre régions, groupes démographiques et secteurs."
+      },
+      "projectionsShort": {
+        "title": "Projections rapides",
+        "body": "Planifiez plusieurs années à l’avance."
+      },
+      "projectionsAssumptions": {
+        "title": "Hypothèses de projection",
+        "body": "Modifiez la croissance, l’inflation, les taux et l’horizon. Des préréglages sont disponibles."
+      },
+      "projectionsTable": {
+        "title": "Résultats",
+        "body": "Analysez PIB, recettes, dépenses, déficit, dette et ratio dette/PIB par année."
+      },
+      "moreMobile": {
+        "title": "Plus",
+        "body": "Sur mobile, les onglets supplémentaires se trouvent sous « Plus ». "
+      },
+      "exportOptions": {
+        "title": "Options d’exportation",
+        "body": "Activez « Inclure la ventilation », puis téléchargez le PDF."
+      }
+    }
+  },
+  "taxPopup": {
+    "close": "Fermer la notification",
+    "tagWithAmount": "{amount} $ d’impôt fédéral en mouvement",
+    "tagFallback": "Explorez les onglets pour suivre votre impôt",
+    "title": {
+      "mobileWithAmount": "Suivez {amount} $ d’impôt fédéral",
+      "desktopWithAmount": "Voyez comment {amount} $ est réparti au niveau fédéral",
+      "mobile": "Votre impôt fédéral vient de remodeler le budget",
+      "desktop": "Votre impôt fédéral vient de remodeler le budget fédéral"
+    },
+    "description": {
+      "mobileBase": "Ouvrez les onglets au-dessus du calculateur pour voir la réaction de chaque section.",
+      "desktopBase": "Ouvrez les onglets Répartition, Catégories et Ressources pour voir comment vos dollars traversent les programmes fédéraux.",
+      "mobileWithAmount": "Répartition, Catégories, FAQ et Ressources reflètent désormais la répartition de {amount} $.",
+      "desktopWithAmount": "{amount} $ d’impôt fédéral se déploient partout au pays. Parcourez Répartition, Catégories, FAQ et Ressources pour toute l’histoire."
+    },
+    "tabs": {
+      "aria": "Onglets du calculateur",
+      "breakdown": {
+        "label": "Répartition budgétaire",
+        "teaser": "Suivez chaque dollar fédéral débloqué par votre impôt."
+      },
+      "categories": {
+        "label": "Catégories",
+        "teaser": "Voyez quelles priorités absorbent la plus grande part."
+      },
+      "faqs": {
+        "label": "FAQ",
+        "teaser": "Retrouvez des réponses rapides adaptées à votre situation."
+      },
+      "resources": {
+        "label": "Ressources",
+        "teaser": "Consultez rapports, guides et données officielles."
+      }
+    },
+    "actions": {
+      "openBreakdown": "Ouvrir la répartition budgétaire",
+      "maybeLater": "Plus tard"
+    },
+    "preferences": {
+      "aria": "Ne plus afficher ce message",
+      "label": "Ne plus afficher"
+    }
+  },
+  "federalBudget": {
+    "title": "Répartition du budget fédéral",
+    "descriptions": {
+      "budget2024": "Le diagramme de répartition du budget 2023-2024 présente les allocations de dépenses proposées par le gouvernement du Canada pour l’exercice 2023-2024.",
+      "estimates2025": "Le graphique des prévisions fédérales 2025-2026 illustre la répartition prévue des principales allocations pour l’exercice 2025-2026, selon les projections économiques actuelles.",
+      "historic": "Le diagramme de la répartition budgétaire fédérale 2022-2023 offre un aperçu détaillé et simplifié des dépenses fédérales, à partir des Comptes publics du Canada."
+    },
+    "explanations": {
+      "budget2024": "Le graphique fédéral 2023-2024 présente la répartition complète des principales allocations du budget, tandis que le graphique circulaire du budget 2023-2024 illustre les dépenses proposées par le gouvernement."
+    },
+    "chartsTitle": "Visualisations budgétaires",
+    "noData": "Aucun impôt fédéral à illustrer",
+    "total": {
+      "title": "Total des impôts fédéraux répartis",
+      "label": "Total des impôts fédéraux répartis :"
+    },
+    "sortButton": "Trier par montant ({order})",
+    "table": {
+      "category": "Catégorie",
+      "amount": "Montant",
+      "percentage": "Pourcentage"
+    }
+  },
+  "budgetCategories": {
+    "title": "Catégories budgétaires",
+    "select": {
+      "all": "Toutes les catégories"
+    },
+    "actions": {
+      "toggleAll": {
+        "expand": "Tout afficher",
+        "collapse": "Tout masquer"
+      },
+      "toggleDetails": {
+        "show": "Afficher les détails",
+        "hide": "Masquer les détails"
+      }
+    },
+    "aria": {
+      "toggleCategory": "Afficher ou masquer les détails pour {name}"
+    },
+    "y2022": {
+      "healthcare": {
+        "name": "Santé",
+        "description": "Le gouvernement fédéral contribue aux systèmes de santé provinciaux et territoriaux par l’entremise du Transfert canadien en matière de santé (TCS). Ce financement soutient les hôpitaux, le personnel de la santé et garantit l’accès aux services médicaux. En 2022-2023, les dépenses fédérales en santé ont atteint 58,2 milliards de dollars, soit environ 10 % du budget total."
+      },
+      "supportForSeniors": {
+        "name": "Soutien aux aînés",
+        "description": "Les programmes de Sécurité de la vieillesse (SV) et de Supplément de revenu garanti (SRG) assurent un revenu de base aux aînés. Avec le vieillissement de la population, cette enveloppe représente une part importante du budget : en 2022-2023, le gouvernement fédéral y a consacré 69,1 milliards de dollars."
+      },
+      "childrenAndFamilies": {
+        "name": "Enfants et familles",
+        "description": "L’Allocation canadienne pour enfants (ACE) verse des paiements mensuels non imposables aux familles admissibles pour les aider à assumer le coût de la vie. Cette catégorie comprend aussi des initiatives en services de garde et en soutien aux familles. Les dépenses totalisent 26,9 milliards de dollars."
+      },
+      "indigenousServices": {
+        "name": "Services aux peuples autochtones",
+        "description": "Cette enveloppe finance les services destinés aux communautés autochtones : accès à l’eau potable, logement, soins de santé et programmes d’éducation. Elle appuie également les démarches de réconciliation, notamment les ententes sur les revendications territoriales. En 2022-2023, 39,8 milliards de dollars y ont été consacrés."
+      },
+      "employmentInsuranceAndBenefits": {
+        "name": "Assurance-emploi et prestations",
+        "description": "L’assurance-emploi offre un soutien financier temporaire aux personnes sans emploi pendant qu’elles recherchent un travail ou perfectionnent leurs compétences. Cette catégorie comprend aussi la formation de la main-d’œuvre et les programmes de développement des compétences. Les dépenses se sont élevées à 35,6 milliards de dollars."
+      },
+      "defense": {
+        "name": "Défense",
+        "description": "Ce poste couvre les dépenses des Forces armées canadiennes, l’acquisition d’équipement (navires, aéronefs, véhicules) et les opérations de défense. Le budget fédéral 2022-2023 a consacré 36,4 milliards de dollars à la défense nationale."
+      },
+      "publicSafetyAndEmergencyPreparedness": {
+        "name": "Sécurité publique et préparation aux urgences",
+        "description": "Cette catégorie finance les services policiers, la sécurité frontalière, les services correctionnels et la préparation aux situations d’urgence. Elle englobe des organismes comme la GRC et l’Agence des services frontaliers du Canada. Les dépenses totalisaient 11,6 milliards de dollars."
+      },
+      "internationalAffairsAndDevelopment": {
+        "name": "Affaires internationales et développement",
+        "description": "Elle comprend l’aide internationale, les missions diplomatiques et les contributions aux organisations internationales. L’aide au développement et l’engagement mondial du Canada se sont élevés à 9,8 milliards de dollars."
+      },
+      "publicDebtCharges": {
+        "name": "Service de la dette publique",
+        "description": "Il s’agit des intérêts payés sur la dette du gouvernement fédéral. La hausse des taux d’intérêt en 2022-2023 a porté le coût du service de la dette à 42,7 milliards de dollars."
+      },
+      "loansInvestmentsAndAdvances": {
+        "name": "Prêts, investissements et avances",
+        "description": "Cette catégorie regroupe divers programmes de soutien financier totalisant 10 milliards de dollars pour appuyer plusieurs secteurs de l’économie. Le montant reflète les décaissements effectués pendant l’exercice 2022-2023 plutôt que la valeur totale des portefeuilles de prêts.",
+        "subsections": {
+          "studentLoans": {
+            "name": "Prêts aux étudiants",
+            "description": "Le Programme canadien d’aide financière aux étudiants offre des prêts pour faciliter l’accès aux études postsecondaires. Même si le portefeuille dépasse 24 milliards de dollars, les montants annuels démontrent l’engagement du gouvernement envers la population étudiante."
+          },
+          "agricultureLoans": {
+            "name": "Prêts agricoles",
+            "description": "Des programmes comme Agri-relance fournissent des prêts aux agricultrices et agriculteurs touchés par des catastrophes, stabilisant ainsi le secteur agricole lors d’événements imprévus."
+          },
+          "internationalDevelopmentLoans": {
+            "name": "Prêts de développement international",
+            "description": "Le Canada soutient le développement mondial par des prêts et des subventions aux organisations internationales et aux pays en développement, notamment l’AIIB, la BERD et la Banque mondiale."
+          },
+          "businessAndInnovationLoans": {
+            "name": "Prêts aux entreprises et à l’innovation",
+            "description": "Le gouvernement appuie des projets d’innovation et d’infrastructure, y compris le déploiement du réseau à large bande et les investissements dans les entreprises canadiennes."
+          },
+          "defenseSectorLoansAndInvestments": {
+            "name": "Prêts et investissements pour la défense",
+            "description": "Les prêts et avances accordés au secteur de la défense soutiennent l’acquisition de matériel militaire et la modernisation des capacités de défense du Canada."
+          },
+          "economicDevelopmentLoans": {
+            "name": "Prêts de développement économique",
+            "description": "Ces prêts soutiennent divers projets de développement économique à l’échelle du pays, notamment les programmes régionaux et le financement des petites entreprises."
+          }
+        }
+      },
+      "otherGovernmentOperations": {
+        "name": "Autres opérations gouvernementales",
+        "description": "Cette catégorie regroupe les dépenses de fonctionnement nécessaires au fonctionnement quotidien du gouvernement fédéral, pour un total d’environ 242 milliards de dollars.",
+        "subsections": {
+          "transportationInfrastructure": {
+            "name": "Infrastructures de transport",
+            "description": "Investissements dans les infrastructures nationales de transport (routes, ponts, ports et réseaux ferroviaires) afin de soutenir le commerce et la mobilité."
+          },
+          "publicSafetyAndEmergencyPreparedness": {
+            "name": "Sécurité publique et intervention d’urgence",
+            "description": "Financement des services policiers et de la réponse aux urgences pour renforcer la capacité du Canada à faire face aux crises et menaces."
+          },
+          "governmentBuildingsAndProperties": {
+            "name": "Immeubles et biens gouvernementaux",
+            "description": "Entretien et construction d’immeubles fédéraux afin de soutenir la prestation des services publics."
+          },
+          "federalEmployeeSalariesAndBenefits": {
+            "name": "Rémunération du personnel fédéral",
+            "description": "Salaires, pensions et avantages des employées et employés fédéraux pour assurer l’efficacité des ministères."
+          },
+          "legalAndJusticeSystem": {
+            "name": "Système juridique et judiciaire",
+            "description": "Soutien au système judiciaire national afin de garantir l’accès à la justice à l’échelle du pays."
+          },
+          "indigenousServicesOperationalExpenses": {
+            "name": "Services aux Autochtones – frais de fonctionnement",
+            "description": "Couverture des coûts opérationnels de Services aux Autochtones Canada pour administrer les programmes destinés aux communautés autochtones."
+          },
+          "culturalAndHeritagePrograms": {
+            "name": "Programmes culturels et patrimoniaux",
+            "description": "Financement des institutions culturelles nationales pour soutenir les arts, la culture et la préservation du patrimoine canadien."
+          },
+          "diplomaticAndInternationalRepresentation": {
+            "name": "Diplomatie et représentation internationale",
+            "description": "Frais d’Affaires mondiales Canada, y compris les ambassades, consulats et missions diplomatiques, soutenant la présence du Canada à l’étranger."
+          },
+          "internationalFinancialCommitments": {
+            "name": "Engagements financiers internationaux",
+            "description": "Contributions du Canada aux institutions internationales pour soutenir le développement mondial, la stabilité financière et la coopération multilatérale."
+          },
+          "environmentAndClimateChange": {
+            "name": "Environnement et changements climatiques",
+            "description": "Financement des initiatives de protection de l’environnement, de conservation et de lutte contre les changements climatiques."
+          },
+          "agricultureAndAgriFood": {
+            "name": "Agriculture et agroalimentaire",
+            "description": "Soutien aux agricultrices et agriculteurs, à la recherche agroalimentaire, à la salubrité des aliments et à l’accès aux marchés."
+          },
+          "scienceInnovationAndTechnology": {
+            "name": "Science, innovation et technologie",
+            "description": "Financement de la recherche scientifique, des programmes d’innovation et du développement technologique partout au pays."
+          },
+          "economicDevelopmentPrograms": {
+            "name": "Programmes de développement économique",
+            "description": "Soutien à la croissance économique régionale, à l’innovation et au développement des entreprises pour améliorer la productivité et la compétitivité."
+          },
+          "infrastructureInvestments": {
+            "name": "Investissements dans les infrastructures",
+            "description": "Investissements dans les infrastructures publiques, notamment les routes, ponts, transports collectifs, infrastructures vertes et installations communautaires."
+          },
+          "immigrationRefugeesAndCitizenship": {
+            "name": "Immigration, réfugiés et citoyenneté",
+            "description": "Financement du système d’immigration canadien, des programmes de réinstallation des réfugiés et des services de citoyenneté."
+          },
+          "generalPublicServices": {
+            "name": "Services publics généraux",
+            "description": "Dépenses liées à l’administration du gouvernement, aux organes législatifs, aux bureaux exécutifs, aux finances et aux affaires extérieures."
+          },
+          "socialProtectionPrograms": {
+            "name": "Programmes de protection sociale",
+            "description": "Programmes d’inclusion sociale, prestations d’invalidité et assurance-chômage. En 2023, ce poste a fortement augmenté, devenant la principale catégorie de dépenses par fonction."
+          },
+          "economicAffairs": {
+            "name": "Affaires économiques",
+            "description": "Dépenses liées aux affaires économiques, commerciales et du travail, y compris les subventions sectorielles, le soutien aux échanges commerciaux et les programmes du marché du travail."
+          }
+        }
+      }
+    },
+    "y2024": {
+      "healthcareCanadaHealthTransfer": {
+        "name": "Santé (Transfert canadien en matière de santé)",
+        "description": "Le gouvernement fédéral soutient les systèmes de santé provinciaux et territoriaux grâce au Transfert canadien en matière de santé. Ce financement aide à offrir des soins universels, à soutenir les hôpitaux, le personnel de santé et les initiatives de santé publique. Les dépenses de santé représentent environ 10 % du budget fédéral."
+      },
+      "supportForSeniors": {
+        "name": "Soutien aux aînés",
+        "description": "Cette enveloppe finance des programmes comme la Sécurité de la vieillesse et le Supplément de revenu garanti, offrant un revenu de base aux aînés. Avec le vieillissement de la population, ces programmes représentent environ 14 % des dépenses fédérales."
+      },
+      "childrenAndFamilies": {
+        "name": "Enfants et familles",
+        "description": "L’Allocation canadienne pour enfants soutient les familles à faible et moyen revenu afin d’aider aux coûts liés à l’éducation des enfants. Cette mesure joue un rôle clé dans la réduction de la pauvreté chez les enfants et représente environ 6 % des dépenses fédérales."
+      },
+      "indigenousServicesAndReconciliation": {
+        "name": "Services aux Autochtones et réconciliation",
+        "description": "Ce financement soutient les communautés autochtones dans les domaines de la santé, de l’éducation, des infrastructures et de la réconciliation, y compris les ententes sur les revendications territoriales. Cela représente environ 7 % du budget fédéral."
+      },
+      "employmentInsuranceAndOtherBenefits": {
+        "name": "Assurance-emploi et autres prestations",
+        "description": "Ce poste finance l’assurance-emploi pour les personnes temporairement sans emploi, les nouveaux parents et les employés saisonniers. Il comprend également des programmes de requalification et de perfectionnement, et représente environ 5 % du budget."
+      },
+      "defenseAndPublicSafety": {
+        "name": "Défense et sécurité publique",
+        "description": "Les dépenses couvrent les Forces armées canadiennes, l’acquisition de matériel (navires, aéronefs, cybersécurité) et les programmes de sécurité publique tels que la protection des frontières. Elles représentent environ 6 % du budget total."
+      },
+      "debtServicingPublicDebtCharges": {
+        "name": "Service de la dette (charges d’intérêt)",
+        "description": "Paiements d’intérêts sur la dette nationale du Canada, qui totalisait 1,173 billion de dollars à la fin de l’exercice. La hausse des taux d’intérêt a augmenté le coût du service de la dette, représentant environ 9 % des dépenses."
+      },
+      "loansInvestmentsAndAdvances": {
+        "name": "Prêts, investissements et avances",
+        "description": "Cette catégorie regroupe différents programmes d’aide financière pour soutenir plusieurs secteurs de l’économie.",
+        "subsections": {
+          "studentLoans": {
+            "name": "Prêts aux étudiants",
+            "description": "Le Programme canadien d’aide financière aux étudiants offre des prêts pour faciliter l’accès aux études postsecondaires. Même si le portefeuille dépasse 24 milliards de dollars, les montants annuels démontrent l’engagement du gouvernement envers la population étudiante."
+          },
+          "agricultureLoans": {
+            "name": "Prêts agricoles",
+            "description": "Des programmes comme Agri-relance offrent des prêts aux agricultrices et agriculteurs touchés par des événements imprévus, contribuant ainsi à stabiliser le secteur agricole."
+          },
+          "internationalDevelopmentAndLoans": {
+            "name": "Prêts et développement international",
+            "description": "Le Canada soutient le développement mondial grâce à des prêts et des subventions destinés aux organisations internationales et aux pays en développement, notamment l’AIIB, la BERD et la Banque mondiale."
+          },
+          "businessAndInnovationLoans": {
+            "name": "Prêts aux entreprises et à l’innovation",
+            "description": "Le gouvernement offre un soutien financier aux projets d’innovation et d’infrastructure, appuyant la croissance technologique et économique."
+          },
+          "defenseSectorLoansAndInvestments": {
+            "name": "Prêts et investissements pour la défense",
+            "description": "En 2022-2023, le ministère de la Défense nationale a reporté 1,57 milliard de dollars, dont 1,45 milliard (92 %) disponible pour de futurs projets. Ces fonds soutiennent l’acquisition d’équipement militaire et le maintien des capacités de défense."
+          },
+          "economicDevelopmentLoans": {
+            "name": "Prêts de développement économique",
+            "description": "Ces prêts soutiennent des projets de développement économique partout au pays, notamment les programmes régionaux et le financement des petites entreprises. Par exemple, Développement économique Canada pour les régions du Québec a investi 491,6 millions de dollars dans 1 325 projets."
+          }
+        }
+      },
+      "otherGovernmentOperations": {
+        "name": "Autres opérations gouvernementales",
+        "description": "Cette catégorie englobe les dépenses de fonctionnement nécessaires aux activités quotidiennes du gouvernement fédéral, estimées à 140 milliards de dollars.",
+        "subsections": {
+          "transportationInfrastructure": {
+            "name": "Infrastructures de transport",
+            "description": "Investissements dans les infrastructures nationales (routes, ponts, ports et réseaux ferroviaires) pour assurer la mobilité des personnes et des marchandises."
+          },
+          "environmentalPrograms": {
+            "name": "Programmes environnementaux",
+            "description": "Fonds consacrés aux initiatives climatiques, à la conservation et à la protection de l’environnement, en cohérence avec les engagements internationaux du Canada."
+          },
+          "publicSafetyAndEmergencyPreparedness": {
+            "name": "Sécurité publique et interventions d’urgence",
+            "description": "Financement des organismes de sécurité nationale afin de garantir la capacité du Canada à répondre aux urgences et menaces à la sécurité."
+          },
+          "governmentBuildingsAndProperties": {
+            "name": "Immeubles et biens gouvernementaux",
+            "description": "Entretien et construction des immeubles gouvernementaux pour soutenir la prestation des services publics."
+          },
+          "researchAndInnovation": {
+            "name": "Recherche et innovation",
+            "description": "Investissements dans la recherche et le développement afin de favoriser les avancées scientifiques et technologiques."
+          },
+          "digitalGovernmentAndItInfrastructure": {
+            "name": "Gouvernement numérique et TI",
+            "description": "Investissements pour moderniser les services numériques fédéraux et l’infrastructure informatique, y compris la cybersécurité."
+          },
+          "federalEmployeeSalariesAndBenefits": {
+            "name": "Rémunération du personnel fédéral",
+            "description": "Salaires, pensions et avantages du personnel fédéral pour maintenir des services gouvernementaux efficaces."
+          },
+          "legalAndJusticeSystem": {
+            "name": "Système juridique et judiciaire",
+            "description": "Soutien aux institutions juridiques et judiciaires afin de garantir l’accès à la justice."
+          },
+          "indigenousServicesOperationalExpenses": {
+            "name": "Services aux Autochtones – frais de fonctionnement",
+            "description": "Frais de fonctionnement nécessaires à la gestion des programmes destinés aux communautés autochtones."
+          },
+          "culturalAndHeritagePrograms": {
+            "name": "Programmes culturels et patrimoniaux",
+            "description": "Financement destiné aux institutions culturelles nationales pour soutenir les arts, la culture et la préservation du patrimoine canadien."
+          },
+          "scientificResearchAndDevelopmentRD": {
+            "name": "Recherche scientifique et développement (R-D)",
+            "description": "Financement de la recherche scientifique, notamment en agriculture, en biotechnologie, en santé et en durabilité environnementale, afin de soutenir l’innovation."
+          },
+          "diplomaticAndInternationalRepresentation": {
+            "name": "Diplomatie et représentation internationale",
+            "description": "Frais d’Affaires mondiales Canada, y compris les ambassades, les consulats et les missions diplomatiques, pour maintenir la présence du Canada à l’étranger."
+          }
+        }
+      }
+    }
+  },
+  "result": {
+    "title": "Votre répartition des impôts",
+    "federalTax": "Impôt fédéral :",
+    "provincialTax": "Impôt provincial :",
+    "cppQppContribution": "Cotisation RPC/RRQ :",
+    "cppQpp": "RPC/RRQ",
+    "eiPremium": "Prime d'assurance-emploi :",
+    "ei": "AE",
+    "totalTax": "Total des impôts :",
+    "netIncomeAfterCredits": "Revenu net après crédits :",
+    "netIncome": "Revenu net",
+    "taxBreakdown": "Répartition des impôts",
+    "exportPdf": "Exporter en PDF",
+    "exportPdfAria": "Exporter la répartition des impôts en PDF",
+    "placeholder": "Veuillez entrer votre revenu et sélectionner votre province ou territoire pour voir la répartition des impôts."
+  },
+  "faq": {
+    "title": "FAQ des contribuables",
+    "q1": "Comment fonctionne la répartition des impôts ?",
+    "a1": "Notre calculateur utilise les derniers taux d'imposition et tranches de {year} pour estimer votre impôt sur le revenu. Nous décomposons les impôts fédéraux et provinciaux, montrant exactement combien vous paierez à chaque niveau. Le calculateur vous montre également comment vos dollars d'impôt sont alloués à différentes catégories de dépenses gouvernementales, vous donnant une image claire de l'utilisation de votre argent.",
+    "q2": "Ce calculateur est-il précis ?",
+    "a2": "Notre calculateur fournit une estimation fiable basée sur les derniers taux d'imposition et données de dépenses gouvernementales disponibles. Bien qu'il tienne compte des déductions et crédits standard, votre situation fiscale réelle peut varier selon des circonstances spécifiques comme des déductions supplémentaires, des investissements ou des revenus d'entreprise. Pour des conseils fiscaux personnalisés, nous recommandons de consulter un professionnel fiscal.",
+    "q3": "Quelles sources sont utilisées pour les calculs d'impôt ?",
+    "a3": "Nous utilisons des données officielles de l'Agence du revenu du Canada (ARC) et du ministère des Finances du Canada. Nos tranches et taux d'imposition sont mis à jour pour refléter l'année d'imposition {year}, et notre répartition des dépenses gouvernementales est basée sur les plus récents rapports budgétaires fédéraux. Nous révisons et mettons à jour régulièrement notre calculateur pour assurer la précision au fur et à mesure que de nouvelles informations deviennent disponibles.",
+    "q4": "Combien d'impôt je paie au Canada ?",
+    "a4": "Le montant d'impôt que vous payez au Canada dépend de votre niveau de revenu, de votre province de résidence et des déductions admissibles. Le Canada utilise un système d'imposition progressif où les niveaux de revenu plus élevés sont imposés à des taux plus élevés. Notre calculateur vous aide à estimer les impôts fédéraux et provinciaux basés sur votre situation spécifique, vous donnant une image claire de votre obligation fiscale totale pour {year}.",
+    "q5_2024": "Quel était l'aperçu général du budget fédéral canadien 2024 ?",
+    "a5_2024": "Au cours de l'exercice 2024, le gouvernement fédéral canadien a projeté des revenus totaux d'environ 498 milliards de dollars et des dépenses totales d'environ 538 milliards de dollars, résultant en un déficit projeté de 40 milliards de dollars.",
+    "q5_2022": "Quel était l'aperçu général du budget fédéral canadien 2022-2023 ?",
+    "a5_2022": "Au cours de l'exercice 2022-2023, le gouvernement fédéral canadien a rapporté des revenus totaux d'environ 482,8 milliards de dollars et des dépenses totales d'environ 574,9 milliards de dollars, résultant en un déficit de 92,1 milliards de dollars. Cela représentait une amélioration significative par rapport au déficit de 113,8 milliards de dollars de l'année précédente, reflétant la reprise économique continue du Canada.",
+    "q6_2024": "D'où venait l'argent ?",
+    "a6_2024": "Les revenus fédéraux provenaient principalement de plusieurs sources :",
+    "a6_2024_personal": "Impôts sur le revenu des particuliers :",
+    "a6_2024_personal_amount": "Approximativement 230 milliards de dollars.",
+    "a6_2024_corporate": "Impôts sur le revenu des sociétés :",
+    "a6_2024_corporate_amount": "Environ 70 milliards de dollars.",
+    "a6_2024_gst": "Taxe sur les produits et services (TPS) :",
+    "a6_2024_gst_amount": "Environ 50 milliards de dollars collectés sur la plupart des biens et services.",
+    "a6_2024_other": "Autres sources :",
+    "a6_2024_other_amount": "Incluant les primes d'assurance-emploi, les réserves de change étrangères, la tarification de la pollution, et les revenus d'autres programmes et sociétés d'État, représentant environ 17 % des revenus budgétaires totaux.",
+    "q7_2024": "Où est allé l'argent ?",
+    "a7_2024": "Les dépenses fédérales ont été allouées à divers secteurs :",
+    "a7_2024_transfers": "Transferts aux personnes :",
+    "a7_2024_transfers_amount": "Incluant le soutien aux personnes âgées, aux familles avec enfants et aux travailleurs, représentant approximativement 25 % des dépenses budgétaires totales.",
+    "a7_2024_operating": "Dépenses de fonctionnement :",
+    "a7_2024_operating_amount": "Couvrant les dépenses des ministères, agences et sociétés d'État, représentant environ 23 % des dépenses budgétaires totales.",
+    "a7_2024_health": "Transferts en santé :",
+    "a7_2024_health_amount": "Représentant environ 10 % des dépenses budgétaires totales.",
+    "q8": "Quels sont les points saillants du budget 2024 ?",
+    "a8_economic": "Croissance économique :",
+    "a8_economic_text": "Le Canada a évité la récession en 2023 avec une croissance du PIB de 1,1 % et devrait atteindre 3,5 % au premier trimestre 2024, parallèlement à plus de 1,1 million de nouveaux emplois et des gains salariaux notables pour les travailleurs à faible revenu.",
+    "a8_housing": "Initiatives de logement :",
+    "a8_housing_text": "Plans ambitieux pour construire 3,87 millions de logements d'ici 2031 grâce aux politiques fédérales, au déblocage des terres publiques, et à des investissements importants dans le logement abordable et le soutien locatif.",
+    "a8_fiscal": "Force fiscale et investissement :",
+    "a8_fiscal_text": "Avec une faible dette nette et des cotes AAA, le gouvernement investit des milliards dans l'énergie propre (incluant une transition nette zéro de 93 milliards de dollars), l'innovation (IA, programmes de recherche), et les services publics essentiels.",
+    "a8_social": "Soutien social et autochtone :",
+    "a8_social_text": "Un financement majeur est dédié à la santé, aux programmes sociaux, et aux investissements ciblés autochtones pour améliorer le logement, l'infrastructure et les initiatives culturelles.",
+    "a8_safety": "Sécurité publique et responsabilité fiscale :",
+    "a8_safety_text": "Des mesures renforcées de cybersécurité et de sécurité publique sont soutenues par des réformes fiscales comme les services numériques et les impôts sur les gains en capital, parallèlement à des émissions d'obligations stratégiques.",
+    "q9": "Comment le gouvernement canadien dépense-t-il mes impôts ?",
+    "a9": "Vos dollars d'impôt financent un large éventail de services et programmes gouvernementaux. Les principales catégories de dépenses incluent les transferts de santé aux provinces, les programmes sociaux comme la Sécurité de la vieillesse et l'Allocation canadienne pour enfants, la défense nationale, les projets d'infrastructure et le service de la dette. Notre calculateur fournit une répartition visuelle de la façon dont votre contribution fiscale spécifique est distribuée à travers ces catégories, vous aidant à comprendre exactement où va votre argent.",
+    "q10": "Comment ces budgets affectent-ils ma communauté ?",
+    "a10": "Les budgets fédéraux impactent les communautés locales en finançant des améliorations dans l'infrastructure, la santé, le logement et les services publics. Les investissements dans la création d'emplois, le développement économique local et les projets d'infrastructure régionale bénéficient directement à votre communauté en améliorant la qualité des services locaux et la stabilité économique globale.",
+    "q11": "Comment puis-je rester informé des dépenses fédérales et des politiques fiscales ?",
+    "a11": "Vous pouvez rester à jour en suivant les publications gouvernementales officielles telles que les",
+    "a11_link": "Comptes publics du Canada",
+    "a11_rest": "en visitant le site web du ministère des Finances, et en surveillant les sources d'information réputées qui couvrent les politiques fiscales et les mises à jour budgétaires. Les Comptes publics fournissent des informations détaillées sur les revenus, dépenses, actifs et passifs du gouvernement. Les consultations publiques et les sessions locales de députés (MP) sont également de bons canaux pour s'impliquer."
+  }
+}

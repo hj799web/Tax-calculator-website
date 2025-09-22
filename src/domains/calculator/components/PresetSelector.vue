@@ -3,7 +3,7 @@
     <div class="preset-header">
       <h3>
         <span class="material-icons icon">auto_awesome</span>
-        Budget Presets
+        {{ i18nText('simulator.presets.title', 'Budget Presets') }}
       </h3>
       <button 
         class="toggle-button"
@@ -12,7 +12,7 @@
         @click="isExpanded = !isExpanded"
       >
         <span class="material-icons">{{ isExpanded ? 'expand_less' : 'expand_more' }}</span>
-        <span class="sr-only">{{ isExpanded ? 'Hide' : 'Show' }} Presets</span>
+        <span class="sr-only">{{ isExpanded ? i18nText('simulator.presets.hide', 'Hide') : i18nText('simulator.presets.show', 'Show') }} {{ i18nText('simulator.presets.label', 'Presets') }}</span>
       </button>
     </div>
     
@@ -22,7 +22,7 @@
         id="preset-grid"
         class="preset-grid"
         role="group"
-        aria-label="Budget presets"
+        :aria-label="i18nText('simulator.presets.ariaGroup', 'Budget presets')"
       >
         <div 
           v-for="(preset, key) in budgetPresets" 
@@ -33,14 +33,14 @@
             class="preset-button" 
             :class="{ 'active': activePreset === key }"
             :aria-pressed="activePreset === key"
-            :aria-label="`Apply ${preset.label} preset`"
+            :aria-label="formatPresetAria(preset.label)"
             @click="applyPreset(key)"
             @mouseenter="hoveredPreset = key"
             @mouseleave="hoveredPreset = null"
           >
             <div class="preset-content">
               <div class="preset-label">
-                {{ preset.label }}
+                {{ presetLabel(key, preset.label) }}
               </div>
               <div
                 :id="`preset-desc-${key}`"
@@ -69,10 +69,10 @@
         class="preset-details"
       >
         <h4 class="preset-details-title">
-          {{ budgetPresets[hoveredPreset]?.label }}
+          {{ presetLabel(hoveredPreset, budgetPresets[hoveredPreset]?.label || '') }}
         </h4>
         <p class="preset-details-description">
-          {{ budgetPresets[hoveredPreset]?.description }}
+          {{ presetDescription(hoveredPreset, budgetPresets[hoveredPreset]?.description || '') }}
         </p>
         <div
           v-if="budgetPresets[hoveredPreset]?.fiscalBalance"
@@ -88,10 +88,10 @@
         class="preset-details"
       >
         <h4 class="preset-details-title">
-          {{ budgetPresets[activePreset]?.label }}
+          {{ presetLabel(activePreset, budgetPresets[activePreset]?.label || '') }}
         </h4>
         <p class="preset-details-description">
-          {{ budgetPresets[activePreset]?.description }}
+          {{ presetDescription(activePreset, budgetPresets[activePreset]?.description || '') }}
         </p>
         <div
           v-if="budgetPresets[activePreset]?.fiscalBalance"
@@ -106,7 +106,7 @@
         v-if="!hoveredPreset && !activePreset"
         class="preset-details preset-details-empty"
       >
-        <p>Hover over a preset to see details or click to apply it to your budget.</p>
+        <p>{{ i18nText('simulator.presets.hoverHint', 'Hover over a preset to see details or click to apply it to your budget.') }}</p>
       </div>
     </div>
     
@@ -117,15 +117,15 @@
     >
       <div class="active-preset-label">
         <span class="material-icons">check_circle</span>
-        Active Preset: {{ budgetPresets[activePreset]?.label }}
+        {{ i18nText('simulator.presets.activeLabel', 'Active Preset:') }} {{ presetLabel(activePreset, budgetPresets[activePreset]?.label || '') }}
       </div>
       <button 
         class="reset-button" 
-        aria-label="Reset active preset"
+        :aria-label="i18nText('simulator.presets.resetAria', 'Reset active preset')"
         @click="resetPreset"
       >
         <span class="material-icons">restart_alt</span>
-        Reset
+        {{ i18nText('simulator.presets.reset', 'Reset') }}
       </button>
     </div>
   </div>
@@ -165,46 +165,36 @@ export default {
   },
   
   methods: {
-    applyPreset(presetKey) {
-      // Apply the preset using the setPreset function from presets.js
-      setPreset(presetKey, this.budgetSimulatorStore);
-      
-      // Update the active preset
-      this.activePreset = presetKey;
-      
-      // Emit an event to notify parent components
-      this.$emit('preset-applied', presetKey);
+    i18nText(key, fallback = '') {
+      const value = this.$t ? this.$t(key) : key
+      return value === key ? fallback : value
     },
-    
-    resetPreset() {
-      // Clear the active preset
-      this.activePreset = null;
-      
-      // Reset the budget to default values
-      this.budgetSimulatorStore.resetBudget();
-      
-      // Emit an event to notify parent components
-      this.$emit('preset-reset');
+    presetLabel(key, fallback = '') {
+      return this.i18nText(`simulator.presets.items.${key}`, fallback)
     },
-    
+    presetDescription(key, fallback = '') {
+      return this.i18nText(`simulator.presets.descriptions.${key}`, fallback)
+    },
+    formatPresetAria(label) {
+      return this.i18nText('simulator.presets.applyAria', 'Apply {label} preset').replace('{label}', label)
+    },
     getFiscalBalanceLabel(balance) {
-      switch (balance) {
-        case 'balanced':
-          return 'Balanced';
-        case 'surplus':
-          return 'Surplus';
-        case 'deficit':
-          return 'Deficit';
-        default:
-          return '';
-      }
+      return this.i18nText(`simulator.presets.badge.${balance}`, balance.charAt(0).toUpperCase() + balance.slice(1))
     },
-    
+    applyPreset(presetKey) {
+      setPreset(presetKey, this.budgetSimulatorStore)
+      this.activePreset = presetKey
+      this.$emit('preset-applied', presetKey)
+    },
+    resetPreset() {
+      this.activePreset = null
+      this.budgetSimulatorStore.resetBudget()
+      this.$emit('preset-reset')
+    },
     getShortDescription(description) {
-      // Truncate description to a reasonable length for the tile display
-      return description.length > 60 
+      return description.length > 60
         ? description.substring(0, 57) + '...'
-        : description;
+        : description
     }
   }
 };

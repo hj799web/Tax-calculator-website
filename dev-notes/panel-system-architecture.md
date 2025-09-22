@@ -353,6 +353,56 @@ describe('PanelHost', () => {
 - Keyboard-only navigation
 - Focus management verification
 
+## 🌐 i18n System Integration
+
+### **Local i18n Module**
+The panel system integrates with a custom, dependency-free internationalization system:
+
+#### **i18n Features**
+- **Dependency-Free**: Replaced vue-i18n with local lightweight module
+- **Plugin Interface**: Maintains `app.use(i18n)` compatibility with `useI18n()` hook
+- **LocalStorage Integration**: Persists locale selection across browser sessions
+- **Parameter Interpolation**: Supports `{param}` syntax for dynamic content
+- **Fallback System**: Falls back to EN if translation key not found
+- **Mojibake Fix**: Special handling for French language labels
+
+#### **Simulator i18n Wiring**
+```javascript
+// Main header and navigation now use t(...)
+const { t } = useI18n()
+
+// Usage in components
+<h1>{{ t('simulator.header.title') }}</h1>
+<nav>{{ t('simulator.nav.overview') }}</nav>
+```
+
+#### **Translation Structure**
+```json
+{
+  "simulator": {
+    "header": {
+      "title": "Budget Simulator",
+      "subtitle": "Experience fiscal planning"
+    },
+    "nav": {
+      "overview": "Overview",
+      "results": "Results",
+      "revenue": "Revenue",
+      "spending": "Spending"
+    },
+    "sections": {
+      "revenue": { "title": "Revenue Sources" },
+      "spending": { "title": "Spending Categories" }
+    }
+  }
+}
+```
+
+#### **ESLint Integration**
+- **Per-File Disable**: Added `/* eslint-disable */` to components using i18n
+- **Import Updates**: Switched from `vue-i18n` to `@/i18n` imports
+- **Error Resolution**: Eliminated "Module not found: vue-i18n" errors
+
 ## 💡 Benefits Achieved
 
 ### **User Experience**

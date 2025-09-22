@@ -917,6 +917,15 @@ watch(activeTab, (value) => {
    - Mobile-optimized with horizontal scrolling
    - Consistent spacing and typography
 
+5. **i18n System Integration**
+   - **Local i18n Module**: Dependency-free internationalization utility
+   - **Plugin Interface**: Maintains `app.use(i18n)` compatibility with `useI18n()` hook
+   - **LocalStorage Integration**: Persists locale selection across sessions
+   - **Parameter Interpolation**: Supports `{param}` syntax for dynamic content
+   - **Fallback System**: Falls back to EN if translation key not found
+   - **Mojibake Fix**: Special handling for French language labels
+   - **Simulator i18n Wiring**: Main header, navigation, and section titles use `t(...)`
+
 ### Shared Tabs Component (`src/components/Tabs.vue`)
 
 #### Component Structure

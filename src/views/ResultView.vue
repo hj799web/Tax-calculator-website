@@ -4,45 +4,45 @@
       v-if="canCalculate"
       class="result-title"
     >
-      Your Tax Breakdown
+      {{ translate('result.title', 'Your Tax Breakdown') }}
     </h2>
     <div v-if="canCalculate">
       <div class="result-item">
-        <span>Federal Tax:</span>
+        <span>{{ translate('result.federalTax', 'Federal Tax:') }}</span>
         <span>
           {{ formatCurrency(netFederalTaxPerPeriod) }}
           ({{ federalTaxPercentage }}%)
         </span>
       </div>
       <div class="result-item">
-        <span>Provincial Tax:</span>
+        <span>{{ translate('result.provincialTax', 'Provincial Tax:') }}</span>
         <span>
           {{ formatCurrency(netProvincialTaxPerPeriod) }}
           ({{ provincialTaxPercentage }}%)
         </span>
       </div>
       <div class="result-item">
-        <span>CPP/QPP Contribution:</span>
+        <span>{{ translate('result.cppQppContribution', 'CPP/QPP Contribution:') }}</span>
         <span>
           {{ formatCurrency(pensionPlanContributionPerPeriod) }}
           ({{ cppTaxPercentage }}%)
         </span>
       </div>
       <div class="result-item">
-        <span>EI Premium:</span>
+        <span>{{ translate('result.eiPremium', 'EI Premium:') }}</span>
         <span>
           {{ formatCurrency(eiPremiumPerPeriod) }}
           ({{ eiTaxPercentage }}%)
         </span>
       </div>
       <div class="result-item total-tax">
-        <span>Total Tax:</span>
+        <span>{{ translate('result.totalTax', 'Total Tax:') }}</span>
         <span>
           {{ formatCurrency(totalTaxPerPeriod) }}
         </span>
       </div>
       <div class="result-item net-income">
-        <span>Net Income After Credits:</span>
+        <span>{{ translate('result.netIncomeAfterCredits', 'Net Income After Credits:') }}</span>
         <span>
           {{ formatCurrency(netIncomeAfterCreditsPerPeriod) }}
         </span>
@@ -51,10 +51,10 @@
       <!-- Export to PDF Button -->
       <button
         class="export-button"
-        aria-label="Export tax breakdown as PDF"
+        :aria-label="translate('result.exportPdfAria', 'Export tax breakdown as PDF')"
         @click="throttledExportToPDF"
       >
-        Export as PDF
+        {{ translate('result.exportPdf', 'Export as PDF') }}
       </button>
 
       <TaxPieChart />
@@ -64,8 +64,7 @@
       class="placeholder-text"
     >
       <p>
-        Please enter your income and select your province or territory to see
-        the tax breakdown.
+        {{ translate('result.placeholder', 'Please enter your income and select your province or territory to see the tax breakdown.') }}
       </p>
     </div>
     <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
@@ -83,6 +82,13 @@ import TaxPieChart from '@/domains/calculator/components/TaxPieChart.vue'
 import throttle from 'lodash.throttle'
 import { handleError } from '@/utils/errorHandler.js'
 import { ref } from 'vue'
+import { useI18n } from '@/i18n'
+
+const { t } = useI18n()
+const translate = (key, fallback = '', params) => {
+  const value = t(key, params)
+  return value === key ? fallback : value
+}
 
 const {
   netFederalTaxPerPeriod,

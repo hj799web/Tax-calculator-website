@@ -29,97 +29,97 @@
     <div class="content-wrapper">
       <!-- Main title -->
       <h1 class="main-title">
-        How It Works
+        {{ t('how.title') }}
       </h1>
 
       <!-- Main Navigation -->
       <MainNavigation />
       
       <div class="toc animate-in">
-        <h2>Table of Contents</h2>
+        <h2>{{ t('how.toc.title') }}</h2>
         <ol>
           <li>
             <a
               href="#calculator-methodology"
               @click.prevent="scrollToSection('calculator-methodology')"
-            >Calculator Methodology</a>
+            >{{ t('how.toc.items.calculatorMethodology') }}</a>
           </li>
           <li>
             <a
               href="#tax-calculation-process"
               @click.prevent="scrollToSection('tax-calculation-process')"
-            >Tax Calculation Process</a>
+            >{{ t('how.toc.items.taxCalculationProcess') }}</a>
           </li>
           <li>
             <a
               href="#income-types-and-deductions"
               @click.prevent="scrollToSection('income-types-and-deductions')"
-            >Income Types and Deductions</a>
+            >{{ t('how.toc.items.incomeTypesAndDeductions') }}</a>
           </li>
           <li>
             <a
               href="#government-spending-visualization"
               @click.prevent="scrollToSection('government-spending-visualization')"
-            >Government Spending Visualization</a>
+            >{{ t('how.toc.items.governmentSpendingVisualization') }}</a>
           </li>
           <li>
             <a
               href="#benefits-of-using-the-calculator"
               @click.prevent="scrollToSection('benefits-of-using-the-calculator')"
-            >Benefits of Using the Calculator</a>
+            >{{ t('how.toc.items.benefits') }}</a>
           </li>
           <li>
             <a
               href="#technical-implementation"
               @click.prevent="scrollToSection('technical-implementation')"
-            >Technical Implementation</a>
+            >{{ t('how.toc.items.technicalImplementation') }}</a>
           </li>
           <li>
             <a
               href="#data-sources-and-accuracy"
               @click.prevent="scrollToSection('data-sources-and-accuracy')"
-            >Data Sources and Accuracy</a>
+            >{{ t('how.toc.items.dataSourcesAndAccuracy') }}</a>
           </li>
           <li>
             <a
               href="#budget-simulator"
               @click.prevent="scrollToSection('budget-simulator')"
-            >Budget Simulator</a>
+            >{{ t('how.toc.items.budgetSimulator') }}</a>
           </li>
           <li>
             <a
               href="#faq"
               @click.prevent="scrollToSection('faq')"
-            >FAQ</a>
+            >{{ t('how.toc.items.faq') }}</a>
           </li>
         </ol>
       </div>
       
       <div class="section animate-in">
-        <p>The Canada Tax Calculator is a comprehensive, user-friendly tool designed to help Canadians understand their tax obligations and see how their tax dollars contribute to government spending. This documentation explains the calculator's methodology, features, and benefits.</p>
+        <p>{{ t('how.intro') }}</p>
       </div>
       
       <div
         id="calculator-methodology"
         class="section animate-in"
       >
-        <h2>Calculator Methodology</h2>
+        <h2>{{ t('how.sections.calculatorMethodology.title') }}</h2>
         
-        <h3>Tax Rates and Brackets</h3>
-        <p>The Canada Tax Calculator uses the latest 2025 federal and provincial tax rates and brackets to provide accurate tax estimates. The calculator includes:</p>
+        <h3>{{ t('how.sections.calculatorMethodology.taxRates.title') }}</h3>
+        <p>{{ t('how.sections.calculatorMethodology.taxRates.body') }}</p>
         <ul>
-          <li>Federal Tax Brackets: Five progressive tax brackets ranging from 15% to 33%</li>
-          <li>Provincial/Territorial Tax Brackets: Specific brackets for all 13 provinces and territories</li>
-          <li>CPP/QPP Contributions: Calculated based on employment income with appropriate maximums</li>
-          <li>EI Premiums: Calculated based on employment income with appropriate maximums</li>
+          <li>{{ t('how.sections.calculatorMethodology.taxRates.items.federal') }}</li>
+          <li>{{ t('how.sections.calculatorMethodology.taxRates.items.provincial') }}</li>
+          <li>{{ t('how.sections.calculatorMethodology.taxRates.items.cppqpp') }}</li>
+          <li>{{ t('how.sections.calculatorMethodology.taxRates.items.ei') }}</li>
         </ul>
         
-        <h3>Basic Personal Amounts</h3>
-        <p>The calculator accounts for both federal and provincial basic personal amounts (BPA), which are non-refundable tax credits that reduce the amount of tax you pay:</p>
+        <h3>{{ t('how.sections.calculatorMethodology.bpa.title') }}</h3>
+        <p>{{ t('how.sections.calculatorMethodology.bpa.body') }}</p>
         <ul>
-          <li>Federal Basic Personal Amount: $15,705 (2025)</li>
-          <li>Provincial Basic Personal Amounts: Vary by province/territory</li>
-          <li>Adjusted BPA for Marital Status: Increased BPA for individuals who are married or in common-law relationships</li>
+          <li>{{ t('how.sections.calculatorMethodology.bpa.items.federal') }}</li>
+          <li>{{ t('how.sections.calculatorMethodology.bpa.items.provincial') }}</li>
+          <li>{{ t('how.sections.calculatorMethodology.bpa.items.marital') }}</li>
         </ul>
       </div>
       
@@ -127,49 +127,49 @@
         id="tax-calculation-process"
         class="section animate-in"
       >
-        <h2>Tax Calculation Process</h2>
-        <p>The calculator follows these steps to determine your tax obligations:</p>
+        <h2>{{ t('how.sections.taxProcess.title') }}</h2>
+        <p>{{ t('how.sections.taxProcess.body') }}</p>
         
-        <h3>1. Collect Income Information</h3>
+        <h3>{{ t('how.sections.taxProcess.steps.collect.title') }}</h3>
         <ul>
-          <li>Employment income</li>
-          <li>Self-employment income</li>
-          <li>Capital gains (before and after June 25, 2024)</li>
-          <li>Eligible and ineligible dividends</li>
-          <li>Other income sources</li>
+          <li>{{ t('how.sections.taxProcess.steps.collect.items.employment') }}</li>
+          <li>{{ t('how.sections.taxProcess.steps.collect.items.self') }}</li>
+          <li>{{ t('how.sections.taxProcess.steps.collect.items.gains') }}</li>
+          <li>{{ t('how.sections.taxProcess.steps.collect.items.dividends') }}</li>
+          <li>{{ t('how.sections.taxProcess.steps.collect.items.other') }}</li>
         </ul>
         
-        <h3>2. Apply Deductions and Credits</h3>
+        <h3>{{ t('how.sections.taxProcess.steps.apply.title') }}</h3>
         <ul>
-          <li>RRSP deductions</li>
-          <li>Basic personal amounts</li>
-          <li>Dependent credits</li>
-          <li>Child credits</li>
-          <li>Dividend tax credits</li>
+          <li>{{ t('how.sections.taxProcess.steps.apply.items.rrsp') }}</li>
+          <li>{{ t('how.sections.taxProcess.steps.apply.items.bpa') }}</li>
+          <li>{{ t('how.sections.taxProcess.steps.apply.items.dependents') }}</li>
+          <li>{{ t('how.sections.taxProcess.steps.apply.items.childCredits') }}</li>
+          <li>{{ t('how.sections.taxProcess.steps.apply.items.dividendCredits') }}</li>
         </ul>
         
-        <h3>3. Calculate Federal Tax</h3>
+        <h3>{{ t('how.sections.taxProcess.steps.federal.title') }}</h3>
         <ul>
-          <li>Determine taxable income</li>
-          <li>Apply federal tax rates to appropriate income brackets</li>
-          <li>Subtract applicable tax credits</li>
+          <li>{{ t('how.sections.taxProcess.steps.federal.items.determineTaxable') }}</li>
+          <li>{{ t('how.sections.taxProcess.steps.federal.items.applyRates') }}</li>
+          <li>{{ t('how.sections.taxProcess.steps.federal.items.subtractCredits') }}</li>
         </ul>
         
-        <h3>4. Calculate Provincial/Territorial Tax</h3>
+        <h3>{{ t('how.sections.taxProcess.steps.provincial.title') }}</h3>
         <ul>
-          <li>Apply provincial/territorial tax rates to appropriate income brackets</li>
-          <li>Subtract applicable provincial tax credits</li>
+          <li>{{ t('how.sections.taxProcess.steps.provincial.items.applyRates') }}</li>
+          <li>{{ t('how.sections.taxProcess.steps.provincial.items.subtractCredits') }}</li>
         </ul>
         
-        <h3>5. Calculate CPP/QPP and EI Contributions</h3>
+        <h3>{{ t('how.sections.taxProcess.steps.payroll.title') }}</h3>
         <ul>
-          <li>CPP/QPP: 5.7% of employment income (11.4% for self-employed) up to maximum</li>
-          <li>EI: 1.63% of employment income up to maximum</li>
+          <li>{{ t('how.sections.taxProcess.steps.payroll.items.cppqpp') }}</li>
+          <li>{{ t('how.sections.taxProcess.steps.payroll.items.ei') }}</li>
         </ul>
         
-        <h3>6. Determine Net Income</h3>
+        <h3>{{ t('how.sections.taxProcess.steps.net.title') }}</h3>
         <ul>
-          <li>Subtract total tax (federal + provincial + CPP/QPP + EI) from gross income</li>
+          <li>{{ t('how.sections.taxProcess.steps.net.items.subtractTotal') }}</li>
         </ul>
       </div>
       
@@ -177,37 +177,37 @@
         id="income-types-and-deductions"
         class="section animate-in"
       >
-        <h2>Income Types and Deductions</h2>
-        <p>The calculator handles various income types differently, reflecting Canada's tax system:</p>
+        <h2>{{ t('how.sections.income.title') }}</h2>
+        <p>{{ t('how.sections.income.body') }}</p>
         
-        <h3>Employment Income</h3>
+        <h3>{{ t('how.sections.income.employment.title') }}</h3>
         <ul>
-          <li>Taxed at regular rates</li>
-          <li>Subject to CPP/QPP and EI premiums</li>
+          <li>{{ t('how.sections.income.employment.items.taxed') }}</li>
+          <li>{{ t('how.sections.income.employment.items.cppEi') }}</li>
         </ul>
         
-        <h3>Self-Employment Income</h3>
+        <h3>{{ t('how.sections.income.self.title') }}</h3>
         <ul>
-          <li>Taxed at regular rates</li>
-          <li>Subject to both employer and employee portions of CPP/QPP</li>
-          <li>Not subject to EI premiums (unless opted in)</li>
+          <li>{{ t('how.sections.income.self.items.taxed') }}</li>
+          <li>{{ t('how.sections.income.self.items.bothCpp') }}</li>
+          <li>{{ t('how.sections.income.self.items.noEi') }}</li>
         </ul>
         
-        <h3>Capital Gains</h3>
+        <h3>{{ t('how.sections.income.gains.title') }}</h3>
         <ul>
-          <li>50% of capital gains are taxable</li>
-          <li>Different treatment for gains before and after June 25, 2024</li>
+          <li>{{ t('how.sections.income.gains.items.halfTaxable') }}</li>
+          <li>{{ t('how.sections.income.gains.items.dateTreatment') }}</li>
         </ul>
         
-        <h3>Dividends</h3>
+        <h3>{{ t('how.sections.income.dividends.title') }}</h3>
         <ul>
-          <li>Eligible dividends are grossed up by 38% with a 15.02% federal dividend tax credit</li>
-          <li>Ineligible dividends are grossed up by 15% with a 9% federal dividend tax credit</li>
+          <li>{{ t('how.sections.income.dividends.items.eligible') }}</li>
+          <li>{{ t('how.sections.income.dividends.items.ineligible') }}</li>
         </ul>
         
-        <h3>RRSP Deductions</h3>
+        <h3>{{ t('how.sections.income.rrsp.title') }}</h3>
         <ul>
-          <li>Directly reduce taxable income</li>
+          <li>{{ t('how.sections.income.rrsp.items.reduces') }}</li>
         </ul>
       </div>
       
@@ -215,76 +215,76 @@
         id="government-spending-visualization"
         class="section animate-in"
       >
-        <h2>Government Spending Visualization</h2>
-        <p>A unique feature of our calculator is the visualization of how your tax dollars are allocated across different government spending categories:</p>
+        <h2>{{ t('how.sections.spendingViz.title') }}</h2>
+        <p>{{ t('how.sections.spendingViz.body') }}</p>
         
-        <h3>Federal Budget Allocation</h3>
-        <p>The calculator shows the breakdown of federal spending, including:</p>
+        <h3>{{ t('how.sections.spendingViz.federal.title') }}</h3>
+        <p>{{ t('how.sections.spendingViz.federal.body') }}</p>
         <ul>
-          <li>Healthcare</li>
-          <li>Support for Seniors</li>
-          <li>Children and Families</li>
-          <li>Indigenous Services and Reconciliation</li>
-          <li>Employment Insurance and Other Benefits</li>
-          <li>Defense and Public Safety</li>
-          <li>Debt Servicing</li>
-          <li>Public Debt Charges</li>
-          <li>Government Operations</li>
-          <li>Other categories</li>
+          <li>{{ t('how.sections.spendingViz.federal.items.health') }}</li>
+          <li>{{ t('how.sections.spendingViz.federal.items.seniors') }}</li>
+          <li>{{ t('how.sections.spendingViz.federal.items.families') }}</li>
+          <li>{{ t('how.sections.spendingViz.federal.items.indigenous') }}</li>
+          <li>{{ t('how.sections.spendingViz.federal.items.ei') }}</li>
+          <li>{{ t('how.sections.spendingViz.federal.items.defense') }}</li>
+          <li>{{ t('how.sections.spendingViz.federal.items.debtService') }}</li>
+          <li>{{ t('how.sections.spendingViz.federal.items.publicDebt') }}</li>
+          <li>{{ t('how.sections.spendingViz.federal.items.operations') }}</li>
+          <li>{{ t('how.sections.spendingViz.federal.items.other') }}</li>
         </ul>
         
-        <h3>Budget Visualization</h3>
-        <p>The calculator provides three different budget views:</p>
+        <h3>{{ t('how.sections.spendingViz.visualization.title') }}</h3>
+        <p>{{ t('how.sections.spendingViz.visualization.body') }}</p>
         <ul>
-          <li>2022-2023: Historical spending data from the Public Accounts of Canada</li>
-          <li>2023-2024: Proposed spending allocations from Budget 2024</li>
-          <li>2025-2026: Projected spending estimates based on current economic forecasts and government projections</li>
+          <li>{{ t('how.sections.spendingViz.visualization.items.y2023') }}</li>
+          <li>{{ t('how.sections.spendingViz.visualization.items.y2024') }}</li>
+          <li>{{ t('how.sections.spendingViz.visualization.items.y2026') }}</li>
         </ul>
         
-        <h3>Personal Tax Allocation</h3>
-        <p>Based on your federal tax amount, the calculator shows exactly how much of your personal tax contribution goes to each spending category, helping you understand the direct impact of your tax dollars.</p>
+        <h3>{{ t('how.sections.spendingViz.personal.title') }}</h3>
+        <p>{{ t('how.sections.spendingViz.personal.body') }}</p>
       </div>
       
       <div
         id="benefits-of-using-the-calculator"
         class="section animate-in"
       >
-        <h2>Benefits of Using the Calculator</h2>
+        <h2>{{ t('how.sections.benefits.title') }}</h2>
         
-        <h3>Accurate Tax Estimation</h3>
+        <h3>{{ t('how.sections.benefits.accuracy.title') }}</h3>
         <ul>
-          <li>Up-to-date tax brackets and rates for all provinces and territories</li>
-          <li>Comprehensive handling of various income types</li>
-          <li>Inclusion of major deductions and credits</li>
+          <li>{{ t('how.sections.benefits.accuracy.items.upToDate') }}</li>
+          <li>{{ t('how.sections.benefits.accuracy.items.incomeTypes') }}</li>
+          <li>{{ t('how.sections.benefits.accuracy.items.credits') }}</li>
         </ul>
         
-        <h3>Financial Planning</h3>
+        <h3>{{ t('how.sections.benefits.planning.title') }}</h3>
         <ul>
-          <li>Helps users understand their effective tax rate</li>
-          <li>Allows for income planning across different payment periods (annual, monthly, bi-weekly, etc.)</li>
-          <li>Supports retirement planning through RRSP contribution visualization</li>
+          <li>{{ t('how.sections.benefits.planning.items.rate') }}</li>
+          <li>{{ t('how.sections.benefits.planning.items.periods') }}</li>
+          <li>{{ t('how.sections.benefits.planning.items.rrsp') }}</li>
         </ul>
         
-        <h3>Tax Transparency</h3>
+        <h3>{{ t('how.sections.benefits.transparency.title') }}</h3>
         <ul>
-          <li>Clearly shows how tax dollars are allocated</li>
-          <li>Helps citizens understand government spending priorities</li>
-          <li>Connects personal contributions to public services</li>
+          <li>{{ t('how.sections.benefits.transparency.items.allocation') }}</li>
+          <li>{{ t('how.sections.benefits.transparency.items.priorities') }}</li>
+          <li>{{ t('how.sections.benefits.transparency.items.connection') }}</li>
         </ul>
         
-        <h3>Educational Value</h3>
+        <h3>{{ t('how.sections.benefits.education.title') }}</h3>
         <ul>
-          <li>Improves financial literacy</li>
-          <li>Demystifies the Canadian tax system</li>
-          <li>Helps users make informed financial decisions</li>
+          <li>{{ t('how.sections.benefits.education.items.literacy') }}</li>
+          <li>{{ t('how.sections.benefits.education.items.demystify') }}</li>
+          <li>{{ t('how.sections.benefits.education.items.decisions') }}</li>
         </ul>
         
-        <h3>Accessibility</h3>
+        <h3>{{ t('how.sections.benefits.accessibility.title') }}</h3>
         <ul>
-          <li>Free to use</li>
-          <li>No registration required</li>
-          <li>Mobile-friendly design</li>
-          <li>Exportable results (PDF format)</li>
+          <li>{{ t('how.sections.benefits.accessibility.items.free') }}</li>
+          <li>{{ t('how.sections.benefits.accessibility.items.noReg') }}</li>
+          <li>{{ t('how.sections.benefits.accessibility.items.mobile') }}</li>
+          <li>{{ t('how.sections.benefits.accessibility.items.export') }}</li>
         </ul>
       </div>
       
@@ -292,19 +292,19 @@
         id="technical-implementation"
         class="section animate-in"
       >
-        <h2>Technical Implementation</h2>
-        <p>The Canada Tax Calculator and Budget Simulator are built using modern web technologies:</p>
+        <h2>{{ t('how.sections.tech.title') }}</h2>
+        <p>{{ t('how.sections.tech.body') }}</p>
         <ul>
-          <li>Frontend Framework: Vue.js for reactive, component-based UI</li>
-          <li>State Management: Pinia for efficient state management</li>
-          <li>Visualization: Chart.js for interactive data visualization</li>
-          <li>Styling: CSS with responsive design principles</li>
-          <li>Validation: Form validation to ensure accurate inputs</li>
-          <li>PDF Export: Capability to export results as PDF documents</li>
-          <li>Real-time Calculations: Efficient algorithms for instant budget updates</li>
-          <li>Interactive Controls: Custom slider components for budget adjustments</li>
-          <li>Tooltip System: Dynamic tooltips for detailed information display</li>
-          <li>Auto-balance Feature: Smart algorithms for budget optimization</li>
+          <li>{{ t('how.sections.tech.items.frontend') }}</li>
+          <li>{{ t('how.sections.tech.items.state') }}</li>
+          <li>{{ t('how.sections.tech.items.viz') }}</li>
+          <li>{{ t('how.sections.tech.items.styling') }}</li>
+          <li>{{ t('how.sections.tech.items.validation') }}</li>
+          <li>{{ t('how.sections.tech.items.export') }}</li>
+          <li>{{ t('how.sections.tech.items.realtime') }}</li>
+          <li>{{ t('how.sections.tech.items.controls') }}</li>
+          <li>{{ t('how.sections.tech.items.tooltips') }}</li>
+          <li>{{ t('how.sections.tech.items.autobalance') }}</li>
         </ul>
       </div>
       
@@ -312,163 +312,163 @@
         id="data-sources-and-accuracy"
         class="section animate-in"
       >
-        <h2>Data Sources and Accuracy</h2>
-        <p>The calculator uses data from authoritative sources:</p>
+        <h2>{{ t('how.sections.data.title') }}</h2>
+        <p>{{ t('how.sections.data.body') }}</p>
         <ul>
-          <li>Tax Rates and Brackets: Canada Revenue Agency (CRA) and provincial tax authorities</li>
-          <li>Budget Allocation: Public Accounts of Canada financial report</li>
-          <li>Budget 2024: Official Budget 2024 documentation</li>
+          <li>{{ t('how.sections.data.items.rates') }}</li>
+          <li>{{ t('how.sections.data.items.publicAccounts') }}</li>
+          <li>{{ t('how.sections.data.items.budget2024') }}</li>
         </ul>
-        <p>While the calculator provides accurate estimates based on the information provided, it is designed for educational and planning purposes. Individual tax situations may vary, and users should consult with a tax professional for personalized advice.</p>
+        <p>{{ t('how.sections.data.note') }}</p>
       </div>
       
       <div
         id="budget-simulator"
         class="section animate-in"
       >
-        <h2>Budget Simulator</h2>
-        <p>The Budget Simulator is an interactive tool that allows you to explore and understand how federal budget allocations work. Here's how it functions:</p>
+        <h2>{{ t('how.sections.simulator.title') }}</h2>
+        <p>{{ t('how.sections.simulator.body') }}</p>
 
-        <h3>Key Features</h3>
+        <h3>{{ t('how.sections.simulator.features.title') }}</h3>
         <ul>
-          <li>Interactive spending controls for major budget categories</li>
-          <li>Real-time deficit/surplus calculations</li>
-          <li>Visual representation of budget impacts</li>
-          <li>Auto-balance functionality for budget optimization</li>
-          <li>Detailed tooltips explaining each category</li>
+          <li>{{ t('how.sections.simulator.features.items.controls') }}</li>
+          <li>{{ t('how.sections.simulator.features.items.realtime') }}</li>
+          <li>{{ t('how.sections.simulator.features.items.viz') }}</li>
+          <li>{{ t('how.sections.simulator.features.items.autobalance') }}</li>
+          <li>{{ t('how.sections.simulator.features.items.tooltips') }}</li>
         </ul>
 
-        <h3>Main Categories</h3>
+        <h3>{{ t('how.sections.simulator.mainCats.title') }}</h3>
         <ul>
-          <li>Social Programs: Healthcare, education, and social services</li>
-          <li>Economic Development: Infrastructure, business support, and innovation</li>
-          <li>Defense and Security: Military, policing, and border security</li>
-          <li>Environmental Protection: Climate action and conservation</li>
-          <li>International Affairs: Foreign aid and diplomatic relations</li>
+          <li>{{ t('how.sections.simulator.mainCats.items.social') }}</li>
+          <li>{{ t('how.sections.simulator.mainCats.items.economic') }}</li>
+          <li>{{ t('how.sections.simulator.mainCats.items.security') }}</li>
+          <li>{{ t('how.sections.simulator.mainCats.items.environment') }}</li>
+          <li>{{ t('how.sections.simulator.mainCats.items.international') }}</li>
         </ul>
 
-        <h3>How to Use the Simulator</h3>
+        <h3>{{ t('how.sections.simulator.howTo.title') }}</h3>
         <ol>
-          <li>Adjust spending percentages for different categories using the sliders</li>
-          <li>Monitor the real-time impact on total spending and deficit/surplus</li>
-          <li>Use the auto-balance feature to automatically adjust revenue sources</li>
-          <li>View detailed information about each category by hovering over the info icons</li>
-          <li>Export your budget plan or share it with others</li>
+          <li>{{ t('how.sections.simulator.howTo.items.adjust') }}</li>
+          <li>{{ t('how.sections.simulator.howTo.items.monitor') }}</li>
+          <li>{{ t('how.sections.simulator.howTo.items.autobalance') }}</li>
+          <li>{{ t('how.sections.simulator.howTo.items.details') }}</li>
+          <li>{{ t('how.sections.simulator.howTo.items.export') }}</li>
         </ol>
 
-        <h3>Understanding the Results</h3>
+        <h3>{{ t('how.sections.simulator.results.title') }}</h3>
         <ul>
-          <li>Total Revenue: Shows the sum of all revenue sources</li>
-          <li>Total Spending: Displays the combined spending across all categories</li>
-          <li>Surplus/Deficit: Indicates whether your budget is balanced</li>
-          <li>Debt-to-GDP Ratio: Shows the impact on national debt levels</li>
-          <li>Category Impacts: Displays how changes affect individual programs</li>
+          <li>{{ t('how.sections.simulator.results.items.totalRevenue') }}</li>
+          <li>{{ t('how.sections.simulator.results.items.totalSpending') }}</li>
+          <li>{{ t('how.sections.simulator.results.items.surplusDeficit') }}</li>
+          <li>{{ t('how.sections.simulator.results.items.debtToGdp') }}</li>
+          <li>{{ t('how.sections.simulator.results.items.categoryImpacts') }}</li>
         </ul>
 
-        <h3>Tips for Effective Use</h3>
+        <h3>{{ t('how.sections.simulator.tips.title') }}</h3>
         <ul>
-          <li>Start with small adjustments to understand the impact</li>
-          <li>Use the auto-balance feature to maintain fiscal responsibility</li>
-          <li>Pay attention to the deficit warnings for sustainable budgeting</li>
-          <li>Consider the interconnected nature of different spending categories</li>
-          <li>Review the tooltips for detailed information about each category</li>
+          <li>{{ t('how.sections.simulator.tips.items.startSmall') }}</li>
+          <li>{{ t('how.sections.simulator.tips.items.autoBalance') }}</li>
+          <li>{{ t('how.sections.simulator.tips.items.watchDeficit') }}</li>
+          <li>{{ t('how.sections.simulator.tips.items.interconnected') }}</li>
+          <li>{{ t('how.sections.simulator.tips.items.reviewTooltips') }}</li>
         </ul>
 
-        <h3>Understanding Tax Calculations</h3>
-        <p>The Budget Simulator uses a simplified approach to tax calculations to help users understand the broad fiscal impact of tax changes:</p>
+        <h3>{{ t('how.sections.simulator.taxCalc.title') }}</h3>
+        <p>{{ t('how.sections.simulator.taxCalc.body') }}</p>
         
-        <h4>Personal Income Tax</h4>
+        <h4>{{ t('how.sections.simulator.personal.title') }}</h4>
         <ul>
-          <li>Uses an average effective tax rate approach rather than detailed tax brackets</li>
-          <li>Base rate: 21% (2024)</li>
-          <li>Base amount: $10 billion per 1% change</li>
-          <li>Total revenue: $210 billion</li>
-          <li>Adjustable range: 0% to 50%</li>
-          <li>Includes tax credits and deferrals that can be adjusted separately</li>
+          <li>{{ t('how.sections.simulator.personal.items.method') }}</li>
+          <li>{{ t('how.sections.simulator.personal.items.baseRate') }}</li>
+          <li>{{ t('how.sections.simulator.personal.items.baseAmount') }}</li>
+          <li>{{ t('how.sections.simulator.personal.items.totalRevenue') }}</li>
+          <li>{{ t('how.sections.simulator.personal.items.range') }}</li>
+          <li>{{ t('how.sections.simulator.personal.items.credits') }}</li>
         </ul>
 
-        <h4>Corporate Income Tax</h4>
+        <h4>{{ t('how.sections.simulator.corporate.title') }}</h4>
         <ul>
-          <li>Uses a simplified rate structure rather than detailed brackets</li>
-          <li>Base rate: 15% (2024)</li>
-          <li>Base amount: $5.33 billion per 1% change</li>
-          <li>Total revenue: $80 billion</li>
-          <li>Adjustable range: 0% to 40%</li>
-          <li>Includes corporate tax expenditures that can be adjusted separately</li>
+          <li>{{ t('how.sections.simulator.corporate.items.method') }}</li>
+          <li>{{ t('how.sections.simulator.corporate.items.baseRate') }}</li>
+          <li>{{ t('how.sections.simulator.corporate.items.baseAmount') }}</li>
+          <li>{{ t('how.sections.simulator.corporate.items.totalRevenue') }}</li>
+          <li>{{ t('how.sections.simulator.corporate.items.range') }}</li>
+          <li>{{ t('how.sections.simulator.corporate.items.expenditures') }}</li>
         </ul>
 
-        <h4>Tax Expenditures and Credits</h4>
+        <h4>{{ t('how.sections.simulator.taxExpenditures.title') }}</h4>
         <ul>
-          <li><strong>Personal Tax Credits:</strong>
+          <li><strong>{{ t('how.sections.simulator.taxExpenditures.personal.title') }}</strong>
             <ul>
-              <li>Base amount: $120 billion gross</li>
-              <li>Net amount: $102 billion (adjusted for interactions)</li>
-              <li>Can be adjusted to impact personal income tax revenue</li>
+              <li>{{ t('how.sections.simulator.taxExpenditures.personal.items.baseAmount') }}</li>
+              <li>{{ t('how.sections.simulator.taxExpenditures.personal.items.netAmount') }}</li>
+              <li>{{ t('how.sections.simulator.taxExpenditures.personal.items.impact') }}</li>
             </ul>
           </li>
-          <li><strong>Corporate Tax Expenditures:</strong>
+          <li><strong>{{ t('how.sections.simulator.taxExpenditures.corporate.title') }}</strong>
             <ul>
-              <li>Base amount: $25 billion gross</li>
-              <li>Net amount: $23.75 billion (adjusted for interactions)</li>
-              <li>Can be adjusted to impact corporate income tax revenue</li>
+              <li>{{ t('how.sections.simulator.taxExpenditures.corporate.items.baseAmount') }}</li>
+              <li>{{ t('how.sections.simulator.taxExpenditures.corporate.items.netAmount') }}</li>
+              <li>{{ t('how.sections.simulator.taxExpenditures.corporate.items.impact') }}</li>
             </ul>
           </li>
         </ul>
 
-        <p>This simplified approach allows users to understand the broad fiscal impact of tax changes without getting lost in the complexity of detailed tax brackets and calculations. The simulator focuses on the overall revenue impact rather than individual taxpayer scenarios.</p>
+        <p>{{ t('how.sections.simulator.summary') }}</p>
       </div>
       
       <div
         id="faq"
         class="section animate-in"
       >
-        <h2>FAQ</h2>
+        <h2>{{ t('how.sections.faq.title') }}</h2>
         
-        <h3>How accurate is the calculator?</h3>
-        <p>The calculator provides a close estimate based on the information you provide and the latest tax rates. However, it's a simplified model and doesn't account for all possible deductions, credits, or special situations.</p>
+        <h3>{{ t('how.sections.faq.q1') }}</h3>
+        <p>{{ t('how.sections.faq.a1') }}</p>
         
-        <h3>Does the calculator store my data?</h3>
-        <p>No, all calculations are performed in your browser. No personal or financial information is stored on our servers.</p>
+        <h3>{{ t('how.sections.faq.q2') }}</h3>
+        <p>{{ t('how.sections.faq.a2') }}</p>
         
-        <h3>How often is the calculator updated?</h3>
-        <p>We update the calculator annually to reflect changes in tax rates, brackets, and government spending allocations. The current version uses 2024 tax rates.</p>
+        <h3>{{ t('how.sections.faq.q3') }}</h3>
+        <p>{{ t('how.sections.faq.a3') }}</p>
         
-        <h3>Can I use the calculator for business taxes?</h3>
-        <p>The calculator is designed for personal income taxes. Business taxes involve different rules and considerations.</p>
+        <h3>{{ t('how.sections.faq.q4') }}</h3>
+        <p>{{ t('how.sections.faq.a4') }}</p>
         
-        <h3>How are the government spending allocations determined?</h3>
-        <p>The spending allocations are based on the Public Accounts of Canada and Budget 2024 documents, which provide detailed breakdowns of federal government expenditures.</p>
+        <h3>{{ t('how.sections.faq.q5') }}</h3>
+        <p>{{ t('how.sections.faq.a5') }}</p>
         
-        <h3>Does the calculator account for all possible tax credits?</h3>
-        <p>The calculator includes major credits like the basic personal amount and simplified child credits, but doesn't account for all possible credits like medical expenses, tuition, or charitable donations.</p>
+        <h3>{{ t('how.sections.faq.q6') }}</h3>
+        <p>{{ t('how.sections.faq.a6') }}</p>
 
-        <h3>How does the Budget Simulator work?</h3>
-        <p>The Budget Simulator uses approximate federal budget data from Public Accounts of Canada and Budget 2024 documents to allow you to experiment with different spending allocations. It calculates the impact of your changes on the overall budget, including effects on deficit/surplus and debt-to-GDP ratio.</p>
+        <h3>{{ t('how.sections.faq.q7') }}</h3>
+        <p>{{ t('how.sections.faq.a7') }}</p>
 
-        <h3>What is the auto-balance feature?</h3>
-        <p>The auto-balance feature automatically adjusts revenue sources to maintain a balanced budget when you make spending changes. It helps you understand the trade-offs between different fiscal policies.</p>
+        <h3>{{ t('how.sections.faq.q8') }}</h3>
+        <p>{{ t('how.sections.faq.a8') }}</p>
 
-        <h3>Can I save my budget simulations?</h3>
-        <p>Yes, you can export your budget plan as a PDF document, which includes all your spending allocations and their impacts. This allows you to save and share your budget scenarios.</p>
+        <h3>{{ t('how.sections.faq.q9') }}</h3>
+        <p>{{ t('how.sections.faq.a9') }}</p>
 
-        <h3>How accurate are the budget impact calculations?</h3>
-        <p>The budget impact calculations are based on current federal budget data and economic models. While they provide a good approximation of the effects of spending changes, they are simplified models and don't account for all possible economic interactions.</p>
+        <h3>{{ t('how.sections.faq.q10') }}</h3>
+        <p>{{ t('how.sections.faq.a10') }}</p>
 
-        <h3>What do the tooltips show?</h3>
-        <p>The tooltips provide detailed information about each budget category, including current spending levels, program descriptions, and potential impacts of changes. They help you make informed decisions about budget allocations.</p>
+        <h3>{{ t('how.sections.faq.q11') }}</h3>
+        <p>{{ t('how.sections.faq.a11') }}</p>
 
-        <h3>How are tax rates and revenue calculated in the Budget Simulator?</h3>
-        <p>The Budget Simulator uses a simplified approach to tax calculations to make it easier to understand the fiscal impact of tax changes. Instead of detailed tax brackets, it uses average effective rates. For Personal Income Tax, the base rate is 21% (2024) with $10 billion in revenue per percentage point. Corporate Income Tax uses a base rate of 15% (2024) with $5.33 billion in revenue per percentage point. Tax credits and expenditures can be adjusted separately to see their impact on revenue. The simulator focuses on overall revenue impact rather than individual taxpayer scenarios, helping users understand the broad fiscal implications of tax changes while maintaining a manageable level of complexity.</p>
+        <h3>{{ t('how.sections.faq.q12') }}</h3>
+        <p>{{ t('how.sections.faq.a12') }}</p>
       </div>
       
       <div class="footer">
-        <p>This documentation was last updated: May 2025</p>
-        <p>For questions or feedback, please contact: <a href="mailto:fiscal-insights@outlook.com">fiscal-insights@outlook.com</a></p>
+        <p>{{ t('how.footer.updated') }}</p>
+        <p>{{ t('how.footer.contact') }} <a href="mailto:fiscal-insights@outlook.com">fiscal-insights@outlook.com</a></p>
         <router-link
           to="/"
           class="back-link"
         >
-          ← Back to Calculator
+          {{ t('how.footer.back') }}
         </router-link>
       </div>
     </div>
@@ -476,9 +476,11 @@
 </template>
 
 <script>
+/* eslint-disable */
 import initAllAnimations from '../assets/howItWorksAnimations.js';
 import '../assets/decorativeElements.css'; // Import decorative elements CSS file
 import MainNavigation from '@/components/MainNavigation.vue';
+import { useI18n } from '@/i18n'
 
 export default {
   name: 'HowItWorksView',
@@ -497,6 +499,10 @@ export default {
   mounted() {
     // Initialize all 3D animations and effects
     initAllAnimations();
+  },
+  setup() {
+    const { t } = useI18n()
+    return { t }
   },
   methods: {
     scrollToSection(sectionId) {
