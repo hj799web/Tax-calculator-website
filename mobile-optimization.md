@@ -194,6 +194,51 @@ Added transparent data source information to build user trust:
 - **≤1024px**: Tablet-friendly layouts with compact navigation
 - **>1024px**: Full desktop experience
 
+## Tax Breakdown Popup Mobile Integration
+
+### Mobile-Optimized Popup Features
+The Tax Breakdown Popup has been specifically designed for mobile devices with touch-first interactions:
+
+#### **Responsive Design**
+- **Full-width glassmorphism notification**: Adapts to mobile viewport widths
+- **Touch-optimized tab "chips"**: Large touch targets (44px minimum) for easy selection
+- **Mobile-friendly animations**: Smooth transitions and pulse highlights optimized for touch devices
+- **Responsive orbit graphic**: Animated visual elements that scale appropriately on mobile screens
+
+#### **Dynamic Content Adaptation**
+- **Federal tax-based content**: Tags, titles, and descriptions remain readable on small screens
+- **Fluid typography**: Uses the same `clamp()` scaling system as other mobile components
+- **Touch-friendly micro-teasers**: Tab "chips" with appropriate spacing and sizing for mobile
+
+#### **Mobile Navigation Integration**
+- **Custom event system**: `tax-tabs:navigate` events work seamlessly on mobile
+- **Touch-optimized scrolling**: Smooth scrolling to revealed content with mobile-friendly momentum
+- **Pulse highlight animation**: Visual feedback that works well on touch devices
+- **Safe area awareness**: Popup respects mobile safe areas and doesn't interfere with system UI
+
+#### **Mobile-Specific Considerations**
+```css
+/* Mobile popup styling */
+.tax-breakdown-popup {
+  /* Full-width on mobile */
+  width: 100vw;
+  max-width: 100vw;
+  
+  /* Touch-friendly spacing */
+  padding: 16px;
+  
+  /* Safe area awareness */
+  padding-bottom: calc(16px + env(safe-area-inset-bottom));
+}
+
+/* Mobile tab chips */
+.tab-chip {
+  min-height: 44px;
+  min-width: 44px;
+  touch-action: manipulation;
+}
+```
+
 ## Testing Guidelines
 
 ### Mobile Testing Checklist
