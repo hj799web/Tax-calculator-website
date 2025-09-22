@@ -1,4 +1,15 @@
-# my-new-project
+# Canada Tax Calculator
+
+A comprehensive tax calculation tool for Canadian taxpayers with government spending visualization and budget simulation capabilities.
+
+## Features
+
+- **Accurate Tax Calculations**: Federal and provincial tax calculations based on 2024 tax rates
+- **Government Spending Visualization**: See how your tax dollars are allocated across different categories
+- **Budget Simulator**: Step into the shoes of Canada's Finance Minister
+- **Bilingual Support**: Full English and French language support
+- **Mobile Responsive**: Optimized for all device sizes
+- **Accessibility**: WCAG 2.1 AA compliant with keyboard navigation
 
 ## Project setup
 ```
@@ -22,7 +33,20 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
-# Web-development
+
+## Recent Updates
+
+### Localization and Welcome Page Conversion (2025-01-21)
+
+- **Welcome Page Conversion**: Converted static HTML welcome pages to fully integrated Vue.js component with i18n support
+- **Comprehensive Localization**: Added complete French translations for all calculator components, results, FAQs, and budget categories
+- **Language Switching**: Implemented seamless language switching with persistence across all pages
+- **Navigation Integration**: Added identical navigation banner to welcome page matching main application
+- **Mobile Optimization**: Enhanced responsive design with touch-friendly interactions and proper scaling
+
+For detailed documentation, see:
+- `docs/LOCALIZATION_AND_WELCOME_PAGE_UPDATE.md`
+- `docs/CHANGELOG.md`
 
 ## Recent UI/UX updates (2025 refresh)
 
