@@ -2,6 +2,43 @@
 
 This project is actively evolving. This log highlights user‑visible and developer‑relevant changes made during the tab UX and onboarding overhaul.
 
+## 2025‑01‑21 – Comprehensive Localization and Welcome Page Conversion
+
+- **Welcome Page Conversion**: Complete transformation of static HTML welcome pages
+  - Converted `docs/welcome.html` and `public/welcome.html` to Vue.js component `src/views/WelcomeView.vue`
+  - Full i18n integration with seamless language switching
+  - Preserved all original styling, animations, and glassmorphism effects
+  - Added navigation banner identical to main application
+  - Responsive design with mobile optimization and touch-friendly interactions
+
+- **Comprehensive Localization**: Complete bilingual support implementation
+  - Added French translations for all calculator components, results, FAQs, and budget categories
+  - Localized hardcoded strings in `FederalBudgetView.vue`, `BudgetCategoriesView.vue`, `ResultView.vue`
+  - Updated Pinia stores (`calculator.js`, `year.js`) to support dynamic translations
+  - Enhanced `TaxPieChart.vue` and `FAQSection.vue` with translation keys
+  - Added loading and error message translations for lazy-loaded components
+
+- **Translation Architecture**: Robust i18n system implementation
+  - Created comprehensive translation keys in `en.json` and `fr.json`
+  - Added `welcome` section with meta, header, nav, features, about, faq, simulator, and footer subsections
+  - Implemented helper functions for dynamic category name translation
+  - Added year-specific FAQ handling with conditional rendering
+  - Proper French typography with accents and cultural adaptations
+
+- **User Experience Enhancements**: Seamless language switching and navigation
+  - Language preference persistence using localStorage
+  - Global language switching affects entire application
+  - Identical navigation experience across all pages
+  - Mobile-responsive language switcher with proper touch targets
+  - Accessibility improvements with ARIA labels and keyboard navigation
+
+- **Technical Improvements**: Performance and maintainability optimizations
+  - Fixed CSS syntax errors and improved code structure
+  - Proper asset handling for background images and logos
+  - Computed properties for efficient reactive translations
+  - Hardware-accelerated 3D transform effects with reduced motion support
+  - Clean separation of concerns with scoped component styles
+
 ## 2025‑01‑20 – Tax Breakdown Popup Federal Tax Integration + i18n Refactoring
 
 - **Federal Tax-Based Popup Triggering**: Enhanced popup logic for better user experience
