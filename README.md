@@ -5,6 +5,7 @@ A comprehensive tax calculation tool for Canadian taxpayers with government spen
 ## Features
 
 - **Accurate Tax Calculations**: Federal and provincial tax calculations based on 2024 tax rates
+- **Quebec-Specific Tax Features**: Complete Quebec tax calculations including abatement, QPIP, and Quebec-specific rates for EI and QPP
 - **Government Spending Visualization**: See how your tax dollars are allocated across different categories
 - **Budget Simulator**: Step into the shoes of Canada's Finance Minister
 - **Bilingual Support**: Full English and French language support
@@ -35,6 +36,16 @@ npm run lint
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ## Recent Updates
+
+### Quebec Tax Calculation Enhancements (2025-01-21)
+
+- **Quebec Abatement Implementation**: Added 16.5% federal tax reduction for Quebec residents
+- **Quebec Tax Brackets Update**: Corrected 2024 Quebec tax brackets to official Revenu Québec rates
+- **QPIP Integration**: Added mandatory Quebec Parental Insurance Plan (0.494% rate)
+- **Quebec-Specific Rates**: Implemented Quebec EI rate (1.32% vs 1.63% federal) and QPP rates (6.4% vs 5.7% CPP)
+- **Enhanced Basic Personal Amount**: Updated Quebec BPA to $18,000 (higher than most provinces)
+- **Comprehensive Documentation**: Added detailed Quebec-specific tax features section to all documentation
+- **Bilingual Support**: Full French translations for all Quebec tax features
 
 ### Chart Translation and Localization Enhancement (2025-01-21)
 

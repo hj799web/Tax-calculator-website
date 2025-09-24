@@ -2,6 +2,47 @@
 
 This project is actively evolving. This log highlights user‑visible and developer‑relevant changes made during the tab UX and onboarding overhaul.
 
+## 2025‑01‑21 – Quebec Tax Calculation Enhancements
+
+- **Quebec Abatement Implementation**: Added 16.5% federal tax reduction for Quebec residents
+  - Quebec residents now receive a 16.5% reduction on their federal basic tax
+  - This reflects Quebec's unique tax administration system
+  - Significant tax savings for Quebec residents (typically $1,500-2,000+ for higher incomes)
+
+- **Quebec Tax Brackets Correction**: Updated to official 2024 Revenu Québec rates
+  - Corrected Quebec tax brackets: 15%, 20%, 24%, 25.75% with proper thresholds
+  - Updated brackets: 15% up to $51,780, 20% to $103,545, 24% to $126,000, 25.75% above
+  - Replaced incorrect 2024 brackets that were using outdated rates
+
+- **QPIP Integration**: Added mandatory Quebec Parental Insurance Plan
+  - 0.494% rate on income up to $91,000
+  - Maximum annual contribution: $449
+  - Mandatory for all Quebec residents with employment income
+  - Included in total tax calculations for Quebec residents
+
+- **Quebec-Specific Contribution Rates**: Implemented accurate Quebec rates
+  - Quebec EI rate: 1.32% (vs 1.63% federal rate) with $63,200 max insurable earnings
+  - Quebec QPP rate: 6.4% (vs 5.7% CPP) with $3,500 basic exemption
+  - Maximum QPP contribution: $4,160 annually
+  - Self-employed QPP rate: 12.8% (vs 11.4% CPP)
+
+- **Enhanced Basic Personal Amount**: Updated Quebec BPA to $18,000
+  - Higher than most provinces (vs $15,705 federal)
+  - Provides additional tax relief for Quebec residents
+  - Updated in all tax calculations and documentation
+
+- **Comprehensive Documentation Updates**: Added detailed Quebec-specific features
+  - New "Quebec-Specific Tax Features" section in all documentation
+  - Updated tax calculation process to include Quebec abatement and QPIP
+  - Bilingual support with complete French translations
+  - Updated README.md and CHANGELOG.md with Quebec enhancements
+
+- **Technical Implementation**: Robust Quebec tax calculation system
+  - Added `calculateQuebecAbatement()`, `calculateQpipContribution()`, `calculateQppContribution()` functions
+  - Updated `calculateEiPremium()` to handle Quebec-specific rates
+  - Integrated Quebec calculations into main calculator store
+  - Added QPIP to total tax calculations and percentage breakdowns
+
 ## 2025‑01‑21 – Chart Translation and Localization Enhancement
 
 - **Federal Budget Chart Translation**: Complete translation of chart visualizations

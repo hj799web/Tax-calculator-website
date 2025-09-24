@@ -827,7 +827,8 @@
             "federal": "Federal tax brackets: progressive rates across income levels",
             "provincial": "Provincial/territorial brackets for all 13 regions",
             "cppqpp": "CPP/QPP contributions computed with appropriate maximums",
-            "ei": "EI premiums computed with appropriate maximums"
+            "ei": "EI premiums computed with appropriate maximums",
+            "quebec": "Quebec-specific features: abatement, QPIP, and Quebec rates for EI and QPP"
           }
         },
         "bpa": {
@@ -836,6 +837,7 @@
           "items": {
             "federal": "Federal Basic Personal Amount",
             "provincial": "Provincial/Territorial Basic Personal Amounts",
+            "quebec": "Quebec Basic Personal Amount: $18,000 (higher than most provinces)",
             "marital": "Adjusted BPA may apply based on marital status"
           }
         }
@@ -887,6 +889,60 @@
         },
         "rrsp": {
           "title": "RRSP Deductions"
+        }
+      },
+      "quebecFeatures": {
+        "title": "Quebec-Specific Tax Features",
+        "body": "Quebec has unique tax rules that differ from other Canadian provinces. The calculator accounts for these Quebec-specific considerations:",
+        "abatement": {
+          "title": "Quebec Abatement",
+          "body": "Quebec residents receive a 16.5% reduction on their federal basic tax. This is because Quebec administers its own tax system and collects federal taxes on behalf of the federal government."
+        },
+        "brackets": {
+          "title": "Quebec Tax Brackets (2024)",
+          "items": {
+            "bracket1": "15% on income up to $51,780",
+            "bracket2": "20% on income from $51,780 to $103,545",
+            "bracket3": "24% on income from $103,545 to $126,000",
+            "bracket4": "25.75% on income above $126,000"
+          }
+        },
+        "qpp": {
+          "title": "Quebec Pension Plan (QPP)",
+          "body": "Quebec uses its own pension plan instead of the federal CPP:",
+          "items": {
+            "rate": "Rate: 6.4% (vs 5.7% for CPP)",
+            "exemption": "Basic exemption: $3,500",
+            "maxEarnings": "Maximum pensionable earnings: $68,500",
+            "maxContribution": "Maximum annual contribution: $4,160"
+          }
+        },
+        "ei": {
+          "title": "Quebec Employment Insurance (EI)",
+          "body": "Quebec has a lower EI rate than other provinces:",
+          "items": {
+            "rate": "Rate: 1.32% (vs 1.63% federal rate)",
+            "maxEarnings": "Maximum insurable earnings: $63,200",
+            "maxContribution": "Maximum annual contribution: $834"
+          }
+        },
+        "qpip": {
+          "title": "Quebec Parental Insurance Plan (QPIP)",
+          "body": "Quebec has its own parental insurance system:",
+          "items": {
+            "rate": "Rate: 0.494%",
+            "maxEarnings": "Maximum insurable earnings: $91,000",
+            "maxContribution": "Maximum annual contribution: $449",
+            "mandatory": "This is mandatory for all Quebec residents with employment income"
+          }
+        },
+        "bpa": {
+          "title": "Quebec Basic Personal Amount",
+          "body": "Quebec offers a higher basic personal amount than most provinces:",
+          "items": {
+            "amount": "2024 amount: $18,000 (vs $15,705 federal)",
+            "benefit": "This provides additional tax relief for Quebec residents"
+          }
         }
       },
       "spendingViz": {

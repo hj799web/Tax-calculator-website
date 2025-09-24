@@ -337,7 +337,8 @@
               "federal": "Paliers fédéraux progressifs par niveau de revenu",
               "provincial": "Paliers provinciaux et territoriaux pour les 13 régions",
               "cppqpp": "Cotisations RPC/RRQ calculées selon les maximums applicables",
-              "ei": "Primes d’assurance-emploi calculées jusqu’au maximum admissible"
+              "ei": "Primes d'assurance-emploi calculées jusqu'au maximum admissible",
+              "quebec": "Fonctionnalités spécifiques au Québec : abattement, RQAP et taux québécois pour l'AE et le RRQ"
             }
           },
           "bpa": {
@@ -346,6 +347,7 @@
             "items": {
               "federal": "Montant personnel de base fédéral",
               "provincial": "Montants personnels provinciaux/territoriaux",
+              "quebec": "Montant personnel de base du Québec : 18 000 $ (plus élevé que la plupart des provinces)",
               "marital": "Ajustements possibles selon la situation familiale"
             }
           }
@@ -401,6 +403,60 @@
               "items": {
                 "subtractTotal": "Soustraire l’impôt total (fédéral + provincial + RPC/RRQ + AE) du revenu brut"
               }
+            }
+          }
+        },
+        "quebecFeatures": {
+          "title": "Fonctionnalités fiscales spécifiques au Québec",
+          "body": "Le Québec a des règles fiscales uniques qui diffèrent des autres provinces canadiennes. Le calculateur tient compte de ces considérations spécifiques au Québec :",
+          "abatement": {
+            "title": "Abattement du Québec",
+            "body": "Les résidents du Québec reçoivent une réduction de 16,5 % sur leur impôt fédéral de base. C'est parce que le Québec administre son propre système fiscal et perçoit les impôts fédéraux au nom du gouvernement fédéral."
+          },
+          "brackets": {
+            "title": "Paliers d'impôt du Québec (2024)",
+            "items": {
+              "bracket1": "15 % sur le revenu jusqu'à 51 780 $",
+              "bracket2": "20 % sur le revenu de 51 780 $ à 103 545 $",
+              "bracket3": "24 % sur le revenu de 103 545 $ à 126 000 $",
+              "bracket4": "25,75 % sur le revenu au-dessus de 126 000 $"
+            }
+          },
+          "qpp": {
+            "title": "Régime de rentes du Québec (RRQ)",
+            "body": "Le Québec utilise son propre régime de retraite au lieu du RPC fédéral :",
+            "items": {
+              "rate": "Taux : 6,4 % (vs 5,7 % pour le RPC)",
+              "exemption": "Exemption de base : 3 500 $",
+              "maxEarnings": "Gains maximums admissibles : 68 500 $",
+              "maxContribution": "Cotisation annuelle maximale : 4 160 $"
+            }
+          },
+          "ei": {
+            "title": "Assurance-emploi du Québec (AE)",
+            "body": "Le Québec a un taux d'AE plus bas que les autres provinces :",
+            "items": {
+              "rate": "Taux : 1,32 % (vs 1,63 % fédéral)",
+              "maxEarnings": "Gains maximums assurables : 63 200 $",
+              "maxContribution": "Cotisation annuelle maximale : 834 $"
+            }
+          },
+          "qpip": {
+            "title": "Régime québécois d'assurance parentale (RQAP)",
+            "body": "Le Québec a son propre système d'assurance parentale :",
+            "items": {
+              "rate": "Taux : 0,494 %",
+              "maxEarnings": "Gains maximums assurables : 91 000 $",
+              "maxContribution": "Cotisation annuelle maximale : 449 $",
+              "mandatory": "Ceci est obligatoire pour tous les résidents du Québec ayant un revenu d'emploi"
+            }
+          },
+          "bpa": {
+            "title": "Montant personnel de base du Québec",
+            "body": "Le Québec offre un montant personnel de base plus élevé que la plupart des provinces :",
+            "items": {
+              "amount": "Montant 2024 : 18 000 $ (vs 15 705 $ fédéral)",
+              "benefit": "Ceci procure un allégement fiscal supplémentaire aux résidents du Québec"
             }
           }
         },
