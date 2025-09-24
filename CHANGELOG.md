@@ -2,6 +2,75 @@
 
 This project is actively evolving. This log highlights user‑visible and developer‑relevant changes made during the tab UX and onboarding overhaul.
 
+## 2025‑01‑21 – Quebec Tax Calculation Enhancements
+
+- **Quebec Abatement Implementation**: Added 16.5% federal tax reduction for Quebec residents
+  - Quebec residents now receive a 16.5% reduction on their federal basic tax
+  - This reflects Quebec's unique tax administration system
+  - Significant tax savings for Quebec residents (typically $1,500-2,000+ for higher incomes)
+
+- **Quebec Tax Brackets Correction**: Updated to official 2024 Revenu Québec rates
+  - Corrected Quebec tax brackets: 15%, 20%, 24%, 25.75% with proper thresholds
+  - Updated brackets: 15% up to $51,780, 20% to $103,545, 24% to $126,000, 25.75% above
+  - Replaced incorrect 2024 brackets that were using outdated rates
+
+- **QPIP Integration**: Added mandatory Quebec Parental Insurance Plan
+  - 0.494% rate on income up to $91,000
+  - Maximum annual contribution: $449
+  - Mandatory for all Quebec residents with employment income
+  - Included in total tax calculations for Quebec residents
+
+- **Quebec-Specific Contribution Rates**: Implemented accurate Quebec rates
+  - Quebec EI rate: 1.32% (vs 1.63% federal rate) with $63,200 max insurable earnings
+  - Quebec QPP rate: 6.4% (vs 5.7% CPP) with $3,500 basic exemption
+  - Maximum QPP contribution: $4,160 annually
+  - Self-employed QPP rate: 12.8% (vs 11.4% CPP)
+
+- **Enhanced Basic Personal Amount**: Updated Quebec BPA to $18,000
+  - Higher than most provinces (vs $15,705 federal)
+  - Provides additional tax relief for Quebec residents
+  - Updated in all tax calculations and documentation
+
+- **Comprehensive Documentation Updates**: Added detailed Quebec-specific features
+  - New "Quebec-Specific Tax Features" section in all documentation
+  - Updated tax calculation process to include Quebec abatement and QPIP
+  - Bilingual support with complete French translations
+  - Updated README.md and CHANGELOG.md with Quebec enhancements
+
+- **Technical Implementation**: Robust Quebec tax calculation system
+  - Added `calculateQuebecAbatement()`, `calculateQpipContribution()`, `calculateQppContribution()` functions
+  - Updated `calculateEiPremium()` to handle Quebec-specific rates
+  - Integrated Quebec calculations into main calculator store
+  - Added QPIP to total tax calculations and percentage breakdowns
+
+## 2025‑01‑21 – Chart Translation and Localization Enhancement
+
+- **Federal Budget Chart Translation**: Complete translation of chart visualizations
+  - Translated all chart titles, legends, and category labels in Federal Budget Allocation and Budget Visualizations sections
+  - Added comprehensive translation keys for budget categories across 2022 and 2024 fiscal years
+  - Updated three main chart components: `FederalBudgetPieChart.vue`, `Budget2024PieChart.vue`, `FederalBudget2024PieChart.vue`
+  - Implemented dynamic translation system with `getCategoryTranslation()` helper functions
+  - Chart content now automatically updates when users switch between English and French
+
+- **Translation Key Architecture**: Organized translation structure
+  - Added `federalBudget.categories.y2022` and `federalBudget.categories.y2024` sections to both language files
+  - Standardized budget category names across all chart visualizations
+  - Consistent terminology for healthcare, defense, social programs, and government operations
+  - Proper French typography with accents and cultural adaptations
+
+- **Chart Component Updates**: Enhanced chart components with i18n support
+  - Added `useI18n` imports and translation logic to all chart components
+  - Updated chart data computation to use translated category names
+  - Chart titles now use `federalBudget.descriptions` translation keys
+  - Dataset labels use `federalBudget.title` for consistency
+  - Tooltips display translated category names for better user experience
+
+- **Technical Improvements**: Code quality and maintainability
+  - Removed unused `useYearStore` import from `Budget2024PieChart.vue` to fix ESLint errors
+  - Clean separation of translation logic with helper functions
+  - Future-proof structure for adding new budget categories
+  - Consistent error handling with fallback to original category names
+
 ## 2025‑01‑21 – Comprehensive Localization and Welcome Page Conversion
 
 - **Welcome Page Conversion**: Complete transformation of static HTML welcome pages
