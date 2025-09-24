@@ -62,9 +62,9 @@
                 <div class="tile-header">
                   <div class="tile-title">
                     <span class="material-icons tile-icon">payments</span>
-                    {{ i18nText('simulator.controls.revenue.labels.personal', 'Personal Income Tax') }}
+                    {{ getCategoryName('personalIncomeTax', 'revenue') }}
                     <CategoryInfo
-                      :name="budgetStore.revenueSources.personalIncomeTax?.name || i18nText('simulator.controls.revenue.labels.personal', 'Personal Income Tax')"
+                      :name="getCategoryName('personalIncomeTax', 'revenue')"
                       :description="budgetStore.revenueSources.personalIncomeTax?.description || ''"
                       :base-amount="budgetStore.revenueSources.personalIncomeTax?.base || 0"
                       :current-setting="revenueRates.personalIncomeTax"
@@ -164,9 +164,9 @@
                 <div class="tile-header">
                   <div class="tile-title">
                     <span class="material-icons tile-icon">payments</span>
-                    {{ i18nText('simulator.controls.revenue.labels.corporate', 'Corporate Income Tax') }}
+                    {{ getCategoryName('corporateIncomeTax', 'revenue') }}
                     <CategoryInfo
-                      :name="budgetStore.revenueSources.corporateIncomeTax?.name || i18nText('simulator.controls.revenue.labels.corporate', 'Corporate Income Tax')"
+                      :name="getCategoryName('corporateIncomeTax', 'revenue')"
                       :description="budgetStore.revenueSources.corporateIncomeTax?.description || ''"
                       :base-amount="budgetStore.revenueSources.corporateIncomeTax?.base || 0"
                       :current-setting="revenueRates.corporateIncomeTax"
@@ -309,9 +309,9 @@
                 <div class="tile-header">
                   <div class="tile-title">
                     <span class="material-icons tile-icon">payments</span>
-                    GST/HST
+                    {{ getCategoryName('gst', 'revenue') }}
                     <CategoryInfo
-                      :name="budgetStore.revenueSources.gst?.name || 'GST/HST'"
+                      :name="getCategoryName('gst', 'revenue')"
                       :description="budgetStore.revenueSources.gst?.description || ''"
                       :base-amount="budgetStore.revenueSources.gst?.base || 0"
                       :current-setting="revenueRates.gst"
@@ -411,9 +411,9 @@
                 <div class="tile-header">
                   <div class="tile-title">
                     <span class="material-icons tile-icon">payments</span>
-                    Customs Duties
+                    {{ getCategoryName('customsAndImportDuties', 'revenue') }}
                     <CategoryInfo
-                      :name="budgetStore.revenueSources.customsDuties?.name || 'Customs Duties'"
+                      :name="getCategoryName('customsAndImportDuties', 'revenue')"
                       :description="budgetStore.revenueSources.customsDuties?.description || ''"
                       :base-amount="budgetStore.revenueSources.customsDuties?.base || 0"
                       :current-setting="revenueRates.customsDuties"
@@ -515,9 +515,9 @@
                 <div class="tile-header">
                   <div class="tile-title">
                     <span class="material-icons tile-icon">payments</span>
-                    Carbon Pricing
+                    {{ getCategoryName('carbonPricing', 'revenue') }}
                     <CategoryInfo
-                      :name="budgetStore.revenueSources.carbonPricing?.name || 'Carbon Pricing'"
+                      :name="getCategoryName('carbonPricing', 'revenue')"
                       :description="budgetStore.revenueSources.carbonPricing?.description || ''"
                       :base-amount="budgetStore.revenueSources.carbonPricing?.base || 0"
                       :current-setting="revenueRates.carbonPricing"
@@ -617,9 +617,9 @@
                 <div class="tile-header">
                   <div class="tile-title">
                     <span class="material-icons tile-icon">payments</span>
-                    Excise Taxes
+                    {{ getCategoryName('exciseTaxes', 'revenue') }}
                     <CategoryInfo
-                      :name="budgetStore.revenueSources.exciseTaxes?.name || 'Excise Taxes'"
+                      :name="getCategoryName('exciseTaxes', 'revenue')"
                       :description="budgetStore.revenueSources.exciseTaxes?.description || ''"
                       :base-amount="budgetStore.revenueSources.exciseTaxes?.base || 0"
                       :current-setting="revenueRates.exciseTaxes"
@@ -762,9 +762,9 @@
                 <div class="tile-header">
                   <div class="tile-title">
                     <span class="material-icons tile-icon">payments</span>
-                    EI Premiums
+                    {{ getCategoryName('employmentInsurancePremiums', 'revenue') }}
                     <CategoryInfo
-                      :name="budgetStore.revenueSources.eiPremiums?.name || 'EI Premiums'"
+                      :name="getCategoryName('employmentInsurancePremiums', 'revenue')"
                       :description="budgetStore.revenueSources.eiPremiums?.description || ''"
                       :base-amount="budgetStore.revenueSources.eiPremiums?.base || 0"
                       :current-setting="revenueRates.eiPremiums"
@@ -864,9 +864,9 @@
                 <div class="tile-header">
                   <div class="tile-title">
                     <span class="material-icons tile-icon">payments</span>
-                    Crown Corp Profits
+                    {{ getCategoryName('crownCorporationProfits', 'revenue') }}
                     <CategoryInfo
-                      :name="budgetStore.revenueSources.crownProfits?.name || 'Crown Corp Profits'"
+                      :name="getCategoryName('crownCorporationProfits', 'revenue')"
                       :description="budgetStore.revenueSources.crownProfits?.description || ''"
                       :base-amount="budgetStore.revenueSources.crownProfits?.base || 0"
                       :current-setting="revenueRates.crownProfits"
@@ -978,9 +978,9 @@
                 <div class="tile-header">
                   <div class="tile-title">
                     <span class="material-icons tile-icon">payments</span>
-                    Resource Royalties
+                    {{ getCategoryName('resourceRoyalties', 'revenue') }}
                     <CategoryInfo
-                      :name="budgetStore.revenueSources.resourceRoyalties?.name || 'Resource Royalties'"
+                      :name="getCategoryName('resourceRoyalties', 'revenue')"
                       :description="budgetStore.revenueSources.resourceRoyalties?.description || ''"
                       :base-amount="budgetStore.revenueSources.resourceRoyalties?.base || 0"
                       :current-setting="revenueRates.resourceRoyalties"
@@ -1214,7 +1214,7 @@
 <script setup>
 import { ref, onMounted, watch, computed, shallowRef, nextTick } from 'vue';
 import CategoryInfo from '@/domains/budget/components/BudgetCategoryInfo.vue';
-import { useI18n } from '@/i18n'
+import { useI18n, getCategoryName } from '@/i18n'
 import debounce from 'lodash.debounce';
 import throttle from 'lodash.throttle';
 import { useBudgetSimulatorStore } from '../store/budgetSimulator';

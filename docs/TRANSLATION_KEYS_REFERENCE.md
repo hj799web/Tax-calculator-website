@@ -174,3 +174,6 @@ const categoryName = t(`budgetCategories.y2024.${categoryId}.name`)
 - **Testing**: Verify translations in both languages
 - **Documentation**: Keep this reference updated
 
+
+
+

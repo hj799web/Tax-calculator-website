@@ -56,9 +56,17 @@ export function calculatePensionPlanContribution(income, isSelfEmployed) {
 /**
  * Calculate EI premiums
  * @param {number} income - Employment income
+ * @param {string} province - Province code (for Quebec-specific rate)
  * @returns {number} EI premium amount
  */
-export function calculateEiPremium(income) {
+export function calculateEiPremium(income, province = null) {
+  // Quebec has a lower EI rate
+  if (province === 'QC') {
+    const annualEiMax = 834; // Quebec max
+    return Math.min(income * 0.0132, annualEiMax);
+  }
+  
+  // Federal rate for other provinces
   const annualEiMax = 1002.45;
   return Math.min(income * 0.0163, annualEiMax);
 }
@@ -83,4 +91,44 @@ export function calculateEffectiveBPA(baseAmount, maritalStatus) {
     return baseAmount + 12500;
   }
   return baseAmount;
+}
+
+/**
+ * Calculate QPIP (Québec Parental Insurance Plan) contribution
+ * @param {number} income - Employment income
+ * @returns {number} QPIP contribution amount
+ */
+export function calculateQpipContribution(income) {
+  const qpipRate = 0.00494; // 0.494%
+  const maxContribution = 449; // 91000 * 0.00494
+  return Math.min(income * qpipRate, maxContribution);
+}
+
+/**
+ * Calculate Quebec abatement (reduces federal tax)
+ * @param {number} federalBasicTax - Federal basic tax before credits
+ * @returns {number} Quebec abatement amount
+ */
+export function calculateQuebecAbatement(federalBasicTax) {
+  return federalBasicTax * 0.165; // 16.5% reduction
+}
+
+/**
+ * Calculate QPP contribution (Quebec-specific)
+ * @param {number} income - Employment income
+ * @param {boolean} isSelfEmployed - Whether the income is from self-employment
+ * @returns {number} QPP contribution amount
+ */
+export function calculateQppContribution(income, isSelfEmployed) {
+  const qppRate = 0.064; // 6.4%
+  const basicExemption = 3500;
+  const maxContribution = 4160; // (68500 - 3500) * 0.064
+  
+  if (isSelfEmployed) {
+    // Self-employed pays both employee and employer portions
+    return Math.min(income * qppRate * 2, maxContribution * 2);
+  }
+  
+  const pensionableIncome = Math.max(0, income - basicExemption);
+  return Math.min(pensionableIncome * qppRate, maxContribution);
 } 

@@ -5,7 +5,7 @@
       <div class="section-header">
         <h2 class="section-title">
           <span class="material-icons icon">bar_chart</span>
-          Revenue Sources
+          {{ i18nText('chartsPanel.sections.revenueSources', 'Revenue Sources') }}
         </h2>
         <button 
           class="toggle-button" 
@@ -14,7 +14,7 @@
           @click="isRevenueExpanded = !isRevenueExpanded"
         >
           <span class="material-icons">{{ isRevenueExpanded ? 'expand_less' : 'expand_more' }}</span>
-          <span class="toggle-text">{{ isRevenueExpanded ? 'Collapse' : 'Expand' }}</span>
+          <span class="toggle-text">{{ isRevenueExpanded ? i18nText('chartsPanel.buttons.collapse', 'Collapse') : i18nText('chartsPanel.buttons.expand', 'Expand') }}</span>
         </button>
       </div>
       
@@ -26,7 +26,7 @@
       >
         <!-- Display Toggle -->
         <div class="display-toggle">
-          <div class="toggle-group" role="group" aria-label="Display mode">
+          <div class="toggle-group" role="group" :aria-label="i18nText('chartsPanel.ariaLabels.displayMode', 'Display mode')">
             <button 
               type="button" 
               class="toggle-option"
@@ -34,7 +34,7 @@
               @click="displayMode = 'amount'"
               aria-pressed="displayMode === 'amount'"
             >
-              Amount
+              {{ i18nText('chartsPanel.displayModes.amount', 'Amount') }}
             </button>
             <button 
               type="button" 
@@ -43,7 +43,7 @@
               @click="displayMode = 'percentage'"
               aria-pressed="displayMode === 'percentage'"
             >
-              Percentage
+              {{ i18nText('chartsPanel.displayModes.percentage', 'Percentage') }}
             </button>
           </div>
         </div>
@@ -84,7 +84,7 @@
                 class="legend-item"
               >
                 <span class="legend-color" :style="{ backgroundColor: source.color }" aria-hidden="true" />
-                <span class="legend-label" :title="source.name">{{ source.name }}</span>
+                <span class="legend-label" :title="getCategoryName(source.id, 'revenue')">{{ getCategoryName(source.id, 'revenue') }}</span>
                 <span class="legend-value">
                   <template v-if="displayMode === 'amount'">
                     ${{ (Number(source.adjustedAmount) || 0).toFixed(1) }}B
@@ -120,7 +120,7 @@
                 class="legend-item"
               >
                 <span class="legend-color" :style="{ backgroundColor: source.color }" aria-hidden="true" />
-                <span class="legend-label" :title="source.name">{{ source.name }}</span>
+                <span class="legend-label" :title="getCategoryName(source.id, 'revenue')">{{ getCategoryName(source.id, 'revenue') }}</span>
                 <span class="legend-value">
                   <template v-if="displayMode === 'amount'">
                     ${{ (Number(source.adjustedAmount) || 0).toFixed(1) }}B
@@ -156,7 +156,7 @@
                 class="legend-item"
               >
                 <span class="legend-color" :style="{ backgroundColor: source.color }" aria-hidden="true" />
-                <span class="legend-label" :title="source.name">{{ source.name }}</span>
+                <span class="legend-label" :title="getCategoryName(source.id, 'revenue')">{{ getCategoryName(source.id, 'revenue') }}</span>
                 <span class="legend-value">
                   <template v-if="displayMode === 'amount'">
                     ${{ (Number(source.adjustedAmount) || 0).toFixed(1) }}B
@@ -221,6 +221,14 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Toolti
 import SpendingPieChart from '@/domains/budget/components/SpendingPieChart.vue';
 import { debounce } from 'lodash-es';
 import { handleError } from '@/utils/errorHandler.js';
+import { useI18n, getCategoryName } from '@/i18n';
+
+// i18n setup
+const { t } = useI18n();
+const i18nText = (key, fallback = '') => {
+  const value = t(key);
+  return value === key ? fallback : value;
+};
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -331,7 +339,7 @@ const otherRevenueSources = computed(() => {
 // Chart data
 const revenueChartData = computed(() => {
   const sources = revenueSources.value;
-  const labels = sources.map(source => source.name);
+  const labels = sources.map(source => getCategoryName(source.id, 'revenue'));
   const total = getTotalRevenue();
   
   let data;

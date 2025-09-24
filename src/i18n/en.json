@@ -2,6 +2,7 @@
   "home": {
     "language": {
       "switchLabel": "Change language",
+      "label": "Language",
       "english": "English",
       "french": "French"
     },
@@ -363,13 +364,198 @@
         "title": "Revenue Sources"
       },
       "spending": {
-        "title": "Spending Controls"
+        "title": "Spending Controls",
+        "groupTitle": {
+          "main": "Main Categories",
+          "other": "Other Categories",
+          "governmentOperations": "Government Operations",
+          "taxExpenditures": "Tax Expenditures / Tax Credits"
+        },
+        "mainIntro": "Adjust spending for major federal budget categories. Increasing percentages raises spending, while decreasing them reduces spending.",
+        "otherIntro": "Adjust spending for additional federal budget categories. These categories represent specialized programs and investments.",
+        "subcategoriesTitle": "Subcategories",
+        "loansSubTitle": "Loans, Investments & Advances Subcategories",
+        "governmentOperationsIntro": "Government operations include administrative functions, transfers, and other essential government services.",
+        "taxExpendituresIntro": "Adjust tax credits and deductions to see their impact on federal revenue. Reducing credits increases revenue, while expanding them decreases revenue.",
+        "updating": "Updating budget calculations..."
       },
       "analysis": {
         "title": "Budget Analysis"
       },
       "sentiment": {
         "title": "Public Sentiment"
+      }
+    },
+    "yearSimulatorModal": {
+      "title": "Year {year} Simulator",
+      "close": "Close",
+      "noBaselineData": "No baseline data available for {year}",
+      "metrics": {
+        "gdp": "GDP",
+        "revenue": "Revenue",
+        "spending": "Spending",
+        "surplusDeficit": "Surplus/Deficit",
+        "debt": "Debt",
+        "debtToGdp": "Debt/GDP"
+      }
+    },
+    "budgetExportPanel": {
+      "buttons": {
+        "downloadPdf": "Download as PDF"
+      },
+      "labels": {
+        "includeFullBreakdown": "Include Full Budget Breakdown"
+      }
+    },
+    "itemsPlanList": {
+      "searchPlaceholder": "Search items...",
+      "labels": {
+        "currentRate": "Current rate (%)",
+        "currentFactor": "Current factor (×)"
+      },
+      "buttons": {
+        "reset": "Reset",
+        "plan": "Plan"
+      },
+      "empty": "No items match your search criteria."
+    },
+    "assumptions": {
+      "labels": {
+        "baseYear": "Base year",
+        "horizon": "Horizon (years)",
+        "gdpGrowth": "GDP growth (%)",
+        "inflation": "Inflation (%)",
+        "interestRate": "Interest rate (%)",
+        "preset": "Preset"
+      },
+      "presets": {
+        "custom": "Custom",
+        "conservative": "Conservative",
+        "moderate": "Moderate",
+        "optimistic": "Optimistic"
+      },
+      "buttons": {
+        "reset": "Reset"
+      }
+    },
+    "multiYearProjections": {
+      "tooltips": {
+        "extraGrowth": "Extra growth due to population aging and demographic changes",
+        "baseline": "Normal program cost increases",
+        "demographic": "Extra growth due to population aging"
+      }
+    },
+    "budgetResults": {
+      "tooltips": {
+        "downloadImage": "Download as Image"
+      }
+    },
+    "projectionsPanel": {
+      "ariaLabels": {
+        "deficitChart": "Historical and projected deficit line chart"
+      }
+    },
+    "budgetChangesBanner": {
+      "tooltips": {
+        "clearAll": "Clear all changes"
+      }
+    },
+    "sharedBudgetDetailModal": {
+      "ariaLabels": {
+        "closeModal": "Close modal"
+      }
+    },
+    "fiscalChaosAlert": {
+      "ariaLabels": {
+        "fiscalChaos": "Fiscal Chaos"
+      }
+    },
+    "results": {
+      "title": "Budget Results",
+      "tabs": {
+        "revenue": "Revenue",
+        "spending": "Spending"
+      },
+      "labels": {
+        "totalRevenue": "Total Revenue:",
+        "totalSpending": "Total Spending:",
+        "debtServicing": "Debt Servicing:",
+        "surplusDeficit": "Surplus/Deficit:",
+        "debtToGdpRatio": "Debt-to-GDP Ratio:"
+      },
+      "tooltips": {
+        "debtServicing": "Interest payments on the federal debt (fixed cost that cannot be adjusted)",
+        "debtToGdpRatio": "The ratio of total federal debt to the size of the Canadian economy (GDP). Lower is generally better for fiscal health.",
+        "ofTotalRevenue": "of total revenue",
+        "autoBalance": "When enabled, the system will automatically adjust revenue sources to balance the budget based on your spending choices."
+      },
+      "warnings": {
+        "mild": "Caution: Deficit may require future fiscal adjustment.",
+        "high": "Warning: Large deficit could challenge fiscal stability long-term.",
+        "critical": "Critical: Severe deficit. Immediate fiscal intervention recommended.",
+        "dismiss": "Dismiss warning",
+        "info": "Understanding Budget Deficits",
+        "infoDescription": "Persistent budget deficits can lead to:",
+        "infoItems": [
+          "Increased debt servicing costs",
+          "Intergenerational financial burden", 
+          "Potential inflation pressure",
+          "Reduced fiscal flexibility during economic downturns"
+        ],
+        "learnMore": "Learn more about public debt from the PBO"
+      },
+      "actions": {
+        "title": "Actions",
+        "shareBudget": "Share Budget",
+        "resetBudget": "Reset Budget",
+        "saveBudget": "Save Budget",
+        "autoBalance": "Auto-Balance Budget",
+        "downloadImage": "Download as Image"
+      },
+      "achievements": {
+        "title": "Budget Achievements",
+        "noBadges": "Make budget adjustments to earn achievement badges!"
+      }
+    },
+    "goals": {
+      "title": "Budget Goals",
+      "enableGoals": "Enable Budget Goals",
+      "targetRevenue": "Target Revenue ($B)",
+      "targetDeficit": "Target {{ type }} ($B)",
+      "targetSurplus": "Target {{ type }} ($B)",
+      "deficit": "Deficit",
+      "surplus": "Surplus",
+      "positiveDeficitNegativeSurplus": "Positive = Deficit, Negative = Surplus",
+      "autoBalance": "Auto-balance budget to match goal",
+      "goalStatus": "Goal Status:",
+      "revenueGoal": "Revenue Goal:",
+      "deficitGoal": "Deficit Goal:",
+      "surplusGoal": "Surplus Goal:",
+      "status": {
+        "onTarget": "On Target",
+        "underTarget": "Under Target", 
+        "overTarget": "Over Target",
+        "deficitTooSmall": "Deficit is too small",
+        "deficitTooLarge": "Deficit is too large",
+        "surplusTooLarge": "Surplus is too large",
+        "surplusTooSmall": "Surplus is too small",
+        "surplusInsteadOfDeficit": "You have a surplus instead of a deficit",
+        "deficitInsteadOfSurplus": "You have a deficit instead of a surplus"
+      },
+      "messages": {
+        "revenueOnTarget": "Your revenue is right on target!",
+        "revenueOverTarget": "You're ${{ amount }}B ({{ percent }}%) over your revenue target.",
+        "revenueUnderTarget": "You're ${{ amount }}B ({{ percent }}%) under your revenue target.",
+        "budgetOnTarget": "Your budget is right on target!",
+        "deficitHigher": "Your deficit is ${{ amount }}B higher than your target.",
+        "deficitLower": "Your deficit is ${{ amount }}B lower than your target.",
+        "surplusHigher": "Your surplus is ${{ amount }}B higher than your target.",
+        "surplusLower": "Your surplus is ${{ amount }}B lower than your target.",
+        "autoBalanceRevenue": "Auto-balancing revenue to reach your ${{ amount }}B revenue goal...",
+        "autoBalanceDeficit": "Auto-balancing revenue to reach your ${{ amount }}B deficit goal...",
+        "autoBalanceSurplus": "Auto-balancing revenue to reach your ${{ amount }}B surplus goal...",
+        "setGoalFirst": "Please set either a revenue goal or a deficit/surplus goal to auto-balance the budget.",
+        "enableGoalsToTrack": "Enable budget goals to track your progress"
       }
     },
     "controls": {
@@ -463,6 +649,53 @@
     "description": {
       "intro": "Experience what it's like to manage Canada's federal budget. Adjust revenue sources and spending priorities to balance the budget while considering public sentiment across different regions and sectors.",
       "disclaimer": "*The Budget Simulator uses federal budget data from the Public Accounts of Canada and Budget 2024, deficit figures from the Department of Finance's Fiscal Reference Tables, debt-to-GDP ratios from the FRED/World Bank series, and projections from the Parliamentary Budget Officer."
+    },
+    "categories": {
+      "revenue": {
+        "personalIncomeTax": "Personal Income Tax",
+        "corporateIncomeTax": "Corporate Income Tax",
+        "gst": "GST/HST",
+        "exciseTaxes": "Excise Taxes",
+        "carbonPricing": "Carbon Pricing Revenue",
+        "employmentInsurancePremiums": "Employment Insurance Premiums",
+        "customsAndImportDuties": "Customs and Import Duties",
+        "crownCorporationProfits": "Crown Corporation Profits",
+        "otherNonTaxRevenues": "Other Non-Tax Revenues",
+        "resourceRoyalties": "Resource Royalties"
+      },
+      "spending": {
+        "healthcare": "Healthcare (CHT)",
+        "education": "Education",
+        "supportForSeniors": "Support for Seniors",
+        "childrenAndFamilies": "Children and Families",
+        "indigenousServices": "Indigenous Services & Reconciliation",
+        "employmentInsurance": "Employment Insurance",
+        "defenseAndPublicSafety": "Defense & Public Safety",
+        "loansInvestmentsAdvances": "Loans, Investments & Advances",
+        "governmentOperations": "Government Operations",
+        "debtServicing": "Debt Servicing",
+        "personalIncomeTaxCredits": "Personal Income Tax Credits",
+        "corporateTaxExpenditures": "Corporate Tax Expenditures",
+        "subcategories": {
+          "studentLoans": "Student Loans",
+          "agricultureLoans": "Agriculture Loans",
+          "internationalDevelopment": "International Development",
+          "businessAndInnovation": "Business & Innovation",
+          "defenseSector": "Defense Sector",
+          "economicDevelopment": "Economic Development",
+          "transportationInfrastructure": "Transportation Infrastructure",
+          "environmentalPrograms": "Environmental Programs",
+          "publicSafetyAndEmergencyPreparedness": "Public Safety and Emergency Preparedness",
+          "governmentBuildingsAndProperties": "Government Buildings and Properties",
+          "researchAndInnovation": "Research and Innovation",
+          "digitalGovernmentAndItInfrastructure": "Digital Government and IT Infrastructure",
+          "federalEmployeeSalariesAndBenefits": "Federal Employee Salaries and Benefits",
+          "legalAndJusticeSystem": "Legal and Justice System",
+          "indigenousServicesOperationalExpenses": "Indigenous Services Operational Expenses",
+          "culturalAndHeritagePrograms": "Cultural and Heritage Programs",
+          "diplomaticAndInternationalRepresentation": "Diplomatic and International Representation"
+        }
+      }
     }
   },
   "terms": {
@@ -896,6 +1129,32 @@
       "category": "Category",
       "amount": "Amount",
       "percentage": "Percentage"
+    },
+    "categories": {
+      "y2022": {
+        "healthcare": "Healthcare",
+        "supportForSeniors": "Support for Seniors",
+        "childrenAndFamilies": "Children and Families",
+        "indigenousServices": "Indigenous Services",
+        "employmentInsuranceAndBenefits": "Employment Insurance and Benefits",
+        "defense": "Defense",
+        "publicSafetyAndEmergencyPreparedness": "Public Safety and Emergency Preparedness",
+        "internationalAffairsAndDevelopment": "International Affairs and Development",
+        "publicDebtCharges": "Public Debt Charges",
+        "loansInvestmentsAndAdvances": "Loans, Investments, and Advances",
+        "otherGovernmentOperations": "Other Government Operations"
+      },
+      "y2024": {
+        "healthcareCanadaHealthTransfer": "Healthcare (Canada Health Transfer)",
+        "supportForSeniors": "Support for Seniors",
+        "childrenAndFamilies": "Children and Families",
+        "indigenousServicesAndReconciliation": "Indigenous Services and Reconciliation",
+        "employmentInsuranceAndOtherBenefits": "Employment Insurance and Other Benefits",
+        "defenseAndPublicSafety": "Defense and Public Safety",
+        "debtServicingPublicDebtCharges": "Debt Servicing (Public Debt Charges)",
+        "loansInvestmentsAndAdvances": "Loans, Investments, and Advances",
+        "otherGovernmentOperations": "Other Government Operations"
+      }
     }
   },
   "budgetCategories": {

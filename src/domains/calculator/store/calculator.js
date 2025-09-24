@@ -10,7 +10,10 @@ import {
   calculateDividendTaxCredit,
   calculateEiPremium,
   calculateChildCredit,
-  calculateEffectiveBPA
+  calculateEffectiveBPA,
+  calculateQpipContribution,
+  calculateQuebecAbatement,
+  calculateQppContribution,
 } from '../utils/taxCalculations.js';
 import {
   federalBasicPersonalAmount2022,
@@ -188,6 +191,13 @@ export const useCalculatorStore = defineStore('calculator', () => {
     let fedTaxable = totalFederalTaxableIncome.value - effectiveFederalBPA.value;
     fedTaxable = Math.max(fedTaxable, 0);
     let fedTax = calculateBracketTax(fedTaxable, currentFederalTaxBrackets.value);
+    
+    // Apply Quebec abatement if Quebec is selected
+    if (selectedRegion.value === 'Quebec') {
+      const abatement = calculateQuebecAbatement(fedTax);
+      fedTax -= abatement;
+    }
+    
     fedTax -= federalDividendTaxCredit.value * periodMultiplier.value;
     fedTax -= childCredit.value;
     return Math.max(fedTax, 0);
@@ -212,6 +222,13 @@ export const useCalculatorStore = defineStore('calculator', () => {
   const pensionPlanContributionAnnual = computed(() => {
     const baseIncome = annualRegularIncome.value;
     const isSelfEmployed = (selfEmploymentIncome.value || 0) > 0;
+    
+    // Use Quebec-specific QPP calculation if Quebec is selected
+    if (selectedRegion.value === 'Quebec') {
+      return calculateQppContribution(baseIncome, isSelfEmployed);
+    }
+    
+    // Use federal CPP calculation for other provinces
     const rate = isSelfEmployed ? 0.114 : 0.057;
     const maxContrib = isSelfEmployed ? annualCppMaxSelfEmployed : annualCppMax;
     return Math.min(baseIncome * rate, maxContrib);
@@ -219,13 +236,22 @@ export const useCalculatorStore = defineStore('calculator', () => {
 
   // EI
   const eiPremiumAnnual = computed(() => {
-    return calculateEiPremium(annualRegularIncome.value);
+    const provinceCode = selectedRegion.value === 'Quebec' ? 'QC' : null;
+    return calculateEiPremium(annualRegularIncome.value, provinceCode);
+  });
+
+  // QPIP (Quebec only)
+  const qpipContributionAnnual = computed(() => {
+    if (selectedRegion.value === 'Quebec') {
+      return calculateQpipContribution(annualRegularIncome.value);
+    }
+    return 0;
   });
 
   // Net Income
   const netIncomeAfterCreditsAnnual = computed(() => {
     const totalTax = netFederalTaxAnnual.value + netProvincialTaxAnnual.value
-      + pensionPlanContributionAnnual.value + eiPremiumAnnual.value;
+      + pensionPlanContributionAnnual.value + eiPremiumAnnual.value + qpipContributionAnnual.value;
     // For net, approximate using the sum of actual (non-grossed) dividends + half CG + T4.
     const totalGrossAnnual =
       annualRegularIncome.value +
@@ -243,6 +269,7 @@ export const useCalculatorStore = defineStore('calculator', () => {
     pensionPlanContributionAnnual.value / periodMultiplier.value
   );
   const eiPremiumPerPeriod = computed(() => eiPremiumAnnual.value / periodMultiplier.value);
+  const qpipContributionPerPeriod = computed(() => qpipContributionAnnual.value / periodMultiplier.value);
   const netIncomeAfterCreditsPerPeriod = computed(() =>
     netIncomeAfterCreditsAnnual.value / periodMultiplier.value
   );
@@ -251,7 +278,8 @@ export const useCalculatorStore = defineStore('calculator', () => {
     netFederalTaxPerPeriod.value +
     netProvincialTaxPerPeriod.value +
     pensionPlanContributionPerPeriod.value +
-    eiPremiumPerPeriod.value
+    eiPremiumPerPeriod.value +
+    qpipContributionPerPeriod.value
   );
 
   // % breakdown
@@ -278,6 +306,10 @@ export const useCalculatorStore = defineStore('calculator', () => {
   const eiTaxPercentage = computed(() => {
     if (baseForPercent.value <= 0) return '0.0';
     return ((eiPremiumAnnual.value / baseForPercent.value) * 100).toFixed(1);
+  });
+  const qpipTaxPercentage = computed(() => {
+    if (baseForPercent.value <= 0) return '0.0';
+    return ((qpipContributionAnnual.value / baseForPercent.value) * 100).toFixed(1);
   });
 
   const totalBudget = computed(() => {
@@ -478,6 +510,8 @@ export const useCalculatorStore = defineStore('calculator', () => {
     cppTaxPercentage,
     eiPremiumPerPeriod,
     eiTaxPercentage,
+    qpipContributionPerPeriod,
+    qpipTaxPercentage,
     totalTaxPerPeriod,
     netIncomeAfterCreditsPerPeriod,
     totalBudget,

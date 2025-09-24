@@ -2,7 +2,7 @@
   <section class="simulator-card results-card">
     <h2 class="card-title">
       <span class="material-icons icon">analytics</span>
-      Budget Results
+      {{ i18nText('simulator.results.title', 'Budget Results') }}
     </h2>
     
     <!-- Deficit Warning Banner -->
@@ -28,7 +28,7 @@
         <span class="warning-message">{{ deficitWarningMessage }}</span>
         <button
           class="dismiss-button"
-          aria-label="Dismiss warning"
+          :aria-label="i18nText('simulator.results.warnings.dismiss', 'Dismiss warning')"
           @click="dismissWarning"
         >
           <span class="material-icons">close</span>
@@ -46,13 +46,15 @@
         v-if="showDeficitInfo"
         class="deficit-info-popover"
       >
-        <h3>Understanding Budget Deficits</h3>
-        <p>Persistent budget deficits can lead to:</p>
+        <h3>{{ i18nText('simulator.results.warnings.info', 'Understanding Budget Deficits') }}</h3>
+        <p>{{ i18nText('simulator.results.warnings.infoDescription', 'Persistent budget deficits can lead to:') }}</p>
         <ul>
-          <li>Increased debt servicing costs</li>
-          <li>Intergenerational financial burden</li>
-          <li>Potential inflation pressure</li>
-          <li>Reduced fiscal flexibility during economic downturns</li>
+          <li v-for="item in i18nText('simulator.results.warnings.infoItems', []).length ? t('simulator.results.warnings.infoItems') : [
+            'Increased debt servicing costs',
+            'Intergenerational financial burden',
+            'Potential inflation pressure',
+            'Reduced fiscal flexibility during economic downturns'
+          ]" :key="item">{{ item }}</li>
         </ul>
         <p>
           <a
@@ -60,7 +62,7 @@
             target="_blank" 
             rel="noopener noreferrer"
           >
-            Learn more about public debt from the PBO
+            {{ i18nText('simulator.results.warnings.learnMore', 'Learn more about public debt from the PBO') }}
           </a>
         </p>
       </div>
@@ -74,14 +76,14 @@
           class="tab-button"
           @click="activeTab = 'revenue'"
         >
-          Revenue
+          {{ i18nText('simulator.results.tabs.revenue', 'Revenue') }}
         </button>
         <button 
           :class="{ 'active-tab': activeTab === 'spending' }" 
           class="tab-button"
           @click="activeTab = 'spending'"
         >
-          Spending
+          {{ i18nText('simulator.results.tabs.spending', 'Spending') }}
         </button>
       </div>
       
@@ -98,7 +100,7 @@
           <div class="result-item">
             <span class="result-label">
               <span class="material-icons text-blue-500 mr-1 text-xs">trending_up</span>
-              Total Revenue:
+              {{ i18nText('simulator.results.labels.totalRevenue', 'Total Revenue:') }}
             </span>
             <span class="font-medium text-blue-600 text-sm">
               {{ formatCurrency(totalRevenueValue) }}
@@ -108,7 +110,7 @@
           <div class="toggle-details">
             <button
               class="download-button"
-              title="Download as Image"
+              :title="i18nText('simulator.results.actions.downloadImage', 'Download as Image')"
               @click="throttledDownloadChart('revenue')"
             >
               <span class="material-icons">download</span>
@@ -126,10 +128,10 @@
           <div class="result-item">
             <span class="result-label">
               <span class="material-icons text-red-500 mr-1 text-xs">trending_down</span>
-              Total Spending:
+              {{ i18nText('simulator.results.labels.totalSpending', 'Total Spending:') }}
             </span>
             <span class="font-medium text-red-600 text-sm tooltip-container"
-              @mouseenter="showTooltip(formatPercentage(totalSpendingValue, totalRevenueValue) + ' of total revenue')"
+              @mouseenter="showTooltip(formatPercentage(totalSpendingValue, totalRevenueValue) + ' ' + i18nText('simulator.results.tooltips.ofTotalRevenue', 'of total revenue'))"
               @mouseleave="hideTooltip()">
               {{ formatCurrency(totalSpendingValue) }}
             </span>
@@ -139,9 +141,9 @@
           <div class="result-item">
             <span class="result-label">
               <span class="material-icons text-gray-500 mr-1 text-xs">account_balance</span>
-              Debt Servicing:
+              {{ i18nText('simulator.results.labels.debtServicing', 'Debt Servicing:') }}
               <span class="info-icon tooltip-container" 
-                @mouseenter="showTooltip('Interest payments on the federal debt (fixed cost that cannot be adjusted)')"
+                @mouseenter="showTooltip(i18nText('simulator.results.tooltips.debtServicing', 'Interest payments on the federal debt (fixed cost that cannot be adjusted)'))"
                 @mouseleave="hideTooltip()"
                 style="margin-left: 4px; cursor: pointer;">
                 ⓘ
@@ -165,11 +167,11 @@
               >
                 {{ surplusValue > 0 ? 'trending_up' : surplusValue < 0 ? 'trending_down' : 'remove' }}
               </span>
-              Surplus/Deficit:
+              {{ i18nText('simulator.results.labels.surplusDeficit', 'Surplus/Deficit:') }}
             </span>
             <span
               class="font-medium text-sm tooltip-container"
-              @mouseenter="showTooltip(formatPercentage(Math.abs(surplusValue), totalRevenueValue) + ' of total revenue')"
+              @mouseenter="showTooltip(formatPercentage(Math.abs(surplusValue), totalRevenueValue) + ' ' + i18nText('simulator.results.tooltips.ofTotalRevenue', 'of total revenue'))"
               @mouseleave="hideTooltip()"
               :class="{
                 'text-green-600': surplusValue > 0,
@@ -186,9 +188,9 @@
           <div class="result-item" :class="{ 'mobile-view': isMobileView }">
             <span class="result-label">
               <span class="material-icons text-gray-500 mr-1 text-xs">account_balance</span>
-              Debt-to-GDP Ratio:
+              {{ i18nText('simulator.results.labels.debtToGdpRatio', 'Debt-to-GDP Ratio:') }}
               <span class="info-icon tooltip-container" 
-                @mouseenter="showTooltip('The ratio of total federal debt to the size of the Canadian economy (GDP). Lower is generally better for fiscal health.')"
+                @mouseenter="showTooltip(i18nText('simulator.results.tooltips.debtToGdpRatio', 'The ratio of total federal debt to the size of the Canadian economy (GDP). Lower is generally better for fiscal health.'))"
                 @mouseleave="hideTooltip()"
                 style="margin-left: 4px; cursor: pointer;">
                 ⓘ
@@ -215,16 +217,16 @@
       <div class="mt-4">
         <div class="flex justify-between items-center">
           <h3 class="text-sm font-semibold text-gray-800">
-            Actions
+            {{ i18nText('simulator.results.actions.title', 'Actions') }}
           </h3>
           <button
             class="share-budget-button"
             @click="throttledShareBudget"
-            aria-label="Share your budget on social media"
+            :aria-label="i18nText('simulator.results.actions.shareBudget', 'Share your budget on social media')"
             style="display: flex; align-items: center; gap: 4px; background: #4263eb; color: #fff; border: none; border-radius: 4px; padding: 6px 14px; font-weight: 500; cursor: pointer; transition: background 0.2s;"
           >
             <span class="material-icons" style="font-size: 18px;">share</span>
-            Share Budget
+            {{ i18nText('simulator.results.actions.shareBudget', 'Share Budget') }}
           </button>
         </div>
         <div class="action-buttons mt-2">
@@ -232,7 +234,7 @@
             class="action-button reset-button"
             @click="throttledResetBudget"
           >
-            Reset Budget
+            {{ i18nText('simulator.results.actions.resetBudget', 'Reset Budget') }}
           </button>
           <div class="auto-balance-container">
             <label class="auto-balance-label">
@@ -241,12 +243,12 @@
                 :checked="simpleAutoBalanceActive"
                 @change="$emit('toggle-simple-auto-balance', $event.target.checked)"
               >
-              <span class="auto-balance-text">Auto-Balance Budget</span>
+              <span class="auto-balance-text">{{ i18nText('simulator.results.actions.autoBalance', 'Auto-Balance Budget') }}</span>
             </label>
             <div class="auto-balance-info">
               <span 
                 class="info-icon"
-                @mouseenter="showTooltip('When enabled, the system will automatically adjust revenue sources to balance the budget based on your spending choices.')"
+                @mouseenter="showTooltip(i18nText('simulator.results.tooltips.autoBalance', 'When enabled, the system will automatically adjust revenue sources to balance the budget based on your spending choices.'))"
                 @mouseleave="hideTooltip()"
               >ⓘ</span>
             </div>
@@ -255,7 +257,7 @@
             class="action-button save-button"
             @click="throttledSaveBudget"
           >
-            Save Budget
+            {{ i18nText('simulator.results.actions.saveBudget', 'Save Budget') }}
           </button>
           
           <!-- Achievement Badges Section -->
@@ -266,7 +268,7 @@
             >
               <h3 class="text-sm font-medium text-gray-700 mb-2 flex items-center">
                 <span class="material-icons mr-2 text-amber-500 text-sm">emoji_events</span>
-                Budget Achievements
+                {{ i18nText('simulator.results.achievements.title', 'Budget Achievements') }}
               </h3>
               <span class="material-icons text-gray-500 text-sm">
                 {{ showBadges ? 'expand_less' : 'expand_more' }}
@@ -295,7 +297,7 @@
                   class="text-center py-3"
                 >
                   <p class="text-sm text-gray-500">
-                    Make budget adjustments to earn achievement badges!
+                    {{ i18nText('simulator.results.achievements.noBadges', 'Make budget adjustments to earn achievement badges!') }}
                   </p>
                 </div>
               </div>
@@ -329,11 +331,19 @@ import AchievementBadge from '@/domains/badges/components/AchievementBadge.vue';
 import html2canvas from 'html2canvas';
 import throttle from 'lodash.throttle';
 import { handleComponentError } from '@/utils/errorHandler.js';
+import { useI18n } from '@/i18n';
 
 // Disable automatic attribute inheritance to prevent warnings
 defineOptions({
   inheritAttrs: false
 });
+
+// i18n setup
+const { t } = useI18n();
+const i18nText = (key, fallback = '') => {
+  const value = t(key);
+  return value === key ? fallback : value;
+};
 
 // State for collapsible sections
 const showBadges = ref(true);
@@ -460,11 +470,11 @@ const deficitWarningLevel = computed(() => {
 const deficitWarningMessage = computed(() => {
   switch (deficitWarningLevel.value) {
     case 'mild':
-      return "Caution: Deficit may require future fiscal adjustment.";
+      return i18nText('simulator.results.warnings.mild', "Caution: Deficit may require future fiscal adjustment.");
     case 'high':
-      return "Warning: Large deficit could challenge fiscal stability long-term.";
+      return i18nText('simulator.results.warnings.high', "Warning: Large deficit could challenge fiscal stability long-term.");
     case 'critical':
-      return "Critical: Severe deficit. Immediate fiscal intervention recommended.";
+      return i18nText('simulator.results.warnings.critical', "Critical: Severe deficit. Immediate fiscal intervention recommended.");
     default:
       return "";
   }

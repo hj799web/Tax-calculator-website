@@ -5,7 +5,7 @@
       class="btn btn-primary mt-4"
       @click="throttledDownloadBudgetPDF(includeFullBreakdown)"
     >
-       Download as PDF
+       {{ i18nText('budgetExportPanel.buttons.downloadPdf', 'Download as PDF') }}
     </button>
 
     <!-- Toggle for Full Breakdown -->
@@ -14,7 +14,7 @@
         v-model="includeFullBreakdown"
         type="checkbox"
       >
-      Include Full Budget Breakdown
+      {{ i18nText('budgetExportPanel.labels.includeFullBreakdown', 'Include Full Budget Breakdown') }}
     </label>
     
     <!-- Export Card for PDF Generation - Hidden off-screen -->
@@ -47,6 +47,14 @@ import { downloadBudgetPDF } from '@/domains/budget/utils/generateExportPDF'
 import { computeSentimentScores } from '@/domains/sentiment/utils/computeSentimentScores'
 import ExportCard from './ExportCard.vue'
 import throttle from 'lodash.throttle'
+import { useI18n } from '@/i18n';
+
+// i18n setup
+const { t } = useI18n();
+const i18nText = (key, fallback = '') => {
+  const value = t(key);
+  return value === key ? fallback : value;
+};
 
 const budgetStore = useBudgetSimulatorStore()
 const includeFullBreakdown = ref(true)

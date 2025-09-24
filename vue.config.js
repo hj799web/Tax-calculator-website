@@ -25,7 +25,7 @@ module.exports = {
     resolve: {
       symlinks: false,
       alias: {
-        vue: path.resolve('./node_modules/vue'),
+        'vue$': 'vue/dist/vue.esm-bundler.js',
       },
     },
     plugins: [

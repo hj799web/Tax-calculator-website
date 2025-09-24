@@ -36,6 +36,15 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ## Recent Updates
 
+### Chart Translation and Localization Enhancement (2025-01-21)
+
+- **Federal Budget Chart Translation**: Fully translated all chart titles, legends, and category labels in Federal Budget Allocation and Budget Visualizations sections
+- **Comprehensive Category Translation**: Added translation keys for all budget categories across 2022 and 2024 fiscal years in both English and French
+- **Chart Component Updates**: Updated three main chart components (FederalBudgetPieChart, Budget2024PieChart, FederalBudget2024PieChart) to use dynamic translation system
+- **Dynamic Language Switching**: Chart content now automatically updates when users switch between English and French
+- **Consistent Terminology**: Standardized budget category names across all chart visualizations
+- **Translation Key Structure**: Implemented organized translation structure with `federalBudget.categories.y2022` and `federalBudget.categories.y2024` sections
+
 ### Localization and Welcome Page Conversion (2025-01-21)
 
 - **Welcome Page Conversion**: Converted static HTML welcome pages to fully integrated Vue.js component with i18n support

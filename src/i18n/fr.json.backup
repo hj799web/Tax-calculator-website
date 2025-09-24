@@ -2,7 +2,6 @@
     "home": {
       "language": {
         "switchLabel": "Changer de langue",
-        "label": "Langue",
         "english": "Anglais",
         "french": "Français"
       },
@@ -308,6 +307,221 @@
         "wholeNumber": "Doit être un nombre entier",
         "rrspLimit": "La valeur ne peut pas dépasser la limite annuelle du REER",
         "dependentsLimit": "La valeur ne peut pas dépasser 20"
+      }
+    },
+    "simulator": {
+      "sections": {
+        "results": {
+          "title": "Résultats budgétaires"
+        },
+        "presets": {
+          "title": "Préréglages budgétaires"
+        },
+        "revenue": {
+          "title": "Sources de revenus"
+        },
+        "spending": {
+          "title": "Contrôles des dépenses",
+          "groupTitle": {
+            "main": "Catégories principales",
+            "other": "Autres catégories",
+            "governmentOperations": "Opérations gouvernementales",
+            "taxExpenditures": "Dépenses fiscales / Crédits d'impôt"
+          },
+          "mainIntro": "Ajustez les dépenses pour les principales catégories du budget fédéral. Augmenter les pourcentages augmente les dépenses, tandis que les diminuer réduit les dépenses.",
+          "otherIntro": "Ajustez les dépenses pour les catégories budgétaires fédérales supplémentaires. Ces catégories représentent des programmes et investissements spécialisés.",
+          "subcategoriesTitle": "Sous-catégories",
+          "loansSubTitle": "Sous-catégories de prêts, investissements et avances",
+          "governmentOperationsIntro": "Les opérations gouvernementales comprennent les fonctions administratives, les transferts et autres services gouvernementaux essentiels.",
+          "taxExpendituresIntro": "Ajustez les crédits d'impôt et les déductions pour voir leur impact sur les recettes fédérales. Réduire les crédits augmente les recettes, tandis que les étendre les diminue.",
+          "updating": "Mise à jour des calculs budgétaires..."
+        },
+        "analysis": {
+          "title": "Analyse budgétaire"
+        },
+        "sentiment": {
+          "title": "Opinion publique"
+        }
+      },
+      "results": {
+        "title": "Résultats budgétaires",
+        "tabs": {
+          "revenue": "Recettes",
+          "spending": "Dépenses"
+        },
+        "labels": {
+          "totalRevenue": "Recettes totales :",
+          "totalSpending": "Dépenses totales :",
+          "debtServicing": "Service de la dette :",
+          "surplusDeficit": "Excédent/Déficit :",
+          "debtToGdpRatio": "Ratio dette/PIB :"
+        },
+        "tooltips": {
+          "debtServicing": "Paiements d'intérêts sur la dette fédérale (coût fixe qui ne peut pas être ajusté)",
+          "debtToGdpRatio": "Le ratio de la dette fédérale totale par rapport à la taille de l'économie canadienne (PIB). Plus bas est généralement meilleur pour la santé fiscale.",
+          "ofTotalRevenue": "des recettes totales",
+          "autoBalance": "Lorsqu'activé, le système ajustera automatiquement les sources de revenus pour équilibrer le budget selon vos choix de dépenses."
+        },
+        "warnings": {
+          "mild": "Attention : Le déficit pourrait nécessiter un ajustement fiscal futur.",
+          "high": "Avertissement : Un grand déficit pourrait compromettre la stabilité fiscale à long terme.",
+          "critical": "Critique : Déficit sévère. Intervention fiscale immédiate recommandée.",
+          "dismiss": "Ignorer l'avertissement",
+          "info": "Comprendre les déficits budgétaires",
+          "infoDescription": "Les déficits budgétaires persistants peuvent mener à :",
+          "infoItems": [
+            "Coûts accrus du service de la dette",
+            "Fardeau financier intergénérationnel",
+            "Pression inflationniste potentielle",
+            "Flexibilité fiscale réduite pendant les ralentissements économiques"
+          ],
+          "learnMore": "En savoir plus sur la dette publique du DPB"
+        },
+        "actions": {
+          "title": "Actions",
+          "shareBudget": "Partager le budget",
+          "resetBudget": "Réinitialiser le budget",
+          "saveBudget": "Sauvegarder le budget",
+          "autoBalance": "Équilibrer automatiquement",
+          "downloadImage": "Télécharger en image"
+        },
+        "achievements": {
+          "title": "Réalisations budgétaires",
+          "noBadges": "Ajustez le budget pour gagner des badges de réalisation !"
+        }
+      },
+      "goals": {
+        "title": "Objectifs budgétaires",
+        "enableGoals": "Activer les objectifs budgétaires",
+        "targetRevenue": "Recettes cibles (G$)",
+        "targetDeficit": "{{ type }} cible (G$)",
+        "targetSurplus": "{{ type }} cible (G$)",
+        "deficit": "Déficit",
+        "surplus": "Excédent",
+        "positiveDeficitNegativeSurplus": "Positif = Déficit, Négatif = Excédent",
+        "autoBalance": "Équilibrer automatiquement le budget selon l'objectif",
+        "goalStatus": "État des objectifs :",
+        "revenueGoal": "Objectif de recettes :",
+        "deficitGoal": "Objectif de déficit :",
+        "surplusGoal": "Objectif d'excédent :",
+        "status": {
+          "onTarget": "Dans l'objectif",
+          "underTarget": "Sous l'objectif",
+          "overTarget": "Au-dessus de l'objectif",
+          "deficitTooSmall": "Le déficit est trop petit",
+          "deficitTooLarge": "Le déficit est trop grand",
+          "surplusTooLarge": "L'excédent est trop grand",
+          "surplusTooSmall": "L'excédent est trop petit",
+          "surplusInsteadOfDeficit": "Vous avez un excédent au lieu d'un déficit",
+          "deficitInsteadOfSurplus": "Vous avez un déficit au lieu d'un excédent"
+        },
+        "messages": {
+          "revenueOnTarget": "Vos recettes sont parfaitement dans l'objectif !",
+          "revenueOverTarget": "Vous êtes {{ amount }} G$ ({{ percent }}%) au-dessus de votre objectif de recettes.",
+          "revenueUnderTarget": "Vous êtes {{ amount }} G$ ({{ percent }}%) sous votre objectif de recettes.",
+          "budgetOnTarget": "Votre budget est parfaitement dans l'objectif !",
+          "deficitHigher": "Votre déficit est {{ amount }} G$ plus élevé que votre objectif.",
+          "deficitLower": "Votre déficit est {{ amount }} G$ plus bas que votre objectif.",
+          "surplusHigher": "Votre excédent est {{ amount }} G$ plus élevé que votre objectif.",
+          "surplusLower": "Votre excédent est {{ amount }} G$ plus bas que votre objectif.",
+          "autoBalanceRevenue": "Équilibrage automatique des recettes pour atteindre votre objectif de {{ amount }} G$...",
+          "autoBalanceDeficit": "Équilibrage automatique des recettes pour atteindre votre objectif de déficit de {{ amount }} G$...",
+          "autoBalanceSurplus": "Équilibrage automatique des recettes pour atteindre votre objectif d'excédent de {{ amount }} G$...",
+          "setGoalFirst": "Veuillez définir soit un objectif de recettes soit un objectif de déficit/excédent pour équilibrer automatiquement le budget.",
+          "enableGoalsToTrack": "Activez les objectifs budgétaires pour suivre vos progrès"
+        }
+      },
+      "controls": {
+        "common": {
+          "base": "Base :",
+          "current": "Actuel :",
+          "reset": "Réinitialiser",
+          "resetTooltip": "Revenir à la valeur de référence",
+          "expand": "Développer",
+          "collapse": "Réduire",
+          "taxImpact": "Impact des recettes :"
+        },
+        "revenue": {
+          "summaryTitle": "À propos de ces curseurs",
+          "summaryBody": "Le simulateur budgétaire utilise une approche simplifiée des calculs fiscaux pour expliquer l'impact financier des modifications. Plutôt que d'appliquer chaque palier, il s'appuie sur des taux effectifs moyens :",
+          "summaryItems": {
+            "personal": "Impôt sur le revenu des particuliers : taux de base de 21 % (2024) générant 10 milliards $ par point de pourcentage",
+            "corporate": "Impôt sur le revenu des sociétés : taux de base de 15 % (2024) générant 5,33 milliards $ par point de pourcentage",
+            "credits": "Les crédits et dépenses fiscales peuvent être ajustés séparément pour mesurer leur effet sur les recettes"
+          },
+          "summaryFooter": "Cette approche met l'accent sur l'impact global sur les recettes plutôt que sur les situations individuelles des contribuables.",
+          "groupTitle": {
+            "incomeTaxes": "Impôts sur le revenu",
+            "consumptionTaxes": "Taxes à la consommation",
+            "otherRevenues": "Autres sources de revenus"
+          },
+          "labels": {
+            "personal": "Impôt sur le revenu des particuliers",
+            "corporate": "Impôt sur le revenu des sociétés"
+          },
+          "notes": {
+            "personalIncomeTax": "L'impôt sur le revenu des particuliers englobe les impôts fédéraux perçus auprès des personnes et des ménages, incluant revenus d'emploi, revenus d'investissement et autres sources imposables.",
+            "corporateIncomeTax": "L'impôt sur le revenu des sociétés s'applique au revenu imposable des entreprises opérant au Canada et inclut le taux général (15 %) ainsi que le taux pour petites entreprises (9 %), plus diverses mesures fiscales."
+          },
+          "personal": {
+            "expenditureNote": "Ce montant intègre l'impact d'ajustements liés aux crédits et aux reports d'impôt des particuliers."
+          },
+          "corporate": {
+            "expenditureNote": "Ce montant intègre l'impact d'ajustements liés aux dépenses fiscales des sociétés."
+          }
+        },
+        "spending": {
+          "updating": "Mise à jour des calculs budgétaires…",
+          "groupTitle": {
+            "main": "Catégories principales",
+            "other": "Autres catégories"
+          },
+          "mainIntro": "Ajustez les dépenses des grandes catégories du budget fédéral. Augmenter un pourcentage accroît la dépense correspondante ; le réduire la diminue.",
+          "otherIntro": "Ajustez les autres catégories du budget fédéral : programmes et investissements spécialisés.",
+          "subcategoriesTitle": "Sous-catégories",
+          "loansSubTitle": "Sous-catégories : prêts, investissements et avances"
+        }
+      },
+      "presets": {
+        "title": "Préréglages budgétaires",
+        "hide": "Masquer",
+        "show": "Afficher",
+        "label": "Préréglages",
+        "ariaGroup": "Préréglages budgétaires",
+        "hoverHint": "Survolez un préréglage pour voir les détails ou cliquez pour l'appliquer au budget.",
+        "activeLabel": "Préréglage actif :",
+        "resetAria": "Réinitialiser le préréglage actif",
+        "reset": "Réinitialiser",
+        "applyAria": "Appliquer le préréglage {label}",
+        "badge": {
+          "balanced": "Équilibré",
+          "surplus": "Excédent",
+          "deficit": "Déficit",
+          "neutral": "Neutre"
+        },
+        "items": {
+          "balancedBudget": "⚖️ Budget équilibré",
+          "austerityPlan": "🔻 Plan d'austérité",
+          "progressiveExpansion": "🌿 Stimulus de croissance verte",
+          "businessFriendly": "💼 Budget pro-entreprises",
+          "infrastructureBuilder": "🏗️ Bâtisseur d'infrastructures",
+          "greenGrowthStimulus": "🌱 Expansion progressive",
+          "securityFirst": "🛡️ Budget sécurité d'abord"
+        },
+        "descriptions": {
+          "balancedBudget": "Approche responsable équilibrant recettes et dépenses tout en maintenant les services essentiels. Conçu pour obtenir les badges Fiscal Hawk et Centrist Pragmatist.",
+          "austerityPlan": "Approche axée sur la réduction du déficit via coupes budgétaires et ajustements fiscaux. Permet d'obtenir les badges Austerity Champion et Surplus Architect.",
+          "progressiveExpansion": "Approche de croissance utilisant déficits stratégiques pour stimuler l'économie tout en limitant le déficit sous 50 G$. Vise les badges Stimulus Commander et Stimulus Engineer.",
+          "businessFriendly": "Approche pro-entreprises réduisant l'impôt des sociétés et la réglementation pour stimuler croissance et création d'emplois. Conçu pour obtenir les badges Corporate Catalyst et Business Friendly.",
+          "infrastructureBuilder": "Investissements majeurs dans infrastructures physiques (transports, haut débit, réseaux d'eau, résilience climatique), financés par déficits modérés et réaffectation de dépenses fiscales.",
+          "greenGrowthStimulus": "Approche sociale-démocrate investissant dans services publics et programmes sociaux, financée par fiscalité accrue pour entreprises et hauts revenus. Active badges sociaux tels que Progressive Moderate, Urban Optimizer, Welfare Architect, Senior Ally, Family Champion, Equity Champion et Social Safety Weaver.",
+          "securityFirst": "Approche priorisant défense et sécurité nationale. Conçu pour obtenir les badges National Security Guardian et Peace Through Strength."
+        }
+      },
+      "chaosWarning": "Indignation publique : système de recettes en désordre !",
+      "description": {
+        "intro": "Découvrez ce que signifie gérer le budget fédéral du Canada. Ajustez les sources de revenus et les priorités de dépenses pour équilibrer le budget tout en tenant compte de l'opinion publique selon les régions et les secteurs.",
+        "disclaimer": "*Le simulateur budgétaire utilise les données des Comptes publics du Canada et du Budget 2024, les chiffres du déficit du Ministère des Finances, les ratios dette/PIB des séries FRED et de la Banque mondiale, ainsi que les projections du Directeur parlementaire du budget.*"
       }
     },
     "how": {
@@ -874,32 +1088,6 @@
         "category": "Catégorie",
         "amount": "Montant",
         "percentage": "Pourcentage"
-      },
-      "categories": {
-        "y2022": {
-          "healthcare": "Santé",
-          "supportForSeniors": "Soutien aux aînés",
-          "childrenAndFamilies": "Enfants et familles",
-          "indigenousServices": "Services aux Autochtones",
-          "employmentInsuranceAndBenefits": "Assurance-emploi et prestations",
-          "defense": "Défense",
-          "publicSafetyAndEmergencyPreparedness": "Sécurité publique et interventions d'urgence",
-          "internationalAffairsAndDevelopment": "Affaires internationales et développement",
-          "publicDebtCharges": "Charges de la dette publique",
-          "loansInvestmentsAndAdvances": "Prêts, investissements et avances",
-          "otherGovernmentOperations": "Autres opérations gouvernementales"
-        },
-        "y2024": {
-          "healthcareCanadaHealthTransfer": "Santé (Transfert canadien en matière de santé)",
-          "supportForSeniors": "Soutien aux aînés",
-          "childrenAndFamilies": "Enfants et familles",
-          "indigenousServicesAndReconciliation": "Services aux Autochtones et réconciliation",
-          "employmentInsuranceAndOtherBenefits": "Assurance-emploi et autres prestations",
-          "defenseAndPublicSafety": "Défense et sécurité publique",
-          "debtServicingPublicDebtCharges": "Service de la dette (charges de la dette publique)",
-          "loansInvestmentsAndAdvances": "Prêts, investissements et avances",
-          "otherGovernmentOperations": "Autres opérations gouvernementales"
-        }
       }
     },
     "budgetCategories": {
@@ -1477,137 +1665,6 @@
           "corporateTaxExpenditures": "Dépenses fiscales des entreprises",
           "gstHstExpenditures": "Dépenses TPS/TVH",
           "deferrals": "Report d'impôt (REER/RPA/CELI)"
-        }
-      },
-      "categories": {
-        "revenue": {
-          "personalIncomeTax": "Impôt sur le revenu des particuliers",
-          "corporateIncomeTax": "Impôt sur le revenu des sociétés",
-          "gst": "TPS/TVH",
-          "exciseTaxes": "Taxes d'accise",
-          "carbonPricing": "Revenus de tarification du carbone",
-          "employmentInsurancePremiums": "Primes d'assurance-emploi",
-          "customsAndImportDuties": "Douanes et droits d'importation",
-          "crownCorporationProfits": "Profits des sociétés d'État",
-          "otherNonTaxRevenues": "Autres revenus non fiscaux",
-          "resourceRoyalties": "Redevances sur les ressources"
-        },
-        "spending": {
-          "healthcare": "Santé (TCS)",
-          "education": "Éducation",
-          "supportForSeniors": "Soutien aux aînés",
-          "childrenAndFamilies": "Enfants et familles",
-          "indigenousServices": "Services aux Autochtones et réconciliation",
-          "employmentInsurance": "Assurance-emploi",
-          "defenseAndPublicSafety": "Défense et sécurité publique",
-          "loansInvestmentsAdvances": "Prêts, investissements et avances",
-          "governmentOperations": "Opérations gouvernementales",
-          "debtServicing": "Service de la dette",
-          "personalIncomeTaxCredits": "Crédits d'impôt sur le revenu des particuliers",
-          "corporateTaxExpenditures": "Dépenses fiscales des sociétés",
-          "subcategories": {
-            "studentLoans": "Prêts étudiants",
-            "agricultureLoans": "Prêts agricoles",
-            "internationalDevelopment": "Développement international",
-            "businessAndInnovation": "Entreprises et innovation",
-            "defenseSector": "Secteur de la défense",
-            "economicDevelopment": "Développement économique",
-            "transportationInfrastructure": "Infrastructure de transport",
-            "environmentalPrograms": "Programmes environnementaux",
-            "publicSafetyAndEmergencyPreparedness": "Sécurité publique et préparation aux urgences",
-            "governmentBuildingsAndProperties": "Bâtiments et propriétés gouvernementaux",
-            "researchAndInnovation": "Recherche et innovation",
-            "digitalGovernmentAndItInfrastructure": "Gouvernement numérique et infrastructure TI",
-            "federalEmployeeSalariesAndBenefits": "Salaires et avantages des employés fédéraux",
-            "legalAndJusticeSystem": "Système juridique et judiciaire",
-            "indigenousServicesOperationalExpenses": "Dépenses opérationnelles des services aux Autochtones",
-            "culturalAndHeritagePrograms": "Programmes culturels et patrimoniaux",
-            "diplomaticAndInternationalRepresentation": "Représentation diplomatique et internationale"
-          }
-        }
-      },
-      "yearSimulatorModal": {
-        "title": "Simulateur de l'année {year}",
-        "close": "Fermer",
-        "noBaselineData": "Aucune donnée de référence disponible pour {year}",
-        "metrics": {
-          "gdp": "PIB",
-          "revenue": "Recettes",
-          "spending": "Dépenses",
-          "surplusDeficit": "Excédent/Déficit",
-          "debt": "Dette",
-          "debtToGdp": "Dette/PIB"
-        }
-      },
-      "budgetExportPanel": {
-        "buttons": {
-          "downloadPdf": "Télécharger en PDF"
-        },
-        "labels": {
-          "includeFullBreakdown": "Inclure la répartition complète du budget"
-        }
-      },
-      "itemsPlanList": {
-        "searchPlaceholder": "Rechercher des éléments...",
-        "labels": {
-          "currentRate": "Taux actuel (%)",
-          "currentFactor": "Facteur actuel (×)"
-        },
-        "buttons": {
-          "reset": "Réinitialiser",
-          "plan": "Planifier"
-        },
-        "empty": "Aucun élément ne correspond à vos critères de recherche."
-      },
-      "assumptions": {
-        "labels": {
-          "baseYear": "Année de base",
-          "horizon": "Horizon (années)",
-          "gdpGrowth": "Croissance du PIB (%)",
-          "inflation": "Inflation (%)",
-          "interestRate": "Taux d'intérêt (%)",
-          "preset": "Préréglage"
-        },
-        "presets": {
-          "custom": "Personnalisé",
-          "conservative": "Conservateur",
-          "moderate": "Modéré",
-          "optimistic": "Optimiste"
-        },
-        "buttons": {
-          "reset": "Réinitialiser"
-        }
-      },
-      "multiYearProjections": {
-        "tooltips": {
-          "extraGrowth": "Croissance supplémentaire due au vieillissement de la population et aux changements démographiques",
-          "baseline": "Augmentations normales des coûts de programme",
-          "demographic": "Croissance supplémentaire due au vieillissement de la population"
-        }
-      },
-      "budgetResults": {
-        "tooltips": {
-          "downloadImage": "Télécharger en image"
-        }
-      },
-      "projectionsPanel": {
-        "ariaLabels": {
-          "deficitChart": "Graphique linéaire du déficit historique et projeté"
-        }
-      },
-      "budgetChangesBanner": {
-        "tooltips": {
-          "clearAll": "Effacer tous les changements"
-        }
-      },
-      "sharedBudgetDetailModal": {
-        "ariaLabels": {
-          "closeModal": "Fermer la fenêtre"
-        }
-      },
-      "fiscalChaosAlert": {
-        "ariaLabels": {
-          "fiscalChaos": "Chaos fiscal"
         }
       }
     }

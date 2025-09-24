@@ -1,7 +1,7 @@
 <template>
   <div class="items-plan-list">
     <div class="search-bar">
-      <input v-model="searchQuery" placeholder="Search items..." />
+      <input v-model="searchQuery" :placeholder="i18nText('itemsPlanList.searchPlaceholder', 'Search items...')" />
     </div>
 
     <div class="items-grid">
@@ -14,7 +14,7 @@
           <span class="badge">{{ item.badge }}</span>
         </div>
         <div class="item-controls">
-          <label>{{ item.type === 'revenue' ? 'Current rate (%)' : 'Current factor (×)' }}</label>
+          <label>{{ item.type === 'revenue' ? i18nText('itemsPlanList.labels.currentRate', 'Current rate (%)') : i18nText('itemsPlanList.labels.currentFactor', 'Current factor (×)') }}</label>
           <input
             v-if="item.type === 'revenue'"
             type="number"
@@ -31,14 +31,14 @@
           />
         </div>
         <div class="item-actions">
-          <button class="btn" @click="resetItem(item)">Reset</button>
-          <button class="btn primary" @click="planItem(item)">Plan</button>
+          <button class="btn" @click="resetItem(item)">{{ i18nText('itemsPlanList.buttons.reset', 'Reset') }}</button>
+          <button class="btn primary" @click="planItem(item)">{{ i18nText('itemsPlanList.buttons.plan', 'Plan') }}</button>
         </div>
       </div>
     </div>
 
     <div v-if="filteredItems.length === 0" class="empty">
-      No items match your search criteria.
+      {{ i18nText('itemsPlanList.empty', 'No items match your search criteria.') }}
     </div>
   </div>
   
@@ -48,6 +48,14 @@
 import { ref, computed } from 'vue';
 import { useBudgetSimulatorStore } from '@/domains/budget/store/budgetSimulator.js';
 import { useMultiYearSettingsStore } from '@/domains/budget/store/multiYearSettings.js';
+import { useI18n } from '@/i18n';
+
+// i18n setup
+const { t } = useI18n();
+const i18nText = (key, fallback = '') => {
+  const value = t(key);
+  return value === key ? fallback : value;
+};
 
 const emit = defineEmits(['open-plan']);
 

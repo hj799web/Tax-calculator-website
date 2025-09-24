@@ -2,43 +2,43 @@
   <div v-if="show" class="modal-backdrop" @click="emit('close')">
     <div class="modal" @click.stop>
       <div class="header">
-        <h3>Budget Simulator: {{ year }}</h3>
-        <button class="icon-btn" @click="emit('close')" aria-label="Close">&times;</button>
+        <h3>{{ t('yearSimulatorModal.title', { year }) }}</h3>
+        <button class="icon-btn" @click="emit('close')" :aria-label="i18nText('yearSimulatorModal.close', 'Close')">&times;</button>
       </div>
 
-      <div v-if="!baselineRow" class="body empty">No baseline data for {{ year }}.</div>
+      <div v-if="!baselineRow" class="body empty">{{ t('yearSimulatorModal.noBaselineData', { year }) }}</div>
 
       <div v-else class="body">
         <section class="metrics">
           <div class="metric">
-            <div class="label">GDP</div>
+            <div class="label">{{ i18nText('yearSimulatorModal.metrics.gdp', 'GDP') }}</div>
             <div class="value">{{ fmt(baselineRow.gdp) }}</div>
           </div>
           <div class="metric">
-            <div class="label">Revenue</div>
+            <div class="label">{{ i18nText('yearSimulatorModal.metrics.revenue', 'Revenue') }}</div>
             <div class="value">{{ fmt(adjusted.revenueTotal) }}</div>
           </div>
           <div class="metric">
-            <div class="label">Spending</div>
+            <div class="label">{{ i18nText('yearSimulatorModal.metrics.spending', 'Spending') }}</div>
             <div class="value">{{ fmt(adjusted.spendingTotal) }}</div>
           </div>
           <div class="metric" :class="{ pos: adjusted.deficit >= 0, neg: adjusted.deficit < 0 }">
-            <div class="label">Surplus/Deficit</div>
+            <div class="label">{{ i18nText('yearSimulatorModal.metrics.surplusDeficit', 'Surplus/Deficit') }}</div>
             <div class="value">{{ fmt(adjusted.deficit) }}</div>
           </div>
           <div class="metric">
-            <div class="label">Debt</div>
+            <div class="label">{{ i18nText('yearSimulatorModal.metrics.debt', 'Debt') }}</div>
             <div class="value">{{ fmt(adjusted.debt) }}</div>
           </div>
           <div class="metric">
-            <div class="label">Debt/GDP</div>
+            <div class="label">{{ i18nText('yearSimulatorModal.metrics.debtToGdp', 'Debt/GDP') }}</div>
             <div class="value">{{ (adjusted.debtToGDP * 100).toFixed(1) }}%</div>
           </div>
         </section>
 
         <section class="controls">
           <div class="col">
-            <h4>Revenue Adjustments</h4>
+            <h4>{{ i18nText('yearSimulatorModal.sections.revenueAdjustments', 'Revenue Adjustments') }}</h4>
             <div class="list">
               <div v-for="(amt, key) in baselineRow.revenueBySource" :key="key" class="row">
                 <div class="k">{{ prettyKey(key) }}</div>
@@ -51,7 +51,7 @@
             </div>
           </div>
           <div class="col">
-            <h4>Spending Adjustments</h4>
+            <h4>{{ i18nText('yearSimulatorModal.sections.spendingAdjustments', 'Spending Adjustments') }}</h4>
             <div class="list">
               <div v-for="(amt, key) in baselineRow.spendingByCategory" :key="key" class="row">
                 <div class="k">{{ prettyKey(key) }}</div>
@@ -66,10 +66,10 @@
         </section>
 
         <section class="actions">
-          <input class="name-input" type="text" v-model="scenarioName" placeholder="Scenario name (optional)"/>
+          <input class="name-input" type="text" v-model="scenarioName" :placeholder="i18nText('yearSimulatorModal.placeholders.scenarioName', 'Scenario name (optional)')"/>
           <div class="spacer"></div>
-          <button class="btn" @click="reset">Reset</button>
-          <button class="btn primary" @click="save">Save Scenario</button>
+          <button class="btn" @click="reset">{{ i18nText('yearSimulatorModal.buttons.reset', 'Reset') }}</button>
+          <button class="btn primary" @click="save">{{ i18nText('yearSimulatorModal.buttons.saveScenario', 'Save Scenario') }}</button>
         </section>
       </div>
     </div>
@@ -79,6 +79,14 @@
 <script setup>
 import { computed, reactive, watch, ref } from 'vue';
 import { useYearSimulationStore } from '@/domains/budget/store/yearSimulation.js';
+import { useI18n } from '@/i18n';
+
+// i18n setup
+const { t } = useI18n();
+const i18nText = (key, fallback = '') => {
+  const value = t(key);
+  return value === key ? fallback : value;
+};
 
 const props = defineProps({
   show: { type: Boolean, default: false },

@@ -5,14 +5,28 @@ This document outlines the comprehensive localization improvements and welcome p
 
 ## Changes Summary
 
-### 1. Welcome Page Conversion
+### 1. Chart Translation and Localization Enhancement
+- **Federal Budget Chart Translation**: Fully translated all chart titles, legends, and category labels in Federal Budget Allocation and Budget Visualizations sections
+- **Comprehensive Category Translation**: Added translation keys for all budget categories across 2022 and 2024 fiscal years in both English and French
+- **Chart Component Updates**: Updated three main chart components to use dynamic translation system
+- **Dynamic Language Switching**: Chart content now automatically updates when users switch between English and French
+- **Consistent Terminology**: Standardized budget category names across all chart visualizations
+
+### 2. Welcome Page Conversion
 - **Converted** `docs/welcome.html` and `public/welcome.html` from static HTML to Vue.js component
 - **Created** `src/views/WelcomeView.vue` with full i18n integration
 - **Added** language switcher functionality
 - **Integrated** navigation banner identical to main application
 - **Preserved** all original styling and animations
 
-### 2. Comprehensive Localization
+### 3. Chart Translation Implementation
+- **Chart Component Updates**: Modified three main chart components to use translation system
+- **Translation Key Architecture**: Added organized translation structure for budget categories
+- **Dynamic Category Translation**: Implemented helper functions for category name translation
+- **Chart Title Translation**: Updated chart titles to use descriptive translation keys
+- **Tooltip Translation**: Chart tooltips now display translated category names
+
+### 4. Comprehensive Localization
 - **Localized** all hardcoded strings across multiple Vue components
 - **Added** translation keys for calculator inputs, results, FAQs, and budget categories
 - **Updated** Pinia stores to support dynamic translations
@@ -236,6 +250,122 @@ This document outlines the comprehensive localization improvements and welcome p
   - `home.year.labels.2024`
   - `home.year.labels.2025`
 
+### D. Chart Translation Implementation
+
+#### Chart Components Updated
+
+**`src/domains/calculator/components/FederalBudgetPieChart.vue`**:
+- **Added** `useI18n` import and `getCategoryTranslation` helper function
+- **Updated** chart data labels to use translated category names via `getCategoryTranslation(x.categoryKey || x.category, yearStore.selectedTaxYear)`
+- **Updated** chart title to use `federalBudget.descriptions.estimates2025` or `federalBudget.descriptions.budget2024`
+- **Updated** dataset label to use `federalBudget.title`
+- **Enhanced** tooltip callbacks to display translated category names
+
+**`src/domains/calculator/components/Budget2024PieChart.vue`**:
+- **Added** `useI18n` import and `getCategoryTranslation` helper function
+- **Updated** budget data computation to use translated category names via `getCategoryTranslation(c.key || c.name)`
+- **Updated** chart title to use `federalBudget.descriptions.budget2024`
+- **Updated** dataset label to use `federalBudget.title`
+- **Removed** unused `useYearStore` import to fix ESLint errors
+
+**`src/domains/calculator/components/FederalBudget2024PieChart.vue`**:
+- **Added** `useI18n` import and `getCategoryTranslation` helper function
+- **Updated** federal budget data computation to use translated category names via `getCategoryTranslation(cat.key || cat.name)`
+- **Updated** chart title to use `federalBudget.descriptions.budget2024`
+- **Updated** dataset label to use `federalBudget.title`
+- **Enhanced** tooltip callbacks to display translated category names
+
+#### Translation Keys Added
+
+**Federal Budget Categories (`federalBudget.categories`)**:
+
+**English (`src/i18n/en.json`)**:
+```json
+{
+  "federalBudget": {
+    "categories": {
+      "y2022": {
+        "healthcare": "Healthcare",
+        "supportForSeniors": "Support for Seniors",
+        "childrenAndFamilies": "Children and Families",
+        "indigenousServices": "Indigenous Services",
+        "employmentInsuranceAndBenefits": "Employment Insurance and Benefits",
+        "defense": "Defense",
+        "publicSafetyAndEmergencyPreparedness": "Public Safety and Emergency Preparedness",
+        "internationalAffairsAndDevelopment": "International Affairs and Development",
+        "publicDebtCharges": "Public Debt Charges",
+        "loansInvestmentsAndAdvances": "Loans, Investments, and Advances",
+        "otherGovernmentOperations": "Other Government Operations"
+      },
+      "y2024": {
+        "healthcareCanadaHealthTransfer": "Healthcare (Canada Health Transfer)",
+        "supportForSeniors": "Support for Seniors",
+        "childrenAndFamilies": "Children and Families",
+        "indigenousServicesAndReconciliation": "Indigenous Services and Reconciliation",
+        "employmentInsuranceAndOtherBenefits": "Employment Insurance and Other Benefits",
+        "defenseAndPublicSafety": "Defense and Public Safety",
+        "debtServicingPublicDebtCharges": "Debt Servicing (Public Debt Charges)",
+        "loansInvestmentsAndAdvances": "Loans, Investments, and Advances",
+        "otherGovernmentOperations": "Other Government Operations"
+      }
+    }
+  }
+}
+```
+
+**French (`src/i18n/fr.json`)**:
+```json
+{
+  "federalBudget": {
+    "categories": {
+      "y2022": {
+        "healthcare": "Santé",
+        "supportForSeniors": "Soutien aux aînés",
+        "childrenAndFamilies": "Enfants et familles",
+        "indigenousServices": "Services aux Autochtones",
+        "employmentInsuranceAndBenefits": "Assurance-emploi et prestations",
+        "defense": "Défense",
+        "publicSafetyAndEmergencyPreparedness": "Sécurité publique et interventions d'urgence",
+        "internationalAffairsAndDevelopment": "Affaires internationales et développement",
+        "publicDebtCharges": "Charges de la dette publique",
+        "loansInvestmentsAndAdvances": "Prêts, investissements et avances",
+        "otherGovernmentOperations": "Autres opérations gouvernementales"
+      },
+      "y2024": {
+        "healthcareCanadaHealthTransfer": "Santé (Transfert canadien en matière de santé)",
+        "supportForSeniors": "Soutien aux aînés",
+        "childrenAndFamilies": "Enfants et familles",
+        "indigenousServicesAndReconciliation": "Services aux Autochtones et réconciliation",
+        "employmentInsuranceAndOtherBenefits": "Assurance-emploi et autres prestations",
+        "defenseAndPublicSafety": "Défense et sécurité publique",
+        "debtServicingPublicDebtCharges": "Service de la dette (charges de la dette publique)",
+        "loansInvestmentsAndAdvances": "Prêts, investissements et avances",
+        "otherGovernmentOperations": "Autres opérations gouvernementales"
+      }
+    }
+  }
+}
+```
+
+#### Translation Helper Functions
+
+**`getCategoryTranslation(categoryKey, year)`**:
+- **Purpose**: Dynamically translates budget category names based on fiscal year
+- **Parameters**: 
+  - `categoryKey`: The category identifier (e.g., 'healthcare', 'defense')
+  - `year`: The fiscal year ('2022' or '2024')
+- **Returns**: Translated category name or fallback to original key
+- **Implementation**: Uses `t(\`federalBudget.categories.${yearKey}.${categoryKey}\`)` with fallback
+
+**Chart Title Translation**:
+- **2025 Data**: Uses `federalBudget.descriptions.estimates2025`
+- **2024 Data**: Uses `federalBudget.descriptions.budget2024`
+- **Dynamic**: Chart titles automatically update based on selected tax year
+
+**Dataset Label Translation**:
+- **Consistent**: All charts use `federalBudget.title` for dataset labels
+- **Bilingual**: Automatically switches between "Federal Budget Allocation" and "Répartition du budget fédéral"
+
 ### C. Translation Keys Added
 
 #### New Translation Sections
@@ -325,6 +455,10 @@ This document outlines the comprehensive localization improvements and welcome p
 - [ ] All translation keys resolve correctly
 - [ ] No console errors in browser
 - [ ] Mobile responsiveness works on various screen sizes
+- [ ] Chart titles and legends translate correctly when switching languages
+- [ ] Budget category names display in correct language in all charts
+- [ ] Chart tooltips show translated category names
+- [ ] Federal Budget Allocation charts update dynamically with language changes
 
 ### Content Tests
 - [ ] All French translations are grammatically correct
@@ -402,4 +536,7 @@ This document outlines the comprehensive localization improvements and welcome p
 This comprehensive update successfully converts the static welcome page into a fully integrated Vue.js component with complete bilingual support. The implementation maintains the original design aesthetic while adding modern functionality, accessibility features, and seamless language switching capabilities.
 
 The changes ensure a consistent user experience across all pages of the application while providing a solid foundation for future internationalization efforts and content management improvements.
+
+
+
 

@@ -1,39 +1,39 @@
 <template>
   <div class="multi-year-panel">
     <div class="header-row">
-      <h3 class="title">Multi-Year Projections</h3>
+      <h3 class="title">{{ i18nText('multiYearProjections.title', 'Multi-Year Projections') }}</h3>
       <button class="btn primary" @click="showPlanner = !showPlanner">
         <span class="material-icons" aria-hidden="true">timeline</span>
-        {{ showPlanner ? 'Hide Charts' : 'Show Charts' }}
+        {{ showPlanner ? i18nText('multiYearProjections.buttons.hideCharts', 'Hide Charts') : i18nText('multiYearProjections.buttons.showCharts', 'Show Charts') }}
       </button>
     </div>
     <div v-if="!FEATURES.MULTI_YEAR_PLANNING" class="flag-disabled">
-      <p>This feature is disabled. Enable MULTI_YEAR_PLANNING to view projections.</p>
+      <p>{{ i18nText('multiYearProjections.featureDisabled', 'This feature is disabled. Enable MULTI_YEAR_PLANNING to view projections.') }}</p>
     </div>
     <div v-else>
       <div class="assumptions editable">
         <div class="row">
-          <label>Base year</label>
+          <label>{{ i18nText('multiYearProjections.labels.baseYear', 'Base year') }}</label>
           <input type="number" v-model.number="settingsStore.planning.baseYear" @change="normalize()" min="2000" max="2100" />
         </div>
         <div class="row">
-          <label>Horizon (years)</label>
+          <label>{{ i18nText('multiYearProjections.labels.horizon', 'Horizon (years)') }}</label>
           <input type="number" v-model.number="settingsStore.planning.horizonYears" @change="normalize()" min="1" max="50" />
         </div>
         <div class="row">
-          <label>Real GDP growth (%)</label>
+          <label>{{ i18nText('multiYearProjections.labels.realGdpGrowth', 'Real GDP growth (%)') }}</label>
           <input type="number" step="0.1" v-model.number="settingsStore.economic.gdpReal" @change="normalize()" min="-5" max="10" />
         </div>
         <div class="row">
-          <label>Inflation (%)</label>
+          <label>{{ i18nText('multiYearProjections.labels.inflation', 'Inflation (%)') }}</label>
           <input type="number" step="0.1" v-model.number="settingsStore.economic.inflation" @change="normalize()" min="-2" max="20" />
         </div>
         <div class="row">
-          <label>Interest rate (%)</label>
+          <label>{{ i18nText('multiYearProjections.labels.interestRate', 'Interest rate (%)') }}</label>
           <input type="number" step="0.1" v-model.number="settingsStore.economic.interestRate" @change="normalize()" min="0" max="20" />
         </div>
         <div class="row">
-          <label title="One-time adjustment to all program spending levels">Program spending boost (%)</label>
+          <label :title="i18nText('multiYearProjections.tooltips.programSpendingBoost', 'One-time adjustment to all program spending levels')">{{ i18nText('multiYearProjections.labels.programSpendingBoost', 'Program spending boost (%)') }}</label>
           <input
             type="number"
             step="0.5"
@@ -44,7 +44,7 @@
           />
         </div>
         <div class="row">
-          <label title="Adjusts how fast program spending grows each year. +0.5 means all categories grow 0.5 percentage points faster annually.">Speed up spending growth (pp)</label>
+          <label :title="i18nText('multiYearProjections.tooltips.speedUpSpendingGrowth', 'Adjusts how fast program spending grows each year. +0.5 means all categories grow 0.5 percentage points faster annually.')">{{ i18nText('multiYearProjections.labels.speedUpSpendingGrowth', 'Speed up spending growth (pp)') }}</label>
           <input
             type="number"
             step="0.1"
@@ -210,6 +210,14 @@ import { makeBaseSnapshotFromStore } from '@/domains/budget/utils/projectionAdap
 import { projectAll } from '@/domains/budget/utils/projections.js';
 import { FEATURES } from '@/features.js';
 import ProjectionsPanelLite from '@/domains/budget/components/ProjectionsPanelLite.vue';
+import { useI18n } from '@/i18n';
+
+// i18n setup
+const { t } = useI18n();
+const i18nText = (key, fallback = '') => {
+  const value = t(key);
+  return value === key ? fallback : value;
+};
 
 const budget = useBudgetSimulatorStore();
 const settingsStore = useMultiYearSettingsStore();

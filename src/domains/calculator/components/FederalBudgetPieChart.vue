@@ -24,15 +24,16 @@
   </template>
   
   <script setup>
-  import { computed, ref, onMounted } from 'vue'
-  import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js/auto'
-  import { Pie } from 'vue-chartjs'
-  import { storeToRefs } from 'pinia'
-  import { useCalculatorStore } from '@/domains/calculator/store/calculator.js'
-  import { formatCurrency, generateColors } from '@/domains/calculator/utils/chartUtils.js'
-  import { htmlLegendPlugin } from '@/domains/calculator/utils/htmlLegendPlugin.js'
-  import { useCalculator } from '../composables/calculator.js'
-  import { useYearStore } from '@/domains/calculator/store/year.js'
+import { computed, ref, onMounted } from 'vue'
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js/auto'
+import { Pie } from 'vue-chartjs'
+import { storeToRefs } from 'pinia'
+import { useCalculatorStore } from '@/domains/calculator/store/calculator.js'
+import { formatCurrency, generateColors } from '@/domains/calculator/utils/chartUtils.js'
+import { htmlLegendPlugin } from '@/domains/calculator/utils/htmlLegendPlugin.js'
+import { useCalculator } from '../composables/calculator.js'
+import { useYearStore } from '@/domains/calculator/store/year.js'
+import { useI18n } from '@/i18n'
   
   // Register Chart.js components
   ChartJS.register(ArcElement, Tooltip, Legend)
@@ -40,28 +41,35 @@
   // Create a ref for the legend container
   const legendRef = ref(null)
   
-  // Extract data and flags
-  const { federalBudgetData } = storeToRefs(useCalculatorStore())
-  const { canCalculate } = useCalculator()
-  const yearStore = useYearStore()
+// Extract data and flags
+const { federalBudgetData } = storeToRefs(useCalculatorStore())
+const { canCalculate } = useCalculator()
+const yearStore = useYearStore()
+const { t } = useI18n()
+
+// Helper function to get translated category name
+const getCategoryTranslation = (categoryKey, year) => {
+  const yearKey = year === '2024' ? 'y2024' : 'y2022'
+  return t(`federalBudget.categories.${yearKey}.${categoryKey}`) || categoryKey
+}
   
   // Debug: log chart data on mount
   onMounted(() => {
     console.log('FederalBudgetPieChart chartData:', chartData.value)
   })
   
-  // Prepare chart data
-  const chartData = computed(() => ({
-    labels: federalBudgetData.value.map(x => x.category),
-    datasets: [
-      {
-        label: 'Federal Budget Allocation',
-        data: federalBudgetData.value.map(x => x.amount),
-        backgroundColor: generateColors(federalBudgetData.value.length),
-        borderWidth: 1,
-      },
-    ],
-  }))
+// Prepare chart data
+const chartData = computed(() => ({
+  labels: federalBudgetData.value.map(x => getCategoryTranslation(x.categoryKey || x.category, yearStore.selectedTaxYear)),
+  datasets: [
+    {
+      label: t('federalBudget.title'),
+      data: federalBudgetData.value.map(x => x.amount),
+      backgroundColor: generateColors(federalBudgetData.value.length),
+      borderWidth: 1,
+    },
+  ],
+}))
   
   // Chart options (pass the legend ref to the plugin)
   const chartOptions = computed(() => ({
@@ -77,8 +85,8 @@
       title: {
         display: true,
         text: yearStore.selectedTaxYear === '2025' ? 
-          '2025-2026 Federal Estimates Allocation Chart' :
-          `${yearStore.selectedTaxYear} Canada Federal Budget Allocation Chart`,
+          t('federalBudget.descriptions.estimates2025') :
+          t('federalBudget.descriptions.budget2024'),
         font: {
           size: 14
         }

@@ -6,6 +6,12 @@ import { ref, markRaw } from 'vue';
 import { budgetValidationSchemas } from '@/utils/storeValidation.js';
 import { wrapStoreAction } from '@/utils/storeActionWrapper.js';
 import { debounce } from 'lodash-es';
+import { getCategoryName } from '@/i18n';
+
+// Helper function to get translated category names
+const getTranslatedName = (categoryId, categoryType = 'spending') => {
+  return getCategoryName(categoryId, categoryType);
+};
 
 // Change types for categorization
 const CHANGE_TYPES = {
@@ -188,7 +194,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
     revenueSources: {
       personalIncomeTax: {
         id: "personalIncomeTax",
-        name: "Personal Income Tax",
+        name: getTranslatedName("personalIncomeTax", "revenue"),
         rate: 21,
         base: 10, // $10B per 1%
         amount: 210, // $210B
@@ -211,7 +217,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
       },
       corporateIncomeTax: {
         id: "corporateIncomeTax",
-        name: "Corporate Income Tax",
+        name: getTranslatedName("corporateIncomeTax", "revenue"),
         rate: 15,
         base: 5.33, // ~$5.33B per 1%
         amount: 80, // $80B
@@ -255,7 +261,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
       },
       exciseTaxes: {
         id: "exciseTaxes",
-        name: "Excise Taxes",
+        name: getTranslatedName("exciseTaxes", "revenue"),
         rate: 2.5,
         base: 4.8, // $4.8B per 1%
         amount: 12, // $12B
@@ -275,7 +281,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
       },
       carbonPricing: {
         id: "carbonPricing",
-        name: "Carbon Pricing Revenue",
+        name: getTranslatedName("carbonPricing", "revenue"),
         rate: 1,
         base: 8, // $8B per 1%
         amount: 8, // $8B
@@ -295,7 +301,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
       },
       eiPremiums: {
         id: "eiPremiums",
-        name: "Employment Insurance Premiums",
+        name: getTranslatedName("employmentInsurancePremiums", "revenue"),
         rate: 1.35,
         base: 20, // $20B per 1%
         amount: 27, // $27B
@@ -315,7 +321,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
       },
       customsDuties: {
         id: "customsDuties",
-        name: "Customs and Import Duties",
+        name: getTranslatedName("customsAndImportDuties", "revenue"),
         rate: 1,
         base: 6, // $6B per 1%
         amount: 6, // $6B
@@ -335,7 +341,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
       },
       crownProfits: {
         id: "crownProfits",
-        name: "Crown Corporation Profits",
+        name: getTranslatedName("crownCorporationProfits", "revenue"),
         rate: 2.5,
         base: 2.4, // $2.4B per 1%
         amount: 6, // $6B
@@ -356,7 +362,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
       },
       nonTaxRevenue: {
         id: "nonTaxRevenue",
-        name: "Other Non-Tax Revenues",
+        name: getTranslatedName("otherNonTaxRevenues", "revenue"),
         rate: 3,
         base: 10, // $10B per 1%
         amount: 30, // $30B
@@ -376,7 +382,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
       },
       resourceRoyalties: {
         id: "resourceRoyalties",
-        name: "Resource Royalties",
+        name: getTranslatedName("resourceRoyalties", "revenue"),
         rate: 1,
         base: 5, // $5B per 1%
         amount: 5, // $5B
@@ -409,7 +415,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
       },
       education: {
         id: "education",
-        name: "Education",
+        name: getTranslatedName("education", "spending"),
         baseAmount: 12.0, // $12.0B (federal programs, transfers, research support)
         adjustmentFactor: 1,
         description:
@@ -418,7 +424,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
       },
       seniors: {
         id: "seniors",
-        name: "Support for Seniors",
+        name: getTranslatedName("supportForSeniors", "spending"),
         baseAmount: 76.0, // $76.0B (OAS, GIS, Allowances)
         adjustmentFactor: 1,
         description:
@@ -427,7 +433,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
       },
       childrenFamilies: {
         id: "childrenFamilies",
-        name: "Children and Families",
+        name: getTranslatedName("childrenAndFamilies", "spending"),
         baseAmount: 26.3, // $26.3B (Canada Child Benefit)
         adjustmentFactor: 1,
         description:
@@ -436,7 +442,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
       },
       indigenousServices: {
         id: "indigenousServices",
-        name: "Indigenous Services & Reconciliation",
+        name: getTranslatedName("indigenousServices", "spending"),
         baseAmount: 35.5, // $35.5B (ISC & CIRNAC)
         adjustmentFactor: 1,
         description:
@@ -445,7 +451,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
       },
       employmentInsurance: {
         id: "employmentInsurance",
-        name: "Employment Insurance",
+        name: getTranslatedName("employmentInsurance", "spending"),
         baseAmount: 23.1, // $23.1B (Employment Insurance and Other Benefits)
         adjustmentFactor: 1,
         description:
@@ -471,7 +477,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
         children: {
           studentLoans: {
             id: "studentLoans",
-            name: "Student Loans",
+            name: getTranslatedName("studentLoans", "spending.subcategories"),
             baseAmount: 24.0, // $24.0B (Canada Student Financial Assistance Program)
             adjustmentFactor: 1,
             description: "Financial assistance for post-secondary education.",
@@ -479,7 +485,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
           },
           agricultureLoans: {
             id: "agricultureLoans",
-            name: "Agriculture Loans",
+            name: getTranslatedName("agricultureLoans", "spending.subcategories"),
             baseAmount: 0.162, // $0.162B (AgriRecovery and other programs)
             adjustmentFactor: 1,
             description: "Support for farmers and agricultural businesses.",
@@ -487,7 +493,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
           },
           internationalDevelopment: {
             id: "internationalDevelopment",
-            name: "International Development",
+            name: getTranslatedName("internationalDevelopment", "spending.subcategories"),
             baseAmount: 53.0, // $53.0B (International development loans and grants)
             adjustmentFactor: 1,
             description: "Foreign aid and development assistance.",
@@ -504,7 +510,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
           },
           defenseSector: {
             id: "defenseSector",
-            name: "Defense Sector",
+            name: getTranslatedName("defenseSector", "spending.subcategories"),
             baseAmount: 1.45, // $1.45B (Defense sector loans and investments)
             adjustmentFactor: 1,
             description:
@@ -513,7 +519,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
           },
           economicDevelopment: {
             id: "economicDevelopment",
-            name: "Economic Development",
+            name: getTranslatedName("economicDevelopment", "spending.subcategories"),
             baseAmount: 0.5, // $0.5B (Regional development programs)
             adjustmentFactor: 1,
             description:
@@ -525,14 +531,14 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
       // Government Operations group
       governmentOperations: {
         id: "governmentOperations",
-        name: "Government Operations",
+        name: getTranslatedName("governmentOperations", "spending"),
         isGroup: true,
         isExpanded: false,
         color: "#ED64A6", // pink-500
         children: {
           transportationInfrastructure: {
             id: "transportationInfrastructure",
-            name: "Transportation Infrastructure",
+            name: getTranslatedName("transportationInfrastructure", "spending.subcategories"),
             baseAmount: 15.0, // $15.0B
             adjustmentFactor: 1,
             description:
@@ -541,7 +547,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
           },
           environmentalPrograms: {
             id: "environmentalPrograms",
-            name: "Environmental Programs",
+            name: getTranslatedName("environmentalPrograms", "spending.subcategories"),
             baseAmount: 8.0, // $8.0B
             adjustmentFactor: 1,
             description:
@@ -550,7 +556,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
           },
           publicSafetyEmergency: {
             id: "publicSafetyEmergency",
-            name: "Public Safety and Emergency Preparedness",
+            name: getTranslatedName("publicSafetyAndEmergencyPreparedness", "spending.subcategories"),
             baseAmount: 9.0, // $9.0B
             adjustmentFactor: 1,
             description:
@@ -559,7 +565,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
           },
           governmentBuildings: {
             id: "governmentBuildings",
-            name: "Government Buildings and Properties",
+            name: getTranslatedName("governmentBuildingsAndProperties", "spending.subcategories"),
             baseAmount: 7.0, // $7.0B
             adjustmentFactor: 1,
             description:
@@ -568,7 +574,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
           },
           researchInnovation: {
             id: "researchInnovation",
-            name: "Research and Innovation",
+            name: getTranslatedName("researchAndInnovation", "spending.subcategories"),
             baseAmount: 10.0, // $10.0B
             adjustmentFactor: 1,
             description:
@@ -577,7 +583,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
           },
           digitalGovernment: {
             id: "digitalGovernment",
-            name: "Digital Government and IT Infrastructure",
+            name: getTranslatedName("digitalGovernmentAndItInfrastructure", "spending.subcategories"),
             baseAmount: 5.0, // $5.0B
             adjustmentFactor: 1,
             description:
@@ -586,7 +592,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
           },
           federalEmployeeSalaries: {
             id: "federalEmployeeSalaries",
-            name: "Federal Employee Salaries and Benefits",
+            name: getTranslatedName("federalEmployeeSalariesAndBenefits", "spending.subcategories"),
             baseAmount: 35.0, // $35.0B
             adjustmentFactor: 1,
             description:
@@ -595,7 +601,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
           },
           legalJusticeSystem: {
             id: "legalJusticeSystem",
-            name: "Legal and Justice System",
+            name: getTranslatedName("legalAndJusticeSystem", "spending.subcategories"),
             baseAmount: 5.0, // $5.0B
             adjustmentFactor: 1,
             description:
@@ -604,7 +610,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
           },
           indigenousServicesOps: {
             id: "indigenousServicesOps",
-            name: "Indigenous Services Operational Expenses",
+            name: getTranslatedName("indigenousServicesOperationalExpenses", "spending.subcategories"),
             baseAmount: 4.0, // $4.0B
             adjustmentFactor: 1,
             description:
@@ -613,7 +619,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
           },
           culturalHeritage: {
             id: "culturalHeritage",
-            name: "Cultural and Heritage Programs",
+            name: getTranslatedName("culturalAndHeritagePrograms", "spending.subcategories"),
             baseAmount: 2.0, // $2.0B
             adjustmentFactor: 1,
             description:
@@ -631,7 +637,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
           },
           diplomaticRepresentation: {
             id: "diplomaticRepresentation",
-            name: "Diplomatic and International Representation",
+            name: getTranslatedName("diplomaticAndInternationalRepresentation", "spending.subcategories"),
             baseAmount: 5.0, // $5.0B
             adjustmentFactor: 1,
             description:
@@ -646,7 +652,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
     fixedCosts: {
       debtServicing: {
         id: "debtServicing",
-        name: "Debt Servicing",
+        name: getTranslatedName("debtServicing", "spending"),
         amount: 47.3, // $47.3B (Public Debt Charges)
         description: "Interest payments on the federal debt (fixed cost).",
         color: "#667EEA", // indigo-500
@@ -657,7 +663,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
     taxExpenditures: {
       personalTaxCredits: {
         id: "personalTaxCredits",
-        name: "Personal Income Tax Credits",
+        name: getTranslatedName("personalIncomeTaxCredits", "spending"),
         baseAmount: 120, // $120B gross base
         netAmount: 102, // $102B net (adjusted for interaction)
         interactionFactor: 0.85, // 15% interaction adjustment
@@ -673,7 +679,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
       },
       corporateTaxExpenditures: {
         id: "corporateTaxExpenditures",
-        name: "Corporate Tax Expenditures",
+        name: getTranslatedName("corporateTaxExpenditures", "spending"),
         baseAmount: 25, // $25B gross base
         netAmount: 23.75, // $23.75B net (adjusted for interaction)
         interactionFactor: 0.95, // 5% interaction adjustment

@@ -2,11 +2,11 @@
   <details class="spend-growth" :open="openByDefault">
     <summary>
       <span class="summary-title">
-        Program Spending Growth (%)
+        {{ i18nText('spendingGrowthControls.title', 'Program Spending Growth (%)') }}
         <span
           class="info-icon"
-          title="Set annual growth rates for each program spending category. Baseline is underlying growth; Demographic adds growth from population/aging."
-          aria-label="About Program Spending Growth"
+          :title="i18nText('spendingGrowthControls.titleTooltip', 'Set annual growth rates for each program spending category. Baseline is underlying growth; Demographic adds growth from population/aging.')"
+          :aria-label="i18nText('spendingGrowthControls.titleAriaLabel', 'About Program Spending Growth')"
         >info</span>
       </span>
     </summary>
@@ -17,21 +17,21 @@
         <input
           class="filter"
           v-model="growthFilter"
-          placeholder="Filter categories (e.g., health, seniors)"
+          :placeholder="i18nText('spendingGrowthControls.search.placeholder', 'Filter categories (e.g., health, seniors)')"
         />
       </div>
       <div class="spacer"></div>
       <button class="btn subtle" @click="onResetAll">
         <span class="material-icons" aria-hidden="true">restart_alt</span>
-        Reset all
+        {{ i18nText('spendingGrowthControls.buttons.resetAll', 'Reset all') }}
       </button>
     </div>
 
     <div class="growth-head">
-      <div class="label" title="Spending categories used in the projections">Category</div>
+      <div class="label" :title="i18nText('spendingGrowthControls.headers.categoryTooltip', 'Spending categories used in the projections')">{{ i18nText('spendingGrowthControls.headers.category', 'Category') }}</div>
       <div class="inputs-head">
-        <span title="Underlying per‑year growth rate for this category">Baseline</span>
-        <span title="Additional per‑year growth from demographics (aging, population)">Demographic</span>
+        <span :title="i18nText('spendingGrowthControls.headers.baselineTooltip', 'Underlying per‑year growth rate for this category')">{{ i18nText('spendingGrowthControls.headers.baseline', 'Baseline') }}</span>
+        <span :title="i18nText('spendingGrowthControls.headers.demographicTooltip', 'Additional per‑year growth from demographics (aging, population)')">{{ i18nText('spendingGrowthControls.headers.demographic', 'Demographic') }}</span>
       </div>
       <div class="actions"></div>
     </div>
@@ -44,7 +44,7 @@
       >
         <div class="label">{{ prettyKey(key) }}</div>
         <div class="inputs">
-          <label class="sub" title="Underlying per‑year growth rate for this category">Baseline</label>
+          <label class="sub" :title="i18nText('spendingGrowthControls.headers.baselineTooltip', 'Underlying per‑year growth rate for this category')">{{ i18nText('spendingGrowthControls.headers.baseline', 'Baseline') }}</label>
           <input
             type="number"
             step="0.1"
@@ -52,7 +52,7 @@
             :max="15"
             v-model.number="settingsStore.spendingGrowth[key].baseline"
           />
-          <label class="sub" title="Additional per‑year growth from demographics">Demographic</label>
+          <label class="sub" :title="i18nText('spendingGrowthControls.headers.demographicTooltip', 'Additional per‑year growth from demographics')">{{ i18nText('spendingGrowthControls.headers.demographic', 'Demographic') }}</label>
           <input
             type="number"
             step="0.1"
@@ -62,7 +62,7 @@
           />
         </div>
         <div class="actions">
-          <button class="icon-btn" :title="`Reset ${prettyKey(key)}`" @click="onResetRow(key)">
+          <button class="icon-btn" :title="`${i18nText('spendingGrowthControls.buttons.reset', 'Reset')} ${prettyKey(key)}`" @click="onResetRow(key)">
             <span class="material-icons" aria-hidden="true">restart_alt</span>
           </button>
         </div>
@@ -74,6 +74,14 @@
 <script setup>
 import { computed, ref } from 'vue';
 import { useMultiYearSettingsStore } from '@/domains/budget/store/multiYearSettings.js';
+import { useI18n } from '@/i18n';
+
+// i18n setup
+const { t } = useI18n();
+const i18nText = (key, fallback = '') => {
+  const value = t(key);
+  return value === key ? fallback : value;
+};
 
 defineProps({ openByDefault: { type: Boolean, default: false } });
 

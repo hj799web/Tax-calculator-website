@@ -2,6 +2,34 @@
 
 This project is actively evolving. This log highlights user‑visible and developer‑relevant changes made during the tab UX and onboarding overhaul.
 
+## 2025‑01‑21 – Chart Translation and Localization Enhancement
+
+- **Federal Budget Chart Translation**: Complete translation of chart visualizations
+  - Translated all chart titles, legends, and category labels in Federal Budget Allocation and Budget Visualizations sections
+  - Added comprehensive translation keys for budget categories across 2022 and 2024 fiscal years
+  - Updated three main chart components: `FederalBudgetPieChart.vue`, `Budget2024PieChart.vue`, `FederalBudget2024PieChart.vue`
+  - Implemented dynamic translation system with `getCategoryTranslation()` helper functions
+  - Chart content now automatically updates when users switch between English and French
+
+- **Translation Key Architecture**: Organized translation structure
+  - Added `federalBudget.categories.y2022` and `federalBudget.categories.y2024` sections to both language files
+  - Standardized budget category names across all chart visualizations
+  - Consistent terminology for healthcare, defense, social programs, and government operations
+  - Proper French typography with accents and cultural adaptations
+
+- **Chart Component Updates**: Enhanced chart components with i18n support
+  - Added `useI18n` imports and translation logic to all chart components
+  - Updated chart data computation to use translated category names
+  - Chart titles now use `federalBudget.descriptions` translation keys
+  - Dataset labels use `federalBudget.title` for consistency
+  - Tooltips display translated category names for better user experience
+
+- **Technical Improvements**: Code quality and maintainability
+  - Removed unused `useYearStore` import from `Budget2024PieChart.vue` to fix ESLint errors
+  - Clean separation of translation logic with helper functions
+  - Future-proof structure for adding new budget categories
+  - Consistent error handling with fallback to original category names
+
 ## 2025‑01‑21 – Comprehensive Localization and Welcome Page Conversion
 
 - **Welcome Page Conversion**: Complete transformation of static HTML welcome pages

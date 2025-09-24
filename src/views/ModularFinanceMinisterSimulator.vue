@@ -2,25 +2,45 @@
   <ErrorBoundary component-name="FinanceMinisterSimulator">
     <div class="simulator-container">
       <div class="simulator-header">
-        <h1 class="simulator-title">Finance Minister Simulator</h1>
-        <div class="year-selector">
-          <button 
-            class="year-button"
-            @click="decrementYear"
-            :disabled="currentYear <= 2020"
-            aria-label="Previous year"
-          >
-            <span class="material-icons">chevron_left</span>
-          </button>
-          <span class="year-display">{{ currentYear }}</span>
-          <button 
-            class="year-button"
-            @click="incrementYear"
-            :disabled="currentYear >= 2025"
-            aria-label="Next year"
-          >
-            <span class="material-icons">chevron_right</span>
-          </button>
+        <h1 class="simulator-title">{{ i18nText('simulator.title', 'Finance Minister Simulator') }}</h1>
+        <div class="header-controls">
+          <div class="year-selector">
+            <button 
+              class="year-button"
+              @click="decrementYear"
+              :disabled="currentYear <= 2020"
+              :aria-label="i18nText('simulator.controls.previousYear', 'Previous year')"
+            >
+              <span class="material-icons">chevron_left</span>
+            </button>
+            <span class="year-display">{{ currentYear }}</span>
+            <button 
+              class="year-button"
+              @click="incrementYear"
+              :disabled="currentYear >= 2025"
+              :aria-label="i18nText('simulator.controls.nextYear', 'Next year')"
+            >
+              <span class="material-icons">chevron_right</span>
+            </button>
+          </div>
+          <div class="language-switcher" role="group" :aria-label="i18nText('home.language.switchLabel', 'Language selection')">
+            <button
+              type="button"
+              class="language-button"
+              :class="{ active: currentLocale === 'en' }"
+              @click="setLocale('en')"
+            >
+              English
+            </button>
+            <button
+              type="button"
+              class="language-button"
+              :class="{ active: currentLocale === 'fr' }"
+              @click="setLocale('fr')"
+            >
+              Français
+            </button>
+          </div>
         </div>
       </div>
 
@@ -32,7 +52,7 @@
         <ErrorBoundary component-name="GoalTracker">
           <div class="simulator-card goals-card">
             <div class="card-header">
-              <h2 class="card-title">Budget Goals</h2>
+              <h2 class="card-title">{{ i18nText('simulator.cards.budgetGoals', 'Budget Goals') }}</h2>
             </div>
             <div class="card-content">
               <GoalTracker />
@@ -43,7 +63,7 @@
         <ErrorBoundary component-name="BudgetResults">
           <div class="simulator-card results-card">
             <div class="card-header">
-              <h2 class="card-title">Budget Results</h2>
+              <h2 class="card-title">{{ i18nText('simulator.cards.budgetResults', 'Budget Results') }}</h2>
             </div>
             <div class="card-content">
               <BudgetResults />
@@ -54,7 +74,7 @@
         <ErrorBoundary component-name="RevenueSliders">
           <div class="simulator-card revenue-card">
             <div class="card-header">
-              <h2 class="card-title">Revenue Sources</h2>
+              <h2 class="card-title">{{ i18nText('simulator.cards.revenueSources', 'Revenue Sources') }}</h2>
             </div>
             <div class="card-content">
               <RevenueSliders />
@@ -65,7 +85,7 @@
         <ErrorBoundary component-name="SpendingControls">
           <div class="simulator-card spending-card">
             <div class="card-header">
-              <h2 class="card-title">Spending Controls</h2>
+              <h2 class="card-title">{{ i18nText('simulator.cards.spendingControls', 'Spending Controls') }}</h2>
             </div>
             <div class="card-content">
               <SpendingControls />
@@ -76,7 +96,7 @@
         <ErrorBoundary component-name="ChartsPanel">
           <div class="simulator-card charts-card">
             <div class="card-header">
-              <h2 class="card-title">Budget Analysis</h2>
+              <h2 class="card-title">{{ i18nText('simulator.cards.budgetAnalysis', 'Budget Analysis') }}</h2>
             </div>
             <div class="card-content">
               <ChartsPanel />
@@ -93,7 +113,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, watch } from 'vue';
+import { ref, onMounted, onUnmounted, watch, computed } from 'vue';
 import { useBudgetSimulatorStore } from '@/domains/budget/store/budgetSimulator';
 import ErrorBoundary from '@/components/ErrorBoundary.vue';
 import GoalTracker from '@/domains/budget/components/GoalTracker.vue';
@@ -107,6 +127,32 @@ import { FEATURES } from '@/features.js';
 import MultiYearProjectionsPanel from '@/domains/budget/components/MultiYearProjectionsPanel.vue';
 import MultiYearDock from '@/domains/budget/components/MultiYearDock.vue';
 import PanelHost from '@/domains/budget/components/BudgetPanelHost.vue';
+import { useI18n } from '@/i18n';
+
+// i18n setup
+const { t, locale } = useI18n();
+const i18nText = (key, fallback = '') => {
+  const value = t(key);
+  return value === key ? fallback : value;
+};
+
+// Locales configuration (matching home page pattern)
+const locales = [
+  { code: 'en', labelKey: 'home.language.english' },
+  { code: 'fr', labelKey: 'home.language.french' }
+];
+
+const currentLocale = computed(() => locale.value);
+
+const setLocale = (code) => {
+  if (locale.value === code) {
+    return;
+  }
+  locale.value = code;
+  if (typeof window !== 'undefined') {
+    window.localStorage.setItem('locale', code);
+  }
+};
 
 const budgetStore = useBudgetSimulatorStore();
 const currentYear = ref(2023);
@@ -184,25 +230,6 @@ watch(currentYear, (newYear) => {
   container-type: inline-size;
   transform: scale(0.8);
   transform-origin: top center;
-}
-
-.simulator-header {
-  text-align: center;
-  margin-bottom: 2rem;
-  padding: 2rem;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 1rem;
-  box-shadow: 
-    0 10px 20px rgba(0, 0, 0, 0.19),
-    0 6px 6px rgba(0, 0, 0, 0.23);
-  transition: box-shadow 0.3s ease, transform 0.3s ease;
-}
-
-.simulator-header:hover {
-  transform: translateY(-5px);
-  box-shadow: 
-    0 15px 30px rgba(0, 0, 0, 0.25),
-    0 10px 10px rgba(0, 0, 0, 0.22);
 }
 
 .simulator-title {
@@ -439,6 +466,9 @@ watch(currentYear, (newYear) => {
   .simulator-header {
     padding: 1.5rem;
     margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
   
   .simulator-title {
@@ -462,6 +492,9 @@ watch(currentYear, (newYear) => {
 @container (max-width: 480px) {
   .simulator-header {
     padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
   
   .simulator-title {
@@ -533,5 +566,70 @@ watch(currentYear, (newYear) => {
     white-space: normal !important;
     word-break: break-word !important;
   }
+  
+  .header-controls {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+  }
+}
+
+/* Simulator Header Styles - CORRECTED VERSION */
+.simulator-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  color: white;
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.language-switcher {
+  display: flex !important;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 8px 12px;
+  border-radius: 25px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  min-width: 120px;
+  z-index: 10;
+}
+
+.language-button {
+  border: none;
+  background: transparent;
+  color: white;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  min-width: 60px;
+  opacity: 1;
+  visibility: visible;
+  display: inline-block;
+}
+
+.language-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+.language-button.active {
+  background: #ffffff;
+  color: #667eea;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  font-weight: 700;
 }
 </style>

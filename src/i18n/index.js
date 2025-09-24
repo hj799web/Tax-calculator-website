@@ -393,9 +393,22 @@ function translate(key, params) {
   return key
 }
 
+// Available locales configuration
+const locales = [
+  { code: 'en', labelKey: 'home.language.english', flag: '🇺🇸' },
+  { code: 'fr', labelKey: 'home.language.french', flag: '🇫🇷' }
+]
+
 export function useI18n() {
   const t = (key, params) => translate(key, params)
-  return { t, locale }
+  const currentLocale = locale
+  return { t, locale, currentLocale, setLocale, locales }
+}
+
+// Helper function to get category name translation
+export function getCategoryName(categoryId, categoryType = 'spending') {
+  const key = `simulator.categories.${categoryType}.${categoryId}`;
+  return translate(key) || categoryId; // fallback to ID if translation not found
 }
 
 export default {

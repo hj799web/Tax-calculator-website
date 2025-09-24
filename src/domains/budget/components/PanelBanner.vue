@@ -1,5 +1,5 @@
 <template>
-  <div class="panel-banner" :class="{ compact }" role="tablist" aria-label="Sections" tabindex="0" @keydown="onKeydown">
+  <div class="panel-banner" :class="{ compact }" role="tablist" :aria-label="i18nText('panelBanner.sections', 'Sections')" tabindex="0" @keydown="onKeydown">
     <div v-for="grp in visibleGroups" :key="grp.key" class="group-block" :data-panel-group="grp.key">
       <div class="group-label" aria-hidden="true">{{ grp.title }}</div>
       <button v-for="p in grp.items" :key="p.key"
@@ -17,7 +17,7 @@
     </div>
     <button v-if="isMobile && collapsibleExists" class="more-toggle" @click="showMore = !showMore">
       <span class="material-icons" aria-hidden="true">{{ showMore ? 'expand_less' : 'expand_more' }}</span>
-      <span class="label">{{ showMore ? 'Less' : 'More' }}</span>
+      <span class="label">{{ showMore ? i18nText('panelBanner.less', 'Less') : i18nText('panelBanner.more', 'More') }}</span>
     </button>
   </div>
   
@@ -25,6 +25,15 @@
 
 <script setup>
 import { computed, ref, onMounted, onUnmounted } from 'vue';
+import { useI18n } from '@/i18n';
+
+// i18n setup
+const { t } = useI18n();
+const i18nText = (key, fallback = '') => {
+  const value = t(key);
+  return value === key ? fallback : value;
+};
+
 const props = defineProps({
   modelValue: { type: String, required: true },
   panels: { type: Array, required: true },
@@ -34,7 +43,14 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue']);
 
 const order = ['pinned','core','adjust','insights','planning','share'];
-const titles = { core: 'Core', adjust: 'Adjust', insights: 'Insights', planning: 'Planning', share: 'Share' };
+
+const titles = computed(() => ({ 
+  core: i18nText('panelBanner.groups.core', 'Core'), 
+  adjust: i18nText('panelBanner.groups.adjust', 'Adjust'), 
+  insights: i18nText('panelBanner.groups.insights', 'Insights'), 
+  planning: i18nText('panelBanner.groups.planning', 'Planning'), 
+  share: i18nText('panelBanner.groups.share', 'Share') 
+}));
 
 const pinnedSet = computed(() => new Set((props.pinnedKeys || []).filter(Boolean)));
 
@@ -51,7 +67,7 @@ const baseGroups = computed(() => {
     map.get(g).push(p);
   }
   const keys = Array.from(map.keys()).sort((a,b) => order.indexOf(a) - order.indexOf(b));
-  return keys.map(k => ({ key: k, title: k === 'pinned' ? 'Pinned' : (titles[k] || k), items: map.get(k) }));
+  return keys.map(k => ({ key: k, title: k === 'pinned' ? 'Pinned' : (titles.value[k] || k), items: map.get(k) }));
 });
 
 // Mobile collapse state

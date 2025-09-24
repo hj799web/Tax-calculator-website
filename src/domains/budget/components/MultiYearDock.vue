@@ -1,5 +1,5 @@
 <template>
-  <aside class="my-dock" :class="{ collapsed }" role="complementary" aria-label="Multi-year planning">
+  <aside class="my-dock" :class="{ collapsed }" role="complementary" :aria-label="i18nText('multiYearDock.ariaLabel', 'Multi-year planning')">
     <button class="dock-toggle" @click="collapsed = !collapsed" :aria-expanded="!collapsed">
       <span class="material-icons">{{ collapsed ? 'chevron_left' : 'chevron_right' }}</span>
     </button>
@@ -12,6 +12,14 @@
 <script setup>
 import { ref } from 'vue';
 import MultiYearPlanner from '@/domains/budget/components/MultiYearPlanner.vue';
+import { useI18n } from '@/i18n';
+
+// i18n setup
+const { t } = useI18n();
+const i18nText = (key, fallback = '') => {
+  const value = t(key);
+  return value === key ? fallback : value;
+};
 
 const collapsed = ref(false);
 </script>

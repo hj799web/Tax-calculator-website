@@ -13,7 +13,7 @@
           :for="`spending-${category.id}`"
           class="block text-sm font-medium text-gray-700 truncate"
         >
-          {{ category.name }}
+          {{ getCategoryName(category.id, 'spending') }}
         </label>
       </div>
       <div
@@ -39,7 +39,7 @@
       />
       <div class="mt-2 flex justify-end w-full">
         <CategoryInfo
-          :name="category.name"
+          :name="getCategoryName(category.id, 'spending')"
           :description="category.description"
           :base-amount="category.baseAmount"
           :current-setting="spendingFactor"
@@ -53,6 +53,7 @@
 import { ref, watch } from 'vue';
 import PercentageInput from './PercentageInput.vue';
 import CategoryInfo from './BudgetCategoryInfo.vue';
+import { getCategoryName } from '@/i18n';
 
 const props = defineProps({
   category: {

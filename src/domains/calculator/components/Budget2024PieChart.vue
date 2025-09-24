@@ -43,7 +43,8 @@ import { generateColors } from '@/domains/calculator/utils/chartUtils.js'
 import { htmlLegendPlugin } from '@/domains/calculator/utils/htmlLegendPlugin.js'
 import { budgetCategories2024 } from '@/domains/calculator/constants/taxData.js'
 import { useCalculator } from '@/domains/calculator/composables/calculator.js'
-import { useYearStore } from '@/domains/calculator/store/year.js'
+// import { useYearStore } from '@/domains/calculator/store/year.js'
+import { useI18n } from '@/i18n'
 
 // Register Chart.js components
 ChartJS.register(ArcElement, Tooltip, Legend)
@@ -54,19 +55,25 @@ const legendRef = ref(null)
 // Extract reactive state and flags
 const { netFederalTaxPerPeriod } = storeToRefs(useCalculatorStore())
 const { canCalculate } = useCalculator()
-const yearStore = useYearStore()
+// const yearStore = useYearStore()
+const { t } = useI18n()
+
+// Helper function to get translated category name
+const getCategoryTranslation = (categoryKey) => {
+  return t(`federalBudget.categories.y2024.${categoryKey}`) || categoryKey
+}
 
 // Compute Budget 2024 data based on base data and net federal tax
 const budget2024DataComputed = computed(() => {
   const total = budgetCategories2024.reduce((acc, cat) => acc + cat.amount, 0)
   if (total === 0) {
     return budgetCategories2024.map(c => ({
-      category: c.name,
+      category: getCategoryTranslation(c.key || c.name),
       amount: 0,
     }))
   }
   return budgetCategories2024.map(c => ({
-    category: c.name,
+    category: getCategoryTranslation(c.key || c.name),
     amount: (c.amount / total) * netFederalTaxPerPeriod.value,
   }))
 })
@@ -81,7 +88,7 @@ const chartData = computed(() => ({
   labels: budget2024DataComputed.value.map(x => x.category),
   datasets: [
     {
-      label: 'Budget 2024 Allocation',
+      label: t('federalBudget.title'),
       data: budget2024DataComputed.value.map(x => x.amount),
       backgroundColor: generateColors(budget2024DataComputed.value.length),
       borderWidth: 1,
@@ -102,7 +109,7 @@ const chartOptions = computed(() => ({
     },
     title: {
       display: true,
-      text: `${yearStore.selectedTaxYear} Budget Allocation`,
+      text: t('federalBudget.descriptions.budget2024'),
       font: {
         size: 14
       }

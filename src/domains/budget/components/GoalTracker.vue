@@ -2,7 +2,7 @@
   <div class="goal-tracker bg-white rounded-lg shadow-md p-4">
     <div class="flex items-center justify-between mb-4">
       <h3 class="text-lg font-semibold text-gray-800">
-        Budget Goals
+        {{ i18nText('simulator.goals.title', 'Budget Goals') }}
       </h3>
       <div class="flex items-center">
         <input 
@@ -16,7 +16,7 @@
           for="enable-goals"
           class="ml-2 block text-sm text-gray-700"
         >
-          Enable Budget Goals
+          {{ i18nText('simulator.goals.enableGoals', 'Enable Budget Goals') }}
         </label>
       </div>
     </div>
@@ -32,7 +32,7 @@
             for="target-revenue"
             class="block text-sm font-medium text-gray-700"
           >
-            Target Revenue ($B)
+            {{ i18nText('simulator.goals.targetRevenue', 'Target Revenue ($B)') }}
           </label>
           <div class="mt-1 relative rounded-md shadow-sm">
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -61,7 +61,10 @@
             for="target-deficit"
             class="block text-sm font-medium text-gray-700"
           >
-            Target {{ localGoals.targetDeficit !== null && localGoals.targetDeficit >= 0 ? 'Deficit' : 'Surplus' }} ($B)
+            {{ localGoals.targetDeficit !== null && localGoals.targetDeficit >= 0 
+              ? t('simulator.goals.targetDeficit', { type: i18nText('simulator.goals.deficit', 'Deficit') })
+              : t('simulator.goals.targetSurplus', { type: i18nText('simulator.goals.surplus', 'Surplus') })
+            }}
           </label>
           <div class="mt-1 relative rounded-md shadow-sm">
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -82,7 +85,7 @@
             </div>
           </div>
           <div class="text-xs text-gray-500 mt-1">
-            Positive = Deficit, Negative = Surplus
+            {{ i18nText('simulator.goals.positiveDeficitNegativeSurplus', 'Positive = Deficit, Negative = Surplus') }}
           </div>
         </div>
       </div>
@@ -100,7 +103,7 @@
           for="auto-balance"
           class="ml-2 block text-sm text-gray-700"
         >
-          Auto-balance budget to match goal
+          {{ i18nText('simulator.goals.autoBalance', 'Auto-balance budget to match goal') }}
         </label>
       </div>
 
@@ -116,7 +119,7 @@
       <!-- Feedback Section -->
       <div class="mt-4 border-t border-gray-200 pt-4">
         <h4 class="text-sm font-medium text-gray-700 mb-3">
-          Goal Status:
+          {{ i18nText('simulator.goals.goalStatus', 'Goal Status:') }}
         </h4>
         
         <!-- Revenue Goal Status -->
@@ -125,7 +128,7 @@
           class="mb-3"
         >
           <div class="flex items-center mb-1">
-            <span class="text-sm font-medium text-gray-600 mr-2">Revenue Goal:</span>
+            <span class="text-sm font-medium text-gray-600 mr-2">{{ i18nText('simulator.goals.revenueGoal', 'Revenue Goal:') }}</span>
             <span class="text-xl mr-1">{{ revenueStatusIcon }}</span>
             <span
               :class="revenueStatusClass"
@@ -152,7 +155,10 @@
         >
           <div class="flex items-center mb-1">
             <span class="text-sm font-medium text-gray-600 mr-2">
-              {{ localGoals.targetDeficit >= 0 ? 'Deficit' : 'Surplus' }} Goal:
+              {{ localGoals.targetDeficit >= 0 
+                ? i18nText('simulator.goals.deficitGoal', 'Deficit Goal:')
+                : i18nText('simulator.goals.surplusGoal', 'Surplus Goal:')
+              }}
             </span>
             <span class="text-xl mr-1">{{ deficitStatusIcon }}</span>
             <span
@@ -182,7 +188,7 @@
       v-else
       class="text-center text-gray-500 italic py-2"
     >
-      Enable budget goals to track your progress
+      {{ i18nText('simulator.goals.messages.enableGoalsToTrack', 'Enable budget goals to track your progress') }}
     </div>
   </div>
 </template>
@@ -191,6 +197,7 @@
 import { ref, computed, watch, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useBudgetSimulatorStore } from '../store/budgetSimulator';
+import { useI18n } from '@/i18n';
 
 // Props
 const props = defineProps({
@@ -218,6 +225,13 @@ const emit = defineEmits(['update:goals', 'goalStatusChanged', 'autoBalanceToggl
 // Router for URL params
 const router = useRouter();
 const route = useRoute();
+
+// i18n setup
+const { t } = useI18n();
+const i18nText = (key, fallback = '') => {
+  const value = t(key);
+  return value === key ? fallback : value;
+};
 
 // Local state
 const localGoals = ref({
@@ -278,11 +292,11 @@ const revenueStatusColor = computed(() => {
 
 const revenueStatusText = computed(() => {
   if (revenuePercentOfGoal.value >= 95 && revenuePercentOfGoal.value <= 105) {
-    return 'On Target';
+    return i18nText('simulator.goals.status.onTarget', 'On Target');
   } else if (revenuePercentOfGoal.value < 95) {
-    return 'Under Target';
+    return i18nText('simulator.goals.status.underTarget', 'Under Target');
   } else {
-    return 'Over Target';
+    return i18nText('simulator.goals.status.overTarget', 'Over Target');
   }
 });
 
@@ -293,11 +307,17 @@ const revenueGapMessage = computed(() => {
   const percentGap = (gap / localGoals.value.targetRevenue) * 100;
   
   if (Math.abs(percentGap) < 2) {
-    return 'Your revenue is right on target!';
+    return i18nText('simulator.goals.messages.revenueOnTarget', 'Your revenue is right on target!');
   } else if (gap > 0) {
-    return `You're $${gap.toFixed(1)}B (${percentGap.toFixed(1)}%) over your revenue target.`;
+    return t('simulator.goals.messages.revenueOverTarget', { 
+      amount: gap.toFixed(1), 
+      percent: percentGap.toFixed(1) 
+    });
   } else {
-    return `You're $${Math.abs(gap).toFixed(1)}B (${Math.abs(percentGap).toFixed(1)}%) under your revenue target.`;
+    return t('simulator.goals.messages.revenueUnderTarget', { 
+      amount: Math.abs(gap).toFixed(1), 
+      percent: Math.abs(percentGap).toFixed(1) 
+    });
   }
 });
 
@@ -378,20 +398,20 @@ const deficitStatusText = computed(() => {
   
   if (!signsMatch) {
     return localGoals.value.targetDeficit >= 0 
-      ? 'You have a surplus instead of a deficit' 
-      : 'You have a deficit instead of a surplus';
+      ? i18nText('simulator.goals.status.surplusInsteadOfDeficit', 'You have a surplus instead of a deficit')
+      : i18nText('simulator.goals.status.deficitInsteadOfSurplus', 'You have a deficit instead of a surplus');
   }
   
   if (Math.abs(deficitPercentOfGoal.value - 100) <= 5) {
-    return 'On Target';
+    return i18nText('simulator.goals.status.onTarget', 'On Target');
   } else if (deficitPercentOfGoal.value < 95) {
     return localGoals.value.targetDeficit >= 0 
-      ? 'Deficit is too small' 
-      : 'Surplus is too large';
+      ? i18nText('simulator.goals.status.deficitTooSmall', 'Deficit is too small')
+      : i18nText('simulator.goals.status.surplusTooLarge', 'Surplus is too large');
   } else {
     return localGoals.value.targetDeficit >= 0 
-      ? 'Deficit is too large' 
-      : 'Surplus is too small';
+      ? i18nText('simulator.goals.status.deficitTooLarge', 'Deficit is too large')
+      : i18nText('simulator.goals.status.surplusTooSmall', 'Surplus is too small');
   }
 });
 
@@ -402,15 +422,15 @@ const deficitGapMessage = computed(() => {
   const gap = currentDeficitValue - localGoals.value.targetDeficit;
   
   if (Math.abs(gap) < 2) {
-    return `Your budget is right on target!`;
+    return i18nText('simulator.goals.messages.budgetOnTarget', 'Your budget is right on target!');
   } else if (gap > 0) {
     return localGoals.value.targetDeficit >= 0
-      ? `Your deficit is $${gap.toFixed(1)}B higher than your target.`
-      : `Your surplus is $${Math.abs(gap).toFixed(1)}B lower than your target.`;
+      ? t('simulator.goals.messages.deficitHigher', { amount: gap.toFixed(1) })
+      : t('simulator.goals.messages.surplusLower', { amount: Math.abs(gap).toFixed(1) });
   } else {
     return localGoals.value.targetDeficit >= 0
-      ? `Your deficit is $${Math.abs(gap).toFixed(1)}B lower than your target.`
-      : `Your surplus is $${Math.abs(gap).toFixed(1)}B higher than your target.`;
+      ? t('simulator.goals.messages.deficitLower', { amount: Math.abs(gap).toFixed(1) })
+      : t('simulator.goals.messages.surplusHigher', { amount: gap.toFixed(1) });
   }
 });
 
@@ -448,7 +468,7 @@ function handleAutoBalanceChange() {
   if (autoBalanceEnabled.value) {
     if (localGoals.value.targetRevenue !== null) {
       const amount = localGoals.value.targetRevenue.toFixed(1);
-      autoBalanceMessage.value = `Auto-balancing revenue to reach your $${amount}B revenue goal...`;
+      autoBalanceMessage.value = t('simulator.goals.messages.autoBalanceRevenue', { amount });
       
       // Directly update the store
       budgetStore.budgetGoals.targetRevenue = localGoals.value.targetRevenue;
@@ -461,15 +481,15 @@ function handleAutoBalanceChange() {
         Math.abs(localGoals.value.targetDeficit).toFixed(1);
       
       autoBalanceMessage.value = isDeficit ?
-        `Auto-balancing revenue to reach your $${amount}B deficit goal...` :
-        `Auto-balancing revenue to reach your $${amount}B surplus goal...`;
+        t('simulator.goals.messages.autoBalanceDeficit', { amount }) :
+        t('simulator.goals.messages.autoBalanceSurplus', { amount });
         
       // Directly update the store
       budgetStore.budgetGoals.targetDeficit = localGoals.value.targetDeficit;
       budgetStore.budgetGoals.enabled = true;
       budgetStore.toggleAutoBalance(true);
     } else {
-      autoBalanceMessage.value = 'Please set either a revenue goal or a deficit/surplus goal to auto-balance the budget.';
+      autoBalanceMessage.value = i18nText('simulator.goals.messages.setGoalFirst', 'Please set either a revenue goal or a deficit/surplus goal to auto-balance the budget.');
       autoBalanceEnabled.value = false;
     }
   } else {

@@ -37,11 +37,11 @@
               class="main-category-item"
             >
               <div class="main-category-header">
-                <h4>{{ category.name }}</h4>
+                <h4>{{ getCategoryName(category.id, 'spending') }}</h4>
                 <div class="main-category-base">
                   {{ i18nText('simulator.controls.common.base', 'Base:') }} ${{ formatAmount(category.baseAmount) }}B
                   <CategoryInfo
-                    :name="category.name"
+                    :name="getCategoryName(category.id, 'spending')"
                     :description="category.description || ''"
                     :base-amount="category.baseAmount"
                     :current-setting="validSpendingFactors[category.id]"
@@ -175,11 +175,11 @@
                       class="subcategory-item"
                     >
                       <div class="subcategory-header">
-                        <h4>{{ child.name }}</h4>
+                        <h4>{{ getCategoryName(child.id, 'spending.subcategories') }}</h4>
                         <div class="subcategory-base">
                           {{ i18nText('simulator.controls.common.base', 'Base:') }} ${{ formatAmount(child.baseAmount) }}B
                           <CategoryInfo
-                            :name="child.name"
+                            :name="getCategoryName(child.id, 'spending.subcategories')"
                             :description="child.description || ''"
                             :base-amount="child.baseAmount"
                             :current-setting="validSpendingFactors[child.id]"
@@ -244,7 +244,7 @@
 
         <!-- Government Operations Group -->
         <CategoryGroup
-          title="Government Operations"
+          :title="i18nText('simulator.controls.spending.groupTitle.governmentOperations', 'Government Operations')"
           :total-amount="totalGovOps"
           :expanded="expandedGroups.governmentOperations"
           group-id="governmentOperations"
@@ -255,7 +255,7 @@
             class="w-full"
           >
             <div class="gov-ops-info mb-3">
-              <p>Government operations include administrative functions, transfers, and other essential government services.</p>
+              <p>{{ i18nText('simulator.controls.spending.governmentOperationsIntro', 'Government operations include administrative functions, transfers, and other essential government services.') }}</p>
             </div>
             
             <div class="gov-ops-grid">
@@ -265,13 +265,13 @@
                 class="gov-ops-item"
               >
                 <div class="gov-ops-header">
-                  <h4 :title="child.name">
-                    {{ child.name }}
+                  <h4 :title="getCategoryName(child.id, 'spending.subcategories')">
+                    {{ getCategoryName(child.id, 'spending.subcategories') }}
                   </h4>
                   <div class="gov-ops-base">
                     {{ i18nText('simulator.controls.common.base', 'Base:') }} ${{ formatAmount(child.baseAmount) }}B
                     <CategoryInfo
-                      :name="child.name"
+                      :name="getCategoryName(child.id, 'spending.subcategories')"
                       :description="''"
                       :base-amount="child.baseAmount"
                       :current-setting="validSpendingFactors[child.id]"
@@ -337,14 +337,14 @@
 
         <!-- Tax Expenditures / Tax Credits Group -->
         <CategoryGroup
-          title="Tax Expenditures / Tax Credits"
+          :title="i18nText('simulator.controls.spending.groupTitle.taxExpenditures', 'Tax Expenditures / Tax Credits')"
           :total-amount="totalTaxExpenditures"
           :expanded="expandedGroups.taxExpenditures"
           group-id="taxExpenditures"
           @toggle="toggleGroup"
         >
           <div class="tax-expenditures-info">
-            <p>Adjust tax credits and deductions to see their impact on federal revenue. Reducing credits increases revenue, while expanding them decreases revenue.</p>
+            <p>{{ i18nText('simulator.controls.spending.taxExpendituresIntro', 'Adjust tax credits and deductions to see their impact on federal revenue. Reducing credits increases revenue, while expanding them decreases revenue.') }}</p>
           </div>
           <div class="tax-expenditures-grid">
             <div
@@ -458,7 +458,7 @@
 
 <script setup>
 import { computed, defineEmits, defineProps, ref } from 'vue';
-import { useI18n } from '@/i18n'
+import { useI18n, getCategoryName } from '@/i18n'
 import { useBudgetSimulatorStore } from '@/domains/budget/store/budgetSimulator';
 import CategoryGroup from './CategoryGroup.vue';
 // eslint-disable-next-line no-unused-vars

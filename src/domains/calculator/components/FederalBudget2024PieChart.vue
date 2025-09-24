@@ -33,6 +33,7 @@
   import { htmlLegendPlugin } from '@/domains/calculator/utils/htmlLegendPlugin.js'
   import { budgetCategories2024 } from '@/domains/calculator/constants/taxData.js'
   import { useCalculator } from '../composables/calculator.js'
+  import { useI18n } from '@/i18n'
   
   // Register Chart.js components
   ChartJS.register(ArcElement, Tooltip, Legend)
@@ -43,6 +44,12 @@
   // Extract data and flags
   const { netFederalTaxPerPeriod } = storeToRefs(useCalculatorStore())
   const { canCalculate } = useCalculator()
+  const { t } = useI18n()
+
+  // Helper function to get translated category name
+  const getCategoryTranslation = (categoryKey) => {
+    return t(`federalBudget.categories.y2024.${categoryKey}`) || categoryKey
+  }
   
   // Compute 2024 federal budget data
   const federalBudget2024DataComputed = computed(() => {
@@ -50,13 +57,13 @@
     
     if (netFederalTaxPerPeriod.value === 0) {
       return budgetCategories2024.map((cat) => ({
-        category: cat.name,
+        category: getCategoryTranslation(cat.key || cat.name),
         amount: 0,
       }))
     }
     
     return budgetCategories2024.map((cat) => ({
-      category: cat.name,
+      category: getCategoryTranslation(cat.key || cat.name),
       amount: (netFederalTaxPerPeriod.value * cat.amount) / totalBudget,
     }))
   })
@@ -71,7 +78,7 @@
     labels: federalBudget2024DataComputed.value.map(x => x.category),
     datasets: [
       {
-        label: '2024 Federal Budget Allocation',
+        label: t('federalBudget.title'),
         data: federalBudget2024DataComputed.value.map(x => x.amount),
         backgroundColor: generateColors(federalBudget2024DataComputed.value.length),
         borderWidth: 1,
@@ -92,7 +99,7 @@
       },
       title: {
         display: true,
-        text: '2024 Canada Federal Budget Allocation Chart',
+        text: t('federalBudget.descriptions.budget2024'),
         font: {
           size: 14
         }
