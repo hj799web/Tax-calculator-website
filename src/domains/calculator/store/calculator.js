@@ -8,12 +8,13 @@ import { useI18n } from '@/i18n';
 import {
   calculateBracketTax,
   calculateDividendTaxCredit,
-  calculateEiPremium,
-  calculateChildCredit,
   calculateEffectiveBPA,
-  calculateQpipContribution,
   calculateQuebecAbatement,
-  calculateQppContribution,
+  calculateEiPremiumYearAware,
+  calculateCppContributions,
+  calculateQppContributions,
+  calculateQpipContributionYearAware,
+  computeFederalBPAForIncome,
 } from '../utils/taxCalculations.js';
 import {
   federalBasicPersonalAmount2022,
@@ -33,7 +34,9 @@ import {
   provincialTaxBrackets2024,
   provincialTaxBrackets2025,
   budgetCategories2022,
-  budgetCategories2024
+  budgetCategories2024,
+  taxCredits2024,
+  taxCredits2025
 } from "../constants/taxData.js";
 
 // Province name to code mapping
@@ -157,22 +160,13 @@ export const useCalculatorStore = defineStore('calculator', () => {
     }
   });
 
-  // Federal + Provincial BPA
-  const effectiveFederalBPA = computed(() => {
-    return calculateEffectiveBPA(currentFederalBasicPersonalAmount.value, maritalStatus.value);
-  });
-
+  // Provincial BPA (no marital status adjustment)
   const effectiveProvincialBPA = computed(() => {
     if (!selectedRegion.value) return 0;
     const provinceCode = provinceCodeMap[selectedRegion.value];
     if (!provinceCode) return 0;
     const basePA = currentProvincialBasicPersonalAmounts.value[provinceCode] || 0;
-    return calculateEffectiveBPA(basePA, maritalStatus.value);
-  });
-
-  // Simple child credit
-  const childCredit = computed(() => {
-    return calculateChildCredit(numberOfChildrenUnder18.value);
+    return calculateEffectiveBPA(basePA);
   });
 
   // Full Fed Taxable
@@ -185,22 +179,52 @@ export const useCalculatorStore = defineStore('calculator', () => {
     return Math.max(0, base);
   });
 
-  // Fed Tax
-  const netFederalTaxAnnual = computed(() => {
-    if (totalFederalTaxableIncome.value <= 0) return 0;
-    let fedTaxable = totalFederalTaxableIncome.value - effectiveFederalBPA.value;
-    fedTaxable = Math.max(fedTaxable, 0);
-    let fedTax = calculateBracketTax(fedTaxable, currentFederalTaxBrackets.value);
-    
-    // Apply Quebec abatement if Quebec is selected
-    if (selectedRegion.value === 'Quebec') {
-      const abatement = calculateQuebecAbatement(fedTax);
-      fedTax -= abatement;
+  // Get current year tax credits
+  const currentTaxCredits = computed(() => {
+    switch(yearStore.selectedTaxYear) {
+      case '2024': return taxCredits2024;
+      case '2025': return taxCredits2025;
+      default: return taxCredits2024;
     }
-    
-    fedTax -= federalDividendTaxCredit.value * periodMultiplier.value;
-    fedTax -= childCredit.value;
-    return Math.max(fedTax, 0);
+  });
+
+  // Federal BPA with phase-out for high income
+  const federalBpaCreditAnnual = computed(() => {
+    const year = yearStore.selectedTaxYear;
+    const baseEnhanced = currentFederalBasicPersonalAmount.value;
+    const floorByYear = { '2024': 14156, '2025': 14539 };
+    const incomeForPhase = totalFederalTaxableIncome.value; // proxy; ideally net income
+    const bpa = computeFederalBPAForIncome(baseEnhanced, floorByYear[year], incomeForPhase, year);
+    return bpa * 0.15; // Apply at lowest federal rate
+  });
+
+  // Canada Employment Amount credit (non-refundable) for employment income
+  const ceaCreditAnnual = computed(() => {
+    const cea = currentTaxCredits.value.employmentAmount || 0;
+    return (annualRegularIncome.value > 0) ? cea * 0.15 : 0;
+  });
+
+  // Dividend credit already computed as a tax credit amount
+  const federalDividendTaxCreditAnnual = computed(() => federalDividendTaxCredit.value * periodMultiplier.value);
+
+  // Basic federal tax before credits
+  const basicFederalTaxBeforeCreditsAnnual = computed(() => {
+    return calculateBracketTax(totalFederalTaxableIncome.value, currentFederalTaxBrackets.value);
+  });
+
+  // Basic federal tax after credits
+  const basicFederalTaxAfterCreditsAnnual = computed(() => {
+    const credits = federalBpaCreditAnnual.value + ceaCreditAnnual.value + federalDividendTaxCreditAnnual.value;
+    return Math.max(basicFederalTaxBeforeCreditsAnnual.value - credits, 0);
+  });
+
+  // Fed Tax (with Quebec abatement applied after credits)
+  const netFederalTaxAnnual = computed(() => {
+    let tax = basicFederalTaxAfterCreditsAnnual.value;
+    if (selectedRegion.value === 'Quebec') {
+      tax -= calculateQuebecAbatement(tax); // 16.5% of basic federal tax after credits
+    }
+    return Math.max(tax, 0);
   });
 
   // Provincial
@@ -216,34 +240,33 @@ export const useCalculatorStore = defineStore('calculator', () => {
     return Math.max(provTax, 0);
   });
 
-  // CPP/QPP
-  const annualCppMax = 3754.45;
-  const annualCppMaxSelfEmployed = 3754.45 * 2;
+  // CPP/QPP (year-aware)
   const pensionPlanContributionAnnual = computed(() => {
     const baseIncome = annualRegularIncome.value;
     const isSelfEmployed = (selfEmploymentIncome.value || 0) > 0;
+    const year = yearStore.selectedTaxYear;
     
     // Use Quebec-specific QPP calculation if Quebec is selected
     if (selectedRegion.value === 'Quebec') {
-      return calculateQppContribution(baseIncome, isSelfEmployed);
+      return calculateQppContributions(baseIncome, isSelfEmployed, year);
     }
     
     // Use federal CPP calculation for other provinces
-    const rate = isSelfEmployed ? 0.114 : 0.057;
-    const maxContrib = isSelfEmployed ? annualCppMaxSelfEmployed : annualCppMax;
-    return Math.min(baseIncome * rate, maxContrib);
+    return calculateCppContributions(baseIncome, isSelfEmployed, year);
   });
 
-  // EI
+  // EI (year-aware)
   const eiPremiumAnnual = computed(() => {
     const provinceCode = selectedRegion.value === 'Quebec' ? 'QC' : null;
-    return calculateEiPremium(annualRegularIncome.value, provinceCode);
+    const year = yearStore.selectedTaxYear;
+    return calculateEiPremiumYearAware(annualRegularIncome.value, provinceCode, year);
   });
 
-  // QPIP (Quebec only)
+  // QPIP (Quebec only, year-aware)
   const qpipContributionAnnual = computed(() => {
     if (selectedRegion.value === 'Quebec') {
-      return calculateQpipContribution(annualRegularIncome.value);
+      const year = yearStore.selectedTaxYear;
+      return calculateQpipContributionYearAware(annualRegularIncome.value, year);
     }
     return 0;
   });

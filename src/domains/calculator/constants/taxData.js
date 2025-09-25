@@ -8,6 +8,24 @@ export const salaryOptions = [
   { label: 'Hourly', value: 'Hourly', periodMultiplier: 2080 },
 ]
 
+// 2024 Tax Credits and Deductions
+export const taxCredits2024 = {
+  basicPersonalAmount: 15705,
+  spouseAmount: 15705,
+  ageAmount: 8396,
+  disabilityAmount: 9428,
+  caregiverAmount: 7999,
+  pensionIncomeAmount: 2000,
+  employmentAmount: 1433,
+  homeBuyersAmount: 5000,
+  digitalNewsSubscriptionMax: 500,
+  volunteerFirefightersAmount: 3000,
+  adoptionExpensesMax: 17131,
+  medicalExpensesThreshold: 2479,
+  charitableDonationsThreshold: 200,
+  charitableDonationsHighIncomeThreshold: 253214
+};
+
 // 2025 Tax Credits and Deductions
 export const taxCredits2025 = {
   basicPersonalAmount: 16129,
@@ -129,7 +147,7 @@ export const provincialBasicPersonalAmounts2024 = {
   'NU': 17321,
   'ON': 11365,
   'PE': 11581,
-  'QC': 18000,
+  'QC': 18056,
   'SK': 17206,
   'YT': 15705
 };
@@ -145,7 +163,7 @@ export const provincialBasicPersonalAmounts2025 = {
   'NU': 16862,
   'ON': 12747,
   'PE': 14250,
-  'QC': 17183,
+  'QC': 18571,
   'SK': 17661,
   'YT': 16129
 };
@@ -161,20 +179,94 @@ export const quebecContributionRates2024 = {
     basicExemption: 3500,
     maxContribution: 4160 // (68500 - 3500) * 0.064
   },
+  qpp2: {
+    rate: 0.04, // 4%
+    maxPensionableEarnings: 73200,
+    minPensionableEarnings: 68500,
+    maxContribution: 188 // (73200 - 68500) * 0.04
+  },
   ei: {
     rate: 0.0132, // 1.32% (Quebec rate, lower than federal)
     maxInsurableEarnings: 63200,
-    maxContribution: 834 // 63200 * 0.0132
+    maxContribution: 834.24 // 63200 * 0.0132
   },
   qpip: {
     rate: 0.00494, // 0.494%
-    maxInsurableEarnings: 91000,
-    maxContribution: 449 // 91000 * 0.00494
+    maxInsurableEarnings: 94000,
+    maxContribution: 464.36 // 94000 * 0.00494
+  }
+};
+
+// Quebec-specific contribution rates and limits (2025)
+export const quebecContributionRates2025 = {
+  qpp: {
+    rate: 0.064, // 6.4%
+    maxPensionableEarnings: 71300,
+    basicExemption: 3500,
+    maxContribution: 4339.20 // (71300 - 3500) * 0.064
+  },
+  qpp2: {
+    rate: 0.04, // 4%
+    maxPensionableEarnings: 81200,
+    minPensionableEarnings: 71300,
+    maxContribution: 396 // (81200 - 71300) * 0.04
+  },
+  ei: {
+    rate: 0.0131, // 1.31% (Quebec rate, lower than federal)
+    maxInsurableEarnings: 65700,
+    maxContribution: 860.67 // 65700 * 0.0131
+  },
+  qpip: {
+    rate: 0.00494, // 0.494%
+    maxInsurableEarnings: 98000,
+    maxContribution: 484.12 // 98000 * 0.00494
   }
 };
 
 // Quebec abatement rate (reduces federal tax)
 export const quebecAbatementRate = 0.165; // 16.5%
+
+// Federal contribution rates and limits (2024)
+export const federalContributionRates2024 = {
+  cpp: {
+    rate: 0.0595, // 5.95%
+    maxPensionableEarnings: 68500,
+    basicExemption: 3500,
+    maxContribution: 3867.50 // (68500 - 3500) * 0.0595
+  },
+  cpp2: {
+    rate: 0.04, // 4%
+    maxPensionableEarnings: 73200,
+    minPensionableEarnings: 68500,
+    maxContribution: 188 // (73200 - 68500) * 0.04
+  },
+  ei: {
+    rate: 0.0166, // 1.66%
+    maxInsurableEarnings: 63200,
+    maxContribution: 1049.12 // 63200 * 0.0166
+  }
+};
+
+// Federal contribution rates and limits (2025)
+export const federalContributionRates2025 = {
+  cpp: {
+    rate: 0.0595, // 5.95%
+    maxPensionableEarnings: 71300,
+    basicExemption: 3500,
+    maxContribution: 4034.10 // (71300 - 3500) * 0.0595
+  },
+  cpp2: {
+    rate: 0.04, // 4%
+    maxPensionableEarnings: 81200,
+    minPensionableEarnings: 71300,
+    maxContribution: 396 // (81200 - 71300) * 0.04
+  },
+  ei: {
+    rate: 0.0164, // 1.64%
+    maxInsurableEarnings: 65700,
+    maxContribution: 1077.48 // 65700 * 0.0164
+  }
+};
 
 // Federal Tax Brackets
 export const federalTaxBrackets2022 = [
@@ -194,10 +286,10 @@ export const federalTaxBrackets2023 = [
 ];
 
 export const federalTaxBrackets2024 = [
-  { rate: 0.15, upTo: 55199 },
-  { rate: 0.205, upTo: 110398 },
-  { rate: 0.26, upTo: 171090 },
-  { rate: 0.29, upTo: 243902 },
+  { rate: 0.15, upTo: 55867 },
+  { rate: 0.205, upTo: 111733 },
+  { rate: 0.26, upTo: 173205 },
+  { rate: 0.29, upTo: 246752 },
   { rate: 0.33, upTo: Infinity },
 ];
 
@@ -447,7 +539,7 @@ export const provincialTaxBrackets2024 = {
     { rate: 0.167, upTo: Infinity },
   ],
   'QC': [
-    { rate: 0.15, upTo: 51780 },
+    { rate: 0.14, upTo: 51780 },
     { rate: 0.20, upTo: 103545 },
     { rate: 0.24, upTo: 126000 },
     { rate: 0.2575, upTo: Infinity },
@@ -538,9 +630,9 @@ export const provincialTaxBrackets2025 = {
     { rate: 0.19, upTo: Infinity },
   ],
   'QC': [
-    { rate: 0.14, upTo: 53255 },
-    { rate: 0.19, upTo: 106495 },
-    { rate: 0.24, upTo: 129590 },
+    { rate: 0.14, upTo: 53295 },
+    { rate: 0.19, upTo: 106585 },
+    { rate: 0.24, upTo: 129275 },
     { rate: 0.2575, upTo: Infinity },
   ],
   'SK': [
@@ -725,4 +817,4 @@ export const federalBudget2024Data = [
   { category: 'Defence and Public Safety', amount: 43.143 },
   { category: 'Public Debt and Fiscal Stability', amount: 58.3 },
   { category: 'Strategic Investments in Innovation', amount: 0.138 }
-]; 
+];
