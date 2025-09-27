@@ -62,10 +62,10 @@
                 <div class="tile-header">
                   <div class="tile-title">
                     <span class="material-icons tile-icon">payments</span>
-                    {{ getCategoryName('personalIncomeTax', 'revenue') }}
+                    {{ localizedName('personalIncomeTax', 'revenue', budgetStore.revenueSources.personalIncomeTax?.name || '') }}
                     <CategoryInfo
-                      :name="getCategoryName('personalIncomeTax', 'revenue')"
-                      :description="budgetStore.revenueSources.personalIncomeTax?.description || ''"
+                      :name="localizedName('personalIncomeTax', 'revenue', budgetStore.revenueSources.personalIncomeTax?.name || '')"
+                      :description="localizedDescription('personalIncomeTax', 'revenue', budgetStore.revenueSources.personalIncomeTax?.description || '')"
                       :base-amount="budgetStore.revenueSources.personalIncomeTax?.base || 0"
                       :current-setting="revenueRates.personalIncomeTax"
                       @show-tooltip="showTooltip"
@@ -164,10 +164,10 @@
                 <div class="tile-header">
                   <div class="tile-title">
                     <span class="material-icons tile-icon">payments</span>
-                    {{ getCategoryName('corporateIncomeTax', 'revenue') }}
+                    {{ localizedName('corporateIncomeTax', 'revenue', budgetStore.revenueSources.corporateIncomeTax?.name || '') }}
                     <CategoryInfo
-                      :name="getCategoryName('corporateIncomeTax', 'revenue')"
-                      :description="budgetStore.revenueSources.corporateIncomeTax?.description || ''"
+                      :name="localizedName('corporateIncomeTax', 'revenue', budgetStore.revenueSources.corporateIncomeTax?.name || '')"
+                      :description="localizedDescription('corporateIncomeTax', 'revenue', budgetStore.revenueSources.corporateIncomeTax?.description || '')"
                       :base-amount="budgetStore.revenueSources.corporateIncomeTax?.base || 0"
                       :current-setting="revenueRates.corporateIncomeTax"
                       @show-tooltip="showTooltip"
@@ -309,10 +309,10 @@
                 <div class="tile-header">
                   <div class="tile-title">
                     <span class="material-icons tile-icon">payments</span>
-                    {{ getCategoryName('gst', 'revenue') }}
+                    {{ localizedName('gst', 'revenue', budgetStore.revenueSources.gst?.name || '') }}
                     <CategoryInfo
-                      :name="getCategoryName('gst', 'revenue')"
-                      :description="budgetStore.revenueSources.gst?.description || ''"
+                      :name="localizedName('gst', 'revenue', budgetStore.revenueSources.gst?.name || '')"
+                      :description="localizedDescription('gst', 'revenue', budgetStore.revenueSources.gst?.description || '')"
                       :base-amount="budgetStore.revenueSources.gst?.base || 0"
                       :current-setting="revenueRates.gst"
                       @show-tooltip="showTooltip"
@@ -411,10 +411,10 @@
                 <div class="tile-header">
                   <div class="tile-title">
                     <span class="material-icons tile-icon">payments</span>
-                    {{ getCategoryName('customsAndImportDuties', 'revenue') }}
+                    {{ localizedName('customsAndImportDuties', 'revenue', budgetStore.revenueSources.customsDuties?.name || '') }}
                     <CategoryInfo
-                      :name="getCategoryName('customsAndImportDuties', 'revenue')"
-                      :description="budgetStore.revenueSources.customsDuties?.description || ''"
+                      :name="localizedName('customsAndImportDuties', 'revenue', budgetStore.revenueSources.customsDuties?.name || '')"
+                      :description="localizedDescription('customsAndImportDuties', 'revenue', budgetStore.revenueSources.customsDuties?.description || '')"
                       :base-amount="budgetStore.revenueSources.customsDuties?.base || 0"
                       :current-setting="revenueRates.customsDuties"
                       @show-tooltip="showTooltip"
@@ -515,10 +515,10 @@
                 <div class="tile-header">
                   <div class="tile-title">
                     <span class="material-icons tile-icon">payments</span>
-                    {{ getCategoryName('carbonPricing', 'revenue') }}
+                    {{ localizedName('carbonPricing', 'revenue', budgetStore.revenueSources.carbonPricing?.name || '') }}
                     <CategoryInfo
-                      :name="getCategoryName('carbonPricing', 'revenue')"
-                      :description="budgetStore.revenueSources.carbonPricing?.description || ''"
+                      :name="localizedName('carbonPricing', 'revenue', budgetStore.revenueSources.carbonPricing?.name || '')"
+                      :description="localizedDescription('carbonPricing', 'revenue', budgetStore.revenueSources.carbonPricing?.description || '')"
                       :base-amount="budgetStore.revenueSources.carbonPricing?.base || 0"
                       :current-setting="revenueRates.carbonPricing"
                       @show-tooltip="showTooltip"
@@ -617,10 +617,10 @@
                 <div class="tile-header">
                   <div class="tile-title">
                     <span class="material-icons tile-icon">payments</span>
-                    {{ getCategoryName('exciseTaxes', 'revenue') }}
+                    {{ localizedName('exciseTaxes', 'revenue', budgetStore.revenueSources.exciseTaxes?.name || '') }}
                     <CategoryInfo
-                      :name="getCategoryName('exciseTaxes', 'revenue')"
-                      :description="budgetStore.revenueSources.exciseTaxes?.description || ''"
+                      :name="localizedName('exciseTaxes', 'revenue', budgetStore.revenueSources.exciseTaxes?.name || '')"
+                      :description="localizedDescription('exciseTaxes', 'revenue', budgetStore.revenueSources.exciseTaxes?.description || '')"
                       :base-amount="budgetStore.revenueSources.exciseTaxes?.base || 0"
                       :current-setting="revenueRates.exciseTaxes"
                       @show-tooltip="showTooltip"
@@ -762,10 +762,10 @@
                 <div class="tile-header">
                   <div class="tile-title">
                     <span class="material-icons tile-icon">payments</span>
-                    {{ getCategoryName('employmentInsurancePremiums', 'revenue') }}
+                    {{ localizedName('employmentInsurancePremiums', 'revenue', budgetStore.revenueSources.eiPremiums?.name || '') }}
                     <CategoryInfo
-                      :name="getCategoryName('employmentInsurancePremiums', 'revenue')"
-                      :description="budgetStore.revenueSources.eiPremiums?.description || ''"
+                      :name="localizedName('employmentInsurancePremiums', 'revenue', budgetStore.revenueSources.eiPremiums?.name || '')"
+                      :description="localizedDescription('employmentInsurancePremiums', 'revenue', budgetStore.revenueSources.eiPremiums?.description || '')"
                       :base-amount="budgetStore.revenueSources.eiPremiums?.base || 0"
                       :current-setting="revenueRates.eiPremiums"
                       @show-tooltip="showTooltip"
@@ -864,10 +864,10 @@
                 <div class="tile-header">
                   <div class="tile-title">
                     <span class="material-icons tile-icon">payments</span>
-                    {{ getCategoryName('crownCorporationProfits', 'revenue') }}
+                    {{ localizedName('crownCorporationProfits', 'revenue', budgetStore.revenueSources.crownProfits?.name || '') }}
                     <CategoryInfo
-                      :name="getCategoryName('crownCorporationProfits', 'revenue')"
-                      :description="budgetStore.revenueSources.crownProfits?.description || ''"
+                      :name="localizedName('crownCorporationProfits', 'revenue', budgetStore.revenueSources.crownProfits?.name || '')"
+                      :description="localizedDescription('crownCorporationProfits', 'revenue', budgetStore.revenueSources.crownProfits?.description || '')"
                       :base-amount="budgetStore.revenueSources.crownProfits?.base || 0"
                       :current-setting="revenueRates.crownProfits"
                       @show-tooltip="showTooltip"
@@ -978,10 +978,10 @@
                 <div class="tile-header">
                   <div class="tile-title">
                     <span class="material-icons tile-icon">payments</span>
-                    {{ getCategoryName('resourceRoyalties', 'revenue') }}
+                    {{ localizedName('resourceRoyalties', 'revenue', budgetStore.revenueSources.resourceRoyalties?.name || '') }}
                     <CategoryInfo
-                      :name="getCategoryName('resourceRoyalties', 'revenue')"
-                      :description="budgetStore.revenueSources.resourceRoyalties?.description || ''"
+                      :name="localizedName('resourceRoyalties', 'revenue', budgetStore.revenueSources.resourceRoyalties?.name || '')"
+                      :description="localizedDescription('resourceRoyalties', 'revenue', budgetStore.revenueSources.resourceRoyalties?.description || '')"
                       :base-amount="budgetStore.revenueSources.resourceRoyalties?.base || 0"
                       :current-setting="revenueRates.resourceRoyalties"
                       @show-tooltip="showTooltip"
@@ -1080,10 +1080,10 @@
                 <div class="tile-header">
                   <div class="tile-title">
                     <span class="material-icons tile-icon">payments</span>
-                    Non-Tax Revenue
+                    {{ i18nText('simulator.controls.revenue.nonTaxRevenue.title', 'Non-Tax Revenue') }}
                     <CategoryInfo
-                      :name="budgetStore.revenueSources.nonTaxRevenue?.name || 'Non-Tax Revenue'"
-                      :description="budgetStore.revenueSources.nonTaxRevenue?.description || ''"
+                      :name="localizedName('nonTaxRevenue', 'revenue', budgetStore.revenueSources.nonTaxRevenue?.name || t('simulator.controls.revenue.nonTaxRevenue.title'))"
+                      :description="localizedDescription('nonTaxRevenue', 'revenue', budgetStore.revenueSources.nonTaxRevenue?.description || '')"
                       :base-amount="budgetStore.revenueSources.nonTaxRevenue?.base || 0"
                       :current-setting="revenueRates.nonTaxRevenue"
                       @show-tooltip="showTooltip"
@@ -1123,14 +1123,14 @@
                 </div>
                 <div class="tile-note">
                   <span>
-                    Non-Tax Revenue includes government income from various sources such as fees, licenses, permits, fines, and returns on investments that are not classified as taxes.
+                    {{ i18nText('simulator.controls.revenue.nonTaxRevenue.description', 'Non-Tax Revenue includes government income from various sources such as fees, licenses, permits, fines, and returns on investments that are not classified as taxes.') }}
                   </span>
                 </div>
                 <div
                   v-if="budgetStore.revenueSources.nonTaxRevenue?.expenditureImpact !== 0"
                   class="tax-expenditure-note"
                 >
-                  This revenue figure includes the impact of non-tax revenue expenditure adjustments.
+                  {{ i18nText('simulator.controls.revenue.nonTaxRevenue.expenditureNote', 'This revenue figure includes the impact of non-tax revenue expenditure adjustments.') }}
                 </div>
                 <div class="slider-container">
                   <div class="slider-labels">
@@ -1183,7 +1183,7 @@
     <div class="revenue-summary">
       <div class="summary-card">
         <div class="summary-title">
-          Total Revenue
+          {{ t('simulator.common.totalRevenue') }}
         </div>
         <div class="summary-amount">
           ${{ formatCurrency(budgetStore.totalRevenue, 1) }}B
@@ -1214,13 +1214,19 @@
 <script setup>
 import { ref, onMounted, watch, computed, shallowRef, nextTick } from 'vue';
 import CategoryInfo from '@/domains/budget/components/BudgetCategoryInfo.vue';
-import { useI18n, getCategoryName } from '@/i18n'
+import { useI18n, getCategoryName, getCategoryDescription } from '@/i18n'
 import debounce from 'lodash.debounce';
 import throttle from 'lodash.throttle';
 import { useBudgetSimulatorStore } from '../store/budgetSimulator';
 
 const budgetStore = useBudgetSimulatorStore();
 const { t } = useI18n();
+
+const localizedName = (id, type = 'revenue', fallback = '') =>
+  getCategoryName(id, type) || fallback || id
+const localizedDescription = (id, type = 'revenue', fallback = '') =>
+  getCategoryDescription(id, type) || fallback
+
 const i18nText = (key, fallback = '') => {
   const value = t(key)
   return value == key ? fallback : value

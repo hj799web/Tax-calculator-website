@@ -2,13 +2,13 @@
   <teleport to="body">
     <div v-if="isMobile && open !== 'none'">
       <div class="scrim" @click="close" />
-      <section class="sheet" role="dialog" aria-modal="true" aria-label="Budget changes">
+      <section class="sheet" role="dialog" aria-modal="true" :aria-label="t('mobileBottomSheet.ariaLabel', 'Budget changes')">
         <header class="sheet-header">
           <div class="title">
             <span class="material-icons" aria-hidden="true">history</span>
-            Budget Changes
+            {{ t('mobileBottomSheet.title', 'Budget Changes') }}
           </div>
-          <button class="close" @click="close" :aria-label="'Close'">
+          <button class="close" @click="close" :aria-label="t('mobileBottomSheet.closeAria', 'Close')">
             <span class="material-icons" aria-hidden="true">close</span>
           </button>
         </header>
@@ -25,7 +25,9 @@
 <script setup>
 import { useMobileDock } from '@/composables/useMobileDock'
 import BudgetChangesBanner from '@/domains/budget/components/BudgetChangesBanner.vue'
+import { useI18n } from '@/i18n'
 
+const { t } = useI18n()
 const { isMobile, open, close } = useMobileDock()
 </script>
 

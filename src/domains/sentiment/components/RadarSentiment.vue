@@ -1,4 +1,4 @@
-<!--
+﻿<!--
   RadarSentiment.vue
   
   This component visualizes public sentiment toward budget decisions using a radar chart.
@@ -9,14 +9,14 @@
     <div class="radar-header">
       <div class="radar-title-row">
         <h3 class="radar-title">
-          Public Sentiment
+          {{ t('simulator.sentiment.radar.title') }}
         </h3>
         <div
           v-if="activeScenario"
           class="scenario-badge"
           :title="activeScenarioDescription"
         >
-          <span class="scenario-label">Scenario Impact: {{ activeScenarioLabel }}</span>
+          <span class="scenario-label">{{ t('simulator.sentiment.radar.scenarioImpact', { label: activeScenarioLabel }) }}</span>
           <span class="scenario-icon">{{ activeScenarioIcon }}</span>
         </div>
       </div>
@@ -31,7 +31,7 @@
           >
           <span class="toggle-slider" />
         </label>
-        <span class="toggle-label">{{ showBaseReactions ? 'Base Reactions' : 'Scenario Impact' }}</span>
+        <span class="toggle-label">{{ t(showBaseReactions ? 'simulator.sentiment.radar.toggle.base' : 'simulator.sentiment.radar.toggle.scenario') }}</span>
       </div>
       <div class="overall-sentiment">
         <div
@@ -40,9 +40,9 @@
         >
           {{ overallEmoji }}
         </div>
-        <div v-if="fiscalChaos" class="fiscal-chaos-indicator" title="Fiscal chaos detected!" style="margin-left: 0.5em; color: #e53e3e; font-size: 1.4em; display: flex; align-items: center;">
-          <span style="margin-right: 0.2em;">⚠️</span>
-          <span style="font-size: 0.85em; font-weight: 600;">Fiscal Chaos</span>
+        <div v-if="fiscalChaos" class="fiscal-chaos-indicator" :title="t('sentiment.fiscalChaosDetected', 'Fiscal chaos detected!')" style="margin-left: 0.5em; color: #e53e3e; font-size: 1.4em; display: flex; align-items: center;">
+          <span style="margin-right: 0.2em;">!</span>
+          <span style="font-size: 0.85em; font-weight: 600;">{{ t('sentiment.fiscalChaos', 'Fiscal Chaos') }}</span>
         </div>
         <div class="sentiment-score">
   <span class="score-value" :style="{ color: overallColor }">
@@ -51,12 +51,10 @@
   <span
     v-if="Math.abs(overallDelta) > 0.01"
     :class="['score-delta', overallDelta > 0 ? 'delta-up' : 'delta-down']"
-    :title="overallDelta > 0 ? 'Increased' : 'Decreased'"
+    :title="overallDelta > 0 ? t('simulator.sentiment.radar.delta.increased') : t('simulator.sentiment.radar.delta.decreased')"
     style="margin-left: 0.3em;"
   >
-    <span v-if="overallDelta > 0">▲</span>
-    <span v-else>▼</span>
-    {{ Math.abs(overallDelta).toFixed(2) }}
+    {{ formatSignedDelta(overallDelta) }}
   </span>
   <span class="score-label">{{ overallLabel }}</span>
 </div>
@@ -118,11 +116,9 @@
             <span
               v-if="entityDeltas && Math.abs(entityDeltas[name]) > 0.01"
               :class="['score-delta', entityDeltas[name] > 0 ? 'delta-up' : 'delta-down']"
-              :title="entityDeltas[name] > 0 ? 'Increased' : 'Decreased'"
+              :title="entityDeltas[name] > 0 ? t('simulator.sentiment.radar.delta.increased') : t('simulator.sentiment.radar.delta.decreased')"
             >
-              <span v-if="entityDeltas[name] > 0">▲</span>
-              <span v-else>▼</span>
-              {{ Math.abs(entityDeltas[name]).toFixed(2) }}
+              {{ formatSignedDelta(entityDeltas[name]) }}
             </span>
             <span class="entity-emoji">{{ getSentimentEmoji(score) }}</span>
           </div>
@@ -175,11 +171,9 @@
             <span
               v-if="entityDeltas && Math.abs(entityDeltas[name]) > 0.01"
               :class="['score-delta', entityDeltas[name] > 0 ? 'delta-up' : 'delta-down']"
-              :title="entityDeltas[name] > 0 ? 'Increased' : 'Decreased'"
+              :title="entityDeltas[name] > 0 ? t('simulator.sentiment.radar.delta.increased') : t('simulator.sentiment.radar.delta.decreased')"
             >
-              <span v-if="entityDeltas[name] > 0">▲</span>
-              <span v-else>▼</span>
-              {{ Math.abs(entityDeltas[name]).toFixed(2) }}
+              {{ formatSignedDelta(entityDeltas[name]) }}
             </span>
             <span class="entity-emoji">{{ getSentimentEmoji(score) }}</span>
           </div>
@@ -209,6 +203,9 @@ import { ref, computed, watch, onMounted, onUnmounted, nextTick, defineProps } f
 import { useBudgetSimulatorStore } from '@/domains/budget/store/budgetSimulator';
 import { useSentimentSettingsStore } from '@/domains/sentiment/store/sentimentSettings';
 import { budgetScenarioModifiers } from '@/domains/budget/config/budgetScenarioModifiers';
+import { useI18n } from '@/i18n';
+
+const { t } = useI18n();
 import { computeSentimentScores, getSentimentLabel, getSentimentEmoji, getSentimentColor } from '@/domains/sentiment/utils/computeSentimentScores';
 import Chart from 'chart.js/auto';
 import { entityImpactFactors } from '@/domains/sentiment/config/entityImpactFactors.js';
@@ -285,11 +282,11 @@ function safeDestroyChart(context = 'unknown') {
 }
 
 // Tabs configuration
-const tabs = [
-  { id: 'provinces', label: 'Provinces and territories' },
-  { id: 'demographics', label: 'Demographics' },
-  { id: 'sectors', label: 'Sectors' }
-];
+const tabs = computed(() => [
+  { id: 'provinces', label: t('simulator.sentiment.tabs.provinces') },
+  { id: 'demographics', label: t('simulator.sentiment.tabs.demographics') },
+  { id: 'sectors', label: t('simulator.sentiment.tabs.sectors') }
+]);
 
 // Track whether we're showing base reactions or scenario impact
 const showBaseReactions = ref(false);
@@ -385,10 +382,15 @@ function getScenarioImpactText(entityName) {
   if (!sectionModifiers || sectionModifiers[entityName] === undefined) return '';
   
   const modifier = sectionModifiers[entityName];
-  const direction = modifier > 0 ? 'Positive' : 'Negative';
-  const intensity = Math.abs(modifier) > 0.5 ? 'Strong' : 'Moderate';
+  const directionKey = modifier > 0 ? 'positive' : 'negative';
+  const intensityKey = Math.abs(modifier) > 0.5 ? 'strong' : 'moderate';
+  const value = `${modifier > 0 ? '+' : ''}${modifier.toFixed(1)}`;
   
-  return `${intensity} ${direction} Impact: ${modifier > 0 ? '+' : ''}${modifier.toFixed(1)}`;
+  return t('simulator.sentiment.radar.scenarioImpactText', {
+    intensity: t(`simulator.sentiment.radar.intensity.${intensityKey}`),
+    direction: t(`simulator.sentiment.radar.direction.${directionKey}`),
+    value
+  });
 }
 
 // Watch for changes in the store that should trigger sentiment updates
@@ -523,21 +525,72 @@ watch(
   { immediate: true }
 );
 
+function formatSignedDelta(value, digits = 2) {
+  const num = Number(value);
+  if (!Number.isFinite(num)) return '0.00';
+  const magnitude = Math.abs(num).toFixed(digits);
+  if (num > 0) return `+${magnitude}`;
+  if (num < 0) return `-${magnitude}`;
+  return magnitude;
+}
+
+// Translate entity names based on tab type
+function translateEntityName(tab, name) {
+  // For provinces, use the sentiment.provinces translation keys
+  if (tab === 'provinces') {
+    // Map display names to translation keys
+    const provinceKeyMap = {
+      'Alberta': 'sentiment.provinces.alberta',
+      'British Columbia': 'sentiment.provinces.britishColumbia',
+      'Manitoba': 'sentiment.provinces.manitoba',
+      'New Brunswick': 'sentiment.provinces.newBrunswick',
+      'Newfoundland and Labrador': 'sentiment.provinces.newfoundlandAndLabrador',
+      'Northwest Territories': 'sentiment.provinces.northwestTerritories',
+      'Nova Scotia': 'sentiment.provinces.novaScotia',
+      'Nunavut': 'sentiment.provinces.nunavut',
+      'Ontario': 'sentiment.provinces.ontario',
+      'Prince Edward Island': 'sentiment.provinces.princeEdwardIsland',
+      'Quebec': 'sentiment.provinces.quebec',
+      'Saskatchewan': 'sentiment.provinces.saskatchewan',
+      'Yukon': 'sentiment.provinces.yukon'
+    };
+    
+    const translationKey = provinceKeyMap[name];
+    if (translationKey) {
+      return t(translationKey, name);
+    }
+  }
+  
+  // For demographics and sectors, try to find translation keys
+  if (tab === 'demographics' || tab === 'sectors') {
+    // Convert name to camelCase for translation key
+    const camelCaseName = name.replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) => {
+      return index === 0 ? word.toLowerCase() : word.toUpperCase();
+    }).replace(/\s+/g, '');
+    
+    const translationKey = `sentiment.${tab}.${camelCaseName}`;
+    const translated = t(translationKey, name);
+    
+    // If translation key doesn't exist, return the original name
+    if (translated !== translationKey) {
+      return translated;
+    }
+  }
+  
+  // Fallback: return the original name
+  return name;
+}
+
 // Format entity names for display
-function formatName(name) {
-  // Convert camelCase or snake_case to Title Case with spaces
-  return name
-    .replace(/([A-Z])/g, ' $1') // Insert space before capital letters
-    .replace(/_/g, ' ')         // Replace underscores with spaces
-    .replace(/^\w/, c => c.toUpperCase()) // Capitalize first letter
-    .trim();
+function formatName(name, tab = activeTab.value) {
+  return translateEntityName(tab, name);
 }
 
 // Helper function to get the correct entity key
 function getEntityKey(displayName, tab) {
   // Special case for Newfoundland and Labrador
   if (displayName === 'Newfoundland and Labrador') {
-    return '"Newfoundland and Labrador"';
+    return t('sentiment.newfoundlandAndLabrador', 'Newfoundland and Labrador');
   }
 
   // For provinces, we need to handle both spaced and camelCase names
@@ -661,7 +714,7 @@ function updateChart() {
   }
   
   // Prepare the data for the chart
-  const labels = Object.keys(entities).map(formatName);
+  const labels = Object.keys(entities).map(name => formatName(name, activeTab.value));
   const data = Object.values(entities);
   const colors = data.map(score => getSentimentColor(score));
   
@@ -713,20 +766,20 @@ function updateChart() {
             const score = context.raw;
             const entityName = context.label;
             if (score === undefined || score === null) {
-              return 'No data';
+              return t('simulator.sentiment.radar.tooltip.noData');
             }
             try {
               const entityKey = getEntityKey(entityName, activeTab.value);
               const factors = entityImpactFactors[activeTab.value]?.[entityKey]?.factors;
               if (!factors) {
-                return `Score: ${score.toFixed(1)} - ${getSentimentLabel(score)}`;
+                return t('simulator.sentiment.radar.tooltip.scoreWithLabel', { score: score.toFixed(1), label: getSentimentLabel(score) });
               }
 
               // Create tooltip content
               const tooltipContent = [
-                `Score: ${score.toFixed(1)} - ${getSentimentLabel(score)}`,
+                t('simulator.sentiment.radar.tooltip.scoreWithLabel', { score: score.toFixed(1), label: getSentimentLabel(score) }),
                 '',
-                'Impact Factors:'
+                t('simulator.sentiment.radar.tooltip.impactFactors')
               ];
 
               // Add each factor to the tooltip
@@ -747,13 +800,13 @@ function updateChart() {
                   ? ` (${impact > 0 ? '+' : ''}${impact.toFixed(1)}%)`
                   : '';
                 
-                tooltipContent.push(`• ${factor.name}: ${factor.description}${impactText}`);
+                tooltipContent.push(t('simulator.sentiment.radar.tooltip.factorLine', { name: factor.name, description: factor.description, impact: impactText }));
               });
 
               return tooltipContent;
             } catch (e) {
               handleError(e, (msg) => errorMessage.value = msg);
-              return `Score: ${score}`;
+              return t('simulator.sentiment.radar.tooltip.scoreOnly', { score: Number(score).toFixed(1) });
             }
           }
         }
@@ -772,7 +825,7 @@ function updateChart() {
           data: {
             labels,
             datasets: [{
-              label: 'Sentiment',
+              label: t('simulator.sentiment.radar.datasetLabel'),
               data,
               backgroundColor: 'rgba(66, 153, 225, 0.2)',
               borderColor: '#4299E1',
@@ -828,20 +881,20 @@ function updateChart() {
                     const score = context.raw;
                     const entityName = context.label;
                     if (score === undefined || score === null) {
-                      return 'No data';
+                      return t('simulator.sentiment.radar.tooltip.noData');
                     }
                     try {
                       const entityKey = getEntityKey(entityName, activeTab.value);
                       const factors = entityImpactFactors[activeTab.value]?.[entityKey]?.factors;
                       if (!factors) {
-                        return `Score: ${score.toFixed(1)} - ${getSentimentLabel(score)}`;
+                        return t('simulator.sentiment.radar.tooltip.scoreWithLabel', { score: score.toFixed(1), label: getSentimentLabel(score) });
                       }
 
                       // Create tooltip content
                       const tooltipContent = [
-                        `Score: ${score.toFixed(1)} - ${getSentimentLabel(score)}`,
+                        t('simulator.sentiment.radar.tooltip.scoreWithLabel', { score: score.toFixed(1), label: getSentimentLabel(score) }),
                         '',
-                        'Impact Factors:'
+                        t('simulator.sentiment.radar.tooltip.impactFactors')
                       ];
 
                       // Add each factor to the tooltip
@@ -862,13 +915,13 @@ function updateChart() {
                           ? ` (${impact > 0 ? '+' : ''}${impact.toFixed(1)}%)`
                           : '';
                         
-                        tooltipContent.push(`• ${factor.name}: ${factor.description}${impactText}`);
+                        tooltipContent.push(t('simulator.sentiment.radar.tooltip.factorLine', { name: factor.name, description: factor.description, impact: impactText }));
                       });
 
                       return tooltipContent;
                     } catch (e) {
                       handleError(e, (msg) => errorMessage.value = msg);
-                      return `Score: ${score}`;
+                      return t('simulator.sentiment.radar.tooltip.scoreOnly', { score: Number(score).toFixed(1) });
                     }
                   }
                 }

@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <section
     class="simulator-card spending-card w-full"
     style="min-height: 1440px; display: flex; flex-direction: column;"
@@ -37,12 +37,12 @@
               class="main-category-item"
             >
               <div class="main-category-header">
-                <h4>{{ getCategoryName(category.id, 'spending') }}</h4>
+                <h4>{{ localizedName(category.id, 'spending', category.name) }}</h4>
                 <div class="main-category-base">
                   {{ i18nText('simulator.controls.common.base', 'Base:') }} ${{ formatAmount(category.baseAmount) }}B
                   <CategoryInfo
-                    :name="getCategoryName(category.id, 'spending')"
-                    :description="category.description || ''"
+                    :name="localizedName(category.id, 'spending', category.name)"
+                    :description="localizedDescription(category.id, 'spending', category.description || '')"
                     :base-amount="category.baseAmount"
                     :current-setting="validSpendingFactors[category.id]"
                     @show-tooltip="showTooltip"
@@ -107,12 +107,12 @@
                 class="other-category-item"
               >
                 <div class="other-category-header">
-                  <h4>{{ group.name }}</h4>
+                  <h4>{{ localizedName(group.id, 'spending', group.name) }}</h4>
                   <div class="other-category-base">
                     {{ i18nText('simulator.controls.common.base', 'Base:') }} ${{ formatAmount(group.baseAmount) }}B
                     <CategoryInfo
-                      :name="group.name"
-                      :description="group.description || ''"
+                      :name="localizedName(group.id, 'spending', group.name)"
+                      :description="localizedDescription(group.id, 'spending', group.description || '')"
                       :base-amount="group.baseAmount"
                       :current-setting="validSpendingFactors[group.id]"
                       @show-tooltip="showTooltip"
@@ -175,12 +175,12 @@
                       class="subcategory-item"
                     >
                       <div class="subcategory-header">
-                        <h4>{{ getCategoryName(child.id, 'spending.subcategories') }}</h4>
+                        <h4>{{ localizedName(child.id, 'spending.subcategories', child.name) }}</h4>
                         <div class="subcategory-base">
                           {{ i18nText('simulator.controls.common.base', 'Base:') }} ${{ formatAmount(child.baseAmount) }}B
                           <CategoryInfo
-                            :name="getCategoryName(child.id, 'spending.subcategories')"
-                            :description="child.description || ''"
+                            :name="localizedName(child.id, 'spending.subcategories', child.name)"
+                            :description="localizedDescription(child.id, 'spending.subcategories', child.description || '')"
                             :base-amount="child.baseAmount"
                             :current-setting="validSpendingFactors[child.id]"
                             @show-tooltip="showTooltip"
@@ -265,14 +265,14 @@
                 class="gov-ops-item"
               >
                 <div class="gov-ops-header">
-                  <h4 :title="getCategoryName(child.id, 'spending.subcategories')">
-                    {{ getCategoryName(child.id, 'spending.subcategories') }}
+                  <h4 :title="localizedName(child.id, 'spending.subcategories', child.name)">
+                    {{ localizedName(child.id, 'spending.subcategories', child.name) }}
                   </h4>
                   <div class="gov-ops-base">
                     {{ i18nText('simulator.controls.common.base', 'Base:') }} ${{ formatAmount(child.baseAmount) }}B
                     <CategoryInfo
-                      :name="getCategoryName(child.id, 'spending.subcategories')"
-                      :description="''"
+                      :name="localizedName(child.id, 'spending.subcategories', child.name)"
+                      :description="localizedDescription(child.id, 'spending.subcategories', child.description || '')"
                       :base-amount="child.baseAmount"
                       :current-setting="validSpendingFactors[child.id]"
                       @show-tooltip="showTooltip"
@@ -285,7 +285,7 @@
                     v-if="child.description"
                     class="gov-ops-description"
                   >
-                    {{ child.description }}
+                    {{ localizedDescription(child.id, 'spending.subcategories', child.description || '') }}
                   </div>
                   <div class="gov-ops-controls">
                     <PercentageInput
@@ -353,12 +353,12 @@
               class="tax-expenditure-item"
             >
               <div class="tax-expenditure-header">
-                <h4>{{ expenditure.name }}</h4>
+                <h4>{{ localizedName(expenditure.id, 'taxExpenditures', expenditure.name) }}</h4>
                 <div class="tax-expenditure-base">
                   {{ i18nText('simulator.controls.common.base', 'Base:') }} ${{ formatAmount(expenditure.netAmount) }}B
                   <CategoryInfo
-                    :name="expenditure.name"
-                    :description="expenditure.description || 'No description available.'"
+                    :name="localizedName(expenditure.id, 'taxExpenditures', expenditure.name)"
+                    :description="localizedDescription(expenditure.id, 'taxExpenditures', expenditure.description || t('tooltips.noDescriptionAvailable', 'No description available.'))"
                     :base-amount="expenditure.netAmount"
                     :current-setting="expenditure.adjustmentFactor"
                     @show-tooltip="showTooltip"
@@ -368,7 +368,7 @@
               </div>
               <div class="tax-expenditure-content">
                 <div class="tax-expenditure-description">
-                  {{ expenditure.description }}
+                  {{ localizedDescription(expenditure.id, 'taxExpenditures', expenditure.description || '') }}
                 </div>
                 <div class="tax-expenditure-controls">
                   <PercentageInput
@@ -388,7 +388,7 @@
                 </div>
                 <div class="tax-expenditure-impact">
                   <div class="impact-label">
-                    Revenue Impact:
+                    {{ t('simulator.common.revenueImpact') }}:
                   </div>
                   <div
                     class="impact-value"
@@ -402,7 +402,7 @@
           </div>
           <div class="tax-expenditures-summary">
             <div class="summary-header">
-              <h4>Total Impact on Revenue</h4>
+              <h4>{{ t('simulator.common.totalImpactOnRevenue') }}</h4>
               <button
                 class="reset-all-button"
                 @click="resetAllTaxExpenditures"
@@ -420,11 +420,11 @@
                   backgroundColor: expenditure.color,
                   marginLeft: getImpactPercentage(expenditure) < 0 ? 'auto' : '0'
                 }"
-                :title="`${expenditure.name}: ${getImpactPrefix(expenditure)}$${formatAmount(calculateImpact(expenditure))}B`"
+                :title="`${localizedName(expenditure.id, 'taxExpenditures', expenditure.name)}: ${getImpactPrefix(expenditure)}$${formatAmount(calculateImpact(expenditure))}B`"
               />
             </div>
             <div class="summary-total">
-              <span>Net Revenue Change:</span>
+              <span>{{ t('simulator.common.netRevenueChange') }}:</span>
               <span :class="getTotalImpactClass()">
                 {{ getTotalImpactPrefix() }}${{ formatAmount(Math.abs(budgetStore.taxExpenditureRevenueImpact)) }}B
               </span>
@@ -435,7 +435,7 @@
         <!-- Total Spending Summary -->
         <div class="mt-4 p-3 bg-gray-100 rounded-md w-full">
           <div class="flex justify-between items-center">
-            <span class="text-sm font-semibold text-gray-800">Total Spending:</span>
+            <span class="text-sm font-semibold text-gray-800">{{ t('simulator.common.totalSpending') }}:</span>
             <span class="text-sm font-semibold text-red-600">{{ formatCurrency(totalSpending) }}</span>
           </div>
         </div>
@@ -458,7 +458,7 @@
 
 <script setup>
 import { computed, defineEmits, defineProps, ref } from 'vue';
-import { useI18n, getCategoryName } from '@/i18n'
+import { useI18n, getCategoryName, getCategoryDescription } from '@/i18n'
 import { useBudgetSimulatorStore } from '@/domains/budget/store/budgetSimulator';
 import CategoryGroup from './CategoryGroup.vue';
 // eslint-disable-next-line no-unused-vars
@@ -547,6 +547,12 @@ const emit = defineEmits([
 // Use store for additional data if needed
 const budgetStore = useBudgetSimulatorStore();
 const { t } = useI18n();
+
+const localizedName = (id, type = 'spending', fallback = '') =>
+  getCategoryName(id, type) || fallback || id
+const localizedDescription = (id, type = 'spending', fallback = '') =>
+  getCategoryDescription(id, type) || fallback
+
 const i18nText = (key, fallback = '') => {
   const value = t(key)
   return value == key ? fallback : value

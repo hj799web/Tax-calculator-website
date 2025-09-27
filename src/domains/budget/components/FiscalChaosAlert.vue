@@ -1,6 +1,6 @@
 <template>
   <div class="fiscal-chaos-alert">
-    <span class="chaos-emoji" aria-label="Fiscal Chaos">🚨</span>
+    <span class="chaos-emoji" :aria-label="t('simulator.fiscalChaosAlert.ariaLabels.fiscalChaos', 'Fiscal Chaos')">🚨</span>
     <div class="chaos-message">
       <strong>Public Confidence Crisis:</strong> Extreme tax rates have triggered negative public sentiment
     </div>
@@ -8,7 +8,9 @@
 </template>
 
 <script setup>
-// No props needed, this is a visual alert only
+import { useI18n } from '@/i18n'
+
+const { t } = useI18n()
 </script>
 
 <style scoped>

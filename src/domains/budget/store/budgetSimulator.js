@@ -239,7 +239,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
       },
       gst: {
         id: "gst",
-        name: "GST/HST",
+        name: getTranslatedName("gstHst", "revenue"),
         rate: 5,
         base: 10, // $10B per 1%
         amount: 50, // $50B
@@ -406,7 +406,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
     spendingCategories: {
       healthcare: {
         id: "healthcare",
-        name: "Healthcare (CHT)",
+        name: getTranslatedName("healthcareCht", "spending"),
         baseAmount: 50.4, // $50.4B (Canada Health Transfer)
         adjustmentFactor: 1,
         description:
@@ -460,7 +460,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
       },
       defensePublicSafety: {
         id: "defensePublicSafety",
-        name: "Defense & Public Safety",
+        name: getTranslatedName("defensePublicSafety", "spending"),
         baseAmount: 32.6, // $32.6B (DND, RCMP, CBSA)
         adjustmentFactor: 1,
         description:
@@ -470,7 +470,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
       // Loans, Investments & Advances group
       loansInvestments: {
         id: "loansInvestments",
-        name: "Loans, Investments & Advances",
+        name: getTranslatedName("loansInvestmentsAdvances", "spending"),
         isGroup: true,
         isExpanded: false,
         color: "#ECC94B", // yellow-500
@@ -501,7 +501,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
           },
           businessInnovation: {
             id: "businessInnovation",
-            name: "Business & Innovation",
+            name: getTranslatedName("businessInnovation", "spending.subcategories"),
             baseAmount: 0.6, // $0.6B (Innovation and infrastructure projects)
             adjustmentFactor: 1,
             description:
@@ -628,7 +628,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
           },
           scientificResearch: {
             id: "scientificResearch",
-            name: "Scientific Research and Development (R&D)",
+            name: getTranslatedName("scientificResearchDevelopment", "spending.subcategories"),
             baseAmount: 5.0, // $5.0B
             adjustmentFactor: 1,
             description:
@@ -695,7 +695,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
       },
       gstExpenditures: {
         id: "gstExpenditures",
-        name: "GST/HST Expenditures",
+        name: getTranslatedName("gstHstExpenditures", "taxExpenditures"),
         baseAmount: 22, // $22B gross base
         netAmount: 22, // $22B net (no interaction adjustment)
         interactionFactor: 1,
@@ -711,7 +711,7 @@ export const useBudgetSimulatorStore = defineStore("budgetSimulator", {
       },
       taxDeferrals: {
         id: "taxDeferrals",
-        name: "Deferrals (RRSP/RPP/TFSA)",
+        name: getTranslatedName("deferralsRrspRppTfsa", "taxExpenditures"),
         baseAmount: 33, // $33B gross base
         netAmount: 24, // $24B net (adjusted for long-term impact)
         interactionFactor: 0.73,

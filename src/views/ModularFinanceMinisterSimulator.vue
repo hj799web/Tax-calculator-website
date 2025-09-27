@@ -30,7 +30,7 @@
               :class="{ active: currentLocale === 'en' }"
               @click="setLocale('en')"
             >
-              English
+              {{ t('home.language.english', 'English') }}
             </button>
             <button
               type="button"
@@ -38,7 +38,7 @@
               :class="{ active: currentLocale === 'fr' }"
               @click="setLocale('fr')"
             >
-              Français
+              {{ t('home.language.french', 'Français') }}
             </button>
           </div>
         </div>

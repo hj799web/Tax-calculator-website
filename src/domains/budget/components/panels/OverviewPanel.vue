@@ -2,23 +2,23 @@
   <div class="overview">
     <header class="kpi-header">
       <div class="kpi">
-        <span class="label">Total Revenue</span>
+        <span class="label">{{ t('simulator.overview.labels.totalRevenue') }}</span>
         <strong>{{ fmtB(budget.totalRevenue) }}</strong>
       </div>
       <div class="kpi">
-        <span class="label">Total Spending</span>
+        <span class="label">{{ t('simulator.overview.labels.totalSpending') }}</span>
         <strong>{{ fmtB(budget.totalSpending) }}</strong>
       </div>
       <div class="kpi">
-        <span class="label">Debt Servicing</span>
+        <span class="label">{{ t('simulator.overview.labels.debtServicing') }}</span>
         <strong>{{ fmtB(budget.debtServicing) }}</strong>
       </div>
       <div class="kpi">
-        <span class="label">Surplus / Deficit</span>
+        <span class="label">{{ t('simulator.overview.labels.surplusDeficit') }}</span>
         <strong :class="{ neg: deficit > 0, pos: deficit <= 0 }">{{ fmtB(deficit) }}</strong>
       </div>
       <div class="kpi">
-        <span class="label">Debt-to-GDP</span>
+        <span class="label">{{ t('simulator.overview.labels.debtToGdp') }}</span>
         <strong>{{ (debtToGdp * 100).toFixed(1) }}%</strong>
       </div>
     </header>
@@ -31,10 +31,12 @@
 
 <script setup>
 import { computed } from 'vue';
+import { useI18n } from '@/i18n';
 import { useBudgetSimulatorStore } from '@/domains/budget/store/budgetSimulator';
 import ProjectionsPanelLite from '@/domains/budget/components/ProjectionsPanelLite.vue';
 
 const budget = useBudgetSimulatorStore();
+const { t } = useI18n();
 
 const deficit = computed(() => Number(budget.totalSpending || 0) - Number(budget.totalRevenue || 0));
 const debtToGdp = computed(() => safeRatio(budget.fiscalIndicators?.debt, budget.fiscalIndicators?.gdp));

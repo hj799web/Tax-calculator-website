@@ -1,15 +1,15 @@
 <template>
   <div class="proj-lite">
     <div class="panel-header">
-      <h4>Projections</h4>
+      <h4>{{ t('projectionsPanel.title', 'Projections') }}</h4>
     </div>
 
     <details v-if="showControls" class="planning-controls" open>
-      <summary>Planning Controls</summary>
+      <summary>{{ t('projectionsPanel.planningControls', 'Planning Controls') }}</summary>
       <div class="controls-grid">
         <div class="row">
-          <label title="One-time adjustment to all program spending levels">Program spending boost (%)
-            <span class="info-icon" title="Applies a one-time level change to program spending in the base year (and carried through).">info</span>
+          <label :title="t('projectionsPanel.programSpendingBoostTooltip', 'One-time adjustment to all program spending levels')">{{ t('projectionsPanel.programSpendingBoost', 'Program spending boost (%)') }}
+            <span class="info-icon" :title="t('projectionsPanel.programSpendingBoostTooltip', 'Applies a one-time level change to program spending in the base year (and carried through).')">info</span>
           </label>
           <input
             type="number"
@@ -21,8 +21,8 @@
           />
         </div>
         <div class="row">
-          <label title="Adjusts how fast program spending grows each year. +0.5 means all categories grow 0.5 percentage points faster annually.">Speed up spending growth (pp)
-            <span class="info-icon" title="Adds or subtracts percentage points to the annual growth rate applied to all categories.">info</span>
+          <label :title="t('projectionsPanel.speedUpSpendingGrowthTooltip', 'Adjusts how fast program spending grows each year. +0.5 means all categories grow 0.5 percentage points faster annually.')">{{ t('projectionsPanel.speedUpSpendingGrowth', 'Speed up spending growth (pp)') }}
+            <span class="info-icon" :title="t('projectionsPanel.speedUpSpendingGrowthTooltip', 'Adds or subtracts percentage points to the annual growth rate applied to all categories.')">info</span>
           </label>
           <input
             type="number"
@@ -42,16 +42,16 @@
     </div>
     <div class="mini-charts">
       <!-- Deficit chart (historical + projected) using Chart.js for clarity & tooltips -->
-      <div class="chart" aria-label="Historical and projected deficit line chart" ref="defChartEl">
-        <div class="chart-title">Deficit: Historical + Projections</div>
+      <div class="chart" :aria-label="t('projectionsPanel.charts.deficitChartAria', 'Historical and projected deficit line chart')" ref="defChartEl">
+        <div class="chart-title">{{ t('projectionsPanel.charts.deficitChartTitle', 'Deficit: Historical + Projections') }}</div>
         <div class="chart-box-tall">
           <Line :data="defChartData" :options="defChartOptions" />
         </div>
       </div>
 
       <!-- Debt/GDP chart (historical + projected) using Chart.js -->
-      <div class="chart" aria-label="Historical and projected debt-to-GDP line chart">
-        <div class="chart-title">Debt-to-GDP: Historical + Projections (%)</div>
+      <div class="chart" :aria-label="t('projectionsPanel.charts.debtGdpChartAria', 'Historical and projected debt-to-GDP line chart')">
+        <div class="chart-title">{{ t('projectionsPanel.charts.debtGdpChartTitle', 'Debt-to-GDP: Historical + Projections (%)') }}</div>
         <div class="chart-box-tall">
           <Line :data="debtGdpChartData" :options="debtGdpChartOptions" />
         </div>
@@ -67,6 +67,9 @@ import { computed, ref, onMounted, onUnmounted } from 'vue';
 import { useBudgetSimulatorStore } from '@/domains/budget/store/budgetSimulator';
 import { useMultiYearSettingsStore } from '@/domains/budget/store/multiYearSettings.js';
 import { makeBaseSnapshotFromStore } from '@/domains/budget/utils/projectionAdapters.js';
+import { useI18n } from '@/i18n';
+
+const { t } = useI18n();
 import { projectAll } from '@/domains/budget/utils/projections.js';
 import { Line } from 'vue-chartjs'
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler } from 'chart.js'

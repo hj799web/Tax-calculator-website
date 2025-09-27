@@ -2,14 +2,14 @@
   <div class="sentiment-sensitivity-control">
     <LoadingIndicator 
       :show="isUpdating" 
-      message="Updating sentiment calculations..."
+      :message="t('simulator.sentiment.sensitivity.loading')"
       size="small"
       variant="inline"
     />
     
-    <h3>Public Sentiment Sensitivity</h3>
+    <h3>{{ t('simulator.sentiment.sensitivity.title') }}</h3>
     <div class="slider-group">
-      <label for="overall-sensitivity">Overall Sensitivity</label>
+      <label for="overall-sensitivity">{{ t('simulator.sentiment.sensitivity.overall') }}</label>
       <input
         id="overall-sensitivity"
         type="range"
@@ -21,10 +21,10 @@
       />
       <span>{{ overall.toFixed(2) }}</span>
     </div>
-    <button @click="resetAll">Reset to Default</button>
+    <button @click="resetAll">{{ t('simulator.sentiment.sensitivity.reset') }}</button>
     <div class="category-sliders">
       <div class="slider-group">
-        <label for="regions-sensitivity">Provinces and territories Multiplier</label>
+        <label for="regions-sensitivity">{{ t('simulator.sentiment.sensitivity.regions') }}</label>
         <input
           id="regions-sensitivity"
           type="range"
@@ -38,7 +38,7 @@
       </div>
       
       <div class="slider-group">
-        <label for="demographics-sensitivity">Demographics Multiplier</label>
+        <label for="demographics-sensitivity">{{ t('simulator.sentiment.sensitivity.demographics') }}</label>
         <input
           id="demographics-sensitivity"
           type="range"
@@ -52,7 +52,7 @@
       </div>
       
       <div class="slider-group">
-        <label for="sectors-sensitivity">Sectors Multiplier</label>
+        <label for="sectors-sensitivity">{{ t('simulator.sentiment.sensitivity.sectors') }}</label>
         <input
           id="sectors-sensitivity"
           type="range"
@@ -70,11 +70,13 @@
 
 <script setup>
 import { computed, ref } from 'vue';
+import { useI18n } from '@/i18n';
 import { useSentimentSettingsStore } from '@/domains/sentiment/store/sentimentSettings';
 import { createDebouncedFunction } from '@/utils/debounceUtils';
 import LoadingIndicator from '@/components/LoadingIndicator.vue';
 
 const sentimentSettings = useSentimentSettingsStore();
+const { t } = useI18n();
 const isUpdating = ref(false);
 
 const debouncedUpdateOverall = createDebouncedFunction((value) => {

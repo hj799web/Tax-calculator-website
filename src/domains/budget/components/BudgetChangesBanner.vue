@@ -7,21 +7,21 @@
     <div class="banner-header" @click="toggleCollapse">
       <div class="banner-title">
         <i class="material-icons">history</i>
-        <span>Budget Changes</span>
+        <span>{{ t('simulator.budgetChangesBanner.title') }}</span>
         <span class="change-count">({{ changeCount }})</span>
       </div>
       <div class="banner-controls">
         <button 
           @click.stop="clearChanges"
           class="clear-btn"
-          title="Clear all changes"
+          :title="t('simulator.budgetChangesBanner.tooltips.clearAll')"
         >
           <i class="material-icons">clear_all</i>
         </button>
         <button 
           @click.stop="toggleCollapse"
           class="collapse-btn"
-          :title="isCollapsed ? 'Expand' : 'Collapse'"
+          :title="isCollapsed ? t('simulator.common.expand') : t('simulator.common.collapse')"
         >
           <i class="material-icons">{{ isCollapsed ? 'expand_less' : 'expand_more' }}</i>
         </button>
@@ -37,8 +37,8 @@
           <i class="material-icons">timeline</i>
         </div>
         <div class="no-changes-message">
-          <p>No budget changes yet</p>
-          <p class="no-changes-subtitle">Start adjusting taxes and spending to see changes here</p>
+          <p>{{ t('simulator.budgetChangesBanner.empty.title') }}</p>
+          <p class="no-changes-subtitle">{{ t('simulator.budgetChangesBanner.empty.subtitle') }}</p>
         </div>
       </div>
 
@@ -53,7 +53,7 @@
             class="category-tab"
             :class="{ 'active': activeCategory === category }"
           >
-            {{ category }}
+            {{ translateCategory(category) }}
             <span class="tab-count">({{ changes.length }})</span>
           </button>
         </div>
@@ -90,7 +90,7 @@
         <!-- Summary -->
         <div class="changes-summary">
           <div class="summary-item">
-            <span class="summary-label">Revenue:</span>
+            <span class="summary-label">{{ t('simulator.budgetChangesBanner.summary.revenue') }}</span>
             <span 
               class="summary-value"
               :class="summary.totalRevenueChange >= 0 ? 'positive' : 'negative'"
@@ -99,7 +99,7 @@
             </span>
           </div>
           <div class="summary-item">
-            <span class="summary-label">Spending:</span>
+            <span class="summary-label">{{ t('simulator.budgetChangesBanner.summary.spending') }}</span>
             <span 
               class="summary-value"
               :class="summary.totalSpendingChange >= 0 ? 'positive' : 'negative'"
@@ -114,17 +114,17 @@
       <div class="budget-totals">
         <div class="totals-header">
           <i class="material-icons">analytics</i>
-          <span>Current Budget Totals</span>
+          <span>{{ t('simulator.budgetChangesBanner.totals.title') }}</span>
         </div>
         <div class="totals-grid">
           <div class="total-item">
-            <span class="total-label">Total Revenue</span>
+            <span class="total-label">{{ t('simulator.common.totalRevenue') }}</span>
             <span class="total-value revenue">
               ${{ formatAmount(budgetStore.totalRevenue) }}B
             </span>
           </div>
           <div class="total-item">
-            <span class="total-label">Total Spending</span>
+            <span class="total-label">{{ t('simulator.common.totalSpending') }}</span>
             <span class="total-value spending">
               ${{ formatAmount(budgetStore.totalSpending) }}B
             </span>
@@ -149,6 +149,7 @@
 <script>
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useBudgetSimulatorStore } from '../store/budgetSimulator.js';
+import { useI18n } from '@/i18n';
 
 export default {
   name: 'BudgetChangesBanner',
@@ -160,8 +161,26 @@ export default {
   },
   setup(props) {
     const budgetStore = useBudgetSimulatorStore();
+    const { t } = useI18n();
     const isCollapsed = ref(false);
     const activeCategory = ref('All');
+
+    const categoryLabelKeys = {
+      'All': 'simulator.budgetChangesBanner.categories.all',
+      'Income Taxes': 'simulator.budgetChangesBanner.categories.incomeTaxes',
+      'Consumption Taxes': 'simulator.budgetChangesBanner.categories.consumptionTaxes',
+      'Other Revenue': 'simulator.budgetChangesBanner.categories.otherRevenue',
+      'Main Spending': 'simulator.budgetChangesBanner.categories.mainSpending',
+      'Loans & Investments': 'simulator.budgetChangesBanner.categories.loansInvestments',
+      'Government Operations': 'simulator.budgetChangesBanner.categories.governmentOperations',
+      'Tax Credits & Deductions': 'simulator.budgetChangesBanner.categories.taxCredits',
+      'System Actions': 'simulator.budgetChangesBanner.categories.systemActions'
+    };
+
+    const translateCategory = (category) => {
+      const key = categoryLabelKeys[category];
+      return key ? t(key) : category;
+    };
 
     // Reactive computed properties
     const hasChanges = computed(() => {
@@ -272,6 +291,7 @@ export default {
 
     return {
       budgetStore,
+      t,
       isCollapsed,
       activeCategory,
       hasChanges,
@@ -282,7 +302,8 @@ export default {
       toggleCollapse,
       clearChanges,
       formatTime,
-      formatAmount
+      formatAmount,
+      translateCategory
     };
   }
 };

@@ -26,11 +26,11 @@
           </div>
           <!-- Header -->
           <div class="sticky top-0 w-full bg-white dark:bg-gray-900 px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center z-10">
-            <h2 class="text-xl font-semibold">Share Your Budget</h2>
+            <h2 class="text-xl font-semibold">{{ t('socialShare.title', 'Share Your Budget') }}</h2>
             <button 
               @click="$emit('update:modelValue', false)"
               class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-500"
-              aria-label="Close modal"
+              :aria-label="t('socialShare.closeModal', 'Close modal')"
             >
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
@@ -150,8 +150,8 @@
                   <button 
                     @click="shareToSocialMedia('facebook')"
                     class="flex items-center gap-3 px-5 py-3 rounded-lg text-white transition-all hover:scale-105 bg-[var(--color-facebook)] hover:bg-[var(--facebook-hover)]"
-                    aria-label="Share on Facebook"
-                    title="Share your budget on Facebook"
+                    :aria-label="t('socialShare.shareOnFacebook', 'Share on Facebook')"
+                    :title="t('socialShare.shareOnFacebookTitle', 'Share your budget on Facebook')"
                   >
                     <template v-if="sharedPlatform === 'facebook'">
                       <span class="material-icons animate-pop">check_circle</span>
@@ -161,15 +161,15 @@
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
                       </svg>
-                      Share on Facebook
+                      {{ t('socialShare.shareOnFacebook', 'Share on Facebook') }}
                     </template>
                   </button>
                   
                   <button 
                     @click="shareToSocialMedia('linkedin')"
                     class="flex items-center gap-3 px-5 py-3 rounded-lg text-white transition-all hover:scale-105 bg-[var(--color-linkedin)] hover:bg-[var(--linkedin-hover)]"
-                    aria-label="Share on LinkedIn"
-                    title="Share your budget on LinkedIn"
+                    :aria-label="t('socialShare.shareOnLinkedIn', 'Share on LinkedIn')"
+                    :title="t('socialShare.shareOnLinkedInTitle', 'Share your budget on LinkedIn')"
                   >
                     <template v-if="sharedPlatform === 'linkedin'">
                       <span class="material-icons animate-pop">check_circle</span>
@@ -179,15 +179,15 @@
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                       </svg>
-                      Share on LinkedIn
+                      {{ t('socialShare.shareOnLinkedIn', 'Share on LinkedIn') }}
                     </template>
                   </button>
                   
                   <button 
                     @click="shareToSocialMedia('instagram')"
                     class="flex items-center gap-3 px-5 py-3 rounded-lg text-white transition-all hover:scale-105 bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 hover:from-purple-600 hover:via-pink-600 hover:to-orange-600"
-                    aria-label="Share on Instagram"
-                    title="Share your budget on Instagram"
+                    :aria-label="t('socialShare.shareOnInstagram', 'Share on Instagram')"
+                    :title="t('socialShare.shareOnInstagramTitle', 'Share your budget on Instagram')"
                   >
                     <template v-if="sharedPlatform === 'instagram'">
                       <span class="material-icons animate-pop">check_circle</span>
@@ -197,7 +197,7 @@
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
                       </svg>
-                      Share on Instagram
+                      {{ t('socialShare.shareOnInstagram', 'Share on Instagram') }}
                     </template>
                   </button>
                 </div>
@@ -207,41 +207,41 @@
                   <button 
                     @click="downloadImage"
                     class="flex items-center justify-center gap-2 px-5 py-3 rounded-lg text-white transition-all hover:scale-105 bg-emerald-600 hover:bg-emerald-700"
-                    aria-label="Download budget image"
+                    :aria-label="t('socialShare.downloadBudgetImage', 'Download budget image')"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
                     </svg>
-                    Download Image
+                    {{ t('socialShare.downloadBudgetImage', 'Download Image') }}
                   </button>
                   
                   <button 
                     @click="copyLink"
                     class="flex items-center justify-center gap-2 px-5 py-3 rounded-lg text-white transition-all hover:scale-105 bg-blue-600 hover:bg-blue-700"
-                    aria-label="Copy link to share"
+                    :aria-label="t('socialShare.copyLinkToShare', 'Copy link to share')"
                   >
                     <template v-if="linkCopied">
                       <span class="material-icons animate-pop">check_circle</span>
-                      Copied!
+                      {{ t('socialShare.copied', 'Copied!') }}
                     </template>
                     <template v-else>
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5a2 2 0 11-2.828-2.828l3-3z" clip-rule="evenodd" />
                       </svg>
-                      Copy Link
+                      {{ t('socialShare.copyLinkToShare', 'Copy Link') }}
                     </template>
                   </button>
                   
                   <button 
                     @click="copyImage"
                     class="flex items-center justify-center gap-2 px-5 py-3 rounded-lg text-white transition-all hover:scale-105 bg-purple-600 hover:bg-purple-700"
-                    aria-label="Copy image to clipboard"
+                    :aria-label="t('socialShare.copyImageToClipboard', 'Copy image to clipboard')"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                       <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
                       <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
                     </svg>
-                    Copy to Clipboard
+                    {{ t('socialShare.copyImageToClipboard', 'Copy to Clipboard') }}
                   </button>
                 </div>
               </div>
@@ -259,6 +259,9 @@ import html2canvas from 'html2canvas';
 import BudgetSentimentBadgeCard from '@/domains/badges/components/BudgetSentimentBadgeCard.vue';
 import { useBudgetSimulatorStore } from '@/domains/budget';
 import { handleError } from '@/utils/errorHandler.js';
+import { useI18n } from '@/i18n';
+
+const { t } = useI18n();
 
 // Build previewBudgetData from current store/computed values
 const previewBudgetData = computed(() => ({

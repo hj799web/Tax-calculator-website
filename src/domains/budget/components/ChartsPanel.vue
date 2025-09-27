@@ -65,7 +65,7 @@
           <div class="category-group">
             <div class="category-header">
               <span class="legend-color" style="background-color: #2B6CB0" aria-hidden="true" />
-              <span class="legend-label">Income Tax</span>
+              <span class="legend-label">{{ i18nText('chartsPanel.legend.incomeTax', "Income Tax") }}</span>
               <span class="legend-value">
                 <template v-if="displayMode === 'amount'">
                   ${{ (getIncomeTaxTotal() || 0).toFixed(1) }}B
@@ -101,7 +101,7 @@
           <div class="category-group">
             <div class="category-header">
               <span class="legend-color" style="background-color: #2F855A" aria-hidden="true" />
-              <span class="legend-label">Consumption Tax</span>
+              <span class="legend-label">{{ i18nText('chartsPanel.legend.consumptionTax', "Consumption Tax") }}</span>
               <span class="legend-value">
                 <template v-if="displayMode === 'amount'">
                   ${{ (getConsumptionTaxTotal() || 0).toFixed(1) }}B
@@ -137,7 +137,7 @@
           <div class="category-group">
             <div class="category-header">
               <span class="legend-color" style="background-color: #C05621" aria-hidden="true" />
-              <span class="legend-label">Other Revenue Sources</span>
+              <span class="legend-label">{{ i18nText('chartsPanel.legend.otherRevenue', "Other Revenue Sources") }}</span>
               <span class="legend-value">
                 <template v-if="displayMode === 'amount'">
                   ${{ (getOtherRevenueTotal() || 0).toFixed(1) }}B
@@ -416,7 +416,9 @@ const revenueChartOptions = computed(() => {
         },
         title: {
           display: true,
-          text: displayMode.value === 'amount' ? 'Billions of Dollars' : 'Percentage of Total Revenue',
+          text: displayMode.value === 'amount'
+            ? t('chartsPanel.axis.amountLabel')
+            : t('chartsPanel.axis.percentageLabel'),
           font: { 
             size: isMobile.value ? 11 : 12,
             family: "'Inter', sans-serif"

@@ -1,8 +1,8 @@
-<template>
+﻿<template>
   <section class="simulator-card results-card">
     <h2 class="card-title">
       <span class="material-icons icon">analytics</span>
-      {{ i18nText('simulator.results.title', 'Budget Results') }}
+      {{ t('simulator.results.title') }}
     </h2>
     
     <!-- Deficit Warning Banner -->
@@ -28,7 +28,7 @@
         <span class="warning-message">{{ deficitWarningMessage }}</span>
         <button
           class="dismiss-button"
-          :aria-label="i18nText('simulator.results.warnings.dismiss', 'Dismiss warning')"
+          :aria-label="t('simulator.results.warnings.dismiss')"
           @click="dismissWarning"
         >
           <span class="material-icons">close</span>
@@ -46,15 +46,10 @@
         v-if="showDeficitInfo"
         class="deficit-info-popover"
       >
-        <h3>{{ i18nText('simulator.results.warnings.info', 'Understanding Budget Deficits') }}</h3>
-        <p>{{ i18nText('simulator.results.warnings.infoDescription', 'Persistent budget deficits can lead to:') }}</p>
+        <h3>{{ t('simulator.results.warnings.info') }}</h3>
+        <p>{{ t('simulator.results.warnings.infoDescription') }}</p>
         <ul>
-          <li v-for="item in i18nText('simulator.results.warnings.infoItems', []).length ? t('simulator.results.warnings.infoItems') : [
-            'Increased debt servicing costs',
-            'Intergenerational financial burden',
-            'Potential inflation pressure',
-            'Reduced fiscal flexibility during economic downturns'
-          ]" :key="item">{{ item }}</li>
+          <li v-for="item in t('simulator.results.warnings.infoItems')" :key="item">{{ item }}</li>
         </ul>
         <p>
           <a
@@ -62,7 +57,7 @@
             target="_blank" 
             rel="noopener noreferrer"
           >
-            {{ i18nText('simulator.results.warnings.learnMore', 'Learn more about public debt from the PBO') }}
+            {{ t('simulator.results.warnings.learnMore') }}
           </a>
         </p>
       </div>
@@ -76,14 +71,14 @@
           class="tab-button"
           @click="activeTab = 'revenue'"
         >
-          {{ i18nText('simulator.results.tabs.revenue', 'Revenue') }}
+          {{ t('simulator.results.tabs.revenue') }}
         </button>
         <button 
           :class="{ 'active-tab': activeTab === 'spending' }" 
           class="tab-button"
           @click="activeTab = 'spending'"
         >
-          {{ i18nText('simulator.results.tabs.spending', 'Spending') }}
+          {{ t('simulator.results.tabs.spending') }}
         </button>
       </div>
       
@@ -100,7 +95,7 @@
           <div class="result-item">
             <span class="result-label">
               <span class="material-icons text-blue-500 mr-1 text-xs">trending_up</span>
-              {{ i18nText('simulator.results.labels.totalRevenue', 'Total Revenue:') }}
+              {{ t('simulator.results.labels.totalRevenue') }}
             </span>
             <span class="font-medium text-blue-600 text-sm">
               {{ formatCurrency(totalRevenueValue) }}
@@ -110,7 +105,7 @@
           <div class="toggle-details">
             <button
               class="download-button"
-              :title="i18nText('simulator.results.actions.downloadImage', 'Download as Image')"
+              :title="t('simulator.results.actions.downloadImage')"
               @click="throttledDownloadChart('revenue')"
             >
               <span class="material-icons">download</span>
@@ -128,10 +123,10 @@
           <div class="result-item">
             <span class="result-label">
               <span class="material-icons text-red-500 mr-1 text-xs">trending_down</span>
-              {{ i18nText('simulator.results.labels.totalSpending', 'Total Spending:') }}
+              {{ t('simulator.results.labels.totalSpending') }}
             </span>
             <span class="font-medium text-red-600 text-sm tooltip-container"
-              @mouseenter="showTooltip(formatPercentage(totalSpendingValue, totalRevenueValue) + ' ' + i18nText('simulator.results.tooltips.ofTotalRevenue', 'of total revenue'))"
+              @mouseenter="showTooltip(formatPercentage(totalSpendingValue, totalRevenueValue) + ' ' + t('simulator.results.tooltips.ofTotalRevenue'))"
               @mouseleave="hideTooltip()">
               {{ formatCurrency(totalSpendingValue) }}
             </span>
@@ -141,12 +136,12 @@
           <div class="result-item">
             <span class="result-label">
               <span class="material-icons text-gray-500 mr-1 text-xs">account_balance</span>
-              {{ i18nText('simulator.results.labels.debtServicing', 'Debt Servicing:') }}
+              {{ t('simulator.results.labels.debtServicing') }}
               <span class="info-icon tooltip-container" 
-                @mouseenter="showTooltip(i18nText('simulator.results.tooltips.debtServicing', 'Interest payments on the federal debt (fixed cost that cannot be adjusted)'))"
+                @mouseenter="showTooltip(t('simulator.results.tooltips.debtServicing'))"
                 @mouseleave="hideTooltip()"
                 style="margin-left: 4px; cursor: pointer;">
-                ⓘ
+                â“˜
               </span>
             </span>
             <span class="font-medium text-gray-600 text-sm">
@@ -167,11 +162,11 @@
               >
                 {{ surplusValue > 0 ? 'trending_up' : surplusValue < 0 ? 'trending_down' : 'remove' }}
               </span>
-              {{ i18nText('simulator.results.labels.surplusDeficit', 'Surplus/Deficit:') }}
+              {{ t('simulator.results.labels.surplusDeficit') }}
             </span>
             <span
               class="font-medium text-sm tooltip-container"
-              @mouseenter="showTooltip(formatPercentage(Math.abs(surplusValue), totalRevenueValue) + ' ' + i18nText('simulator.results.tooltips.ofTotalRevenue', 'of total revenue'))"
+              @mouseenter="showTooltip(formatPercentage(Math.abs(surplusValue), totalRevenueValue) + ' ' + t('simulator.results.tooltips.ofTotalRevenue'))"
               @mouseleave="hideTooltip()"
               :class="{
                 'text-green-600': surplusValue > 0,
@@ -179,7 +174,7 @@
                 'text-gray-600': surplusValue === 0
               }"
             >
-              {{ surplusValue > 0 ? 'Surplus: +' : surplusValue < 0 ? 'Deficit: ' : '' }}
+              {{ surplusValue > 0 ? t('simulator.goals.surplus') + ': +' : surplusValue < 0 ? t('simulator.goals.deficit') + ': ' : '' }}
               {{ formatCurrency(Math.abs(surplusValue)) }}
             </span>
           </div>
@@ -188,12 +183,12 @@
           <div class="result-item" :class="{ 'mobile-view': isMobileView }">
             <span class="result-label">
               <span class="material-icons text-gray-500 mr-1 text-xs">account_balance</span>
-              {{ i18nText('simulator.results.labels.debtToGdpRatio', 'Debt-to-GDP Ratio:') }}
+              {{ t('simulator.results.labels.debtToGdpRatio') }}
               <span class="info-icon tooltip-container" 
-                @mouseenter="showTooltip(i18nText('simulator.results.tooltips.debtToGdpRatio', 'The ratio of total federal debt to the size of the Canadian economy (GDP). Lower is generally better for fiscal health.'))"
+                @mouseenter="showTooltip(t('simulator.results.tooltips.debtToGdpRatio'))"
                 @mouseleave="hideTooltip()"
                 style="margin-left: 4px; cursor: pointer;">
-                ⓘ
+                â“˜
               </span>
             </span>
             <span class="font-medium text-gray-700 text-sm">
@@ -204,7 +199,7 @@
           <div class="toggle-details">
             <button
               class="download-button"
-              title="Download as Image"
+              :title="t('simulator.budgetResults.tooltips.downloadImage')"
               @click="throttledDownloadChart('spending')"
             >
               <span class="material-icons">download</span>
@@ -217,16 +212,16 @@
       <div class="mt-4">
         <div class="flex justify-between items-center">
           <h3 class="text-sm font-semibold text-gray-800">
-            {{ i18nText('simulator.results.actions.title', 'Actions') }}
+            {{ t('simulator.results.actions.title') }}
           </h3>
           <button
             class="share-budget-button"
             @click="throttledShareBudget"
-            :aria-label="i18nText('simulator.results.actions.shareBudget', 'Share your budget on social media')"
+            :aria-label="t('simulator.results.actions.shareBudget')"
             style="display: flex; align-items: center; gap: 4px; background: #4263eb; color: #fff; border: none; border-radius: 4px; padding: 6px 14px; font-weight: 500; cursor: pointer; transition: background 0.2s;"
           >
             <span class="material-icons" style="font-size: 18px;">share</span>
-            {{ i18nText('simulator.results.actions.shareBudget', 'Share Budget') }}
+            {{ t('simulator.results.actions.shareBudget') }}
           </button>
         </div>
         <div class="action-buttons mt-2">
@@ -234,7 +229,7 @@
             class="action-button reset-button"
             @click="throttledResetBudget"
           >
-            {{ i18nText('simulator.results.actions.resetBudget', 'Reset Budget') }}
+            {{ t('simulator.results.actions.resetBudget') }}
           </button>
           <div class="auto-balance-container">
             <label class="auto-balance-label">
@@ -243,21 +238,21 @@
                 :checked="simpleAutoBalanceActive"
                 @change="$emit('toggle-simple-auto-balance', $event.target.checked)"
               >
-              <span class="auto-balance-text">{{ i18nText('simulator.results.actions.autoBalance', 'Auto-Balance Budget') }}</span>
+              <span class="auto-balance-text">{{ t('simulator.results.actions.autoBalance') }}</span>
             </label>
             <div class="auto-balance-info">
               <span 
                 class="info-icon"
-                @mouseenter="showTooltip(i18nText('simulator.results.tooltips.autoBalance', 'When enabled, the system will automatically adjust revenue sources to balance the budget based on your spending choices.'))"
+                @mouseenter="showTooltip(t('simulator.results.tooltips.autoBalance'))"
                 @mouseleave="hideTooltip()"
-              >ⓘ</span>
+              >â“˜</span>
             </div>
           </div>
           <button
             class="action-button save-button"
             @click="throttledSaveBudget"
           >
-            {{ i18nText('simulator.results.actions.saveBudget', 'Save Budget') }}
+            {{ t('simulator.results.actions.saveBudget') }}
           </button>
           
           <!-- Achievement Badges Section -->
@@ -268,7 +263,7 @@
             >
               <h3 class="text-sm font-medium text-gray-700 mb-2 flex items-center">
                 <span class="material-icons mr-2 text-amber-500 text-sm">emoji_events</span>
-                {{ i18nText('simulator.results.achievements.title', 'Budget Achievements') }}
+                {{ t('simulator.results.achievements.title') }}
               </h3>
               <span class="material-icons text-gray-500 text-sm">
                 {{ showBadges ? 'expand_less' : 'expand_more' }}
@@ -297,7 +292,7 @@
                   class="text-center py-3"
                 >
                   <p class="text-sm text-gray-500">
-                    {{ i18nText('simulator.results.achievements.noBadges', 'Make budget adjustments to earn achievement badges!') }}
+                    {{ t('simulator.results.achievements.noBadges') }}
                   </p>
                 </div>
               </div>
@@ -340,11 +335,6 @@ defineOptions({
 
 // i18n setup
 const { t } = useI18n();
-const i18nText = (key, fallback = '') => {
-  const value = t(key);
-  return value === key ? fallback : value;
-};
-
 // State for collapsible sections
 const showBadges = ref(true);
 
@@ -448,33 +438,33 @@ onUnmounted(() => {
 const deficitWarningLevel = computed(() => {
   if (warningDismissed.value) return 'none';
   
-  // Check if we have a surplus or small deficit (≤ $25B) - Fiscal Stability Zone
+  // Check if we have a surplus or small deficit (â‰¤ $25B) - Fiscal Stability Zone
   if (surplusValue.value >= 0 || surplusValue.value > -25) {
     return 'none';
   }
   
-  // $25B–$49.9B deficit: Mild Warning - Fiscal Vigilance Zone
+  // $25Bâ€“$49.9B deficit: Mild Warning - Fiscal Vigilance Zone
   if (surplusValue.value >= -50) {
     return 'mild';
   }
   
-  // $50B–$99.9B deficit: High Warning - Fiscal Stress Zone
+  // $50Bâ€“$99.9B deficit: High Warning - Fiscal Stress Zone
   if (surplusValue.value >= -100) {
     return 'high';
   }
   
-  // ≥ $100B deficit: Critical Warning - Fiscal Emergency Zone
+  // â‰¥ $100B deficit: Critical Warning - Fiscal Emergency Zone
   return 'critical';
 });
 
 const deficitWarningMessage = computed(() => {
   switch (deficitWarningLevel.value) {
     case 'mild':
-      return i18nText('simulator.results.warnings.mild', "Caution: Deficit may require future fiscal adjustment.");
+      return t('simulator.results.warnings.mild');
     case 'high':
-      return i18nText('simulator.results.warnings.high', "Warning: Large deficit could challenge fiscal stability long-term.");
+      return t('simulator.results.warnings.high');
     case 'critical':
-      return i18nText('simulator.results.warnings.critical', "Critical: Severe deficit. Immediate fiscal intervention recommended.");
+      return t('simulator.results.warnings.critical');
     default:
       return "";
   }
@@ -1147,3 +1137,4 @@ const throttledDownloadChart = throttle(downloadChart, 2000);
   }
 }
 </style>
+

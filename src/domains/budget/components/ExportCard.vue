@@ -3,17 +3,17 @@
     <!-- Header Section with Gradient Background -->
     <div style="background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%); color: white; padding: 30px 40px; margin-bottom: 30px; border-radius: 0 0 8px 8px;">
       <div style="font-size: 28px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.5px;">
-        Federal Budget Summary
+        {{ i18nText('simulator.exportCard.header.title', 'Federal Budget Summary') }}
       </div>
       <div style="font-size: 14px; opacity: 0.9; font-weight: 300;">
-        Generated on {{ new Date().toLocaleDateString() }} at {{ new Date().toLocaleTimeString() }}
+        {{ generatedStamp }}
       </div>
     </div>
 
     <!-- Budget Title and Badge -->
     <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px; padding: 0 40px;">
       <h1 style="font-size: 24px; font-weight: 700; color: #1a365d; margin: 0;">
-        {{ budgetTitle }}
+        {{ budgetTitleText }}
       </h1>
       <div style="display: flex; flex-direction: column; gap: 12px;">
         <div v-for="(badge, index) in badges" :key="index" 
@@ -44,19 +44,19 @@
       <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
         <!-- Revenue Card -->
         <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border: 1px solid #e2e8f0;">
-          <div style="font-size: 14px; color: #64748b; margin-bottom: 8px;">Total Revenue</div>
+          <div style="font-size: 14px; color: #64748b; margin-bottom: 8px;">{{ i18nText('simulator.exportCard.financialSummary.cards.totalRevenue', 'Total Revenue') }}</div>
           <div style="font-size: 24px; font-weight: 700; color: #1a365d;">{{ formatCurrency(totalRevenue) }}</div>
         </div>
         
         <!-- Spending Card -->
         <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border: 1px solid #e2e8f0;">
-          <div style="font-size: 14px; color: #64748b; margin-bottom: 8px;">Total Spending</div>
+          <div style="font-size: 14px; color: #64748b; margin-bottom: 8px;">{{ i18nText('simulator.exportCard.financialSummary.cards.totalSpending', 'Total Spending') }}</div>
           <div style="font-size: 24px; font-weight: 700; color: #1a365d;">{{ formatCurrency(totalSpending) }}</div>
         </div>
         
         <!-- Surplus/Deficit Card -->
         <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border: 1px solid #e2e8f0;">
-          <div style="font-size: 14px; color: #64748b; margin-bottom: 8px;">Surplus/Deficit</div>
+          <div style="font-size: 14px; color: #64748b; margin-bottom: 8px;">{{ i18nText('simulator.exportCard.financialSummary.cards.surplusDeficit', 'Surplus/Deficit') }}</div>
           <div :style="{
             fontSize: '24px',
             fontWeight: '700',
@@ -71,16 +71,16 @@
     <!-- Sentiment Analysis Section (new page) -->
     <div class="page-break-before"></div>
     <h2 style="font-size: 20px; font-weight: 600; color: #1a365d; margin-bottom: 20px; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0;">
-      Public Sentiment Analysis
+      {{ i18nText('simulator.exportCard.sentiment.title', 'Public Sentiment Analysis') }}
     </h2>
     <div style="padding: 0 40px; margin-bottom: 30px;">
       <!-- Provinces & Territories -->
       <div style="margin-bottom: 30px;">
-        <h3 style="font-size: 16px; font-weight: 600; color: #2d3748; margin-bottom: 16px;">Provinces & Territories</h3>
+        <h3 style="font-size: 16px; font-weight: 600; color: #2d3748; margin-bottom: 16px;">{{ i18nText('simulator.exportCard.sentiment.sections.provinces', 'Provinces & Territories') }}</h3>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
           <!-- Most Positive -->
           <div style="background: #F0FDF4; padding: 16px; border-radius: 8px; border: 1px solid #86EFAC;">
-            <div style="font-size: 14px; color: #166534; margin-bottom: 12px; font-weight: 600;">Most Positive</div>
+            <div style="font-size: 14px; color: #166534; margin-bottom: 12px; font-weight: 600;">{{ i18nText('simulator.exportCard.sentiment.mostPositive', 'Most Positive') }}</div>
             <div v-for="[province, score] in topProvinceScores.positive" :key="province" 
                  style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
               <span style="color: #166534;">{{ province }}</span>
@@ -89,7 +89,7 @@
           </div>
           <!-- Most Negative -->
           <div style="background: #FEF2F2; padding: 16px; border-radius: 8px; border: 1px solid #FCA5A5;">
-            <div style="font-size: 14px; color: #991B1B; margin-bottom: 12px; font-weight: 600;">Most Negative</div>
+            <div style="font-size: 14px; color: #991B1B; margin-bottom: 12px; font-weight: 600;">{{ i18nText('simulator.exportCard.sentiment.mostNegative', 'Most Negative') }}</div>
             <div v-for="[province, score] in topProvinceScores.negative" :key="province"
                  style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
               <span style="color: #991B1B;">{{ province }}</span>
@@ -100,11 +100,11 @@
       </div>
       <!-- Sectors -->
       <div style="margin-bottom: 30px;">
-        <h3 style="font-size: 16px; font-weight: 600; color: #2d3748; margin-bottom: 16px;">Sectors</h3>
+        <h3 style="font-size: 16px; font-weight: 600; color: #2d3748; margin-bottom: 16px;">{{ i18nText('simulator.exportCard.sentiment.sections.sectors', 'Sectors') }}</h3>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
           <!-- Most Positive -->
           <div style="background: #F0FDF4; padding: 16px; border-radius: 8px; border: 1px solid #86EFAC;">
-            <div style="font-size: 14px; color: #166534; margin-bottom: 12px; font-weight: 600;">Most Positive</div>
+            <div style="font-size: 14px; color: #166534; margin-bottom: 12px; font-weight: 600;">{{ i18nText('simulator.exportCard.sentiment.mostPositive', 'Most Positive') }}</div>
             <div v-for="[sector, score] in topSectorScores.positive" :key="sector"
                  style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
               <span style="color: #166534;">{{ sector }}</span>
@@ -113,7 +113,7 @@
           </div>
           <!-- Most Negative -->
           <div style="background: #FEF2F2; padding: 16px; border-radius: 8px; border: 1px solid #FCA5A5;">
-            <div style="font-size: 14px; color: #991B1B; margin-bottom: 12px; font-weight: 600;">Most Negative</div>
+            <div style="font-size: 14px; color: #991B1B; margin-bottom: 12px; font-weight: 600;">{{ i18nText('simulator.exportCard.sentiment.mostNegative', 'Most Negative') }}</div>
             <div v-for="[sector, score] in topSectorScores.negative" :key="sector"
                  style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
               <span style="color: #991B1B;">{{ sector }}</span>
@@ -124,11 +124,11 @@
       </div>
       <!-- Demographics -->
       <div style="margin-bottom: 30px;">
-        <h3 style="font-size: 16px; font-weight: 600; color: #2d3748; margin-bottom: 16px;">Demographics</h3>
+        <h3 style="font-size: 16px; font-weight: 600; color: #2d3748; margin-bottom: 16px;">{{ i18nText('simulator.exportCard.sentiment.sections.demographics', 'Demographics') }}</h3>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
           <!-- Most Positive -->
           <div style="background: #F0FDF4; padding: 16px; border-radius: 8px; border: 1px solid #86EFAC;">
-            <div style="font-size: 14px; color: #166534; margin-bottom: 12px; font-weight: 600;">Most Positive</div>
+            <div style="font-size: 14px; color: #166534; margin-bottom: 12px; font-weight: 600;">{{ i18nText('simulator.exportCard.sentiment.mostPositive', 'Most Positive') }}</div>
             <div v-for="[demographic, score] in topDemographicScores.positive" :key="demographic"
                  style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
               <span style="color: #166534;">{{ demographic }}</span>
@@ -137,7 +137,7 @@
           </div>
           <!-- Most Negative -->
           <div style="background: #FEF2F2; padding: 16px; border-radius: 8px; border: 1px solid #FCA5A5;">
-            <div style="font-size: 14px; color: #991B1B; margin-bottom: 12px; font-weight: 600;">Most Negative</div>
+            <div style="font-size: 14px; color: #991B1B; margin-bottom: 12px; font-weight: 600;">{{ i18nText('simulator.exportCard.sentiment.mostNegative', 'Most Negative') }}</div>
             <div v-for="[demographic, score] in topDemographicScores.negative" :key="demographic"
                  style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
               <span style="color: #991B1B;">{{ demographic }}</span>
@@ -151,12 +151,12 @@
     <!-- Full Budget Breakdown (if enabled) -->
     <div v-if="includeFullBreakdown" class="full-breakdown-table" style="padding: 0 40px; margin-bottom: 30px;">
       <h2 style="font-size: 20px; font-weight: 600; color: #1a365d; margin-bottom: 20px; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0;">
-        Detailed Budget Breakdown
+        {{ i18nText('simulator.exportCard.breakdown.title', 'Detailed Budget Breakdown') }}
       </h2>
       
       <!-- Revenue Sources (new page) -->
       <div class="page-break-before"></div>
-      <h3 style="font-size: 16px; font-weight: 600; color: #2d3748; margin: 12px 0 8px;">Revenue Sources</h3>
+      <h3 style="font-size: 16px; font-weight: 600; color: #2d3748; margin: 12px 0 8px;">{{ i18nText('simulator.exportCard.breakdown.revenueSources', 'Revenue Sources') }}</h3>
       <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 30px; padding-top: 0;">
         <div v-for="source in getSortedRevenueSources" :key="source.name" 
              style="background: white; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; overflow: hidden; min-height: 120px; page-break-inside: avoid;">
@@ -168,17 +168,17 @@
           <div style="padding: 12px;">
             <!-- Base Amount -->
             <div style="margin-bottom: 8px;">
-              <div style="font-size: 11px; color: #64748b; margin-bottom: 2px;">Base Amount</div>
+              <div style="font-size: 11px; color: #64748b; margin-bottom: 2px;">{{ i18nText('simulator.exportCard.breakdown.cards.baseAmount', 'Base Amount') }}</div>
               <div style="font-size: 14px; font-weight: 600; color: #1a365d;">{{ formatCurrency(source.baseAmount) }}</div>
             </div>
             <!-- Adjusted Amount -->
             <div style="margin-bottom: 8px;">
-              <div style="font-size: 11px; color: #64748b; margin-bottom: 2px;">Adjusted Amount</div>
+              <div style="font-size: 11px; color: #64748b; margin-bottom: 2px;">{{ i18nText('simulator.exportCard.breakdown.cards.adjustedAmount', 'Adjusted Amount') }}</div>
               <div style="font-size: 14px; font-weight: 600; color: #1a365d;">{{ formatCurrency(source.adjustedAmount) }}</div>
             </div>
             <!-- Change -->
             <div>
-              <div style="font-size: 11px; color: #64748b; margin-bottom: 2px;">Change</div>
+              <div style="font-size: 11px; color: #64748b; margin-bottom: 2px;">{{ i18nText('simulator.exportCard.breakdown.cards.change', 'Change') }}</div>
               <div :style="{
                 fontSize: '14px',
                 fontWeight: '600',
@@ -189,7 +189,7 @@
               }">
                 <span>{{ formatPercentageWithSign(source.change) }}</span>
                 <span v-if="source.change !== 0" style="font-size: 12px;">
-                  {{ source.change > 0 ? '↑' : '↓' }}
+                  {{ source.change > 0 ? '\u25B2' : '\u25BC' }}
                 </span>
               </div>
             </div>
@@ -199,14 +199,14 @@
 
       <!-- Spending Categories (new page) -->
       <div class="page-break-before"></div>
-      <h3 style="font-size: 16px; font-weight: 600; color: #2d3748; margin: 12px 0 8px;">Spending Categories</h3>
+      <h3 style="font-size: 16px; font-weight: 600; color: #2d3748; margin: 12px 0 8px;">{{ i18nText('simulator.exportCard.breakdown.spendingCategories', 'Spending Categories') }}</h3>
       <table style="width: 100%; border-collapse: collapse;">
         <thead>
           <tr style="background-color: #f8fafc;">
-            <th style="padding: 12px; text-align: left; border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 600;">Category</th>
-            <th style="padding: 12px; text-align: right; border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 600;">Base Amount</th>
-            <th style="padding: 12px; text-align: right; border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 600;">Adjusted Amount</th>
-            <th style="padding: 12px; text-align: right; border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 600;">Change</th>
+            <th style="padding: 12px; text-align: left; border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 600;">{{ i18nText('simulator.exportCard.breakdown.table.category', 'Category') }}</th>
+            <th style="padding: 12px; text-align: right; border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 600;">{{ i18nText('simulator.exportCard.breakdown.table.baseAmount', 'Base Amount') }}</th>
+            <th style="padding: 12px; text-align: right; border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 600;">{{ i18nText('simulator.exportCard.breakdown.table.adjustedAmount', 'Adjusted Amount') }}</th>
+            <th style="padding: 12px; text-align: right; border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 600;">{{ i18nText('simulator.exportCard.breakdown.table.change', 'Change') }}</th>
           </tr>
         </thead>
         <tbody>
@@ -224,8 +224,8 @@
 
     <!-- Footer -->
     <div style="margin-top: 40px; padding: 20px 40px; background-color: #f8fafc; border-top: 1px solid #e2e8f0; font-size: 12px; color: #64748b;">
-      <p style="margin: 0;">This budget summary was generated using the Canada Tax Calculator's Budget Simulator.</p>
-      <p style="margin: 8px 0 0;">For more information, visit: <a href="https://hj799web.github.io/Tax-calculator-website/" style="color: #2c5282; text-decoration: none;">https://hj799web.github.io/Tax-calculator-website/</a></p>
+      <p style="margin: 0;">{{ i18nText('simulator.exportCard.footer.disclaimer', 'This budget summary was generated using the Canada Tax Calculator\'s Budget Simulator.') }}</p>
+      <p style="margin: 8px 0 0;">{{ i18nText('simulator.exportCard.footer.cta', 'For more information, visit:') }} <a href="https://hj799web.github.io/Tax-calculator-website/" style="color: #2c5282; text-decoration: none;">{{ i18nText('simulator.exportCard.footer.linkLabel', 'https://hj799web.github.io/Tax-calculator-website/') }}</a></p>
     </div>
   </div>
 </template>
@@ -233,10 +233,11 @@
 <script setup>
 // Props: budgetTitle, badges, narrative, totalRevenue, totalSpending, surplus, sentimentScores, includeFullBreakdown, budget, formatCurrency, formatPercentageChange
 import { getSentimentEmoji, getSentimentLabel } from '@/domains/sentiment/utils/computeSentimentScores';
-import { computed } from 'vue';
+import { computed, getCurrentInstance } from 'vue';
+import { useI18n } from '@/i18n';
 
 const props = defineProps({
-  budgetTitle: { type: String, default: 'Budget Summary' },
+  budgetTitle: { type: String, default: '' },
   badges: { type: Array, default: () => [] },
   narrative: { type: String, default: '' },
   totalRevenue: { type: Number, default: 0 },
@@ -248,6 +249,29 @@ const props = defineProps({
   formatCurrency: { type: Function, default: (val) => `$${val}B` },
   formatPercentageChange: { type: Function, default: (val) => `${val.toFixed(1)}%` }
 })
+
+const { t } = useI18n();
+const instance = getCurrentInstance();
+const globalT = instance?.appContext?.config?.globalProperties?.$t || t;
+
+const i18nText = (key, fallback = '') => {
+  const value = globalT(key);
+  return value === key ? fallback : value;
+};
+
+const generatedAt = new Date();
+const generatedDate = computed(() => generatedAt.toLocaleDateString());
+const generatedTime = computed(() => generatedAt.toLocaleTimeString());
+const generatedStamp = computed(() => {
+  const key = 'simulator.exportCard.header.generatedOn';
+  const translation = globalT(key, { date: generatedDate.value, time: generatedTime.value });
+  if (translation === key) {
+    return `Generated on ${generatedDate.value} at ${generatedTime.value}`;
+  }
+  return translation;
+});
+
+const budgetTitleText = computed(() => props.budgetTitle || i18nText('simulator.exportCard.defaults.budgetTitle', 'Budget Summary'));
 
 // Helper function to format percentage change with proper sign
 const formatPercentageWithSign = (value) => {
@@ -441,3 +465,4 @@ const getSortedSpendingCategories = computed(() => {
   break-before: page;
 }
 </style>
+

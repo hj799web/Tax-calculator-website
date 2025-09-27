@@ -14,7 +14,7 @@ export const budgetScenarioModifiers = {
   // ===== BALANCED BUDGET =====
   balancedBudget: {
     label: "⚖️ Balanced Budget",
-    description: "Moderate approach with balanced revenue and spending",
+    description: "budgetScenarios.balancedBudget.description",
     provinces: {
       Ontario: 1.0,           // Positive
       Quebec: 0.0,            // Neutral
@@ -60,7 +60,7 @@ export const budgetScenarioModifiers = {
   // ===== PROGRESSIVE EXPANSION =====
   progressiveExpansion: {
     label: "🌱 Progressive Expansion",
-    description: "Major increases to social programs, healthcare, and climate initiatives",
+    description: "budgetScenarios.socialPrograms.description",
     provinces: {
       Ontario: 1.0,          // Positive
       Quebec: 1.0,           // Positive
@@ -113,7 +113,7 @@ export const budgetScenarioModifiers = {
   // ===== INFRASTRUCTURE BUILDER =====
   infrastructureBuilder: {
     label: "🏗️ Infrastructure Builder",
-    description: "Major investment in physical infrastructure, transit, broadband, and climate-resilient development",
+    description: "budgetScenarios.infrastructure.description",
     provinces: {
       Ontario: 0.0,          // Neutral
       Quebec: 1.0,           // Positive
@@ -159,7 +159,7 @@ export const budgetScenarioModifiers = {
   // ===== BUSINESS FRIENDLY =====
   businessFriendly: {
     label: "💼 Business Friendly",
-    description: "Lower corporate taxes, enhanced business incentives, and strategic deregulation",
+    description: "budgetScenarios.businessFriendly.description",
     provinces: {
       Alberta: 1.0,          // Positive
       Saskatchewan: 1.0,     // Positive
@@ -205,7 +205,7 @@ export const budgetScenarioModifiers = {
   // ===== GREEN GROWTH STIMULUS =====
   greenGrowthStimulus: {
     label: "🌿 Green Growth Stimulus",
-    description: "Climate-forward Keynesian budget with major investments in renewable energy, sustainable infrastructure, and green tech R&D",
+    description: "budgetScenarios.climateForward.description",
     provinces: {
       "British Columbia": 1.0, // Positive
       Quebec: 1.0,          // Positive
@@ -251,7 +251,7 @@ export const budgetScenarioModifiers = {
   // ===== SECURITY FIRST =====
   securityFirst: {
     label: "🛡️ Security First",
-    description: "National-security-forward budget with increased military, defense, cybersecurity, and policing spending",
+    description: "budgetScenarios.nationalSecurity.description",
     provinces: {
       Alberta: 1.0,         // Positive
       Saskatchewan: 1.0,    // Positive
@@ -297,7 +297,7 @@ export const budgetScenarioModifiers = {
   // ===== AUSTERITY PLAN =====
   austerityPlan: {
     label: "✂️ Austerity Plan",
-    description: "Significant spending cuts to reduce deficit and enforce fiscal discipline",
+    description: "budgetScenarios.fiscalDiscipline.description",
     provinces: {
       Ontario: 0.0,         // Neutral
       Quebec: -0.5,         // Slightly negative

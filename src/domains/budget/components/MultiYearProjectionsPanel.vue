@@ -90,11 +90,11 @@
           <div class="growth-head">
             <div class="label">Category</div>
             <div class="inputs-head">
-              <span title="Normal program cost increases (inflation, policy changes, etc.)">
+              <span :title="t('simulator.multiYearProjections.tooltips.baseline', 'Normal program cost increases (inflation, policy changes, etc.)')">
                 Baseline
                 <span class="help-icon">ⓘ</span>
               </span>
-              <span title="Extra growth due to population aging and demographic changes">
+              <span :title="t('simulator.multiYearProjections.tooltips.extraGrowth', 'Extra growth due to population aging and demographic changes')">
                 Demographic
                 <span class="help-icon">ⓘ</span>
               </span>
@@ -110,7 +110,7 @@
             >
               <div class="label">{{ prettyKey(key) }}</div>
               <div class="inputs">
-                <label class="sub" title="Normal program cost increases">Baseline</label>
+                <label class="sub" :title="t('simulator.multiYearProjections.tooltips.baseline', 'Normal program cost increases')">Baseline</label>
                 <input
                   type="number"
                   step="0.1"
@@ -119,7 +119,7 @@
                   v-model.number="settingsStore.spendingGrowth[key].baseline"
                   :title="`Baseline growth rate for ${prettyKey(key)}`"
                 />
-                <label class="sub" title="Extra growth due to population aging">Demographic</label>
+                <label class="sub" :title="t('simulator.multiYearProjections.tooltips.demographic', 'Extra growth due to population aging')">Demographic</label>
                 <input
                   type="number"
                   step="0.1"
@@ -181,11 +181,11 @@
         </div>
         <div class="ye-grid">
           <div class="row">
-            <label title="One-time adjustment to program spending for this year">Spending boost (%)</label>
+            <label :title="t('projectionsPanel.spendingBoostTooltip', 'One-time adjustment to program spending for this year')">{{ t('projectionsPanel.spendingBoost', 'Spending boost (%)') }}</label>
             <input type="number" step="0.5" :min="-15" :max="15" v-model.number="yearLevel" />
           </div>
           <div class="row">
-            <label title="Adjusts growth rate for this year and forward. +0.5 means spending grows 0.5 percentage points faster.">Growth rate boost (pp)</label>
+            <label :title="t('projectionsPanel.growthRateBoostTooltip', 'Adjusts growth rate for this year and forward. +0.5 means spending grows 0.5 percentage points faster.')">{{ t('projectionsPanel.growthRateBoost', 'Growth rate boost (pp)') }}</label>
             <input type="number" step="0.1" v-model.number="yearGrowth" />
           </div>
           <div class="row">

@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div
     class="spending-tile w-full"
     :style="{ '--tile-color': category.color || parentColor }"
@@ -13,7 +13,7 @@
           :for="`spending-${category.id}`"
           class="block text-sm font-medium text-gray-700 truncate"
         >
-          {{ getCategoryName(category.id, 'spending') }}
+          {{ categoryName }}
         </label>
       </div>
       <div
@@ -39,8 +39,8 @@
       />
       <div class="mt-2 flex justify-end w-full">
         <CategoryInfo
-          :name="getCategoryName(category.id, 'spending')"
-          :description="category.description"
+          :name="categoryName"
+          :description="categoryDescription"
           :base-amount="category.baseAmount"
           :current-setting="spendingFactor"
         />
@@ -50,10 +50,10 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch, computed } from 'vue';
 import PercentageInput from './PercentageInput.vue';
 import CategoryInfo from './BudgetCategoryInfo.vue';
-import { getCategoryName } from '@/i18n';
+import { getCategoryName, getCategoryDescription } from '@/i18n';
 
 const props = defineProps({
   category: {
@@ -73,6 +73,9 @@ const props = defineProps({
     default: false
   }
 });
+
+const categoryName = computed(() => getCategoryName(props.category.id, 'spending'))
+const categoryDescription = computed(() => getCategoryDescription(props.category.id, 'spending') || props.category.description || '')
 
 const emit = defineEmits(['update:spendingFactor']);
 

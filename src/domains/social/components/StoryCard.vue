@@ -3,15 +3,15 @@
     <!-- Story Header with Gradient Background -->
     <div class="story-header">
       <div class="logo-container">
-        <img src="../assets/fiscal-insights-logo.webp" alt="Fiscal Insights" class="logo-image" />
+        <img src="../assets/fiscal-insights-logo.webp" :alt="t('home.alt.logo', 'Fiscal Insights')" class="logo-image" />
       </div>
-      <h2 class="story-title">Canadian Budget</h2>
+      <h2 class="story-title">{{ t('storyCard.title', 'Canadian Budget') }}</h2>
     </div>
     
     <!-- Budget Highlight Section -->
     <div class="budget-highlight">
       <div class="fiscal-status" :class="{ 'surplus': budgetSurplus > 0, 'deficit': budgetSurplus < 0 }">
-        <div class="status-label">{{ budgetSurplus > 0 ? 'SURPLUS' : 'DEFICIT' }}</div>
+        <div class="status-label">{{ budgetSurplus > 0 ? t('storyCard.surplus', 'SURPLUS') : t('storyCard.deficit', 'DEFICIT') }}</div>
         <div class="status-value">${{ formatCurrency(Math.abs(budgetSurplus)) }}B</div>
       </div>
       
@@ -78,8 +78,14 @@
 </template>
 
 <script>
+import { useI18n } from '@/i18n'
+
 export default {
   name: 'StoryCard',
+  setup() {
+    const { t } = useI18n()
+    return { t }
+  },
   props: {
     budgetSurplus: {
       type: Number,

@@ -13,11 +13,11 @@
           <!-- Modal Header -->
           <div class="modal-header">
             <h2 class="modal-title">
-              Achievement Badges
+              {{ t('badgeGallery.title', 'Achievement Badges') }}
             </h2>
             <button
               class="close-button"
-              aria-label="Close modal"
+              :aria-label="t('badgeGallery.closeAria', 'Close modal')"
               @click="closeModal"
             >
               <span class="material-icons">close</span>
@@ -103,6 +103,9 @@
 import { computed, watch } from 'vue';
 import { useBudgetSimulatorStore } from '@/domains/budget';
 import { badgeConfig } from '@/domains/badges/config/badgeConfig';
+import { useI18n } from '@/i18n';
+
+const { t } = useI18n();
 
 // Props
 const props = defineProps({

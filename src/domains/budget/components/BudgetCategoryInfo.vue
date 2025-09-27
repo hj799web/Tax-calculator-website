@@ -10,6 +10,9 @@
 
 <script setup>
 import { computed } from 'vue';
+import { useI18n } from '@/i18n';
+
+const { t } = useI18n();
 
 const props = defineProps({
   name: {
@@ -33,7 +36,7 @@ const props = defineProps({
 const emit = defineEmits(['show-tooltip', 'hide-tooltip']);
 
 const tooltipContent = computed(() => {
-  return `${props.name}\n\n${props.description}\n\nBase Amount: $${props.baseAmount ? props.baseAmount.toFixed(1) : '0.0'}B\nCurrent Setting: ${props.currentSetting || 0}%\nAdjusted Amount: $${props.baseAmount && props.currentSetting ? (props.baseAmount * props.currentSetting / 100).toFixed(1) : '0.0'}B`;
+  return `${props.name}\n\n${props.description}\n\n${t('tooltips.baseAmount', 'Base Amount:')} $${props.baseAmount ? props.baseAmount.toFixed(1) : '0.0'}B\n${t('tooltips.currentSetting', 'Current Setting:')} ${props.currentSetting || 0}%\n${t('tooltips.adjustedAmount', 'Adjusted Amount:')} $${props.baseAmount && props.currentSetting ? (props.baseAmount * props.currentSetting / 100).toFixed(1) : '0.0'}B`;
 });
 
 function showTooltip() {

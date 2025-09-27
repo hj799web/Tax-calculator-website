@@ -1,4 +1,4 @@
-/* eslint-disable */
+﻿/* eslint-disable */
 // Lightweight i18n utility without external dependency
 import { ref } from 'vue'
 import en from './en.json'
@@ -323,7 +323,7 @@ const overrides =
   'fr': {
     'simulator': {
       'yearSelector': {
-        'aria': 'Sélecteur d’exercice fiscal',
+        'aria': 'SÃ©lecteur dâ€™exercice fiscal',
         'labels': {
           'y2024': '2023-2024'
         }
@@ -348,6 +348,37 @@ function deepMerge(target, source) {
 }
 
 const messages = { en: deepMerge(en, overrides.en), fr: deepMerge(fr, overrides.fr) }
+
+const CATEGORY_KEY_ALIASES = {
+  spending: {
+    healthcare: 'healthcareCht',
+    seniors: 'supportForSeniors',
+    childrenFamilies: 'childrenAndFamilies',
+    loansInvestments: 'loansInvestmentsAdvances'
+  },
+  'spending.subcategories': {
+    governmentBuildings: 'governmentBuildingsAndProperties',
+    researchInnovation: 'researchAndInnovation',
+    digitalGovernment: 'digitalGovernmentAndItInfrastructure',
+    federalEmployeeSalaries: 'federalEmployeeSalariesAndBenefits',
+    legalJusticeSystem: 'legalAndJusticeSystem',
+    indigenousServicesOps: 'indigenousServicesOperationalExpenses',
+    culturalHeritage: 'culturalAndHeritagePrograms',
+    scientificResearch: 'scientificResearchDevelopment',
+    diplomaticRepresentation: 'diplomaticAndInternationalRepresentation',
+    publicSafetyEmergency: 'publicSafetyAndEmergencyPreparedness'
+  },
+  taxExpenditures: {
+    personalTaxCredits: 'personalIncomeTaxCredits',
+    corporateTaxExpenditures: 'corporateTaxExpenditures',
+    gstExpenditures: 'gstHstExpenditures',
+    taxDeferrals: 'deferralsRrspRppTfsa'
+  },
+  revenue: {
+    gst: 'gstHst'
+  }
+}
+
 
 function resolveLocale() {
   if (typeof window === 'undefined') return 'en'
@@ -387,16 +418,22 @@ function format(str, params) {
 
 function translate(key, params) {
   const current = get(messages[locale.value] || {}, key)
+  if (Array.isArray(current)) {
+    return current.map(item => (typeof item === 'string' ? format(item, params) : item))
+  }
   if (typeof current === 'string') return format(current, params)
   const fallback = get(messages.en || {}, key)
+  if (Array.isArray(fallback)) {
+    return fallback.map(item => (typeof item === 'string' ? format(item, params) : item))
+  }
   if (typeof fallback === 'string') return format(fallback, params)
   return key
 }
 
 // Available locales configuration
 const locales = [
-  { code: 'en', labelKey: 'home.language.english', flag: '🇺🇸' },
-  { code: 'fr', labelKey: 'home.language.french', flag: '🇫🇷' }
+  { code: 'en', labelKey: 'home.language.english', flag: 'ðŸ‡ºðŸ‡¸' },
+  { code: 'fr', labelKey: 'home.language.french', flag: 'ðŸ‡«ðŸ‡·' }
 ]
 
 export function useI18n() {
@@ -407,8 +444,15 @@ export function useI18n() {
 
 // Helper function to get category name translation
 export function getCategoryName(categoryId, categoryType = 'spending') {
-  const key = `simulator.categories.${categoryType}.${categoryId}`;
-  return translate(key) || categoryId; // fallback to ID if translation not found
+  const resolvedId = CATEGORY_KEY_ALIASES[categoryType]?.[categoryId] || categoryId
+  const key = `simulator.categories.${categoryType}.${resolvedId}`
+  return translate(key) || categoryId
+}
+
+export function getCategoryDescription(categoryId, categoryType = 'spending') {
+  const resolvedId = CATEGORY_KEY_ALIASES[categoryType]?.[categoryId] || categoryId
+  const key = `simulator.categoryDescriptions.${categoryType}.${resolvedId}`
+  return translate(key) || ''
 }
 
 export default {
@@ -423,3 +467,4 @@ export default {
   locale,
   setLocale
 }
+

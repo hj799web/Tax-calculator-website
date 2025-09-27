@@ -8,7 +8,7 @@
       <div
         class="pie-chart-container"
         role="img"
-        aria-label="Budget 2024 Allocation Chart"
+        :aria-label="t('federalBudget.charts.ariaLabel', 'Budget 2024 Allocation Chart')"
       >
         <div class="pie-chart-inner-container">
           <Pie

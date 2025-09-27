@@ -1,11 +1,11 @@
-<template>
+﻿<template>
   <div>
     <!-- Main Export Button -->
     <button
       class="btn btn-primary mt-4"
       @click="throttledDownloadBudgetPDF(includeFullBreakdown)"
     >
-       {{ i18nText('budgetExportPanel.buttons.downloadPdf', 'Download as PDF') }}
+       {{ t('simulator.budgetExportPanel.buttons.downloadPdf') }}
     </button>
 
     <!-- Toggle for Full Breakdown -->
@@ -14,7 +14,7 @@
         v-model="includeFullBreakdown"
         type="checkbox"
       >
-      {{ i18nText('budgetExportPanel.labels.includeFullBreakdown', 'Include Full Budget Breakdown') }}
+      {{ t('simulator.budgetExportPanel.labels.includeFullBreakdown') }}
     </label>
     
     <!-- Export Card for PDF Generation - Hidden off-screen -->
@@ -51,11 +51,6 @@ import { useI18n } from '@/i18n';
 
 // i18n setup
 const { t } = useI18n();
-const i18nText = (key, fallback = '') => {
-  const value = t(key);
-  return value === key ? fallback : value;
-};
-
 const budgetStore = useBudgetSimulatorStore()
 const includeFullBreakdown = ref(true)
 
@@ -75,9 +70,9 @@ const formatPercentageChange = (value) => {
 // Get budget title
 const budgetTitle = computed(() => {
   if (budgetStore.activePreset && budgetStore.activePreset.name) {
-    return `${budgetStore.activePreset.name} Budget`
+    return t('simulator.budgetExportPanel.narrative.presetTitle', { name: budgetStore.activePreset.name })
   }
-  return 'Federal Budget Summary'
+  return t('simulator.exportCard.header.title')
 })
 
 // Calculate accurate sentiment scores directly using the computeSentimentScores function
@@ -97,43 +92,50 @@ const sentimentScores = computed(() => {
 
 // Get narrative
 const narrative = computed(() => {
-  // Get budget data for analysis
-  const surplus = budgetStore.totalRevenue - budgetStore.totalSpending;
-  const totalRevenue = budgetStore.totalRevenue || 0;
-  const totalSpending = budgetStore.totalSpending || 0;
-  
-  // Analyze spending patterns to create an accurate description
-  let spendingDescription = '';
-  
-  // Check if there are significant spending cuts
-  const hasSpendingCuts = budgetStore.spendingCategories && 
-    Object.values(budgetStore.spendingCategories).some(category => 
-      category.adjustmentFactor < 0.95 && !category.isGroup);
-  
-  // Check if there are significant spending increases
-  const hasSpendingIncreases = budgetStore.spendingCategories && 
-    Object.values(budgetStore.spendingCategories).some(category => 
-      category.adjustmentFactor > 1.05 && !category.isGroup);
-  
-  // Create an honest description based on actual budget decisions
+  const surplus = budgetStore.totalRevenue - budgetStore.totalSpending
+  const totalRevenue = budgetStore.totalRevenue || 0
+  const totalSpending = budgetStore.totalSpending || 0
+
+  let spendingKey = 'maintaining'
+
+  const hasSpendingCuts = budgetStore.spendingCategories &&
+    Object.values(budgetStore.spendingCategories).some(category =>
+      category.adjustmentFactor < 0.95 && !category.isGroup)
+
+  const hasSpendingIncreases = budgetStore.spendingCategories &&
+    Object.values(budgetStore.spendingCategories).some(category =>
+      category.adjustmentFactor > 1.05 && !category.isGroup)
+
   if (hasSpendingCuts && hasSpendingIncreases) {
-    spendingDescription = 'reallocating funds between departments';
+    spendingKey = 'reallocating'
   } else if (hasSpendingCuts) {
-    spendingDescription = 'implementing spending cuts across departments';
+    spendingKey = 'cuts'
   } else if (hasSpendingIncreases) {
-    spendingDescription = 'increasing investments in government programs';
-  } else {
-    spendingDescription = 'maintaining current spending levels';
+    spendingKey = 'investments'
   }
-  
-  // Generate the final narrative
+
+  const spendingDescription = t(`simulator.budgetExportPanel.narrative.spending.${spendingKey}`)
+
   if (surplus > 0) {
-    return `This budget achieves a surplus of ${formatCurrency(surplus)} by ${spendingDescription}. Total revenue is ${formatCurrency(totalRevenue)} against expenditures of ${formatCurrency(totalSpending)}.`;
+    return t('simulator.budgetExportPanel.narrative.templates.surplus', {
+      amount: formatCurrency(surplus),
+      description: spendingDescription,
+      revenue: formatCurrency(totalRevenue),
+      spending: formatCurrency(totalSpending)
+    })
   } else if (surplus < 0) {
-    return `This budget runs a deficit of ${formatCurrency(Math.abs(surplus))} while ${spendingDescription}. Total revenue is ${formatCurrency(totalRevenue)} against expenditures of ${formatCurrency(totalSpending)}.`;
-  } else {
-    return `This budget is balanced at ${formatCurrency(totalRevenue)} by ${spendingDescription}.`;
+    return t('simulator.budgetExportPanel.narrative.templates.deficit', {
+      amount: formatCurrency(Math.abs(surplus)),
+      description: spendingDescription,
+      revenue: formatCurrency(totalRevenue),
+      spending: formatCurrency(totalSpending)
+    })
   }
+
+  return t('simulator.budgetExportPanel.narrative.templates.balanced', {
+    revenue: formatCurrency(totalRevenue),
+    description: spendingDescription
+  })
 })
 
 // Throttle the downloadBudgetPDF function

@@ -116,7 +116,7 @@
         "description": "Get a detailed breakdown of federal and provincial taxes based on your income and province of residence, using the latest 2024 tax rates."
       },
       "spending": {
-        "title": "Government Spending Visualization", 
+        "title": "Government Spending Visualization",
         "description": "See exactly how your tax dollars are allocated across different government spending categories like healthcare, education, and defense."
       },
       "income": {
@@ -131,7 +131,7 @@
         "title": "Federal Tax Brackets (2024)",
         "brackets": [
           "15% on the first $53,359 of taxable income",
-          "20.5% on taxable income over $53,359 up to $106,717", 
+          "20.5% on taxable income over $53,359 up to $106,717",
           "26% on taxable income over $106,717 up to $165,430",
           "29% on taxable income over $165,430 up to $235,675",
           "33% on taxable income over $235,675"
@@ -184,7 +184,7 @@
           "description": "Monitor GDP growth, debt-to-GDP ratio, and fiscal balance as you make budget decisions."
         },
         {
-          "icon": "people", 
+          "icon": "people",
           "title": "Public Sentiment",
           "description": "See how different demographic groups react to your budget choices."
         },
@@ -199,7 +199,7 @@
       "cta": "Try the Canada Tax Calculator Now",
       "links": {
         "howItWorks": "How It Works",
-        "contact": "Contact Us", 
+        "contact": "Contact Us",
         "feedback": "Feedback",
         "cra": "CRA"
       },
@@ -405,6 +405,20 @@
       },
       "labels": {
         "includeFullBreakdown": "Include Full Budget Breakdown"
+      },
+      "narrative": {
+        "presetTitle": "{name} Budget",
+        "spending": {
+          "reallocating": "reallocating funds between departments",
+          "cuts": "implementing spending cuts across departments",
+          "investments": "increasing investments in government programs",
+          "maintaining": "maintaining current spending levels"
+        },
+        "templates": {
+          "surplus": "This budget achieves a surplus of {amount} by {description}. Total revenue is {revenue} against expenditures of {spending}.",
+          "deficit": "This budget runs a deficit of {amount} while {description}. Total revenue is {revenue} against expenditures of {spending}.",
+          "balanced": "This budget is balanced at {revenue} by {description}."
+        }
       }
     },
     "itemsPlanList": {
@@ -458,11 +472,59 @@
     "budgetChangesBanner": {
       "tooltips": {
         "clearAll": "Clear all changes"
+      },
+      "title": "Budget Changes",
+      "empty": {
+        "title": "No budget changes yet",
+        "subtitle": "Start adjusting taxes and spending to see changes here"
+      },
+      "summary": {
+        "revenue": "Revenue:",
+        "spending": "Spending:"
+      },
+      "totals": {
+        "title": "Current Budget Totals"
+      },
+      "categories": {
+        "all": "All",
+        "incomeTaxes": "Income Taxes",
+        "consumptionTaxes": "Consumption Taxes",
+        "otherRevenue": "Other Revenue",
+        "mainSpending": "Main Spending",
+        "loansInvestments": "Loans & Investments",
+        "governmentOperations": "Government Operations",
+        "taxCredits": "Tax Credits & Deductions",
+        "systemActions": "System Actions"
       }
     },
     "sharedBudgetDetailModal": {
       "ariaLabels": {
         "closeModal": "Close modal"
+      },
+      "title": "Shared Budget Details",
+      "metrics": {
+        "surplus": "Surplus",
+        "deficit": "Deficit",
+        "revenue": "Revenue",
+        "debtToGdp": "Debt-to-GDP"
+      },
+      "highlights": {
+        "title": "Budget Highlights"
+      },
+      "sentiment": {
+        "title": "Budget Impact Analysis",
+        "mostPositive": "Most Positive Impact",
+        "mostNegative": "Most Negative Impact",
+        "noData": "No sentiment data available for this budget."
+      },
+      "badges": {
+        "title": "Achievements Earned",
+        "fallbackDescription": "Achievement earned through budget choices",
+        "noBadges": "No badges earned with this budget yet."
+      },
+      "buttons": {
+        "apply": "Apply This Budget",
+        "createCustom": "Create My Own Budget"
       }
     },
     "fiscalChaosAlert": {
@@ -498,7 +560,7 @@
         "infoDescription": "Persistent budget deficits can lead to:",
         "infoItems": [
           "Increased debt servicing costs",
-          "Intergenerational financial burden", 
+          "Intergenerational financial burden",
           "Potential inflation pressure",
           "Reduced fiscal flexibility during economic downturns"
         ],
@@ -533,7 +595,7 @@
       "surplusGoal": "Surplus Goal:",
       "status": {
         "onTarget": "On Target",
-        "underTarget": "Under Target", 
+        "underTarget": "Under Target",
         "overTarget": "Over Target",
         "deficitTooSmall": "Deficit is too small",
         "deficitTooLarge": "Deficit is too large",
@@ -595,18 +657,27 @@
         },
         "corporate": {
           "expenditureNote": "This revenue figure includes the impact of corporate tax expenditure adjustments."
+        },
+        "nonTaxRevenue": {
+          "title": "Non-Tax Revenue",
+          "description": "Non-tax revenue includes income from fees, licences, fines, and investments that fall outside traditional taxes.",
+          "expenditureNote": "This revenue figure reflects adjustments from non-tax expenditure measures."
         }
       },
       "spending": {
         "updating": "Updating budget calculations...",
         "groupTitle": {
           "main": "Main Categories",
-          "other": "Other Categories"
+          "other": "Other Categories",
+          "governmentOperations": "Government Operations",
+          "taxExpenditures": "Tax Expenditures / Tax Credits"
         },
         "mainIntro": "Adjust spending for major federal budget categories. Increasing percentages raises spending, while decreasing them reduces spending.",
         "otherIntro": "Adjust spending for additional federal budget categories. These categories represent specialized programs and investments.",
         "subcategoriesTitle": "Subcategories",
-        "loansSubTitle": "Loans, Investments & Advances Subcategories"
+        "loansSubTitle": "Loans, Investments & Advances Subcategories",
+        "governmentOperationsIntro": "Government operations include administrative functions, transfers, and other essential government services.",
+        "taxExpendituresIntro": "Adjust tax credits and deductions to see their impact on federal revenue. Reducing credits increases revenue, while expanding them decreases revenue."
       }
     },
     "presets": {
@@ -661,7 +732,8 @@
         "customsAndImportDuties": "Customs and Import Duties",
         "crownCorporationProfits": "Crown Corporation Profits",
         "otherNonTaxRevenues": "Other Non-Tax Revenues",
-        "resourceRoyalties": "Resource Royalties"
+        "resourceRoyalties": "Resource Royalties",
+        "gstHst": "GST/HST"
       },
       "spending": {
         "healthcare": "Healthcare (CHT)",
@@ -693,7 +765,310 @@
           "legalAndJusticeSystem": "Legal and Justice System",
           "indigenousServicesOperationalExpenses": "Indigenous Services Operational Expenses",
           "culturalAndHeritagePrograms": "Cultural and Heritage Programs",
-          "diplomaticAndInternationalRepresentation": "Diplomatic and International Representation"
+          "diplomaticAndInternationalRepresentation": "Diplomatic and International Representation",
+          "businessInnovation": "Business & Innovation",
+          "scientificResearchDevelopment": "Scientific Research and Development"
+        },
+        "seniors": "Support for Seniors",
+        "childrenFamilies": "Children and Families",
+        "taxExpenditures": {
+          "gstHstExpenditures": "GST/HST Tax Expenditures",
+          "deferralsRrspRppTfsa": "Tax Deferrals RRSP, RPP, TFSA"
+        },
+        "healthcareCht": "Healthcare (CHT)",
+        "defensePublicSafety": "Defense & Public Safety",
+        "loansInvestments": "Loans, Investments & Advances"
+      },
+      "tax": {
+        "expenditures": {
+          "gst": {
+            "gstExp": "GST Tax Expenditures"
+          },
+          "deferred": {
+            "php": {
+              "phpTax": "Deferred PHP Tax"
+            }
+          },
+          "gstHstExpenditures": "GST/HST Tax Expenditures",
+          "deferralsRrspRppTfsa": "Tax Deferrals RRSP, RPP, TFSA"
+        }
+      },
+      "tooltips": {
+        "baseAmount": "Base Amount:",
+        "currentSetting": "Current Setting:",
+        "adjustedAmount": "Adjusted Amount:",
+        "noDescriptionAvailable": "No description available."
+      },
+      "taxExpenditures": {
+        "gstHstExpenditures": "GST/HST Expenditures",
+        "deferralsRrspRppTfsa": "Registered Plans (RRSP/RPP/TFSA)",
+        "personalTaxCredits": "Personal Income Tax Credits",
+        "corporateTaxExpenditures": "Corporate Tax Expenditures",
+        "gstExpenditures": "GST/HST Expenditures",
+        "taxDeferrals": "Tax Deferrals (RRSP/RPP/TFSA)"
+      }
+    },
+    "shareTitle": "My budget as Finance Minister has a",
+    "shareTitleSurplus": "surplus",
+    "shareTitleDeficit": "deficit",
+    "shareTitleAmount": "of",
+    "common": {
+      "expand": "Expand",
+      "collapse": "Collapse",
+      "totalRevenue": "Total Revenue",
+      "totalSpending": "Total Spending",
+      "revenueImpact": "Revenue impact",
+      "totalImpactOnRevenue": "Total impact on revenue",
+      "netRevenueChange": "Net revenue change"
+    },
+    "chartsPanel": {
+      "sections": {
+        "revenueSources": "Revenue Sources"
+      },
+      "buttons": {
+        "expand": "Expand",
+        "collapse": "Collapse"
+      },
+      "ariaLabels": {
+        "displayMode": "Display mode"
+      },
+      "displayModes": {
+        "amount": "Amount",
+        "percentage": "Percentage"
+      },
+      "legend": {
+        "incomeTax": "Income Tax",
+        "consumptionTax": "Consumption Tax",
+        "otherRevenue": "Other Revenue Sources"
+      },
+      "axis": {
+        "amountLabel": "Billions of Dollars",
+        "percentageLabel": "Percentage of Total Revenue"
+      }
+    },
+    "overview": {
+      "labels": {
+        "totalRevenue": "Total Revenue",
+        "totalSpending": "Total Spending",
+        "debtServicing": "Debt Servicing",
+        "surplusDeficit": "Surplus / Deficit",
+        "debtToGdp": "Debt-to-GDP"
+      }
+    },
+    "exportCard": {
+      "header": {
+        "title": "Federal Budget Summary",
+        "generatedOn": "Generated on {date} at {time}"
+      },
+      "financialSummary": {
+        "title": "Financial Summary",
+        "cards": {
+          "totalRevenue": "Total Revenue",
+          "totalSpending": "Total Spending",
+          "surplusDeficit": "Surplus/Deficit"
+        }
+      },
+      "sentiment": {
+        "title": "Public Sentiment Analysis",
+        "sections": {
+          "provinces": "Provinces & Territories",
+          "sectors": "Sectors",
+          "demographics": "Demographics"
+        },
+        "mostPositive": "Most Positive",
+        "mostNegative": "Most Negative"
+      },
+      "breakdown": {
+        "title": "Detailed Budget Breakdown",
+        "revenueSources": "Revenue Sources",
+        "spendingCategories": "Spending Categories",
+        "cards": {
+          "baseAmount": "Base Amount",
+          "adjustedAmount": "Adjusted Amount",
+          "change": "Change"
+        },
+        "table": {
+          "category": "Category",
+          "baseAmount": "Base Amount",
+          "adjustedAmount": "Adjusted Amount",
+          "change": "Change"
+        }
+      },
+      "footer": {
+        "disclaimer": "This budget summary was generated using the Canada Tax Calculator's Budget Simulator.",
+        "cta": "For more information, visit:",
+        "linkLabel": "https://hj799web.github.io/Tax-calculator-website/"
+      },
+      "defaults": {
+        "budgetTitle": "Budget Summary"
+      }
+    },
+    "categoryDescriptions": {
+      "spending": {
+        "healthcareCht": "Canada Health Transfer to provinces and territories for healthcare services.",
+        "education": "Federal education supports including transfers, grants, and learning programs.",
+        "supportForSeniors": "Old Age Security, Guaranteed Income Supplement, and other senior support programs.",
+        "childrenAndFamilies": "Canada Child Benefit and other family support programs.",
+        "indigenousServices": "Services, infrastructure, and reconciliation efforts for Indigenous communities.",
+        "employmentInsurance": "Benefits for unemployed workers, parental leave, and skills training.",
+        "defensePublicSafety": "Military, RCMP, border services, and other security agencies.",
+        "personalIncomeTaxCredits": "Tax credits and deductions for individuals, including the basic personal amount and charitable donations.",
+        "corporateTaxExpenditures": "Tax credits and deductions for businesses, including R&D credits and small business deductions.",
+        "debtServicing": "Interest payments on the federal debt (fixed cost).",
+        "loansInvestmentsAdvances": "Financial assistance programs supporting students, businesses, and international development.",
+        "governmentOperations": "Operational funding for federal departments delivering essential public services.",
+        "loansInvestments": "Financial assistance programs supporting students, businesses, and international development."
+      },
+      "spending.subcategories": {
+        "studentLoans": "Financial assistance for post-secondary education.",
+        "agricultureLoans": "Support for farmers and agricultural businesses.",
+        "internationalDevelopment": "Foreign aid and development assistance.",
+        "businessInnovation": "Loans and investments to support business growth and innovation.",
+        "defenseSector": "Investments in defense equipment and technology.",
+        "economicDevelopment": "Regional development programs and initiatives.",
+        "transportationInfrastructure": "Investments in national transportation infrastructure, including roads, bridges, ports, and rail systems.",
+        "environmentalPrograms": "Funds dedicated to climate action, conservation efforts, and environmental protection.",
+        "publicSafetyAndEmergencyPreparedness": "Funding for national security agencies to respond to emergencies and public safety threats.",
+        "governmentBuildingsAndProperties": "Maintenance and construction of government buildings for essential services.",
+        "researchAndInnovation": "Investments in research and development across sectors for scientific advances.",
+        "digitalGovernmentAndItInfrastructure": "Modernizing federal digital services and IT infrastructure.",
+        "federalEmployeeSalariesAndBenefits": "Salaries, pensions, and benefits for federal employees.",
+        "legalAndJusticeSystem": "Supports the national legal and justice system.",
+        "indigenousServicesOperationalExpenses": "Operational costs for Indigenous Services Canada.",
+        "culturalAndHeritagePrograms": "Funding for national cultural institutions and heritage preservation.",
+        "diplomaticAndInternationalRepresentation": "Operational costs of Global Affairs Canada and diplomatic missions.",
+        "scientificResearchDevelopment": "Funding for scientific research across various sectors."
+      },
+      "taxExpenditures": {
+        "personalIncomeTaxCredits": "Tax credits and deductions for individuals, including the basic personal amount and charitable donations.",
+        "corporateTaxExpenditures": "Tax credits and deductions for businesses, including R&D credits and small business deductions.",
+        "gstHstExpenditures": "GST/HST exemptions and zero-rated items such as basic groceries and prescription drugs.",
+        "deferralsRrspRppTfsa": "Tax-advantaged savings accounts including RRSPs, Registered Pension Plans, and TFSAs.",
+        "personalTaxCredits": "Tax credits and deductions for individuals, including the basic personal amount and charitable donations.",
+        "gstExpenditures": "GST/HST exemptions and zero-rated items such as basic groceries and prescription drugs.",
+        "taxDeferrals": "Tax-advantaged savings accounts including RRSPs, Registered Pension Plans, and TFSAs."
+      },
+      "revenue": {
+        "personalIncomeTax": "Controls the average effective personal income tax rate across all brackets.",
+        "corporateIncomeTax": "Reflects business contributions via corporate taxes.",
+        "gst": "Consumption-based tax, commonly 5% in Canada.",
+        "exciseTaxes": "Fuel, tobacco, and alcohol excise taxes.",
+        "carbonPricing": "Levy on carbon emissions.",
+        "eiPremiums": "Payroll contributions from employers and employees.",
+        "customsAndImportDuties": "Tariffs on imported goods.",
+        "crownCorporationProfits": "Annual profits from Crown corporations like Canada Post and EDC.",
+        "nonTaxRevenue": "Licenses, fees, and investment income.",
+        "resourceRoyalties": "Oil, gas, and mineral royalties."
+      }
+    },
+    "sentiment": {
+      "tabs": {
+        "provinces": "Provinces and territories",
+        "demographics": "Demographics",
+        "sectors": "Sectors"
+      },
+      "headers": {
+        "regions": "Regions",
+        "demographics": "Demographics",
+        "sectors": "Sectors"
+      },
+      "sections": {
+        "top": "Top 3",
+        "bottom": "Bottom 3",
+        "allRegions": "All regions",
+        "allDemographics": "All demographics",
+        "allSectors": "All sectors"
+      },
+      "tooltips": {
+        "score": "{label}: {score} (change {delta})"
+      },
+      "radar": {
+        "title": "Public Sentiment",
+        "scenarioImpact": "Scenario Impact: {label}",
+        "toggle": {
+          "base": "Base Reactions",
+          "scenario": "Scenario Impact"
+        },
+        "delta": {
+          "increased": "Increased",
+          "decreased": "Decreased"
+        },
+        "intensity": {
+          "strong": "Strong",
+          "moderate": "Moderate"
+        },
+        "direction": {
+          "positive": "Positive",
+          "negative": "Negative"
+        },
+        "scenarioImpactText": "{intensity} {direction} impact: {value}",
+        "tooltip": {
+          "noData": "No data",
+          "scoreWithLabel": "Score: {score} - {label}",
+          "impactFactors": "Impact factors",
+          "factorLine": "- {name}: {description}{impact}",
+          "scoreOnly": "Score: {score}"
+        },
+        "datasetLabel": "Sentiment"
+      },
+      "sensitivity": {
+        "title": "Public Sentiment Sensitivity",
+        "loading": "Updating sentiment settings…",
+        "overall": "Overall Sensitivity",
+        "reset": "Reset to Default",
+        "regions": "Provinces and Territories Multiplier",
+        "demographics": "Demographics Multiplier",
+        "sectors": "Sectors Multiplier"
+      },
+      "groups": {
+        "provinces": {
+          "alberta": "Alberta",
+          "britishColumbia": "British Columbia",
+          "manitoba": "Manitoba",
+          "newBrunswick": "New Brunswick",
+          "newfoundlandAndLabrador": "Newfoundland and Labrador",
+          "northwestTerritories": "Northwest Territories",
+          "novaScotia": "Nova Scotia",
+          "nunavut": "Nunavut",
+          "ontario": "Ontario",
+          "princeEdwardIsland": "Prince Edward Island",
+          "quebec": "Quebec",
+          "saskatchewan": "Saskatchewan",
+          "yukon": "Yukon"
+        },
+        "demographics": {
+          "families": "Families",
+          "indigenousPeoples": "Indigenous Peoples",
+          "newImmigrants": "New Immigrants",
+          "renters": "Renters",
+          "rural": "Rural",
+          "seniors": "Seniors",
+          "smallBusinessOwners": "Small Business Owners",
+          "students": "Students",
+          "techWorkers": "Tech Workers",
+          "unionizedWorkers": "Unionized Workers",
+          "urban": "Urban",
+          "veterans": "Veterans",
+          "workers": "Workers",
+          "youth": "Youth"
+        },
+        "sectors": {
+          "agriculture": "Agriculture",
+          "business": "Business Services",
+          "creativeIndustries": "Creative Industries",
+          "defense": "Defense",
+          "education": "Education",
+          "energy": "Energy",
+          "environment": "Environment & Climate",
+          "finance": "Financial Services",
+          "healthcare": "Healthcare",
+          "indigenous": "Indigenous Services",
+          "manufacturing": "Manufacturing",
+          "publicSector": "Public Sector",
+          "realEstate": "Real Estate & Construction",
+          "technology": "Technology",
+          "tourism": "Tourism & Hospitality",
+          "veteransServices": "Veterans Services"
         }
       }
     }
@@ -1559,5 +1934,11 @@
     "a11": "You can stay updated by following official government publications such as the",
     "a11_link": "Public Accounts of Canada",
     "a11_rest": "visiting the Department of Finance website, and monitoring reputable news sources that cover fiscal policies and budget updates. The Public Accounts provide detailed information on government revenues, expenditures, assets, and liabilities. Public consultations and local Member of Parliament (MP) sessions are also good channels for getting involved."
+  },
+  "tooltips": {
+    "baseAmount": "Base Amount:",
+    "currentSetting": "Current Setting:",
+    "adjustedAmount": "Adjusted Amount:",
+    "noDescriptionAvailable": "No description available."
   }
 }

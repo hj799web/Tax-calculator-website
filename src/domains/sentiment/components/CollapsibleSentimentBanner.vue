@@ -5,13 +5,13 @@
     @keyup.enter="toggle"
     @click="toggleCollapse"
     role="button"
-    aria-label="Show public sentiment details"
+    :aria-label="t('sentiment.showPublicSentimentDetails', 'Show public sentiment details')"
   >
     <span class="pill-content">
       <span v-if="fiscalChaosFlag" class="emoji" :aria-label="label">🚨</span>
       <span v-if="!collapsed">
         <span class="score-label">
-          <span v-if="fiscalChaosFlag" class="fiscal-warning-text">FISCAL CHAOS WARNING!</span>
+          <span v-if="fiscalChaosFlag" class="fiscal-warning-text">{{ t('sentiment.fiscalChaosWarning', 'FISCAL CHAOS WARNING!') }}</span>
           <transition name="score-fade" mode="out-in">
             <span class="score" :key="animatedScore">{{ animatedScore.toFixed(1) }}</span>
           </transition>
@@ -46,6 +46,9 @@
 import { ref, computed, watch, nextTick } from 'vue'
 import SentimentGroupSelector from './SentimentGroupSelector.vue'
 import { useBudgetSimulatorStore } from '@/domains/budget/store/budgetSimulator'
+import { useI18n } from '@/i18n'
+
+const { t } = useI18n()
 
 // Get access to the budget store
 const budgetStore = useBudgetSimulatorStore()

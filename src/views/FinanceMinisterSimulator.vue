@@ -71,6 +71,26 @@
       </div>
       <div class="flex justify-between items-center mb-0">
         <h1 class="main-title">{{ t('simulator.header.title') }}</h1>
+        <div class="language-switch">
+          <label class="language-label" for="simulator-language-switch">
+            {{ t('home.language.label') }}
+          </label>
+          <select
+            id="simulator-language-switch"
+            class="language-select"
+            :value="locale"
+            @change="handleLocaleChange"
+            :aria-label="t('home.language.switchLabel')"
+          >
+            <option
+              v-for="option in locales"
+              :key="option.code"
+              :value="option.code"
+            >
+              {{ t(option.labelKey) }}
+            </option>
+          </select>
+        </div>
       </div>
 
       <MainNavigation />
@@ -397,7 +417,8 @@ const totalRevenue = computed(() => budgetStore.fiscalIndicators?.totalRevenue |
 const totalSpending = computed(() => budgetStore.fiscalIndicators?.totalSpending || 0);
 const shareTitle = computed(() => {
   const surplus = budgetSurplus.value;
-  return `My budget as Finance Minister has a ${surplus > 0 ? 'surplus' : 'deficit'} of $${Math.abs(surplus).toFixed(1)}B`;
+  const surplusType = surplus > 0 ? t('simulator.shareTitleSurplus') : t('simulator.shareTitleDeficit');
+  return `${t('simulator.shareTitle')} ${surplusType} ${t('simulator.shareTitleAmount')} $${Math.abs(surplus).toFixed(1)}B`;
 });
 
 const sentimentScores = computed(() => {
@@ -793,11 +814,43 @@ const collapseAllSections = () => {
   Object.keys(sectionsExpanded.value).forEach(section => sectionsExpanded.value[section] = false);
 };
 
-const { t } = useI18n()
+const { t, locale, locales, setLocale } = useI18n()
+const handleLocaleChange = (event) => {
+  setLocale(event.target.value)
+}
+
 </script>
 
 <style scoped>
 /* 1. Modern Typography */
+  .language-switch {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .language-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--fg);
+  }
+
+  .language-select {
+    padding: 0.35rem 0.6rem;
+    border-radius: 6px;
+    border: 1px solid rgba(52, 152, 219, 0.35);
+    background: #fff;
+    color: var(--fg);
+    font-weight: 500;
+  }
+
+  .language-select:focus {
+    outline: none;
+    border-color: #27ae60;
+    box-shadow: 0 0 0 2px rgba(39, 174, 96, 0.25);
+  }
+
 .finance-minister-simulator, .simulator-card, .sentiment-card {
   font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial, sans-serif;
   color: var(--fg);
@@ -1615,6 +1668,21 @@ input:focus, select:focus, textarea:focus {
 }
 
 @media (max-width: 768px) {
+  .language-switch {
+    margin-left: 0;
+    margin-top: 0.75rem;
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .language-label {
+    font-size: 0.8rem;
+  }
+
+  .language-select {
+    font-size: 0.8rem;
+  }
+
   .sub-navigation {
     gap: 8px;
     padding: 8px;

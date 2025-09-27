@@ -23,7 +23,7 @@
     <div class="budget-action-buttons">
       <button
         class="toggle-all-button"
-        aria-label="Toggle all budget category details"
+        :aria-label="t('budgetCategories.actions.toggleAll.ariaLabel', 'Toggle all budget category details')"
         @click="toggleAll"
       >
         {{ allExpanded ? translate('budgetCategories.actions.toggleAll.collapse', 'Hide All') : translate('budgetCategories.actions.toggleAll.expand', 'Expand All') }}

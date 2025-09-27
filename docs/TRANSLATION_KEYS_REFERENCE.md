@@ -158,6 +158,64 @@ const { t } = useI18n()
 const categoryName = t(`budgetCategories.y2024.${categoryId}.name`)
 ```
 
+## Simulator Keys (`simulator.*`)
+
+### Main Simulator
+- `simulator.title` - "Finance Minister Simulator"
+- `simulator.controls.previousYear` - "Previous year"
+- `simulator.controls.nextYear` - "Next year"
+
+### Common Controls
+- `simulator.controls.common.base` - "Base:"
+- `simulator.controls.common.current` - "Current:"
+- `simulator.controls.common.reset` - "Reset"
+- `simulator.controls.common.resetTooltip` - "Reset to baseline"
+- `simulator.controls.common.expand` - "Expand"
+- `simulator.controls.common.collapse` - "Collapse"
+- `simulator.controls.common.taxImpact` - "Tax Expenditure Impact:"
+
+### Revenue Controls
+- `simulator.controls.revenue.summaryTitle` - "About these sliders"
+- `simulator.controls.revenue.summaryBody` - Long description text
+- `simulator.controls.revenue.summaryItems.personal` - Personal income tax description
+- `simulator.controls.revenue.summaryItems.corporate` - Corporate income tax description
+- `simulator.controls.revenue.summaryItems.credits` - Tax credits description
+- `simulator.controls.revenue.summaryFooter` - Footer text
+- `simulator.controls.revenue.groupTitle.incomeTaxes` - "Income Taxes"
+- `simulator.controls.revenue.groupTitle.consumptionTaxes` - "Consumption Taxes"
+- `simulator.controls.revenue.groupTitle.otherRevenues` - "Other Revenue Sources"
+
+### Cards
+- `simulator.cards.budgetGoals` - "Budget Goals"
+- `simulator.cards.budgetResults` - "Budget Results"
+- `simulator.cards.revenueSources` - "Revenue Sources"
+- `simulator.cards.spendingControls` - "Spending Controls"
+- `simulator.cards.budgetAnalysis` - "Budget Analysis"
+
+### Year Simulator Modal
+- `simulator.yearSimulatorModal.sections.revenueAdjustments` - "Revenue Adjustments"
+- `simulator.yearSimulatorModal.sections.spendingAdjustments` - "Spending Adjustments"
+- `simulator.yearSimulatorModal.placeholders.scenarioName` - "Scenario name (optional)"
+- `simulator.yearSimulatorModal.buttons.saveScenario` - "Save Scenario"
+
+### Spending Growth Controls
+- `spendingGrowthControls.title` - "Program Spending Growth (%)"
+- `spendingGrowthControls.titleTooltip` - Tooltip text
+- `spendingGrowthControls.titleAriaLabel` - "About Program Spending Growth"
+- `spendingGrowthControls.search.placeholder` - "Filter categories (e.g., health, seniors)"
+- `spendingGrowthControls.headers.category` - "Category"
+- `spendingGrowthControls.headers.baseline` - "Baseline"
+- `spendingGrowthControls.headers.demographic` - "Demographic"
+- `spendingGrowthControls.buttons.resetAll` - "Reset all"
+- `spendingGrowthControls.buttons.reset` - "Reset"
+
+### Component-Specific Keys
+- `simulator.fiscalChaosAlert.ariaLabels.fiscalChaos` - "Fiscal Chaos"
+- `simulator.sharedBudgetDetailModal.ariaLabels.closeModal` - "Close modal"
+- `simulator.budgetChangesBanner.tooltips.clearAll` - "Clear all changes"
+- `simulator.budgetResults.tooltips.downloadImage` - "Download as Image"
+- `federalBudget.charts.ariaLabel` - "Budget 2024 Allocation Chart"
+
 ## Adding New Translations
 
 1. **Add key to both `en.json` and `fr.json`**
