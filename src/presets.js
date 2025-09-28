@@ -595,7 +595,7 @@ export function setPreset(presetKey, store) {
         Ontario: 1.3,      // Urban support
         Quebec: 1.4,       // Strong social program support
         BritishColumbia: 1.3, // Environmental support
-        Alberta: 1.1,      // Limited support
+        Alberta: 0.95,     // Net negative response to higher carbon pricing
         Manitoba: 1.2,     // Moderate support
         Saskatchewan: 1.1,  // Limited support
         NovaScotia: 1.3,   // Healthcare support

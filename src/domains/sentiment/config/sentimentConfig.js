@@ -248,8 +248,9 @@ export const sentimentConfig = {
         // Carbon pricing resistance
         "revenueMix.carbonPricing": [
           { max: 0.01, score: 9 },  // Elimination of carbon tax
-          { max: 0.6 * MAX_MULTIPLIER, score: 2 }, // Low carbon tax
-          { min: 2 * MIN_MULTIPLIER, score: -25 } // High carbon prices
+          { max: 0.6 * MAX_MULTIPLIER, score: 1 }, // Low carbon tax (reduced positive impact)
+          // Raise the threshold so only higher carbon pricing triggers, and increase penalty
+          { min: 8 * MIN_MULTIPLIER, score: -35 } // High carbon prices (stronger negative)
         ],
 
         // Resource sector support
