@@ -99,7 +99,7 @@
       },
       title: {
         display: true,
-        text: t('federalBudget.descriptions.budget2024'),
+        text: t('federalBudget.shortTitles.y2024Comprehensive'),
         font: {
           size: 14
         }

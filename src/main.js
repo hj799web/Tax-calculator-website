@@ -27,11 +27,33 @@ if (process.env.NODE_ENV === 'development') {
 app.config.errorHandler = (err, vm, info) => {
   console.error('[App Error]', err, info)
   
+  // Handle chunk loading errors specifically
+  if (err.name === 'ChunkLoadError' || err.message?.includes('Loading chunk')) {
+    console.error('[Chunk Load Error]', err)
+    // Retry loading the chunk
+    if (window.location) {
+      window.location.reload()
+    }
+    return
+  }
+  
   // In production, you might want to send this to an error reporting service
   if (process.env.NODE_ENV === 'production') {
     // Example: Sentry.captureException(err)
   }
 }
+
+// Global chunk loading error handler
+window.addEventListener('unhandledrejection', (event) => {
+  if (event.reason && event.reason.name === 'ChunkLoadError') {
+    console.error('[Chunk Load Error]', event.reason)
+    // Retry by reloading the page
+    if (window.location) {
+      window.location.reload()
+    }
+    event.preventDefault()
+  }
+})
 
 // Initialize the budget simulator store
 const budgetStore = useBudgetSimulatorStore()

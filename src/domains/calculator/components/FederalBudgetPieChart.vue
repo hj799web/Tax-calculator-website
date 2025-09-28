@@ -84,12 +84,10 @@ const chartData = computed(() => ({
       },
       title: {
         display: true,
-        text: yearStore.selectedTaxYear === '2025' ? 
-          t('federalBudget.descriptions.estimates2025') :
-          t('federalBudget.descriptions.budget2024'),
-        font: {
-          size: 14
-        }
+        text: yearStore.selectedTaxYear === '2025'
+          ? t('federalBudget.shortTitles.y2025')
+          : t('federalBudget.shortTitles.y2024'),
+        font: { size: 14 }
       },
       tooltip: {
         enabled: true,

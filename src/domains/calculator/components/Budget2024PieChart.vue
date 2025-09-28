@@ -69,11 +69,13 @@ const budget2024DataComputed = computed(() => {
   if (total === 0) {
     return budgetCategories2024.map(c => ({
       category: getCategoryTranslation(c.key || c.name),
+      categoryKey: c.key,
       amount: 0,
     }))
   }
   return budgetCategories2024.map(c => ({
     category: getCategoryTranslation(c.key || c.name),
+    categoryKey: c.key,
     amount: (c.amount / total) * netFederalTaxPerPeriod.value,
   }))
 })
@@ -109,10 +111,8 @@ const chartOptions = computed(() => ({
     },
     title: {
       display: true,
-      text: t('federalBudget.descriptions.budget2024'),
-      font: {
-        size: 14
-      }
+      text: t('federalBudget.shortTitles.y2024Proposed'),
+      font: { size: 14 }
     },
     tooltip: {
       enabled: true,

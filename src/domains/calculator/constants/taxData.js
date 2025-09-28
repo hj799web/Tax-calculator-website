@@ -668,66 +668,77 @@ export const provincialTaxBrackets = provincialTaxBrackets2023;
 export const budgetCategories2022 = [
   {
     id: 1,
+    key: 'healthcare',
     name: 'Healthcare (Canada Health Transfer)',
     amount: 58200000000,
     description: 'Funding for healthcare systems across Canada, including medical and technical aid, healthcare professionals training, and public health initiatives.'
   },
   {
     id: 2,
+    key: 'childrenAndFamilies',
     name: 'Children and Families',
     amount: 26900000000,
     description: 'Support for families with children, including the Canada Child Benefit (CCB), childcare initiatives, and family support programs.'
   },
   {
     id: 3,
+    key: 'indigenousServices',
     name: 'Indigenous Services',
     amount: 39800000000,
     description: 'Funding for Indigenous communities, including healthcare, education, infrastructure, and community development.'
   },
   {
     id: 4,
+    key: 'employmentInsuranceAndBenefits',
     name: 'Employment Insurance and Benefits',
     amount: 35600000000,
     description: 'Employment insurance benefits and related employment programs.'
   },
   {
     id: 5,
+    key: 'supportForSeniors',
     name: 'Support for Seniors',
     amount: 69100000000,
     description: 'Old Age Security, Guaranteed Income Supplement, and other senior support programs.'
   },
   {
     id: 6,
+    key: 'defense',
     name: 'Defense',
     amount: 36400000000,
     description: 'National defense spending, including military procurement, operations, and personnel costs.'
   },
   {
     id: 7,
+    key: 'publicSafetyAndEmergencyPreparedness',
     name: 'Public Safety and Emergency Preparedness',
     amount: 11600000000,
     description: 'Funding for police, border security, corrections, and emergency management.'
   },
   {
     id: 8,
+    key: 'internationalAffairsAndDevelopment',
     name: 'International Affairs and Development',
     amount: 9800000000,
     description: 'International aid, diplomacy, and global development initiatives.'
   },
   {
     id: 9,
+    key: 'publicDebtCharges',
     name: 'Public Debt Charges',
     amount: 42700000000,
     description: 'Interest payments on the federal debt.'
   },
   {
     id: 10,
+    key: 'loansInvestmentsAndAdvances',
     name: 'Loans, Investments, and Advances',
     amount: 10000000000,
     description: 'Government loans, investments, and financial advances.'
   },
   {
     id: 11,
+    key: 'otherGovernmentOperations',
     name: 'Other Government Operations',
     amount: 242000000000,
     description: 'Various government operations including General Public Services ($40B), Social Protection Programs ($30B), Economic Affairs ($12B), and other departments and agencies.'
@@ -741,54 +752,63 @@ export const budgetCategories = budgetCategories2022;
 export const budgetCategories2024 = [
   {
     id: 1,
+    key: 'healthcareCanadaHealthTransfer',
     name: 'Healthcare (Canada Health Transfer)',
     amount: 50400000000,
     description: 'The federal government supports provincial and territorial healthcare systems through the Canada Health Transfer (CHT). This funding assists in delivering universal healthcare, including hospitals, healthcare professionals, and public health initiatives. Healthcare expenditures represent approximately 10% of total federal spending.'
   },
   {
     id: 2,
+    key: 'supportForSeniors',
     name: 'Support for Seniors',
     amount: 76000000000,
     description: 'This allocation funds programs like Old Age Security (OAS) and the Guaranteed Income Supplement (GIS), providing basic income support to seniors. Driven by Canada\'s aging population, these programs account for around 14% of total federal spending.'
   },
   {
     id: 3,
+    key: 'childrenAndFamilies',
     name: 'Children and Families',
     amount: 26300000000,
     description: 'The Canada Child Benefit (CCB) offers income support to low- and middle-income families to assist with child-rearing costs. This initiative plays a crucial role in reducing child poverty and constitutes about 6% of federal spending.'
   },
   {
     id: 4,
+    key: 'indigenousServicesAndReconciliation',
     name: 'Indigenous Services and Reconciliation',
     amount: 35500000000,
     description: 'This funding supports Indigenous communities through initiatives in healthcare, education, infrastructure, and reconciliation efforts, including land claim settlements. Indigenous services represent around 7% of the total federal budget.'
   },
   {
     id: 5,
+    key: 'employmentInsuranceAndOtherBenefits',
     name: 'Employment Insurance and Other Benefits',
     amount: 23100000000,
     description: 'Funding for Employment Insurance (EI) provides income support to temporarily unemployed workers, new parents, and seasonal employees. This category also includes retraining and skill development programs, making up around 5% of federal spending.'
   },
   {
     id: 6,
+    key: 'defenseAndPublicSafety',
     name: 'Defense and Public Safety',
     amount: 32600000000,
     description: 'Expenditures cover the Canadian Armed Forces, military procurement (e.g., ships, aircraft), and public safety programs like border security and cybersecurity. This reflects Canada\'s defense commitments and represents about 6% of the total budget.'
   },
   {
     id: 7,
+    key: 'debtServicingPublicDebtCharges',
     name: 'Debt Servicing (Public Debt Charges)',
     amount: 47300000000,
     description: 'Payments for interest on Canada\'s national debt, which totaled $1.173 trillion by the end of the fiscal year. Rising interest rates have increased debt servicing costs, accounting for around 9% of total spending.'
   },
   {
     id: 8,
+    key: 'loansInvestmentsAndAdvances',
     name: 'Loans, Investments, and Advances',
     amount: 10000000000,
     description: 'This category encompasses various financial assistance programs including Student Loans ($24B total portfolio), Agriculture Loans ($162M), International Development and Loans ($53B total), Business and Innovation Loans ($600M), Defense Sector Loans ($1.45B), and Economic Development Loans.'
   },
   {
     id: 9,
+    key: 'otherGovernmentOperations',
     name: 'Other Government Operations',
     amount: 140000000000,
     description: 'This category includes Transportation Infrastructure ($15B), Environmental Programs ($8B), Public Safety ($9B), Government Buildings ($7B), Research and Innovation ($10B), Digital Government ($5B), Federal Employee Salaries ($35B), Legal and Justice System ($5B), Indigenous Services Operations ($4B), Cultural Programs ($2B), Scientific R&D ($5B), and Diplomatic Representation ($5B).'

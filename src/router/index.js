@@ -1,32 +1,33 @@
 // src/router/index.js
 import { createRouter, createWebHashHistory } from 'vue-router'
+import { createSafeImport } from '@/utils/chunkLoader.js'
 
 // Route-level lazy loading with loading states for better mobile performance
 const routes = [
   {
     path: '/',
     name: 'home',
-    component: () => import('../App.vue')
+    component: createSafeImport(() => import('../App.vue'), 'app')
   },
   {
     path: '/welcome',
     name: 'welcome',
-    component: () => import('../views/WelcomeView.vue')
+    component: createSafeImport(() => import('../views/WelcomeView.vue'), 'welcome')
   },
   {
     path: '/how-it-works',
     name: 'how-it-works',
-    component: () => import('../views/HowItWorksView.vue')
+    component: createSafeImport(() => import('../views/HowItWorksView.vue'), 'how-it-works')
   },
   {
     path: '/simulator',
     name: 'finance-minister-simulator',
-    component: () => import('../views/FinanceMinisterSimulator.vue')
+    component: createSafeImport(() => import('../views/FinanceMinisterSimulator.vue'), 'simulator')
   },
   {
     path: '/budget-simulator',
     name: 'shared-budget',
-    component: () => import('../views/FinanceMinisterSimulator.vue'),
+    component: createSafeImport(() => import('../views/FinanceMinisterSimulator.vue'), 'simulator'),
     meta: {
       isSharedBudget: true
     },
@@ -36,7 +37,7 @@ const routes = [
   {
     path: '/terms-of-service',
     name: 'terms-of-service',
-    component: () => import('../views/TermsOfServiceView.vue')
+    component: createSafeImport(() => import('../views/TermsOfServiceView.vue'), 'terms')
   }
 ]
 

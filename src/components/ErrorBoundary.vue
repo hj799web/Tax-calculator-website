@@ -50,6 +50,17 @@ provide('errorBoundary', {
 onErrorCaptured((err, instance, info) => {
   console.error(`[ErrorBoundary] Error in ${props.componentName}:`, err, info);
   
+  // Handle chunk loading errors specifically
+  if (err.name === 'ChunkLoadError' || err.message?.includes('Loading chunk')) {
+    console.error(`[ErrorBoundary] Chunk loading error in ${props.componentName}:`, err);
+    // Try to reload the page to recover from chunk loading errors
+    setTimeout(() => {
+      if (window.location) {
+        window.location.reload();
+      }
+    }, 2000);
+  }
+  
   // Log error with context
   handleError(err, (msg) => {
     console.error(`[ErrorBoundary] ${msg}`);

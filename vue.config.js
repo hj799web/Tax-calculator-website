@@ -28,6 +28,11 @@ module.exports = {
         'vue$': 'vue/dist/vue.esm-bundler.js',
       },
     },
+    // Add chunk loading error handling
+    output: {
+      chunkLoadingGlobal: 'webpackChunkTaxCalculator',
+      chunkLoadTimeout: 30000, // 30 seconds timeout
+    },
     plugins: [
       new webpack.DefinePlugin({
         __VUE_PROD_DEVTOOLS__: false,
@@ -48,10 +53,10 @@ module.exports = {
       splitChunks: {
         chunks: 'all',
         minSize: 20000,
-        maxSize: 512000,
+        maxSize: 244000, // Reduced from 512000 to prevent large chunks
         minChunks: 1,
-        maxAsyncRequests: 30,
-        maxInitialRequests: 30,
+        maxAsyncRequests: 20, // Reduced from 30
+        maxInitialRequests: 20, // Reduced from 30
         enforceSizeThreshold: 50000,
         cacheGroups: {
           // Critical framework chunk - load first

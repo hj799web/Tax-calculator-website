@@ -2,6 +2,27 @@
   command = "npm run build"
   publish = "dist"
   
+# Handle SPA routing - only redirect non-asset requests
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  conditions = {Role = ["admin"], Country = ["!*"]}
+
+# Specific redirects for assets to prevent MIME type issues
+[[redirects]]
+  from = "/js/*"
+  to = "/js/:splat"
+  status = 200
+  headers = {Content-Type = "application/javascript"}
+
+[[redirects]]
+  from = "/css/*"
+  to = "/css/:splat"
+  status = 200
+  headers = {Content-Type = "text/css"}
+
+# Fallback for SPA routing (must be last)
 [[redirects]]
   from = "/*"
   to = "/index.html"
@@ -30,3 +51,28 @@
     
     # Strict-Transport-Security - Enforces HTTPS
     Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+
+# Specific headers for JavaScript files
+[[headers]]
+  for = "/js/*"
+  [headers.values]
+    Content-Type = "application/javascript; charset=utf-8"
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Specific headers for CSS files
+[[headers]]
+  for = "/css/*"
+  [headers.values]
+    Content-Type = "text/css; charset=utf-8"
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Specific headers for other assets
+[[headers]]
+  for = "/img/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

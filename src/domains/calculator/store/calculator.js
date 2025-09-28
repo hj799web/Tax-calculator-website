@@ -342,15 +342,17 @@ export const useCalculatorStore = defineStore('calculator', () => {
 
   const federalBudgetData = computed(() => {
     const budgetCats = yearStore.budgetYear === '2024' ? budgetCategories2024 : budgetCategories2022;
-    
+
     if (netFederalTaxPerPeriod.value === 0) {
       return budgetCats.map((cat) => ({
         category: cat.name,
+        categoryKey: cat.key,
         amount: 0,
       }));
     }
     return budgetCats.map((cat) => ({
       category: cat.name,
+      categoryKey: cat.key,
       amount: (netFederalTaxPerPeriod.value * cat.amount) / totalBudget.value,
     }));
   });

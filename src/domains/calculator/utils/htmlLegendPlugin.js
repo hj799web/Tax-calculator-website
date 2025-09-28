@@ -19,10 +19,8 @@ export const htmlLegendPlugin = {
       const value = dataset.data[i]
       const percentage = total ? ((value / total) * 100).toFixed(2) : '0.00'
       const color = dataset.backgroundColor[i]
-      const formattedValue = value.toLocaleString('en-CA', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      })
+      const locale = (typeof navigator !== 'undefined' ? navigator.language : 'en-CA') || 'en-CA'
+      const formattedValue = new Intl.NumberFormat(locale, { style: 'currency', currency: 'CAD', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value)
 
       const legendItem = document.createElement('div')
       legendItem.style.display = 'flex'
@@ -38,7 +36,7 @@ export const htmlLegendPlugin = {
       colorBox.style.borderRadius = '2px'
 
       const text = document.createElement('span')
-      text.textContent = `${label}: $${formattedValue} (${percentage}%)`
+      text.textContent = `${label}: ${formattedValue} (${percentage}%)`
 
       legendItem.appendChild(colorBox)
       legendItem.appendChild(text)
