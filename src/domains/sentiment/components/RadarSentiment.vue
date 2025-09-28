@@ -540,19 +540,19 @@ function translateEntityName(tab, name) {
   if (tab === 'provinces') {
     // Map display names to translation keys
     const provinceKeyMap = {
-      'Alberta': 'sentiment.provinces.alberta',
-      'British Columbia': 'sentiment.provinces.britishColumbia',
-      'Manitoba': 'sentiment.provinces.manitoba',
-      'New Brunswick': 'sentiment.provinces.newBrunswick',
-      'Newfoundland and Labrador': 'sentiment.provinces.newfoundlandAndLabrador',
-      'Northwest Territories': 'sentiment.provinces.northwestTerritories',
-      'Nova Scotia': 'sentiment.provinces.novaScotia',
-      'Nunavut': 'sentiment.provinces.nunavut',
-      'Ontario': 'sentiment.provinces.ontario',
-      'Prince Edward Island': 'sentiment.provinces.princeEdwardIsland',
-      'Quebec': 'sentiment.provinces.quebec',
-      'Saskatchewan': 'sentiment.provinces.saskatchewan',
-      'Yukon': 'sentiment.provinces.yukon'
+      'Alberta': 'sentiment.groups.provinces.alberta',
+      'British Columbia': 'sentiment.groups.provinces.britishColumbia',
+      'Manitoba': 'sentiment.groups.provinces.manitoba',
+      'New Brunswick': 'sentiment.groups.provinces.newBrunswick',
+      'Newfoundland and Labrador': 'sentiment.groups.provinces.newfoundlandAndLabrador',
+      'Northwest Territories': 'sentiment.groups.provinces.northwestTerritories',
+      'Nova Scotia': 'sentiment.groups.provinces.novaScotia',
+      'Nunavut': 'sentiment.groups.provinces.nunavut',
+      'Ontario': 'sentiment.groups.provinces.ontario',
+      'Prince Edward Island': 'sentiment.groups.provinces.princeEdwardIsland',
+      'Quebec': 'sentiment.groups.provinces.quebec',
+      'Saskatchewan': 'sentiment.groups.provinces.saskatchewan',
+      'Yukon': 'sentiment.groups.provinces.yukon'
     };
     
     const translationKey = provinceKeyMap[name];
@@ -568,7 +568,7 @@ function translateEntityName(tab, name) {
       return index === 0 ? word.toLowerCase() : word.toUpperCase();
     }).replace(/\s+/g, '');
     
-    const translationKey = `sentiment.${tab}.${camelCaseName}`;
+    const translationKey = `sentiment.groups.${tab}.${camelCaseName}`;
     const translated = t(translationKey, name);
     
     // If translation key doesn't exist, return the original name
