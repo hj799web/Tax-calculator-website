@@ -176,26 +176,26 @@
       </div>
       <div v-if="showYearModal" class="year-editor">
         <div class="ye-header">
-          <h4>Edit {{ selectedYear }} (program spending)</h4>
-          <button class="btn" @click="closeYearEditor">Close</button>
+          <h4>{{ i18nText('projectionsPanel.editYearTitle', 'Edit {year} (program spending)')?.replace('{year}', selectedYear) }}</h4>
+          <button class="btn" @click="closeYearEditor">{{ i18nText('common.close', 'Close') }}</button>
         </div>
         <div class="ye-grid">
           <div class="row">
-            <label :title="t('projectionsPanel.spendingBoostTooltip', 'One-time adjustment to program spending for this year')">{{ t('projectionsPanel.spendingBoost', 'Spending boost (%)') }}</label>
+            <label :title="i18nText('projectionsPanel.spendingBoostTooltip', 'One-time adjustment to program spending for this year')">{{ i18nText('projectionsPanel.spendingBoost', 'Program spending boost (%)') }}</label>
             <input type="number" step="0.5" :min="-15" :max="15" v-model.number="yearLevel" />
           </div>
           <div class="row">
-            <label :title="t('projectionsPanel.growthRateBoostTooltip', 'Adjusts growth rate for this year and forward. +0.5 means spending grows 0.5 percentage points faster.')">{{ t('projectionsPanel.growthRateBoost', 'Growth rate boost (pp)') }}</label>
+            <label :title="i18nText('projectionsPanel.growthRateBoostTooltip', 'Adjusts growth rate for this year and forward. +0.5 means spending grows 0.5 percentage points faster.')">{{ i18nText('projectionsPanel.growthRateBoost', 'Growth rate boost (pp)') }}</label>
             <input type="number" step="0.1" v-model.number="yearGrowth" />
           </div>
           <div class="row">
-            <label>Apply forward</label>
+            <label>{{ i18nText('projectionsPanel.applyForward', 'Apply forward') }}</label>
             <input type="checkbox" v-model="applyForward" />
           </div>
         </div>
         <div class="ye-actions">
-          <button class="btn" @click="resetYearOverrides">Reset year</button>
-          <button class="btn primary" @click="applyYearOverrides">Apply</button>
+          <button class="btn" @click="resetYearOverrides">{{ i18nText('projectionsPanel.resetYear', 'Reset year') }}</button>
+          <button class="btn primary" @click="applyYearOverrides">{{ i18nText('common.apply', 'Apply') }}</button>
         </div>
       </div>
     </div>

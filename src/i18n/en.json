@@ -465,9 +465,20 @@
       }
     },
     "projectionsPanel": {
+      "editYearTitle": "Edit {year} (program spending)",
+      "spendingBoost": "Program spending boost (%)",
+      "spendingBoostTooltip": "One-time adjustment to program spending for this year",
+      "growthRateBoost": "Growth rate boost (pp)",
+      "growthRateBoostTooltip": "Adjusts growth rate for this year and forward. +0.5 means spending grows 0.5 percentage points faster.",
+      "applyForward": "Apply forward",
+      "resetYear": "Reset year",
       "ariaLabels": {
         "deficitChart": "Historical and projected deficit line chart"
       }
+    },
+    "common": {
+      "apply": "Apply",
+      "close": "Close"
     },
     "budgetChangesBanner": {
       "tooltips": {

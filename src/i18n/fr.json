@@ -1745,6 +1745,13 @@
       }
     },
     "projectionsPanel": {
+      "editYearTitle": "Modifier {year} (dépenses de programmes)",
+      "spendingBoost": "Hausse des dépenses de programmes (%)",
+      "spendingBoostTooltip": "Ajustement ponctuel des dépenses de programmes pour cette année",
+      "growthRateBoost": "Hausse du taux de croissance (pp)",
+      "growthRateBoostTooltip": "Ajuste le taux de croissance pour cette année et les suivantes. +0,5 signifie +0,5 point de pourcentage par an.",
+      "applyForward": "Appliquer aux années suivantes",
+      "resetYear": "Réinitialiser l’année",
       "ariaLabels": {
         "deficitChart": "Graphique linéaire du déficit historique et projeté"
       }
