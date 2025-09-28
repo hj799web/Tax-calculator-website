@@ -49,7 +49,12 @@
         <h3>{{ t('simulator.results.warnings.info') }}</h3>
         <p>{{ t('simulator.results.warnings.infoDescription') }}</p>
         <ul>
-          <li v-for="item in t('simulator.results.warnings.infoItems')" :key="item">{{ item }}</li>
+          <li
+            v-for="item in t('simulator.results.warnings.infoItems')"
+            :key="item"
+          >
+            {{ item }}
+          </li>
         </ul>
         <p>
           <a
@@ -125,9 +130,11 @@
               <span class="material-icons text-red-500 mr-1 text-xs">trending_down</span>
               {{ t('simulator.results.labels.totalSpending') }}
             </span>
-            <span class="font-medium text-red-600 text-sm tooltip-container"
+            <span
+              class="font-medium text-red-600 text-sm tooltip-container"
               @mouseenter="showTooltip(formatPercentage(totalSpendingValue, totalRevenueValue) + ' ' + t('simulator.results.tooltips.ofTotalRevenue'))"
-              @mouseleave="hideTooltip()">
+              @mouseleave="hideTooltip()"
+            >
               {{ formatCurrency(totalSpendingValue) }}
             </span>
           </div>
@@ -137,10 +144,12 @@
             <span class="result-label">
               <span class="material-icons text-gray-500 mr-1 text-xs">account_balance</span>
               {{ t('simulator.results.labels.debtServicing') }}
-              <span class="info-icon tooltip-container" 
+              <span
+                class="info-icon tooltip-container" 
+                style="margin-left: 4px; cursor: pointer;"
                 @mouseenter="showTooltip(t('simulator.results.tooltips.debtServicing'))"
                 @mouseleave="hideTooltip()"
-                style="margin-left: 4px; cursor: pointer;">
+              >
                 â“˜
               </span>
             </span>
@@ -166,13 +175,13 @@
             </span>
             <span
               class="font-medium text-sm tooltip-container"
-              @mouseenter="showTooltip(formatPercentage(Math.abs(surplusValue), totalRevenueValue) + ' ' + t('simulator.results.tooltips.ofTotalRevenue'))"
-              @mouseleave="hideTooltip()"
               :class="{
                 'text-green-600': surplusValue > 0,
                 'text-red-600': surplusValue < 0,
                 'text-gray-600': surplusValue === 0
               }"
+              @mouseenter="showTooltip(formatPercentage(Math.abs(surplusValue), totalRevenueValue) + ' ' + t('simulator.results.tooltips.ofTotalRevenue'))"
+              @mouseleave="hideTooltip()"
             >
               {{ surplusValue > 0 ? t('simulator.goals.surplus') + ': +' : surplusValue < 0 ? t('simulator.goals.deficit') + ': ' : '' }}
               {{ formatCurrency(Math.abs(surplusValue)) }}
@@ -180,14 +189,19 @@
           </div>
 
           <!-- Debt-to-GDP Ratio -->
-          <div class="result-item" :class="{ 'mobile-view': isMobileView }">
+          <div
+            class="result-item"
+            :class="{ 'mobile-view': isMobileView }"
+          >
             <span class="result-label">
               <span class="material-icons text-gray-500 mr-1 text-xs">account_balance</span>
               {{ t('simulator.results.labels.debtToGdpRatio') }}
-              <span class="info-icon tooltip-container" 
+              <span
+                class="info-icon tooltip-container" 
+                style="margin-left: 4px; cursor: pointer;"
                 @mouseenter="showTooltip(t('simulator.results.tooltips.debtToGdpRatio'))"
                 @mouseleave="hideTooltip()"
-                style="margin-left: 4px; cursor: pointer;">
+              >
                 â“˜
               </span>
             </span>
@@ -216,11 +230,14 @@
           </h3>
           <button
             class="share-budget-button"
-            @click="throttledShareBudget"
             :aria-label="t('simulator.results.actions.shareBudget')"
             style="display: flex; align-items: center; gap: 4px; background: #4263eb; color: #fff; border: none; border-radius: 4px; padding: 6px 14px; font-weight: 500; cursor: pointer; transition: background 0.2s;"
+            @click="throttledShareBudget"
           >
-            <span class="material-icons" style="font-size: 18px;">share</span>
+            <span
+              class="material-icons"
+              style="font-size: 18px;"
+            >share</span>
             {{ t('simulator.results.actions.shareBudget') }}
           </button>
         </div>

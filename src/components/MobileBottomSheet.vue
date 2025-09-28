@@ -1,15 +1,33 @@
 <template>
   <teleport to="body">
     <div v-if="isMobile && open !== 'none'">
-      <div class="scrim" @click="close" />
-      <section class="sheet" role="dialog" aria-modal="true" :aria-label="t('mobileBottomSheet.ariaLabel', 'Budget changes')">
+      <div
+        class="scrim"
+        @click="close"
+      />
+      <section
+        class="sheet"
+        role="dialog"
+        aria-modal="true"
+        :aria-label="t('mobileBottomSheet.ariaLabel', 'Budget changes')"
+      >
         <header class="sheet-header">
           <div class="title">
-            <span class="material-icons" aria-hidden="true">history</span>
+            <span
+              class="material-icons"
+              aria-hidden="true"
+            >history</span>
             {{ t('mobileBottomSheet.title', 'Budget Changes') }}
           </div>
-          <button class="close" @click="close" :aria-label="t('mobileBottomSheet.closeAria', 'Close')">
-            <span class="material-icons" aria-hidden="true">close</span>
+          <button
+            class="close"
+            :aria-label="t('mobileBottomSheet.closeAria', 'Close')"
+            @click="close"
+          >
+            <span
+              class="material-icons"
+              aria-hidden="true"
+            >close</span>
           </button>
         </header>
         <div class="body">

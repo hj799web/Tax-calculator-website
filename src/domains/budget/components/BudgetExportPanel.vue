@@ -5,7 +5,7 @@
       class="btn btn-primary mt-4"
       @click="throttledDownloadBudgetPDF(includeFullBreakdown)"
     >
-       {{ t('simulator.budgetExportPanel.buttons.downloadPdf') }}
+      {{ t('simulator.budgetExportPanel.buttons.downloadPdf') }}
     </button>
 
     <!-- Toggle for Full Breakdown -->

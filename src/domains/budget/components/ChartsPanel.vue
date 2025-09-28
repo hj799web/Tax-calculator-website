@@ -26,13 +26,17 @@
       >
         <!-- Display Toggle -->
         <div class="display-toggle">
-          <div class="toggle-group" role="group" :aria-label="i18nText('chartsPanel.ariaLabels.displayMode', 'Display mode')">
+          <div
+            class="toggle-group"
+            role="group"
+            :aria-label="i18nText('chartsPanel.ariaLabels.displayMode', 'Display mode')"
+          >
             <button 
               type="button" 
               class="toggle-option"
               :class="{ 'active': displayMode === 'amount' }"
-              @click="displayMode = 'amount'"
               aria-pressed="displayMode === 'amount'"
+              @click="displayMode = 'amount'"
             >
               {{ i18nText('chartsPanel.displayModes.amount', 'Amount') }}
             </button>
@@ -40,8 +44,8 @@
               type="button" 
               class="toggle-option"
               :class="{ 'active': displayMode === 'percentage' }"
-              @click="displayMode = 'percentage'"
               aria-pressed="displayMode === 'percentage'"
+              @click="displayMode = 'percentage'"
             >
               {{ i18nText('chartsPanel.displayModes.percentage', 'Percentage') }}
             </button>
@@ -64,7 +68,11 @@
           <!-- Income Tax Category -->
           <div class="category-group">
             <div class="category-header">
-              <span class="legend-color" style="background-color: #2B6CB0" aria-hidden="true" />
+              <span
+                class="legend-color"
+                style="background-color: #2B6CB0"
+                aria-hidden="true"
+              />
               <span class="legend-label">{{ i18nText('chartsPanel.legend.incomeTax', "Income Tax") }}</span>
               <span class="legend-value">
                 <template v-if="displayMode === 'amount'">
@@ -83,8 +91,15 @@
                 :key="source.id"
                 class="legend-item"
               >
-                <span class="legend-color" :style="{ backgroundColor: source.color }" aria-hidden="true" />
-                <span class="legend-label" :title="getCategoryName(source.id, 'revenue')">{{ getCategoryName(source.id, 'revenue') }}</span>
+                <span
+                  class="legend-color"
+                  :style="{ backgroundColor: source.color }"
+                  aria-hidden="true"
+                />
+                <span
+                  class="legend-label"
+                  :title="getCategoryName(source.id, 'revenue')"
+                >{{ getCategoryName(source.id, 'revenue') }}</span>
                 <span class="legend-value">
                   <template v-if="displayMode === 'amount'">
                     ${{ (Number(source.adjustedAmount) || 0).toFixed(1) }}B
@@ -100,7 +115,11 @@
           <!-- Consumption Tax Category -->
           <div class="category-group">
             <div class="category-header">
-              <span class="legend-color" style="background-color: #2F855A" aria-hidden="true" />
+              <span
+                class="legend-color"
+                style="background-color: #2F855A"
+                aria-hidden="true"
+              />
               <span class="legend-label">{{ i18nText('chartsPanel.legend.consumptionTax', "Consumption Tax") }}</span>
               <span class="legend-value">
                 <template v-if="displayMode === 'amount'">
@@ -119,8 +138,15 @@
                 :key="source.id"
                 class="legend-item"
               >
-                <span class="legend-color" :style="{ backgroundColor: source.color }" aria-hidden="true" />
-                <span class="legend-label" :title="getCategoryName(source.id, 'revenue')">{{ getCategoryName(source.id, 'revenue') }}</span>
+                <span
+                  class="legend-color"
+                  :style="{ backgroundColor: source.color }"
+                  aria-hidden="true"
+                />
+                <span
+                  class="legend-label"
+                  :title="getCategoryName(source.id, 'revenue')"
+                >{{ getCategoryName(source.id, 'revenue') }}</span>
                 <span class="legend-value">
                   <template v-if="displayMode === 'amount'">
                     ${{ (Number(source.adjustedAmount) || 0).toFixed(1) }}B
@@ -136,7 +162,11 @@
           <!-- Other Revenue Category -->
           <div class="category-group">
             <div class="category-header">
-              <span class="legend-color" style="background-color: #C05621" aria-hidden="true" />
+              <span
+                class="legend-color"
+                style="background-color: #C05621"
+                aria-hidden="true"
+              />
               <span class="legend-label">{{ i18nText('chartsPanel.legend.otherRevenue', "Other Revenue Sources") }}</span>
               <span class="legend-value">
                 <template v-if="displayMode === 'amount'">
@@ -155,8 +185,15 @@
                 :key="source.id"
                 class="legend-item"
               >
-                <span class="legend-color" :style="{ backgroundColor: source.color }" aria-hidden="true" />
-                <span class="legend-label" :title="getCategoryName(source.id, 'revenue')">{{ getCategoryName(source.id, 'revenue') }}</span>
+                <span
+                  class="legend-color"
+                  :style="{ backgroundColor: source.color }"
+                  aria-hidden="true"
+                />
+                <span
+                  class="legend-label"
+                  :title="getCategoryName(source.id, 'revenue')"
+                >{{ getCategoryName(source.id, 'revenue') }}</span>
                 <span class="legend-value">
                   <template v-if="displayMode === 'amount'">
                     ${{ (Number(source.adjustedAmount) || 0).toFixed(1) }}B
@@ -209,7 +246,12 @@
       </div>
     </div>
 
-    <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
+    <div
+      v-if="errorMessage"
+      class="error-message"
+    >
+      {{ errorMessage }}
+    </div>
   </div>
 </template>
 

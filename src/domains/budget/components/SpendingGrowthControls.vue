@@ -1,5 +1,8 @@
 <template>
-  <details class="spend-growth" :open="openByDefault">
+  <details
+    class="spend-growth"
+    :open="openByDefault"
+  >
     <summary>
       <span class="summary-title">
         {{ i18nText('spendingGrowthControls.title', 'Program Spending Growth (%)') }}
@@ -13,27 +16,41 @@
 
     <div class="growth-toolbar">
       <div class="search">
-        <span class="material-icons" aria-hidden="true">search</span>
+        <span
+          class="material-icons"
+          aria-hidden="true"
+        >search</span>
         <input
-          class="filter"
           v-model="growthFilter"
+          class="filter"
           :placeholder="i18nText('spendingGrowthControls.search.placeholder', 'Filter categories (e.g., health, seniors)')"
-        />
+        >
       </div>
-      <div class="spacer"></div>
-      <button class="btn subtle" @click="onResetAll">
-        <span class="material-icons" aria-hidden="true">restart_alt</span>
+      <div class="spacer" />
+      <button
+        class="btn subtle"
+        @click="onResetAll"
+      >
+        <span
+          class="material-icons"
+          aria-hidden="true"
+        >restart_alt</span>
         {{ i18nText('spendingGrowthControls.buttons.resetAll', 'Reset all') }}
       </button>
     </div>
 
     <div class="growth-head">
-      <div class="label" :title="i18nText('spendingGrowthControls.headers.categoryTooltip', 'Spending categories used in the projections')">{{ i18nText('spendingGrowthControls.headers.category', 'Category') }}</div>
+      <div
+        class="label"
+        :title="i18nText('spendingGrowthControls.headers.categoryTooltip', 'Spending categories used in the projections')"
+      >
+        {{ i18nText('spendingGrowthControls.headers.category', 'Category') }}
+      </div>
       <div class="inputs-head">
         <span :title="i18nText('spendingGrowthControls.headers.baselineTooltip', 'Underlying per‑year growth rate for this category')">{{ i18nText('spendingGrowthControls.headers.baseline', 'Baseline') }}</span>
         <span :title="i18nText('spendingGrowthControls.headers.demographicTooltip', 'Additional per‑year growth from demographics (aging, population)')">{{ i18nText('spendingGrowthControls.headers.demographic', 'Demographic') }}</span>
       </div>
-      <div class="actions"></div>
+      <div class="actions" />
     </div>
 
     <div class="growth-grid">
@@ -42,28 +59,43 @@
         :key="key"
         class="growth-row"
       >
-        <div class="label">{{ prettyKey(key) }}</div>
+        <div class="label">
+          {{ prettyKey(key) }}
+        </div>
         <div class="inputs">
-          <label class="sub" :title="i18nText('spendingGrowthControls.headers.baselineTooltip', 'Underlying per‑year growth rate for this category')">{{ i18nText('spendingGrowthControls.headers.baseline', 'Baseline') }}</label>
+          <label
+            class="sub"
+            :title="i18nText('spendingGrowthControls.headers.baselineTooltip', 'Underlying per‑year growth rate for this category')"
+          >{{ i18nText('spendingGrowthControls.headers.baseline', 'Baseline') }}</label>
           <input
+            v-model.number="settingsStore.spendingGrowth[key].baseline"
             type="number"
             step="0.1"
             :min="-10"
             :max="15"
-            v-model.number="settingsStore.spendingGrowth[key].baseline"
-          />
-          <label class="sub" :title="i18nText('spendingGrowthControls.headers.demographicTooltip', 'Additional per‑year growth from demographics')">{{ i18nText('spendingGrowthControls.headers.demographic', 'Demographic') }}</label>
+          >
+          <label
+            class="sub"
+            :title="i18nText('spendingGrowthControls.headers.demographicTooltip', 'Additional per‑year growth from demographics')"
+          >{{ i18nText('spendingGrowthControls.headers.demographic', 'Demographic') }}</label>
           <input
+            v-model.number="settingsStore.spendingGrowth[key].demographic"
             type="number"
             step="0.1"
             :min="-5"
             :max="10"
-            v-model.number="settingsStore.spendingGrowth[key].demographic"
-          />
+          >
         </div>
         <div class="actions">
-          <button class="icon-btn" :title="`${i18nText('spendingGrowthControls.buttons.reset', 'Reset')} ${prettyKey(key)}`" @click="onResetRow(key)">
-            <span class="material-icons" aria-hidden="true">restart_alt</span>
+          <button
+            class="icon-btn"
+            :title="`${i18nText('spendingGrowthControls.buttons.reset', 'Reset')} ${prettyKey(key)}`"
+            @click="onResetRow(key)"
+          >
+            <span
+              class="material-icons"
+              aria-hidden="true"
+            >restart_alt</span>
           </button>
         </div>
       </div>

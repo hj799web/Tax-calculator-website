@@ -1,6 +1,9 @@
 <template>
   <div class="fiscal-chaos-alert">
-    <span class="chaos-emoji" :aria-label="t('simulator.fiscalChaosAlert.ariaLabels.fiscalChaos', 'Fiscal Chaos')">🚨</span>
+    <span
+      class="chaos-emoji"
+      :aria-label="t('simulator.fiscalChaosAlert.ariaLabels.fiscalChaos', 'Fiscal Chaos')"
+    >🚨</span>
     <div class="chaos-message">
       <strong>Public Confidence Crisis:</strong> Extreme tax rates have triggered negative public sentiment
     </div>

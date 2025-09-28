@@ -4,4 +4,6 @@ export const FEATURES = {
   MULTI_YEAR_PLANNING: true,
   // Gate the new banner-driven panel navigation
   PANEL_NAV: true,
+  // Temporarily hide the Items planning tab
+  ITEMS_TAB: false,
 };

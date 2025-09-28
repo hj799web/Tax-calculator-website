@@ -399,14 +399,16 @@
 
         <h4>{{ t('how.sections.simulator.taxExpenditures.title') }}</h4>
         <ul>
-          <li><strong>{{ t('how.sections.simulator.taxExpenditures.personal.title') }}</strong>
+          <li>
+            <strong>{{ t('how.sections.simulator.taxExpenditures.personal.title') }}</strong>
             <ul>
               <li>{{ t('how.sections.simulator.taxExpenditures.personal.items.baseAmount') }}</li>
               <li>{{ t('how.sections.simulator.taxExpenditures.personal.items.netAmount') }}</li>
               <li>{{ t('how.sections.simulator.taxExpenditures.personal.items.impact') }}</li>
             </ul>
           </li>
-          <li><strong>{{ t('how.sections.simulator.taxExpenditures.corporate.title') }}</strong>
+          <li>
+            <strong>{{ t('how.sections.simulator.taxExpenditures.corporate.title') }}</strong>
             <ul>
               <li>{{ t('how.sections.simulator.taxExpenditures.corporate.items.baseAmount') }}</li>
               <li>{{ t('how.sections.simulator.taxExpenditures.corporate.items.netAmount') }}</li>

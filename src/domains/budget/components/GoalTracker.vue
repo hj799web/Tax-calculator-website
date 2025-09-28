@@ -241,10 +241,22 @@ const localGoals = ref({
 });
 
 // Auto-balance feature
-const autoBalanceEnabled = ref(false);
+const budgetStore = useBudgetSimulatorStore();
+
+const autoBalanceEnabled = ref(budgetStore.autoBalanceActive ?? false);
 const autoBalanceMessage = ref('');
 
-const budgetStore = useBudgetSimulatorStore();
+watch(
+  () => budgetStore.autoBalanceActive,
+  (isActive) => {
+    if (autoBalanceEnabled.value !== isActive) {
+      autoBalanceEnabled.value = isActive;
+    }
+    if (!isActive) {
+      autoBalanceMessage.value = '';
+    }
+  }
+);
 
 // Computed properties
 const currentDeficit = computed(() => {
@@ -435,15 +447,41 @@ const deficitGapMessage = computed(() => {
 });
 
 // Methods
+function normalizeGoalValue(value) {
+  return typeof value === 'number' && !Number.isNaN(value) ? value : null;
+}
+
+function syncGoalsToStore() {
+  const normalizedRevenue = normalizeGoalValue(localGoals.value.targetRevenue);
+  const normalizedDeficit = normalizeGoalValue(localGoals.value.targetDeficit);
+
+  budgetStore.budgetGoals = {
+    ...budgetStore.budgetGoals,
+    enabled: !!localGoals.value.enabled,
+    targetRevenue: normalizedRevenue,
+    revenueTarget: normalizedRevenue,
+    targetDeficit: normalizedDeficit,
+    deficitTarget: normalizedDeficit
+  };
+}
+
 function updateGoals() {
+  syncGoalsToStore();
+
   emit('update:goals', { ...localGoals.value });
-  
+
+  if (!localGoals.value.enabled && autoBalanceEnabled.value) {
+    autoBalanceEnabled.value = false;
+    autoBalanceMessage.value = '';
+    emit('autoBalanceToggled', false);
+  }
+
   if (localGoals.value.enabled) {
     updateUrlParams();
   } else {
     clearUrlParams();
   }
-  
+
   emit('goalStatusChanged', {
     revenue: {
       status: revenueStatusClass.value,
@@ -461,41 +499,45 @@ function updateGoals() {
 }
 
 function handleAutoBalanceChange() {
-  // Simple implementation that just emits the event and updates the message
-  emit('autoBalanceToggled', autoBalanceEnabled.value);
-  
-  // Set the message based on the current state
-  if (autoBalanceEnabled.value) {
-    if (localGoals.value.targetRevenue !== null) {
-      const amount = localGoals.value.targetRevenue.toFixed(1);
-      autoBalanceMessage.value = t('simulator.goals.messages.autoBalanceRevenue', { amount });
-      
-      // Directly update the store
-      budgetStore.budgetGoals.targetRevenue = localGoals.value.targetRevenue;
-      budgetStore.budgetGoals.enabled = true;
-      budgetStore.toggleAutoBalance(true);
-    } else if (localGoals.value.targetDeficit !== null) {
-      const isDeficit = localGoals.value.targetDeficit >= 0;
-      const amount = isDeficit ? 
-        localGoals.value.targetDeficit.toFixed(1) : 
-        Math.abs(localGoals.value.targetDeficit).toFixed(1);
-      
-      autoBalanceMessage.value = isDeficit ?
-        t('simulator.goals.messages.autoBalanceDeficit', { amount }) :
-        t('simulator.goals.messages.autoBalanceSurplus', { amount });
-        
-      // Directly update the store
-      budgetStore.budgetGoals.targetDeficit = localGoals.value.targetDeficit;
-      budgetStore.budgetGoals.enabled = true;
-      budgetStore.toggleAutoBalance(true);
-    } else {
+  const shouldEnable = autoBalanceEnabled.value;
+
+  if (shouldEnable && !localGoals.value.enabled) {
+    localGoals.value.enabled = true;
+  }
+
+  syncGoalsToStore();
+
+  const normalizedRevenue = budgetStore.budgetGoals.targetRevenue;
+  const normalizedDeficit = budgetStore.budgetGoals.targetDeficit;
+
+  const hasRevenueGoal = typeof normalizedRevenue === 'number' && !Number.isNaN(normalizedRevenue);
+  const hasDeficitGoal = typeof normalizedDeficit === 'number' && !Number.isNaN(normalizedDeficit);
+
+  if (shouldEnable) {
+    if (!hasRevenueGoal && !hasDeficitGoal) {
       autoBalanceMessage.value = i18nText('simulator.goals.messages.setGoalFirst', 'Please set either a revenue goal or a deficit/surplus goal to auto-balance the budget.');
       autoBalanceEnabled.value = false;
+      emit('autoBalanceToggled', false);
+      return;
     }
-  } else {
-    autoBalanceMessage.value = '';
-    budgetStore.toggleAutoBalance(false);
+
+    if (hasRevenueGoal) {
+      const amount = normalizedRevenue.toFixed(1);
+      autoBalanceMessage.value = t('simulator.goals.messages.autoBalanceRevenue', { amount });
+    } else {
+      const isDeficit = normalizedDeficit >= 0;
+      const amount = Math.abs(normalizedDeficit).toFixed(1);
+      autoBalanceMessage.value = isDeficit
+        ? t('simulator.goals.messages.autoBalanceDeficit', { amount })
+        : t('simulator.goals.messages.autoBalanceSurplus', { amount });
+    }
+
+    emit('autoBalanceToggled', true);
+    return;
   }
+
+  autoBalanceMessage.value = '';
+  emit('autoBalanceToggled', false);
 }
 
 

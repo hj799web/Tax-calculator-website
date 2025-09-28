@@ -4,7 +4,10 @@
     :class="{ 'banner-collapsed': isCollapsed, 'no-changes': !hasChanges }"
   >
     <!-- Banner Header -->
-    <div class="banner-header" @click="toggleCollapse">
+    <div
+      class="banner-header"
+      @click="toggleCollapse"
+    >
       <div class="banner-title">
         <i class="material-icons">history</i>
         <span>{{ t('simulator.budgetChangesBanner.title') }}</span>
@@ -12,16 +15,16 @@
       </div>
       <div class="banner-controls">
         <button 
-          @click.stop="clearChanges"
           class="clear-btn"
           :title="t('simulator.budgetChangesBanner.tooltips.clearAll')"
+          @click.stop="clearChanges"
         >
           <i class="material-icons">clear_all</i>
         </button>
         <button 
-          @click.stop="toggleCollapse"
           class="collapse-btn"
           :title="isCollapsed ? t('simulator.common.expand') : t('simulator.common.collapse')"
+          @click.stop="toggleCollapse"
         >
           <i class="material-icons">{{ isCollapsed ? 'expand_less' : 'expand_more' }}</i>
         </button>
@@ -29,16 +32,23 @@
     </div>
 
     <!-- Banner Content -->
-    <div v-if="!isCollapsed" class="banner-content">
-      
+    <div
+      v-if="!isCollapsed"
+      class="banner-content"
+    >
       <!-- No Changes State -->
-      <div v-if="!hasChanges" class="no-changes-content">
+      <div
+        v-if="!hasChanges"
+        class="no-changes-content"
+      >
         <div class="no-changes-icon">
           <i class="material-icons">timeline</i>
         </div>
         <div class="no-changes-message">
           <p>{{ t('simulator.budgetChangesBanner.empty.title') }}</p>
-          <p class="no-changes-subtitle">{{ t('simulator.budgetChangesBanner.empty.subtitle') }}</p>
+          <p class="no-changes-subtitle">
+            {{ t('simulator.budgetChangesBanner.empty.subtitle') }}
+          </p>
         </div>
       </div>
 
@@ -49,9 +59,9 @@
           <button 
             v-for="(changes, category) in changesByCategory"
             :key="category"
-            @click="activeCategory = category"
             class="category-tab"
             :class="{ 'active': activeCategory === category }"
+            @click="activeCategory = category"
           >
             {{ translateCategory(category) }}
             <span class="tab-count">({{ changes.length }})</span>
@@ -76,7 +86,9 @@
               <span class="change-time">{{ formatTime(change.timestamp) }}</span>
             </div>
             <div class="change-details">
-              <div class="change-description">{{ change.description }}</div>
+              <div class="change-description">
+                {{ change.description }}
+              </div>
               <div 
                 class="change-amount"
                 :class="change.getDisplayAmount() >= 0 ? 'positive-change' : 'negative-change'"

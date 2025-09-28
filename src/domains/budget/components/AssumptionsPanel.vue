@@ -2,49 +2,112 @@
   <div class="assumptions-panel">
     <div class="row">
       <label>{{ i18nText('assumptions.labels.baseYear', 'Base year') }}</label>
-      <input type="number" v-model.number="settings.planning.baseYear" min="2020" max="2030" />
+      <input
+        v-model.number="settings.planning.baseYear"
+        type="number"
+        min="2020"
+        max="2030"
+      >
     </div>
     <div class="row">
       <label>{{ i18nText('assumptions.labels.horizon', 'Horizon (years)') }}</label>
-      <input type="number" v-model.number="settings.planning.horizonYears" min="1" max="20" />
+      <input
+        v-model.number="settings.planning.horizonYears"
+        type="number"
+        min="1"
+        max="20"
+      >
     </div>
     <div class="row">
       <label>{{ i18nText('assumptions.labels.gdpGrowth', 'GDP growth (%)') }}</label>
-      <input type="number" step="0.1" v-model.number="settings.economic.gdpReal" min="-5" max="10" />
+      <input
+        v-model.number="settings.economic.gdpReal"
+        type="number"
+        step="0.1"
+        min="-5"
+        max="10"
+      >
     </div>
     <div class="row">
       <label>{{ i18nText('assumptions.labels.inflation', 'Inflation (%)') }}</label>
-      <input type="number" step="0.1" v-model.number="settings.economic.inflation" min="-2" max="10" />
+      <input
+        v-model.number="settings.economic.inflation"
+        type="number"
+        step="0.1"
+        min="-2"
+        max="10"
+      >
     </div>
     <div class="row">
       <label>{{ i18nText('assumptions.labels.interestRate', 'Interest rate (%)') }}</label>
-      <input type="number" step="0.1" v-model.number="settings.economic.interestRate" min="0" max="15" />
+      <input
+        v-model.number="settings.economic.interestRate"
+        type="number"
+        step="0.1"
+        min="0"
+        max="15"
+      >
     </div>
     <div class="row preset">
       <label>{{ i18nText('assumptions.labels.preset', 'Preset') }}</label>
-      <select v-model="selectedPreset" @change="applyPreset()">
-        <option value="">{{ i18nText('assumptions.presets.custom', 'Custom') }}</option>
-        <option value="conservative">{{ i18nText('assumptions.presets.conservative', 'Conservative') }}</option>
-        <option value="moderate">{{ i18nText('assumptions.presets.moderate', 'Moderate') }}</option>
-        <option value="optimistic">{{ i18nText('assumptions.presets.optimistic', 'Optimistic') }}</option>
+      <select
+        v-model="selectedPreset"
+        @change="applyPreset()"
+      >
+        <option value="">
+          {{ i18nText('assumptions.presets.custom', 'Custom') }}
+        </option>
+        <option value="conservative">
+          {{ i18nText('assumptions.presets.conservative', 'Conservative') }}
+        </option>
+        <option value="moderate">
+          {{ i18nText('assumptions.presets.moderate', 'Moderate') }}
+        </option>
+        <option value="optimistic">
+          {{ i18nText('assumptions.presets.optimistic', 'Optimistic') }}
+        </option>
       </select>
-      <button class="btn" @click="reset()">{{ i18nText('assumptions.buttons.reset', 'Reset') }}</button>
+      <button
+        class="btn"
+        @click="reset()"
+      >
+        {{ i18nText('assumptions.buttons.reset', 'Reset') }}
+      </button>
     </div>
 
-    <details class="planning-controls" open>
+    <details
+      class="planning-controls"
+      open
+    >
       <summary>{{ i18nText('assumptions.sections.programSpendingControls', 'Program Spending Controls') }}</summary>
       <div class="controls-grid">
         <div class="row">
           <label :title="i18nText('assumptions.tooltips.programSpendingBoost', 'One-time adjustment to all program spending levels')">{{ i18nText('assumptions.labels.programSpendingBoost', 'Program spending boost (%)') }}
-            <span class="info-icon" :title="i18nText('assumptions.tooltips.programSpendingBoostInfo', 'Applies a one-time level change to program spending in the base year (and carried through).')">info</span>
+            <span
+              class="info-icon"
+              :title="i18nText('assumptions.tooltips.programSpendingBoostInfo', 'Applies a one-time level change to program spending in the base year (and carried through).')"
+            >info</span>
           </label>
-          <input type="number" step="0.5" :min="-15" :max="15" v-model.number="settings.spendingGlobal.levelPct" />
+          <input
+            v-model.number="settings.spendingGlobal.levelPct"
+            type="number"
+            step="0.5"
+            :min="-15"
+            :max="15"
+          >
         </div>
         <div class="row">
           <label :title="i18nText('assumptions.tooltips.speedUpSpendingGrowth', 'Adjusts how fast program spending grows each year. +0.5 means all categories grow 0.5 percentage points faster annually.')">{{ i18nText('assumptions.labels.speedUpSpendingGrowth', 'Speed up spending growth (pp)') }}
-            <span class="info-icon" :title="i18nText('assumptions.tooltips.speedUpSpendingGrowthInfo', 'Adds or subtracts percentage points to the annual growth rate applied to all categories.')">info</span>
+            <span
+              class="info-icon"
+              :title="i18nText('assumptions.tooltips.speedUpSpendingGrowthInfo', 'Adds or subtracts percentage points to the annual growth rate applied to all categories.')"
+            >info</span>
           </label>
-          <input type="number" step="0.1" v-model.number="settings.spendingGlobal.growthDeltaPct" />
+          <input
+            v-model.number="settings.spendingGlobal.growthDeltaPct"
+            type="number"
+            step="0.1"
+          >
         </div>
       </div>
       <SpendingGrowthControls />

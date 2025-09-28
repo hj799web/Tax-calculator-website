@@ -1,7 +1,16 @@
 <template>
-  <div v-if="show" class="loading-indicator" :class="[size, variant]">
-    <div class="loading-spinner"></div>
-    <p v-if="message" class="loading-text">{{ message }}</p>
+  <div
+    v-if="show"
+    class="loading-indicator"
+    :class="[size, variant]"
+  >
+    <div class="loading-spinner" />
+    <p
+      v-if="message"
+      class="loading-text"
+    >
+      {{ message }}
+    </p>
   </div>
 </template>
 

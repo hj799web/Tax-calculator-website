@@ -2,28 +2,34 @@
   <ErrorBoundary component-name="FinanceMinisterSimulator">
     <div class="simulator-container">
       <div class="simulator-header">
-        <h1 class="simulator-title">{{ i18nText('simulator.title', 'Finance Minister Simulator') }}</h1>
+        <h1 class="simulator-title">
+          {{ i18nText('simulator.title', 'Finance Minister Simulator') }}
+        </h1>
         <div class="header-controls">
           <div class="year-selector">
             <button 
               class="year-button"
-              @click="decrementYear"
               :disabled="currentYear <= 2020"
               :aria-label="i18nText('simulator.controls.previousYear', 'Previous year')"
+              @click="decrementYear"
             >
               <span class="material-icons">chevron_left</span>
             </button>
             <span class="year-display">{{ currentYear }}</span>
             <button 
               class="year-button"
-              @click="incrementYear"
               :disabled="currentYear >= 2025"
               :aria-label="i18nText('simulator.controls.nextYear', 'Next year')"
+              @click="incrementYear"
             >
               <span class="material-icons">chevron_right</span>
             </button>
           </div>
-          <div class="language-switcher" role="group" :aria-label="i18nText('home.language.switchLabel', 'Language selection')">
+          <div
+            class="language-switcher"
+            role="group"
+            :aria-label="i18nText('home.language.switchLabel', 'Language selection')"
+          >
             <button
               type="button"
               class="language-button"
@@ -44,15 +50,23 @@
         </div>
       </div>
 
-      <div v-if="FEATURES.PANEL_NAV" class="mb-4">
+      <div
+        v-if="FEATURES.PANEL_NAV"
+        class="mb-4"
+      >
         <PanelHost />
       </div>
 
-      <div class="simulator-grid" v-if="!FEATURES.PANEL_NAV">
+      <div
+        v-if="!FEATURES.PANEL_NAV"
+        class="simulator-grid"
+      >
         <ErrorBoundary component-name="GoalTracker">
           <div class="simulator-card goals-card">
             <div class="card-header">
-              <h2 class="card-title">{{ i18nText('simulator.cards.budgetGoals', 'Budget Goals') }}</h2>
+              <h2 class="card-title">
+                {{ i18nText('simulator.cards.budgetGoals', 'Budget Goals') }}
+              </h2>
             </div>
             <div class="card-content">
               <GoalTracker />
@@ -63,7 +77,9 @@
         <ErrorBoundary component-name="BudgetResults">
           <div class="simulator-card results-card">
             <div class="card-header">
-              <h2 class="card-title">{{ i18nText('simulator.cards.budgetResults', 'Budget Results') }}</h2>
+              <h2 class="card-title">
+                {{ i18nText('simulator.cards.budgetResults', 'Budget Results') }}
+              </h2>
             </div>
             <div class="card-content">
               <BudgetResults />
@@ -74,7 +90,9 @@
         <ErrorBoundary component-name="RevenueSliders">
           <div class="simulator-card revenue-card">
             <div class="card-header">
-              <h2 class="card-title">{{ i18nText('simulator.cards.revenueSources', 'Revenue Sources') }}</h2>
+              <h2 class="card-title">
+                {{ i18nText('simulator.cards.revenueSources', 'Revenue Sources') }}
+              </h2>
             </div>
             <div class="card-content">
               <RevenueSliders />
@@ -85,7 +103,9 @@
         <ErrorBoundary component-name="SpendingControls">
           <div class="simulator-card spending-card">
             <div class="card-header">
-              <h2 class="card-title">{{ i18nText('simulator.cards.spendingControls', 'Spending Controls') }}</h2>
+              <h2 class="card-title">
+                {{ i18nText('simulator.cards.spendingControls', 'Spending Controls') }}
+              </h2>
             </div>
             <div class="card-content">
               <SpendingControls />
@@ -96,7 +116,9 @@
         <ErrorBoundary component-name="ChartsPanel">
           <div class="simulator-card charts-card">
             <div class="card-header">
-              <h2 class="card-title">{{ i18nText('simulator.cards.budgetAnalysis', 'Budget Analysis') }}</h2>
+              <h2 class="card-title">
+                {{ i18nText('simulator.cards.budgetAnalysis', 'Budget Analysis') }}
+              </h2>
             </div>
             <div class="card-content">
               <ChartsPanel />

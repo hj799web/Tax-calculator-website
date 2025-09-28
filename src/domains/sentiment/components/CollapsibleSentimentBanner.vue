@@ -2,41 +2,71 @@
   <div
     :class="['sentiment-banner', bannerClass, { expanded: isExpanded && !collapsed, collapsed, 'fiscal-warning': fiscalChaosFlag }]"
     tabindex="0"
-    @keyup.enter="toggle"
-    @click="toggleCollapse"
     role="button"
     :aria-label="t('sentiment.showPublicSentimentDetails', 'Show public sentiment details')"
+    @keyup.enter="toggle"
+    @click="toggleCollapse"
   >
     <span class="pill-content">
-      <span v-if="fiscalChaosFlag" class="emoji" :aria-label="label">🚨</span>
+      <span
+        v-if="fiscalChaosFlag"
+        class="emoji"
+        :aria-label="label"
+      >🚨</span>
       <span v-if="!collapsed">
         <span class="score-label">
-          <span v-if="fiscalChaosFlag" class="fiscal-warning-text">{{ t('sentiment.fiscalChaosWarning', 'FISCAL CHAOS WARNING!') }}</span>
-          <transition name="score-fade" mode="out-in">
-            <span class="score" :key="animatedScore">{{ animatedScore.toFixed(1) }}</span>
+          <span
+            v-if="fiscalChaosFlag"
+            class="fiscal-warning-text"
+          >{{ t('sentiment.fiscalChaosWarning', 'FISCAL CHAOS WARNING!') }}</span>
+          <transition
+            name="score-fade"
+            mode="out-in"
+          >
+            <span
+              :key="animatedScore"
+              class="score"
+            >{{ animatedScore.toFixed(1) }}</span>
           </transition>
           <transition name="delta-fade">
-            <span v-if="showDelta" :class="['score-delta', delta > 0 ? 'delta-up' : 'delta-down']" :key="delta">
+            <span
+              v-if="showDelta"
+              :key="delta"
+              :class="['score-delta', delta > 0 ? 'delta-up' : 'delta-down']"
+            >
               <span v-if="delta > 0">▲ +{{ delta.toFixed(1) }}</span>
               <span v-else-if="delta < 0">▼ {{ delta.toFixed(1) }}</span>
             </span>
           </transition>
           <span class="label">{{ label }}</span>
         </span>
-        <span v-if="!isExpanded" class="hint">Click to personalize</span>
+        <span
+          v-if="!isExpanded"
+          class="hint"
+        >Click to personalize</span>
       </span>
-      <span v-else class="collapsed-indicator">Show</span>
+      <span
+        v-else
+        class="collapsed-indicator"
+      >Show</span>
     </span>
     <transition name="fade-expand">
-      <div v-if="isExpanded && !collapsed" class="expanded-content" @click.stop>
+      <div
+        v-if="isExpanded && !collapsed"
+        class="expanded-content"
+        @click.stop
+      >
         <SentimentGroupSelector
           :provinces="selectedGroups.provinces"
           :sectors="selectedGroups.sectors"
           :demographics="selectedGroups.demographics"
-          @update="handleSelectionUpdate"
           style="margin-top: 0.7em;"
+          @update="handleSelectionUpdate"
         />
-        <span v-if="selectionSummary" class="selection-summary">{{ selectionSummary }}</span>
+        <span
+          v-if="selectionSummary"
+          class="selection-summary"
+        >{{ selectionSummary }}</span>
       </div>
     </transition>
   </div>

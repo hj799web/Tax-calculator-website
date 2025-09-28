@@ -1,6 +1,9 @@
 <template>
   <Teleport to="body">
-    <Transition name="notification-slide" appear>
+    <Transition
+      name="notification-slide"
+      appear
+    >
       <div
         v-if="shouldRender"
         class="tax-breakdown-notification"
@@ -16,24 +19,58 @@
           <button
             class="close-button"
             type="button"
-            @click="closePopup"
             :aria-label="t('taxPopup.close')"
+            @click="closePopup"
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="18" y1="6" x2="6" y2="18" />
-              <line x1="6" y1="6" x2="18" y2="18" />
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <line
+                x1="18"
+                y1="6"
+                x2="6"
+                y2="18"
+              />
+              <line
+                x1="6"
+                y1="6"
+                x2="18"
+                y2="18"
+              />
             </svg>
           </button>
 
           <div class="notification-content">
-            <div class="notification-visual" aria-hidden="true">
-              <span class="visual-orb"></span>
-              <span class="visual-orb visual-orb--secondary"></span>
+            <div
+              class="notification-visual"
+              aria-hidden="true"
+            >
+              <span class="visual-orb" />
+              <span class="visual-orb visual-orb--secondary" />
               <span class="visual-icon">
-                <svg width="36" height="36" viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.6">
-                  <path d="M4 18c4-6.5 9.5-9.8 14-9.8S28.5 11.5 32 18c-4 6.5-9.5 9.8-14 9.8S8 24.5 4 18z" opacity="0.45" />
+                <svg
+                  width="36"
+                  height="36"
+                  viewBox="0 0 36 36"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                >
+                  <path
+                    d="M4 18c4-6.5 9.5-9.8 14-9.8S28.5 11.5 32 18c-4 6.5-9.5 9.8-14 9.8S8 24.5 4 18z"
+                    opacity="0.45"
+                  />
                   <path d="M18 8.2c3.3 0 6 3.8 6 9.8s-2.7 9.8-6 9.8" />
-                  <circle cx="18" cy="18" r="3.4" />
+                  <circle
+                    cx="18"
+                    cy="18"
+                    r="3.4"
+                  />
                 </svg>
               </span>
             </div>
@@ -41,15 +78,25 @@
             <div class="notification-body">
               <span class="notification-tag">{{ popupTag }}</span>
 
-              <h3 id="notification-title" class="notification-title">
+              <h3
+                id="notification-title"
+                class="notification-title"
+              >
                 {{ popupTitle }}
               </h3>
 
-              <p id="notification-description" class="notification-description">
+              <p
+                id="notification-description"
+                class="notification-description"
+              >
                 {{ popupDescription }}
               </p>
 
-              <div class="tab-chip-group" role="group" :aria-label="t('taxPopup.tabs.aria')">
+              <div
+                class="tab-chip-group"
+                role="group"
+                :aria-label="t('taxPopup.tabs.aria')"
+              >
                 <button
                   v-for="destination in tabDestinations"
                   :key="destination.id"
@@ -61,7 +108,14 @@
                     <span class="tab-chip__label">{{ destination.label }}</span>
                     <span class="tab-chip__teaser">{{ destination.teaser }}</span>
                   </div>
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
                     <path d="M9 5l7 7-7 7" />
                   </svg>
                 </button>
@@ -87,10 +141,10 @@
 
               <label class="preference-toggle">
                 <input
-                  type="checkbox"
                   v-model="dontShowAgain"
+                  type="checkbox"
                   :aria-label="t('taxPopup.preferences.aria')"
-                />
+                >
                 <span>{{ t('taxPopup.preferences.label') }}</span>
               </label>
             </div>

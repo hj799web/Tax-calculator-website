@@ -7,97 +7,229 @@
       <RadarSentiment :external-tab="selectedGroup" />
     </div>
     <div class="group-tabs">
-      <button :class="{active: selectedGroup==='provinces'}" @click="selectedGroup='provinces'">{{ t('simulator.sentiment.tabs.provinces') }}</button>
-      <button :class="{active: selectedGroup==='demographics'}" @click="selectedGroup='demographics'">{{ t('simulator.sentiment.tabs.demographics') }}</button>
-      <button :class="{active: selectedGroup==='sectors'}" @click="selectedGroup='sectors'">{{ t('simulator.sentiment.tabs.sectors') }}</button>
+      <button
+        :class="{active: selectedGroup==='provinces'}"
+        @click="selectedGroup='provinces'"
+      >
+        {{ t('simulator.sentiment.tabs.provinces') }}
+      </button>
+      <button
+        :class="{active: selectedGroup==='demographics'}"
+        @click="selectedGroup='demographics'"
+      >
+        {{ t('simulator.sentiment.tabs.demographics') }}
+      </button>
+      <button
+        :class="{active: selectedGroup==='sectors'}"
+        @click="selectedGroup='sectors'"
+      >
+        {{ t('simulator.sentiment.tabs.sectors') }}
+      </button>
     </div>
     <div class="segments">
-      <div class="seg-col" v-show="selectedGroup==='provinces'">
+      <div
+        v-show="selectedGroup==='provinces'"
+        class="seg-col"
+      >
         <h4>{{ t('simulator.sentiment.headers.regions') }}</h4>
         <div class="seg-block">
-          <div class="seg-subtitle">{{ t('simulator.sentiment.sections.top') }}</div>
+          <div class="seg-subtitle">
+            {{ t('simulator.sentiment.sections.top') }}
+          </div>
           <ul>
-            <li v-for="([k,v]) in topN(sentiment.provinces,3,false)" :key="'p-top-'+k">
-              <span class="chip" :style="chipStyle(v)" :title="chipTitle('provinces', k, v)">{{ v.toFixed(1) }}</span> {{ translateLabel('provinces', k) }}
-              <span class="delta" :class="deltaClass(v)">{{ formatDelta(v) }}</span>
+            <li
+              v-for="([k,v]) in topN(sentiment.provinces,3,false)"
+              :key="'p-top-'+k"
+            >
+              <span
+                class="chip"
+                :style="chipStyle(v)"
+                :title="chipTitle('provinces', k, v)"
+              >{{ v.toFixed(1) }}</span> {{ translateLabel('provinces', k) }}
+              <span
+                class="delta"
+                :class="deltaClass(v)"
+              >{{ formatDelta(v) }}</span>
             </li>
           </ul>
         </div>
         <div class="seg-block">
-          <div class="seg-subtitle">{{ t('simulator.sentiment.sections.bottom') }}</div>
+          <div class="seg-subtitle">
+            {{ t('simulator.sentiment.sections.bottom') }}
+          </div>
           <ul>
-            <li v-for="([k,v]) in topN(sentiment.provinces,3,true)" :key="'p-btm-'+k">
-              <span class="chip" :style="chipStyle(v)" :title="chipTitle('provinces', k, v)">{{ v.toFixed(1) }}</span> {{ translateLabel('provinces', k) }}
-              <span class="delta" :class="deltaClass(v)">{{ formatDelta(v) }}</span>
+            <li
+              v-for="([k,v]) in topN(sentiment.provinces,3,true)"
+              :key="'p-btm-'+k"
+            >
+              <span
+                class="chip"
+                :style="chipStyle(v)"
+                :title="chipTitle('provinces', k, v)"
+              >{{ v.toFixed(1) }}</span> {{ translateLabel('provinces', k) }}
+              <span
+                class="delta"
+                :class="deltaClass(v)"
+              >{{ formatDelta(v) }}</span>
             </li>
           </ul>
         </div>
         <div class="seg-block full-list">
-          <div class="seg-subtitle">{{ t('simulator.sentiment.sections.allRegions') }}</div>
+          <div class="seg-subtitle">
+            {{ t('simulator.sentiment.sections.allRegions') }}
+          </div>
           <ul>
-            <li v-for="([k,v]) in sortedEntries(sentiment.provinces)" :key="'p-all-'+k">
-              <span class="chip" :style="chipStyle(v)" :title="chipTitle('provinces', k, v)">{{ v.toFixed(1) }}</span> {{ translateLabel('provinces', k) }}
-              <span class="delta" :class="deltaClass(v)">{{ formatDelta(v) }}</span>
+            <li
+              v-for="([k,v]) in sortedEntries(sentiment.provinces)"
+              :key="'p-all-'+k"
+            >
+              <span
+                class="chip"
+                :style="chipStyle(v)"
+                :title="chipTitle('provinces', k, v)"
+              >{{ v.toFixed(1) }}</span> {{ translateLabel('provinces', k) }}
+              <span
+                class="delta"
+                :class="deltaClass(v)"
+              >{{ formatDelta(v) }}</span>
             </li>
           </ul>
         </div>
       </div>
-      <div class="seg-col" v-show="selectedGroup==='demographics'">
+      <div
+        v-show="selectedGroup==='demographics'"
+        class="seg-col"
+      >
         <h4>{{ t('simulator.sentiment.headers.demographics') }}</h4>
         <div class="seg-block">
-          <div class="seg-subtitle">{{ t('simulator.sentiment.sections.top') }}</div>
+          <div class="seg-subtitle">
+            {{ t('simulator.sentiment.sections.top') }}
+          </div>
           <ul>
-            <li v-for="([k,v]) in topN(sentiment.demographics,3,false)" :key="'d-top-'+k">
-              <span class="chip" :style="chipStyle(v)" :title="chipTitle('demographics', k, v)">{{ v.toFixed(1) }}</span> {{ translateLabel('demographics', k) }}
-              <span class="delta" :class="deltaClass(v)">{{ formatDelta(v) }}</span>
+            <li
+              v-for="([k,v]) in topN(sentiment.demographics,3,false)"
+              :key="'d-top-'+k"
+            >
+              <span
+                class="chip"
+                :style="chipStyle(v)"
+                :title="chipTitle('demographics', k, v)"
+              >{{ v.toFixed(1) }}</span> {{ translateLabel('demographics', k) }}
+              <span
+                class="delta"
+                :class="deltaClass(v)"
+              >{{ formatDelta(v) }}</span>
             </li>
           </ul>
         </div>
         <div class="seg-block">
-          <div class="seg-subtitle">{{ t('simulator.sentiment.sections.bottom') }}</div>
+          <div class="seg-subtitle">
+            {{ t('simulator.sentiment.sections.bottom') }}
+          </div>
           <ul>
-            <li v-for="([k,v]) in topN(sentiment.demographics,3,true)" :key="'d-btm-'+k">
-              <span class="chip" :style="chipStyle(v)" :title="chipTitle('demographics', k, v)">{{ v.toFixed(1) }}</span> {{ translateLabel('demographics', k) }}
-              <span class="delta" :class="deltaClass(v)">{{ formatDelta(v) }}</span>
+            <li
+              v-for="([k,v]) in topN(sentiment.demographics,3,true)"
+              :key="'d-btm-'+k"
+            >
+              <span
+                class="chip"
+                :style="chipStyle(v)"
+                :title="chipTitle('demographics', k, v)"
+              >{{ v.toFixed(1) }}</span> {{ translateLabel('demographics', k) }}
+              <span
+                class="delta"
+                :class="deltaClass(v)"
+              >{{ formatDelta(v) }}</span>
             </li>
           </ul>
         </div>
         <div class="seg-block full-list">
-          <div class="seg-subtitle">{{ t('simulator.sentiment.sections.allDemographics') }}</div>
+          <div class="seg-subtitle">
+            {{ t('simulator.sentiment.sections.allDemographics') }}
+          </div>
           <ul>
-            <li v-for="([k,v]) in sortedEntries(sentiment.demographics)" :key="'d-all-'+k">
-              <span class="chip" :style="chipStyle(v)" :title="chipTitle('demographics', k, v)">{{ v.toFixed(1) }}</span> {{ translateLabel('demographics', k) }}
-              <span class="delta" :class="deltaClass(v)">{{ formatDelta(v) }}</span>
+            <li
+              v-for="([k,v]) in sortedEntries(sentiment.demographics)"
+              :key="'d-all-'+k"
+            >
+              <span
+                class="chip"
+                :style="chipStyle(v)"
+                :title="chipTitle('demographics', k, v)"
+              >{{ v.toFixed(1) }}</span> {{ translateLabel('demographics', k) }}
+              <span
+                class="delta"
+                :class="deltaClass(v)"
+              >{{ formatDelta(v) }}</span>
             </li>
           </ul>
         </div>
       </div>
-      <div class="seg-col" v-show="selectedGroup==='sectors'">
+      <div
+        v-show="selectedGroup==='sectors'"
+        class="seg-col"
+      >
         <h4>{{ t('simulator.sentiment.headers.sectors') }}</h4>
         <div class="seg-block">
-          <div class="seg-subtitle">{{ t('simulator.sentiment.sections.top') }}</div>
+          <div class="seg-subtitle">
+            {{ t('simulator.sentiment.sections.top') }}
+          </div>
           <ul>
-            <li v-for="([k,v]) in topN(sentiment.sectors,3,false)" :key="'s-top-'+k">
-              <span class="chip" :style="chipStyle(v)" :title="chipTitle('sectors', k, v)">{{ v.toFixed(1) }}</span> {{ translateLabel('sectors', k) }}
-              <span class="delta" :class="deltaClass(v)">{{ formatDelta(v) }}</span>
+            <li
+              v-for="([k,v]) in topN(sentiment.sectors,3,false)"
+              :key="'s-top-'+k"
+            >
+              <span
+                class="chip"
+                :style="chipStyle(v)"
+                :title="chipTitle('sectors', k, v)"
+              >{{ v.toFixed(1) }}</span> {{ translateLabel('sectors', k) }}
+              <span
+                class="delta"
+                :class="deltaClass(v)"
+              >{{ formatDelta(v) }}</span>
             </li>
           </ul>
         </div>
         <div class="seg-block">
-          <div class="seg-subtitle">{{ t('simulator.sentiment.sections.bottom') }}</div>
+          <div class="seg-subtitle">
+            {{ t('simulator.sentiment.sections.bottom') }}
+          </div>
           <ul>
-            <li v-for="([k,v]) in topN(sentiment.sectors,3,true)" :key="'s-btm-'+k">
-              <span class="chip" :style="chipStyle(v)" :title="chipTitle('sectors', k, v)">{{ v.toFixed(1) }}</span> {{ translateLabel('sectors', k) }}
-              <span class="delta" :class="deltaClass(v)">{{ formatDelta(v) }}</span>
+            <li
+              v-for="([k,v]) in topN(sentiment.sectors,3,true)"
+              :key="'s-btm-'+k"
+            >
+              <span
+                class="chip"
+                :style="chipStyle(v)"
+                :title="chipTitle('sectors', k, v)"
+              >{{ v.toFixed(1) }}</span> {{ translateLabel('sectors', k) }}
+              <span
+                class="delta"
+                :class="deltaClass(v)"
+              >{{ formatDelta(v) }}</span>
             </li>
           </ul>
         </div>
         <div class="seg-block full-list">
-          <div class="seg-subtitle">{{ t('simulator.sentiment.sections.allSectors') }}</div>
+          <div class="seg-subtitle">
+            {{ t('simulator.sentiment.sections.allSectors') }}
+          </div>
           <ul>
-            <li v-for="([k,v]) in sortedEntries(sentiment.sectors)" :key="'s-all-'+k">
-              <span class="chip" :style="chipStyle(v)" :title="chipTitle('sectors', k, v)">{{ v.toFixed(1) }}</span> {{ translateLabel('sectors', k) }}
-              <span class="delta" :class="deltaClass(v)">{{ formatDelta(v) }}</span>
+            <li
+              v-for="([k,v]) in sortedEntries(sentiment.sectors)"
+              :key="'s-all-'+k"
+            >
+              <span
+                class="chip"
+                :style="chipStyle(v)"
+                :title="chipTitle('sectors', k, v)"
+              >{{ v.toFixed(1) }}</span> {{ translateLabel('sectors', k) }}
+              <span
+                class="delta"
+                :class="deltaClass(v)"
+              >{{ formatDelta(v) }}</span>
             </li>
           </ul>
         </div>

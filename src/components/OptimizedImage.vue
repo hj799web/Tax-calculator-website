@@ -5,14 +5,14 @@
       v-if="avifSrc" 
       :srcset="avifSrc" 
       type="image/avif"
-    />
+    >
     
     <!-- WebP for modern browsers (great compression) -->
     <source 
       v-if="webpSrc" 
       :srcset="webpSrc" 
       type="image/webp"
-    />
+    >
     
     <!-- JPEG fallback for older browsers -->
     <img 
@@ -24,7 +24,7 @@
       :height="height"
       @load="onLoad"
       @error="onError"
-    />
+    >
   </picture>
 </template>
 

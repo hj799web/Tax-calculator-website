@@ -138,16 +138,41 @@ export const useMultiYearSettingsStore = defineStore('multiYearSettings', () => 
   }
 
   function getPlannedFactorForYear(categoryId, year, fallbackFactor) {
-    const p = multiYearPlans.value.spending?.[categoryId];
-    if (!p) return fallbackFactor ?? null;
-    if (p.points && p.points[year] != null) return Number(p.points[year]);
-    // Ongoing level + growth delta are projection concepts; for apply to a given year, we treat ongoing level as multiplier
-    if (p.ongoingLevelPct != null) {
-      const base = Number(fallbackFactor ?? 1);
-      const level = 1 + Number(p.ongoingLevelPct) / 100;
-      return Number((base * level).toFixed(4));
+    const plan = multiYearPlans.value.spending?.[categoryId];
+    if (!plan) return fallbackFactor ?? null;
+
+    if (plan.points && plan.points[year] != null) {
+      return Number(plan.points[year]);
     }
-    return fallbackFactor ?? null;
+
+    const baseFactor = Number(fallbackFactor ?? 1);
+    const startYear = Number(plan.rule?.startYear ?? planning.value.baseYear ?? year);
+
+    if (plan.ongoingLevelPct != null) {
+      const level = 1 + Number(plan.ongoingLevelPct) / 100;
+      return Number((baseFactor * level).toFixed(4));
+    }
+
+    if (!plan.rule) {
+      if (typeof plan.levelShiftPct === 'number' && year >= startYear) {
+        return Number((baseFactor * (1 + Number(plan.levelShiftPct) / 100)).toFixed(4));
+      }
+      return baseFactor;
+    }
+
+    if (year < startYear) {
+      return baseFactor;
+    }
+
+    let start = Number(plan.rule.startFactor ?? baseFactor);
+    if (typeof plan.levelShiftPct === 'number') {
+      start = Number((start * (1 + Number(plan.levelShiftPct) / 100)).toFixed(4));
+    }
+
+    const annualGrowth = Number(plan.rule.annualDeltaPct ?? 0) / 100;
+    const yearsElapsed = Math.max(0, year - startYear);
+    const projected = start * Math.pow(1 + annualGrowth, yearsElapsed);
+    return Number(projected.toFixed(4));
   }
 
   return {
@@ -170,3 +195,4 @@ export const useMultiYearSettingsStore = defineStore('multiYearSettings', () => 
     resetAllSpendingGrowth,
   };
 });
+

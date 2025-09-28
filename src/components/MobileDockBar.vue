@@ -1,12 +1,23 @@
 <template>
-  <div class="dockbar" v-if="isMobile">
-    <button class="pill" @click="openChanges">
-      <span class="material-icons" aria-hidden="true">history</span>
+  <div
+    v-if="isMobile"
+    class="dockbar"
+  >
+    <button
+      class="pill"
+      @click="openChanges"
+    >
+      <span
+        class="material-icons"
+        aria-hidden="true"
+      >history</span>
       <span class="label">Changes</span>
-      <span class="count" v-if="count">({{ count }})</span>
+      <span
+        v-if="count"
+        class="count"
+      >({{ count }})</span>
     </button>
   </div>
-  
 </template>
 
 <script setup>

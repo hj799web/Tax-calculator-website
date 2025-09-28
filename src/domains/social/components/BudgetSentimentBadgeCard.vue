@@ -3,19 +3,30 @@
     <!-- Sentiment Overview -->
     <div class="sentiment-overview">
       <div class="sentiment-header">
-        <h4 class="text-lg font-semibold">Public Sentiment</h4>
-        <div class="sentiment-score" :class="sentimentClass">
+        <h4 class="text-lg font-semibold">
+          Public Sentiment
+        </h4>
+        <div
+          class="sentiment-score"
+          :class="sentimentClass"
+        >
           {{ budgetData.sentiment?.toFixed(1) || 'N/A' }}
         </div>
       </div>
       
       <!-- Top Positive/Negative Segments -->
       <div class="sentiment-segments">
-        <div v-if="budgetData.positiveSegments?.length" class="segment positive">
+        <div
+          v-if="budgetData.positiveSegments?.length"
+          class="segment positive"
+        >
           <span class="material-icons">trending_up</span>
           <span>{{ budgetData.positiveSegments[0]?.name }}</span>
         </div>
-        <div v-if="budgetData.negativeSegments?.length" class="segment negative">
+        <div
+          v-if="budgetData.negativeSegments?.length"
+          class="segment negative"
+        >
           <span class="material-icons">trending_down</span>
           <span>{{ budgetData.negativeSegments[0]?.name }}</span>
         </div>
@@ -23,10 +34,19 @@
     </div>
 
     <!-- Badges Section -->
-    <div v-if="budgetData.badges?.length" class="badges-section">
-      <h4 class="text-lg font-semibold mb-2">Achievements</h4>
+    <div
+      v-if="budgetData.badges?.length"
+      class="badges-section"
+    >
+      <h4 class="text-lg font-semibold mb-2">
+        Achievements
+      </h4>
       <div class="badges-grid">
-        <div v-for="badge in budgetData.badges" :key="badge.name" class="badge-item">
+        <div
+          v-for="badge in budgetData.badges"
+          :key="badge.name"
+          class="badge-item"
+        >
           <span class="badge-icon">{{ badge.icon }}</span>
           <span class="badge-name">{{ badge.name }}</span>
         </div>

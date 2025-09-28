@@ -61,11 +61,21 @@
         >
           {{ t('calculator.inputs.deductions.maritalStatus.placeholder') }}
         </option>
-        <option value="single">{{ t('calculator.inputs.deductions.maritalStatus.options.single') }}</option>
-        <option value="married">{{ t('calculator.inputs.deductions.maritalStatus.options.married') }}</option>
-        <option value="separated">{{ t('calculator.inputs.deductions.maritalStatus.options.separated') }}</option>
-        <option value="divorced">{{ t('calculator.inputs.deductions.maritalStatus.options.divorced') }}</option>
-        <option value="widowed">{{ t('calculator.inputs.deductions.maritalStatus.options.widowed') }}</option>
+        <option value="single">
+          {{ t('calculator.inputs.deductions.maritalStatus.options.single') }}
+        </option>
+        <option value="married">
+          {{ t('calculator.inputs.deductions.maritalStatus.options.married') }}
+        </option>
+        <option value="separated">
+          {{ t('calculator.inputs.deductions.maritalStatus.options.separated') }}
+        </option>
+        <option value="divorced">
+          {{ t('calculator.inputs.deductions.maritalStatus.options.divorced') }}
+        </option>
+        <option value="widowed">
+          {{ t('calculator.inputs.deductions.maritalStatus.options.widowed') }}
+        </option>
       </select>
     </div>
 

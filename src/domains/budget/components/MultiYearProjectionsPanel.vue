@@ -1,71 +1,134 @@
 <template>
   <div class="multi-year-panel">
     <div class="header-row">
-      <h3 class="title">{{ i18nText('multiYearProjections.title', 'Multi-Year Projections') }}</h3>
-      <button class="btn primary" @click="showPlanner = !showPlanner">
-        <span class="material-icons" aria-hidden="true">timeline</span>
+      <h3 class="title">
+        {{ i18nText('multiYearProjections.title', 'Multi-Year Projections') }}
+      </h3>
+      <button
+        class="btn primary"
+        @click="showPlanner = !showPlanner"
+      >
+        <span
+          class="material-icons"
+          aria-hidden="true"
+        >timeline</span>
         {{ showPlanner ? i18nText('multiYearProjections.buttons.hideCharts', 'Hide Charts') : i18nText('multiYearProjections.buttons.showCharts', 'Show Charts') }}
       </button>
     </div>
-    <div v-if="!FEATURES.MULTI_YEAR_PLANNING" class="flag-disabled">
+    <div
+      v-if="!FEATURES.MULTI_YEAR_PLANNING"
+      class="flag-disabled"
+    >
       <p>{{ i18nText('multiYearProjections.featureDisabled', 'This feature is disabled. Enable MULTI_YEAR_PLANNING to view projections.') }}</p>
     </div>
     <div v-else>
       <div class="assumptions editable">
         <div class="row">
           <label>{{ i18nText('multiYearProjections.labels.baseYear', 'Base year') }}</label>
-          <input type="number" v-model.number="settingsStore.planning.baseYear" @change="normalize()" min="2000" max="2100" />
+          <input
+            v-model.number="settingsStore.planning.baseYear"
+            type="number"
+            min="2000"
+            max="2100"
+            @change="normalize()"
+          >
         </div>
         <div class="row">
           <label>{{ i18nText('multiYearProjections.labels.horizon', 'Horizon (years)') }}</label>
-          <input type="number" v-model.number="settingsStore.planning.horizonYears" @change="normalize()" min="1" max="50" />
+          <input
+            v-model.number="settingsStore.planning.horizonYears"
+            type="number"
+            min="1"
+            max="50"
+            @change="normalize()"
+          >
         </div>
         <div class="row">
           <label>{{ i18nText('multiYearProjections.labels.realGdpGrowth', 'Real GDP growth (%)') }}</label>
-          <input type="number" step="0.1" v-model.number="settingsStore.economic.gdpReal" @change="normalize()" min="-5" max="10" />
+          <input
+            v-model.number="settingsStore.economic.gdpReal"
+            type="number"
+            step="0.1"
+            min="-5"
+            max="10"
+            @change="normalize()"
+          >
         </div>
         <div class="row">
           <label>{{ i18nText('multiYearProjections.labels.inflation', 'Inflation (%)') }}</label>
-          <input type="number" step="0.1" v-model.number="settingsStore.economic.inflation" @change="normalize()" min="-2" max="20" />
+          <input
+            v-model.number="settingsStore.economic.inflation"
+            type="number"
+            step="0.1"
+            min="-2"
+            max="20"
+            @change="normalize()"
+          >
         </div>
         <div class="row">
           <label>{{ i18nText('multiYearProjections.labels.interestRate', 'Interest rate (%)') }}</label>
-          <input type="number" step="0.1" v-model.number="settingsStore.economic.interestRate" @change="normalize()" min="0" max="20" />
+          <input
+            v-model.number="settingsStore.economic.interestRate"
+            type="number"
+            step="0.1"
+            min="0"
+            max="20"
+            @change="normalize()"
+          >
         </div>
         <div class="row">
           <label :title="i18nText('multiYearProjections.tooltips.programSpendingBoost', 'One-time adjustment to all program spending levels')">{{ i18nText('multiYearProjections.labels.programSpendingBoost', 'Program spending boost (%)') }}</label>
           <input
+            v-model.number="settingsStore.spendingGlobal.levelPct"
             type="number"
             step="0.5"
             :min="-15"
             :max="15"
-            v-model.number="settingsStore.spendingGlobal.levelPct"
             @change="clampGlobal()"
-          />
+          >
         </div>
         <div class="row">
           <label :title="i18nText('multiYearProjections.tooltips.speedUpSpendingGrowth', 'Adjusts how fast program spending grows each year. +0.5 means all categories grow 0.5 percentage points faster annually.')">{{ i18nText('multiYearProjections.labels.speedUpSpendingGrowth', 'Speed up spending growth (pp)') }}</label>
           <input
+            v-model.number="settingsStore.spendingGlobal.growthDeltaPct"
             type="number"
             step="0.1"
-            v-model.number="settingsStore.spendingGlobal.growthDeltaPct"
             @change="clampGlobal()"
-          />
+          >
         </div>
         <div class="row preset-row">
           <label>Preset</label>
-          <select v-model="selectedPreset" @change="applyPreset()">
-            <option value="">Custom</option>
-            <option value="conservative">Conservative</option>
-            <option value="moderate">Moderate</option>
-            <option value="optimistic">Optimistic</option>
+          <select
+            v-model="selectedPreset"
+            @change="applyPreset()"
+          >
+            <option value="">
+              Custom
+            </option>
+            <option value="conservative">
+              Conservative
+            </option>
+            <option value="moderate">
+              Moderate
+            </option>
+            <option value="optimistic">
+              Optimistic
+            </option>
           </select>
         </div>
         <div class="row">
-          <button class="btn" @click="resetToDefaults()">Reset to defaults</button>
+          <button
+            class="btn"
+            @click="resetToDefaults()"
+          >
+            Reset to defaults
+          </button>
         </div>
         
-        <details class="spend-growth" open>
+        <details
+          class="spend-growth"
+          open
+        >
           <summary>Annual Program Spending Growth Rates (%)</summary>
           
           <div class="growth-explanation">
@@ -79,16 +142,23 @@
 
           <div class="growth-toolbar">
             <input
-              class="filter"
               v-model="growthFilter"
+              class="filter"
               placeholder="Filter categories (e.g., health, seniors)…"
-            />
-            <div class="spacer"></div>
-            <button class="btn" @click="onResetAll()">Reset all</button>
+            >
+            <div class="spacer" />
+            <button
+              class="btn"
+              @click="onResetAll()"
+            >
+              Reset all
+            </button>
           </div>
 
           <div class="growth-head">
-            <div class="label">Category</div>
+            <div class="label">
+              Category
+            </div>
             <div class="inputs-head">
               <span :title="t('simulator.multiYearProjections.tooltips.baseline', 'Normal program cost increases (inflation, policy changes, etc.)')">
                 Baseline
@@ -99,7 +169,7 @@
                 <span class="help-icon">ⓘ</span>
               </span>
             </div>
-            <div class="actions"></div>
+            <div class="actions" />
           </div>
 
           <div class="growth-grid">
@@ -108,30 +178,45 @@
               :key="key"
               class="growth-row"
             >
-              <div class="label">{{ prettyKey(key) }}</div>
+              <div class="label">
+                {{ prettyKey(key) }}
+              </div>
               <div class="inputs">
-                <label class="sub" :title="t('simulator.multiYearProjections.tooltips.baseline', 'Normal program cost increases')">Baseline</label>
+                <label
+                  class="sub"
+                  :title="t('simulator.multiYearProjections.tooltips.baseline', 'Normal program cost increases')"
+                >Baseline</label>
                 <input
+                  v-model.number="settingsStore.spendingGrowth[key].baseline"
                   type="number"
                   step="0.1"
                   :min="-10"
                   :max="15"
-                  v-model.number="settingsStore.spendingGrowth[key].baseline"
                   :title="`Baseline growth rate for ${prettyKey(key)}`"
-                />
-                <label class="sub" :title="t('simulator.multiYearProjections.tooltips.demographic', 'Extra growth due to population aging')">Demographic</label>
+                >
+                <label
+                  class="sub"
+                  :title="t('simulator.multiYearProjections.tooltips.demographic', 'Extra growth due to population aging')"
+                >Demographic</label>
                 <input
+                  v-model.number="settingsStore.spendingGrowth[key].demographic"
                   type="number"
                   step="0.1"
                   :min="-5"
                   :max="10"
-                  v-model.number="settingsStore.spendingGrowth[key].demographic"
                   :title="`Demographic growth rate for ${prettyKey(key)}`"
-                />
+                >
               </div>
               <div class="actions">
-                <button class="icon-btn" :title="`Reset ${prettyKey(key)}`" @click="onResetRow(key)">
-                  <span class="material-icons" aria-hidden="true">restart_alt</span>
+                <button
+                  class="icon-btn"
+                  :title="`Reset ${prettyKey(key)}`"
+                  @click="onResetRow(key)"
+                >
+                  <span
+                    class="material-icons"
+                    aria-hidden="true"
+                  >restart_alt</span>
                 </button>
               </div>
             </div>
@@ -139,7 +224,10 @@
         </details>
       </div>
 
-      <div v-if="showPlanner" class="charts-section">
+      <div
+        v-if="showPlanner"
+        class="charts-section"
+      >
         <ProjectionsPanelLite :show-controls="false" />
       </div>
 
@@ -157,45 +245,89 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="r in rows" :key="r.year">
+            <tr
+              v-for="r in rows"
+              :key="r.year"
+            >
               <td>
-                <button class="year-link" @click="openYearEditor(r.year)">{{ r.year }}</button>
+                <button
+                  class="year-link"
+                  @click="openYearEditor(r.year)"
+                >
+                  {{ r.year }}
+                </button>
               </td>
               <td>{{ fmt(r.gdp) }}</td>
               <td>{{ fmt(r.revenueTotal) }}</td>
               <td>{{ fmt(r.spendingTotal) }}</td>
-              <td :class="{ positive: r.deficit >= 0, negative: r.deficit < 0 }">{{ fmt(r.deficit) }}</td>
+              <td :class="{ positive: r.deficit >= 0, negative: r.deficit < 0 }">
+                {{ fmt(r.deficit) }}
+              </td>
               <td>{{ fmt(r.debt) }}</td>
               <td>{{ (r.debtToGDP * 100).toFixed(1) }}%</td>
             </tr>
           </tbody>
         </table>
-        <div v-if="rows.length === 0" class="empty">
+        <div
+          v-if="rows.length === 0"
+          class="empty"
+        >
           No projection data available. Check settings.
         </div>
       </div>
-      <div v-if="showYearModal" class="year-editor">
+      <div
+        v-if="showYearModal"
+        class="year-editor"
+      >
         <div class="ye-header">
           <h4>{{ i18nText('projectionsPanel.editYearTitle', 'Edit {year} (program spending)')?.replace('{year}', selectedYear) }}</h4>
-          <button class="btn" @click="closeYearEditor">{{ i18nText('common.close', 'Close') }}</button>
+          <button
+            class="btn"
+            @click="closeYearEditor"
+          >
+            {{ i18nText('common.close', 'Close') }}
+          </button>
         </div>
         <div class="ye-grid">
           <div class="row">
             <label :title="i18nText('projectionsPanel.spendingBoostTooltip', 'One-time adjustment to program spending for this year')">{{ i18nText('projectionsPanel.spendingBoost', 'Program spending boost (%)') }}</label>
-            <input type="number" step="0.5" :min="-15" :max="15" v-model.number="yearLevel" />
+            <input
+              v-model.number="yearLevel"
+              type="number"
+              step="0.5"
+              :min="-15"
+              :max="15"
+            >
           </div>
           <div class="row">
             <label :title="i18nText('projectionsPanel.growthRateBoostTooltip', 'Adjusts growth rate for this year and forward. +0.5 means spending grows 0.5 percentage points faster.')">{{ i18nText('projectionsPanel.growthRateBoost', 'Growth rate boost (pp)') }}</label>
-            <input type="number" step="0.1" v-model.number="yearGrowth" />
+            <input
+              v-model.number="yearGrowth"
+              type="number"
+              step="0.1"
+            >
           </div>
           <div class="row">
             <label>{{ i18nText('projectionsPanel.applyForward', 'Apply forward') }}</label>
-            <input type="checkbox" v-model="applyForward" />
+            <input
+              v-model="applyForward"
+              type="checkbox"
+            >
           </div>
         </div>
         <div class="ye-actions">
-          <button class="btn" @click="resetYearOverrides">{{ i18nText('projectionsPanel.resetYear', 'Reset year') }}</button>
-          <button class="btn primary" @click="applyYearOverrides">{{ i18nText('common.apply', 'Apply') }}</button>
+          <button
+            class="btn"
+            @click="resetYearOverrides"
+          >
+            {{ i18nText('projectionsPanel.resetYear', 'Reset year') }}
+          </button>
+          <button
+            class="btn primary"
+            @click="applyYearOverrides"
+          >
+            {{ i18nText('common.apply', 'Apply') }}
+          </button>
         </div>
       </div>
     </div>

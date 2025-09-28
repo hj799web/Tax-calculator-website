@@ -3,35 +3,63 @@
     <!-- Story Header with Gradient Background -->
     <div class="story-header">
       <div class="logo-container">
-        <img src="../assets/fiscal-insights-logo.webp" :alt="t('home.alt.logo', 'Fiscal Insights')" class="logo-image" />
+        <img
+          src="../assets/fiscal-insights-logo.webp"
+          :alt="t('home.alt.logo', 'Fiscal Insights')"
+          class="logo-image"
+        >
       </div>
-      <h2 class="story-title">{{ t('storyCard.title', 'Canadian Budget') }}</h2>
+      <h2 class="story-title">
+        {{ t('storyCard.title', 'Canadian Budget') }}
+      </h2>
     </div>
     
     <!-- Budget Highlight Section -->
     <div class="budget-highlight">
-      <div class="fiscal-status" :class="{ 'surplus': budgetSurplus > 0, 'deficit': budgetSurplus < 0 }">
-        <div class="status-label">{{ budgetSurplus > 0 ? t('storyCard.surplus', 'SURPLUS') : t('storyCard.deficit', 'DEFICIT') }}</div>
-        <div class="status-value">${{ formatCurrency(Math.abs(budgetSurplus)) }}B</div>
+      <div
+        class="fiscal-status"
+        :class="{ 'surplus': budgetSurplus > 0, 'deficit': budgetSurplus < 0 }"
+      >
+        <div class="status-label">
+          {{ budgetSurplus > 0 ? t('storyCard.surplus', 'SURPLUS') : t('storyCard.deficit', 'DEFICIT') }}
+        </div>
+        <div class="status-value">
+          ${{ formatCurrency(Math.abs(budgetSurplus)) }}B
+        </div>
       </div>
       
       <!-- Key Metrics -->
       <div class="key-metrics">
         <div class="metric">
-          <div class="metric-label">Top Revenue</div>
-          <div class="metric-value">{{ topRevenue.name }}</div>
-          <div class="metric-amount">${{ formatCurrency(topRevenue.value) }}B</div>
+          <div class="metric-label">
+            Top Revenue
+          </div>
+          <div class="metric-value">
+            {{ topRevenue.name }}
+          </div>
+          <div class="metric-amount">
+            ${{ formatCurrency(topRevenue.value) }}B
+          </div>
         </div>
         <div class="metric">
-          <div class="metric-label">Top Spending</div>
-          <div class="metric-value">{{ topSpending.name }}</div>
-          <div class="metric-amount">${{ formatCurrency(topSpending.value) }}B</div>
+          <div class="metric-label">
+            Top Spending
+          </div>
+          <div class="metric-value">
+            {{ topSpending.name }}
+          </div>
+          <div class="metric-amount">
+            ${{ formatCurrency(topSpending.value) }}B
+          </div>
         </div>
       </div>
     </div>
     
     <!-- Badge Highlight (if available) -->
-    <div v-if="badges && badges.length > 0" class="badge-highlight">
+    <div
+      v-if="badges && badges.length > 0"
+      class="badge-highlight"
+    >
       <div class="badge-item">
         <span class="badge-icon">{{ badges[0].icon }}</span>
         <span class="badge-name">{{ badges[0].name }}</span>
@@ -39,20 +67,39 @@
     </div>
     
     <!-- Most Positive/Negative Segments Section -->
-    <div v-if="(mostPositiveSegments && mostPositiveSegments.length) || (mostNegativeSegments && mostNegativeSegments.length)" class="segments-section">
-      <h3 class="section-title">Most Positive & Negative Segments</h3>
+    <div
+      v-if="(mostPositiveSegments && mostPositiveSegments.length) || (mostNegativeSegments && mostNegativeSegments.length)"
+      class="segments-section"
+    >
+      <h3 class="section-title">
+        Most Positive & Negative Segments
+      </h3>
       <div class="segments-list">
-        <div class="segment positive-segment" v-if="mostPositiveSegments && mostPositiveSegments.length">
+        <div
+          v-if="mostPositiveSegments && mostPositiveSegments.length"
+          class="segment positive-segment"
+        >
           <span class="segment-label">Most Positive:</span>
-          <span v-for="seg in mostPositiveSegments.slice(0, 2)" :key="seg.name" class="segment-name">
+          <span
+            v-for="seg in mostPositiveSegments.slice(0, 2)"
+            :key="seg.name"
+            class="segment-name"
+          >
             {{ formatGroupName(seg.name) }}
             <span class="segment-emoji">{{ getSentimentEmoji(seg.score) }}</span>
             <span class="segment-score">{{ typeof seg.score === 'number' ? seg.score.toFixed(1) : '0.0' }}</span>
           </span>
         </div>
-        <div class="segment negative-segment" v-if="mostNegativeSegments && mostNegativeSegments.length">
+        <div
+          v-if="mostNegativeSegments && mostNegativeSegments.length"
+          class="segment negative-segment"
+        >
           <span class="segment-label">Most Negative:</span>
-          <span v-for="seg in mostNegativeSegments.slice(0, 2)" :key="seg.name" class="segment-name">
+          <span
+            v-for="seg in mostNegativeSegments.slice(0, 2)"
+            :key="seg.name"
+            class="segment-name"
+          >
             {{ formatGroupName(seg.name) }}
             <span class="segment-emoji">{{ getSentimentEmoji(seg.score) }}</span>
             <span class="segment-score">{{ typeof seg.score === 'number' ? seg.score.toFixed(1) : '0.0' }}</span>
@@ -63,16 +110,31 @@
     
     <!-- Website Link -->
     <div class="website-link">
-      <div class="link-label">Create your own budget at</div>
-      <div class="link-url">hj799web.github.io/Tax-calculator-website</div>
+      <div class="link-label">
+        Create your own budget at
+      </div>
+      <div class="link-url">
+        hj799web.github.io/Tax-calculator-website
+      </div>
     </div>
     
     <!-- Swipe Up Indicator -->
     <div class="swipe-up">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="swipe-icon">
-        <path d="M12 19V5M5 12l7-7 7 7"/>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="swipe-icon"
+      >
+        <path d="M12 19V5M5 12l7-7 7 7" />
       </svg>
-      <div class="swipe-text">Swipe Up</div>
+      <div class="swipe-text">
+        Swipe Up
+      </div>
     </div>
   </div>
 </template>
@@ -82,10 +144,6 @@ import { useI18n } from '@/i18n'
 
 export default {
   name: 'StoryCard',
-  setup() {
-    const { t } = useI18n()
-    return { t }
-  },
   props: {
     budgetSurplus: {
       type: Number,
@@ -121,6 +179,10 @@ export default {
         return [];
       }
     }
+  },
+  setup() {
+    const { t } = useI18n()
+    return { t }
   },
   computed: {
     topRevenue() {

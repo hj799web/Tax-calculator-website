@@ -1,46 +1,72 @@
 <template>
   <div>
     <button 
-      @click="openOptions" 
+      v-if="!isTourActive" 
       class="tour-button"
-      v-if="!isTourActive"
       :aria-label="t('tour.buttons.open')"
+      @click="openOptions"
     >
       <span class="material-icons">lightbulb</span>
       {{ t('tour.buttons.open') }}
     </button>
     <button 
-      @click="resetTour"
-      class="tour-reset-button"
       v-if="!isTourActive"
+      class="tour-reset-button"
       :title="t('tour.buttons.resetTooltip')"
       :aria-label="t('tour.buttons.resetTooltip')"
+      @click="resetTour"
     >
       <span class="material-icons">restart_alt</span>
     </button>
 
-    <div v-if="showOptions" class="tour-options-overlay" role="dialog" aria-modal="true" aria-labelledby="tour-title">
+    <div
+      v-if="showOptions"
+      class="tour-options-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="tour-title"
+    >
       <div class="tour-options">
         <div class="tour-header">
           <span class="material-icons">explore</span>
-          <h3 id="tour-title">{{ t('tour.options.title') }}</h3>
+          <h3 id="tour-title">
+            {{ t('tour.options.title') }}
+          </h3>
         </div>
-        <p class="tour-sub">{{ t('tour.options.subtitle') }}</p>
+        <p class="tour-sub">
+          {{ t('tour.options.subtitle') }}
+        </p>
         <div class="tour-actions">
-          <button class="tour-action primary" @click="startTour('quick')">
+          <button
+            class="tour-action primary"
+            @click="startTour('quick')"
+          >
             <span class="material-icons">bolt</span>
             {{ t('tour.options.quick') }}
           </button>
-          <button class="tour-action" @click="startTour('full')">
+          <button
+            class="tour-action"
+            @click="startTour('full')"
+          >
             <span class="material-icons">tour</span>
             {{ t('tour.options.full') }}
           </button>
         </div>
-        <button class="tour-skip" @click="dismissOptions">{{ t('tour.options.skip') }}</button>
+        <button
+          class="tour-skip"
+          @click="dismissOptions"
+        >
+          {{ t('tour.options.skip') }}
+        </button>
       </div>
     </div>
 
-    <div v-if="onboardingTourErrorMessage" class="error-message">{{ onboardingTourErrorMessage }}</div>
+    <div
+      v-if="onboardingTourErrorMessage"
+      class="error-message"
+    >
+      {{ onboardingTourErrorMessage }}
+    </div>
   </div>
 </template>
 

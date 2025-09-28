@@ -1,7 +1,10 @@
 /* eslint-disable */
 <template>
   <nav class="main-navigation">
-    <a href="welcome.html" class="nav-link">{{ t('home.nav.home') }}</a>
+    <a
+      href="welcome.html"
+      class="nav-link"
+    >{{ t('home.nav.home') }}</a>
     <router-link 
       to="/how-it-works" 
       class="nav-link"
@@ -20,7 +23,12 @@
     >
       {{ t('home.nav.simulator') }}
     </router-link>
-    <a href="https://www.canada.ca/en/revenue-agency.html" target="_blank" rel="noopener noreferrer" class="nav-link">{{ t('home.nav.cra') }}</a>
+    <a
+      href="https://www.canada.ca/en/revenue-agency.html"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="nav-link"
+    >{{ t('home.nav.cra') }}</a>
   </nav>
 </template>
 

@@ -12,7 +12,7 @@
       :label="groupSentimentLabel"
       :selected-groups="selectedGroups"
       :fiscal-chaos="fiscalChaos"
-      @update:selectedGroups="selectedGroups = $event"
+      @update:selected-groups="selectedGroups = $event"
     />
     
     <!-- Retractable Badge Panel at Top Left with View All button -->
@@ -38,7 +38,10 @@
           {{ t('simulator.header.viewAll') }}
         </button>
       </div>
-      <div v-show="badgePanelExpanded && budgetStore.badges.length === 0" class="no-badges-message">
+      <div
+        v-show="badgePanelExpanded && budgetStore.badges.length === 0"
+        class="no-badges-message"
+      >
         {{ t('simulator.header.noBadges') }}
       </div>
       <div
@@ -70,17 +73,22 @@
         >
       </div>
       <div class="flex justify-between items-center mb-0">
-        <h1 class="main-title">{{ t('simulator.header.title') }}</h1>
+        <h1 class="main-title">
+          {{ t('simulator.header.title') }}
+        </h1>
         <div class="language-switch">
-          <label class="language-label" for="simulator-language-switch">
+          <label
+            class="language-label"
+            for="simulator-language-switch"
+          >
             {{ t('home.language.label') }}
           </label>
           <select
             id="simulator-language-switch"
             class="language-select"
             :value="locale"
-            @change="handleLocaleChange"
             :aria-label="t('home.language.switchLabel')"
+            @change="handleLocaleChange"
           >
             <option
               v-for="option in locales"
@@ -108,57 +116,102 @@
       />
 
       <!-- Panel Navigation (feature-gated) -->
-      <div v-if="FEATURES.PANEL_NAV" class="mb-4">
+      <div
+        v-if="FEATURES.PANEL_NAV"
+        class="mb-4"
+      >
         <PanelHost />
       </div>
 
       <!-- Sub Navigation Bar -->
-      <nav class="sub-navigation" v-if="!FEATURES.PANEL_NAV">
-        <a @click="scrollToSection('budget-goals')" class="sub-nav-link">
+      <nav
+        v-if="!FEATURES.PANEL_NAV"
+        class="sub-navigation"
+      >
+        <a
+          class="sub-nav-link"
+          @click="scrollToSection('budget-goals')"
+        >
           <span class="material-icons">flag</span>
           {{ t('simulator.nav.goals') }}
         </a>
-        <a @click="scrollToSection('budget-results')" class="sub-nav-link">
+        <a
+          class="sub-nav-link"
+          @click="scrollToSection('budget-results')"
+        >
           <span class="material-icons">summarize</span>
           {{ t('simulator.nav.results') }}
         </a>
-        <a @click="scrollToSection('revenue-sources')" class="sub-nav-link">
+        <a
+          class="sub-nav-link"
+          @click="scrollToSection('revenue-sources')"
+        >
           <span class="material-icons">payments</span>
           {{ t('simulator.nav.revenue') }}
         </a>
-        <a @click="scrollToSection('spending-controls')" class="sub-nav-link">
+        <a
+          class="sub-nav-link"
+          @click="scrollToSection('spending-controls')"
+        >
           <span class="material-icons">payments</span>
           {{ t('simulator.nav.spending') }}
         </a>
-        <a @click="scrollToSection('budget-analysis')" class="sub-nav-link">
+        <a
+          class="sub-nav-link"
+          @click="scrollToSection('budget-analysis')"
+        >
           <span class="material-icons">bar_chart</span>
           {{ t('simulator.nav.analysis') }}
         </a>
-        <a @click="scrollToSection('public-sentiment')" class="sub-nav-link">
+        <a
+          class="sub-nav-link"
+          @click="scrollToSection('public-sentiment')"
+        >
           <span class="material-icons">people</span>
           {{ t('simulator.nav.sentiment') }}
         </a>
         <div class="section-controls">
-          <button @click="expandAllSections" class="section-control-btn">
+          <button
+            class="section-control-btn"
+            @click="expandAllSections"
+          >
             <span class="material-icons">expand_more</span>
             {{ t('simulator.nav.expandAll') }}
           </button>
-          <button @click="collapseAllSections" class="section-control-btn">
+          <button
+            class="section-control-btn"
+            @click="collapseAllSections"
+          >
             <span class="material-icons">expand_less</span>
             {{ t('simulator.nav.collapseAll') }}
           </button>
         </div>
       </nav>
 
-      <div class="simulator-grid" v-if="!FEATURES.PANEL_NAV">
+      <div
+        v-if="!FEATURES.PANEL_NAV"
+        class="simulator-grid"
+      >
         <!-- Budget Goals Section -->
-        <section id="budget-goals" class="simulator-card goals-card">
-          <h2 class="card-title" @click="toggleSection('budgetGoals')">
+        <section
+          id="budget-goals"
+          class="simulator-card goals-card"
+        >
+          <h2
+            class="card-title"
+            @click="toggleSection('budgetGoals')"
+          >
             <span class="material-icons icon">flag</span>
             {{ t('simulator.nav.goals') }}
-            <span class="material-icons toggle-icon" :class="{ 'rotated': !sectionsExpanded.budgetGoals }">expand_more</span>
+            <span
+              class="material-icons toggle-icon"
+              :class="{ 'rotated': !sectionsExpanded.budgetGoals }"
+            >expand_more</span>
           </h2>
-          <div class="card-content" v-show="sectionsExpanded.budgetGoals">
+          <div
+            v-show="sectionsExpanded.budgetGoals"
+            class="card-content"
+          >
             <!-- Budget Goals feature temporarily disabled -->
             <GoalTracker 
               v-if="FEATURES_ENABLED.budgetGoals"
@@ -166,6 +219,7 @@
               :current-spending="budgetStore.totalSpending"
               :initial-goals="budgetStore.budgetGoals"
               :surplus="budgetStore.surplus"
+              @update:goals="updateBudgetGoals"
               @goal-status-changed="updateGoalStatus"
               @auto-balance-toggled="toggleAutoBalance"
             />
@@ -176,16 +230,31 @@
         </section>
 
         <!-- Budget Results Section -->
-        <div v-if="fiscalChaos" class="budget-chaos-warning">
+        <div
+          v-if="fiscalChaos"
+          class="budget-chaos-warning"
+        >
           <strong>{{ t('simulator.chaosWarning') }}</strong>
         </div>
-        <section id="budget-results" class="simulator-card budget-results-card">
-          <h2 class="card-title" @click="toggleSection('budgetResults')">
+        <section
+          id="budget-results"
+          class="simulator-card budget-results-card"
+        >
+          <h2
+            class="card-title"
+            @click="toggleSection('budgetResults')"
+          >
             <span class="material-icons icon">summarize</span>
             {{ t('simulator.sections.results.title') }}
-            <span class="material-icons toggle-icon" :class="{ 'rotated': !sectionsExpanded.budgetResults }">expand_more</span>
+            <span
+              class="material-icons toggle-icon"
+              :class="{ 'rotated': !sectionsExpanded.budgetResults }"
+            >expand_more</span>
           </h2>
-          <div class="card-content" v-show="sectionsExpanded.budgetResults">
+          <div
+            v-show="sectionsExpanded.budgetResults"
+            class="card-content"
+          >
             <BudgetResults 
               :total-revenue="budgetStore.totalRevenue"
               :total-spending="budgetStore.totalSpending"
@@ -204,12 +273,21 @@
         
         <!-- Budget Presets Section -->
         <section class="simulator-card preset-panel-container">
-          <h2 class="card-title" @click="toggleSection('budgetPresets')">
+          <h2
+            class="card-title"
+            @click="toggleSection('budgetPresets')"
+          >
             <span class="material-icons icon">settings</span>
             {{ t('simulator.sections.presets.title') }}
-            <span class="material-icons toggle-icon" :class="{ 'rotated': !sectionsExpanded.budgetPresets }">expand_more</span>
+            <span
+              class="material-icons toggle-icon"
+              :class="{ 'rotated': !sectionsExpanded.budgetPresets }"
+            >expand_more</span>
           </h2>
-          <div class="card-content" v-show="sectionsExpanded.budgetPresets">
+          <div
+            v-show="sectionsExpanded.budgetPresets"
+            class="card-content"
+          >
             <PresetSelector
               @preset-applied="handlePresetApplied"
               @preset-reset="resetBudget"
@@ -218,25 +296,49 @@
         </section>
 
         <!-- Revenue Sources Section -->
-        <section id="revenue-sources" class="simulator-card revenue-card">
-          <h2 class="card-title" @click="toggleSection('revenueSources')">
+        <section
+          id="revenue-sources"
+          class="simulator-card revenue-card"
+        >
+          <h2
+            class="card-title"
+            @click="toggleSection('revenueSources')"
+          >
             <span class="material-icons icon">payments</span>
             {{ t('simulator.sections.revenue.title') }}
-            <span class="material-icons toggle-icon" :class="{ 'rotated': !sectionsExpanded.revenueSources }">expand_more</span>
+            <span
+              class="material-icons toggle-icon"
+              :class="{ 'rotated': !sectionsExpanded.revenueSources }"
+            >expand_more</span>
           </h2>
-          <div class="card-content" v-show="sectionsExpanded.revenueSources">
+          <div
+            v-show="sectionsExpanded.revenueSources"
+            class="card-content"
+          >
             <RevenueSliders :auto-balance-active="autoBalanceActive" />
           </div>
         </section>
 
         <!-- Spending Controls Section -->
-        <section id="spending-controls" class="simulator-card spending-card">
-          <h2 class="card-title" @click="toggleSection('spendingControls')">
+        <section
+          id="spending-controls"
+          class="simulator-card spending-card"
+        >
+          <h2
+            class="card-title"
+            @click="toggleSection('spendingControls')"
+          >
             <span class="material-icons icon">payments</span>
             {{ t('simulator.sections.spending.title') }}
-            <span class="material-icons toggle-icon" :class="{ 'rotated': !sectionsExpanded.spendingControls }">expand_more</span>
+            <span
+              class="material-icons toggle-icon"
+              :class="{ 'rotated': !sectionsExpanded.spendingControls }"
+            >expand_more</span>
           </h2>
-          <div class="card-content" v-show="sectionsExpanded.spendingControls">
+          <div
+            v-show="sectionsExpanded.spendingControls"
+            class="card-content"
+          >
             <SpendingControls 
               :main-categories="mainCategories"
               :other-categories-groups="otherCategoriesGroups"
@@ -259,25 +361,49 @@
         </section>
 
         <!-- Charts Panel -->
-        <section id="budget-analysis" class="simulator-card charts-card">
-          <h2 class="card-title" @click="toggleSection('budgetAnalysis')">
+        <section
+          id="budget-analysis"
+          class="simulator-card charts-card"
+        >
+          <h2
+            class="card-title"
+            @click="toggleSection('budgetAnalysis')"
+          >
             <span class="material-icons icon">bar_chart</span>
             {{ t('simulator.sections.analysis.title') }}
-            <span class="material-icons toggle-icon" :class="{ 'rotated': !sectionsExpanded.budgetAnalysis }">expand_more</span>
+            <span
+              class="material-icons toggle-icon"
+              :class="{ 'rotated': !sectionsExpanded.budgetAnalysis }"
+            >expand_more</span>
           </h2>
-          <div class="card-content" v-show="sectionsExpanded.budgetAnalysis">
+          <div
+            v-show="sectionsExpanded.budgetAnalysis"
+            class="card-content"
+          >
             <ChartsPanel />
           </div>
         </section>
         
         <!-- Public Sentiment Section -->
-        <section id="public-sentiment" class="simulator-card sentiment-card">
-          <h2 class="card-title" @click="toggleSection('publicSentiment')">
+        <section
+          id="public-sentiment"
+          class="simulator-card sentiment-card"
+        >
+          <h2
+            class="card-title"
+            @click="toggleSection('publicSentiment')"
+          >
             <span class="material-icons icon">sentiment_satisfied</span>
             {{ t('simulator.sections.sentiment.title') }}
-            <span class="material-icons toggle-icon" :class="{ 'rotated': !sectionsExpanded.publicSentiment }">expand_more</span>
+            <span
+              class="material-icons toggle-icon"
+              :class="{ 'rotated': !sectionsExpanded.publicSentiment }"
+            >expand_more</span>
           </h2>
-          <div class="card-content" v-show="sectionsExpanded.publicSentiment">
+          <div
+            v-show="sectionsExpanded.publicSentiment"
+            class="card-content"
+          >
             <div class="sentiment-controls-container">
               <SentimentSensitivityControl />
             </div>
@@ -289,7 +415,10 @@
   </div>
 
   <!-- Budget Changes Banner (hidden on mobile, replaced by bottom sheet) -->
-  <BudgetChangesBanner v-if="!isMobile" :max-recent-changes="10" />
+  <BudgetChangesBanner
+    v-if="!isMobile"
+    :max-recent-changes="10"
+  />
 
   <!-- Social Share Modal -->
   <SocialShareModal
@@ -312,7 +441,12 @@
     @apply-budget="handleApplySharedBudget"
   />
 
-  <div v-if="financeMinisterErrorMessage" class="error-message">{{ financeMinisterErrorMessage }}</div>
+  <div
+    v-if="financeMinisterErrorMessage"
+    class="error-message"
+  >
+    {{ financeMinisterErrorMessage }}
+  </div>
   
   <!-- Mobile Dock + Bottom Sheet -->
   <MobileDockBar v-if="isMobile" />
@@ -600,6 +734,27 @@ function updateGoalStatus(statusData) {
   budgetStore.updateGoalStatus(statusData);
 }
 
+function updateBudgetGoals(goals) {
+  const normalize = (value) => (typeof value === 'number' && !Number.isNaN(value) ? value : null);
+  const normalizedRevenue = normalize(goals && goals.targetRevenue);
+  const normalizedDeficit = normalize(goals && goals.targetDeficit);
+
+  budgetStore.budgetGoals = {
+    ...budgetStore.budgetGoals,
+    enabled: typeof (goals && goals.enabled) === 'boolean' ? goals.enabled : budgetStore.budgetGoals.enabled,
+    targetRevenue: normalizedRevenue,
+    revenueTarget: normalizedRevenue,
+    targetDeficit: normalizedDeficit,
+    deficitTarget: normalizedDeficit
+  };
+
+  if (!budgetStore.budgetGoals.enabled && budgetStore.autoBalanceActive) {
+    budgetStore.toggleAutoBalance(false);
+  } else if (budgetStore.autoBalanceActive) {
+    budgetStore.toggleAutoBalance(true);
+  }
+}
+
 function resetGovOpsSubcategories() {
   const govOps = budgetStore.spendingCategories.governmentOperations;
   if (govOps && govOps.children) {
@@ -729,23 +884,18 @@ async function openSocialShareModal() {
     
     // Check for fiscal chaos
     const isFiscalChaos = sentimentScores.value?.fiscalChaos || false;
-    
-    // Force update of fiscal indicators
-    // This ensures the values are up-to-date from the store before opening the modal
-    budgetSurplus.value = budgetStore.surplus || 0;
-    debtToGdpRatio.value = budgetStore.fiscalIndicators?.debtToGdpRatio || 0;
-    totalRevenue.value = budgetStore.totalRevenue || 0;
-    totalSpending.value = budgetStore.totalSpending || 0;
-    
-    // Log data for debugging
-    console.log("Budget data prepared for social share:", {
-      surplus: budgetSurplus.value,
-      debtToGDP: debtToGdpRatio.value,
-      revenue: totalRevenue.value,
-      spending: totalSpending.value,
+
+    // Log data for debugging with a snapshot of the latest store values
+    const shareSnapshot = {
+      surplus: budgetStore.surplus || 0,
+      debtToGDP: budgetStore.fiscalIndicators?.debtToGdpRatio || 0,
+      revenue: budgetStore.totalRevenue || 0,
+      spending: budgetStore.totalSpending || 0,
       sentimentScores: sentimentScores.value,
       fiscalChaos: isFiscalChaos
-    });
+    };
+
+    console.log("Budget data prepared for social share:", shareSnapshot);
     
     // Artificial delay to ensure all reactive state has updated
     await new Promise(resolve => setTimeout(resolve, 50));
@@ -1791,3 +1941,4 @@ input:focus, select:focus, textarea:focus {
   }
 }
 </style>
+

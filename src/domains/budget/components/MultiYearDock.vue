@@ -1,9 +1,21 @@
 <template>
-  <aside class="my-dock" :class="{ collapsed }" role="complementary" :aria-label="i18nText('multiYearDock.ariaLabel', 'Multi-year planning')">
-    <button class="dock-toggle" @click="collapsed = !collapsed" :aria-expanded="!collapsed">
+  <aside
+    class="my-dock"
+    :class="{ collapsed }"
+    role="complementary"
+    :aria-label="i18nText('multiYearDock.ariaLabel', 'Multi-year planning')"
+  >
+    <button
+      class="dock-toggle"
+      :aria-expanded="!collapsed"
+      @click="collapsed = !collapsed"
+    >
       <span class="material-icons">{{ collapsed ? 'chevron_left' : 'chevron_right' }}</span>
     </button>
-    <div v-if="!collapsed" class="dock-content">
+    <div
+      v-if="!collapsed"
+      class="dock-content"
+    >
       <MultiYearPlanner />
     </div>
   </aside>

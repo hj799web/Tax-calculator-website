@@ -1,27 +1,27 @@
 <template>
-    <div class="pie-chart-container">
-      <div v-if="canCalculate">
-        <div class="pie-chart-inner-container">
-          <Pie
-            :data="chartData"
-            :options="chartOptions"
-            :plugins="[htmlLegendPlugin]"
-          />
-        </div>
-        <!-- Legend container using a Vue ref -->
-        <div
-          ref="legendRef"
-          class="legend-container"
+  <div class="pie-chart-container">
+    <div v-if="canCalculate">
+      <div class="pie-chart-inner-container">
+        <Pie
+          :data="chartData"
+          :options="chartOptions"
+          :plugins="[htmlLegendPlugin]"
         />
       </div>
+      <!-- Legend container using a Vue ref -->
       <div
-        v-else
-        class="no-data"
-      >
-        <p>No budget data available to display.</p>
-      </div>
+        ref="legendRef"
+        class="legend-container"
+      />
     </div>
-  </template>
+    <div
+      v-else
+      class="no-data"
+    >
+      <p>No budget data available to display.</p>
+    </div>
+  </div>
+</template>
   
   <script setup>
 import { computed, ref, onMounted } from 'vue'

@@ -192,18 +192,18 @@ const slotBinding = computed(() => ({
     >
       <button
         v-for="(tab, index) in normalizedItems"
+        :id="getTabId(tab.id)"
         :key="tab.id"
+        :ref="(el) => setTabRef(el, index)"
         type="button"
         class="tabs__tab"
         :class="{ 'is-active': tab.id === activeTab }"
-        :id="getTabId(tab.id)"
         role="tab"
         :aria-selected="tab.id === activeTab"
         :aria-controls="tab.panelId"
         :tabindex="tab.id === activeTab ? 0 : -1"
         @click="onClickTab(tab.id)"
         @keydown="onKeydown($event, index)"
-        :ref="(el) => setTabRef(el, index)"
       >
         <span class="tabs__label">{{ tab.label }}</span>
       </button>

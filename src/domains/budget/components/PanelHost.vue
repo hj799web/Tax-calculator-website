@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="panel-host">
     <PanelBanner 
       v-model="panel" 
@@ -9,16 +9,21 @@
 
     <div class="panel-body">
       <KeepAlive>
-        <component :is="currentComp" @open-plan="openPlan" />
+        <component
+          :is="currentComp"
+          @open-plan="openPlan"
+        />
       </KeepAlive>
     </div>
-
     <MultiYearItemPlanModal
-      v-if="modal.open"
+      :show="modal.open"
       :type="modal.type"
-      :id="modal.id"
-      :year="planning.baseYear"
-      @close="modal.open = false" />
+      :item-id="modal.id"
+      :item-name="modal.name"
+      :item-badge="modal.badge"
+      :base-year="planningStore.planning?.baseYear"
+      @close="modal.open = false"
+    />
   </div>
 </template>
 
@@ -29,10 +34,11 @@ import { defineAsyncComponent } from 'vue';
 import PanelBanner from '@/domains/budget/components/PanelBanner.vue';
 import MultiYearItemPlanModal from '@/domains/budget/components/MultiYearItemPlanModal.vue';
 import { useMultiYearSettingsStore } from '@/domains/budget/store/multiYearSettings.js';
-
-const planning = computed(() => useMultiYearSettingsStore().planning);
+import { FEATURES } from '@/features.js';
 
 // Pinned tabs and compact mode
+const planningStore = useMultiYearSettingsStore();
+
 const pinned = ['revenue','spending'];
 const isCompact = ref(false);
 function handleResize() { try { isCompact.value = window.innerWidth < 900; } catch (_) { isCompact.value = false; } }
@@ -53,7 +59,7 @@ const SpendingPanel = defineAsyncComponent(() => import('@/domains/budget/compon
 const SentimentPanel = defineAsyncComponent(() => import('@/domains/sentiment/components/SentimentPanel.vue'));
 
 // Concise labels + intuitive grouping to reduce overwhelm
-const panelDefs = [
+let panelDefs = [
   { key: 'overview',    label: 'Overview',   icon: 'dashboard',              comp: OverviewPanel,        group: 'core' },
   { key: 'goals',       label: 'Goals',      icon: 'flag',                   comp: GoalsPanel,           group: 'core' },
 
@@ -70,6 +76,11 @@ const panelDefs = [
   { key: 'projections', label: 'Projections',icon: 'stacked_line_chart',     comp: MultiYearProjectionsPanel, group: 'planning' },
   { key: 'export',      label: 'Export',     icon: 'ios_share',              comp: BudgetExportPanel,    group: 'share' },
 ];
+
+// Hide Items tab when feature flag is disabled
+if (!FEATURES.ITEMS_TAB) {
+  panelDefs = panelDefs.filter(d => d.key !== 'items');
+}
 
 const route = useRoute?.() || null;
 const router = useRouter?.() || null;
@@ -88,11 +99,25 @@ watch(panel, (p) => {
 
 const currentComp = computed(() => (panelDefs.find(d => d.key === panel.value) || panelDefs[0]).comp);
 
-const modal = ref({ open: false, type: 'revenue', id: null });
-function openPlan(type, id) { modal.value = { open: true, type, id }; }
+const modal = ref({ open: false, type: 'revenue', id: null, name: '', badge: '' });
+function openPlan(item) {
+  if (!item) {
+    modal.value = { open: false, type: 'revenue', id: null, name: '', badge: '' };
+    return;
+  }
+  modal.value = {
+    open: true,
+    type: item.type,
+    id: item.id,
+    name: item.name,
+    badge: item.badge || ''
+  };
+}
 </script>
 
 <style scoped>
 .panel-host { display: grid; gap: 12px; max-width: 1100px; margin: 0 auto; width: 100%; }
 .panel-body { min-height: 320px; border: 1px solid #e5e7eb; border-radius: 12px; padding: 12px; background: #fff; box-shadow: 0 8px 24px rgba(0,0,0,0.04); }
 </style>
+
+

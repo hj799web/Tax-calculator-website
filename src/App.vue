@@ -21,43 +21,49 @@
               {{ t('home.header.title') }}
             </h1>
             <div class="header-actions">
-            <nav class="main-navigation">
-              <router-link
-                to="/welcome"
-                class="nav-link"
-              >{{ t('home.nav.home') }}</router-link>
-              <router-link
-                to="/how-it-works"
-                class="nav-link"
+              <nav class="main-navigation">
+                <router-link
+                  to="/welcome"
+                  class="nav-link"
+                >
+                  {{ t('home.nav.home') }}
+                </router-link>
+                <router-link
+                  to="/how-it-works"
+                  class="nav-link"
+                >
+                  {{ t('home.nav.howItWorks') }}
+                </router-link>
+                <router-link
+                  to="/simulator"
+                  class="nav-link simulator-link"
+                >
+                  {{ t('home.nav.simulator') }}
+                </router-link>
+                <a
+                  href="https://www.canada.ca/en/revenue-agency.html"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="nav-link"
+                >{{ t('home.nav.cra') }}</a>
+              </nav>
+              <div
+                class="language-switcher"
+                role="group"
+                :aria-label="t('home.language.switchLabel')"
               >
-                {{ t('home.nav.howItWorks') }}
-              </router-link>
-              <router-link
-                to="/simulator"
-                class="nav-link simulator-link"
-              >
-                {{ t('home.nav.simulator') }}
-              </router-link>
-              <a
-                href="https://www.canada.ca/en/revenue-agency.html"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="nav-link"
-              >{{ t('home.nav.cra') }}</a>
-            </nav>
-            <div class="language-switcher" role="group" :aria-label="t('home.language.switchLabel')">
-              <button
-                v-for="lng in locales"
-                :key="lng.code"
-                type="button"
-                class="language-button"
-                :class="{ active: currentLocale === lng.code }"
-                @click="setLocale(lng.code)"
-              >
-                {{ t(lng.labelKey) }}
-              </button>
+                <button
+                  v-for="lng in locales"
+                  :key="lng.code"
+                  type="button"
+                  class="language-button"
+                  :class="{ active: currentLocale === lng.code }"
+                  @click="setLocale(lng.code)"
+                >
+                  {{ t(lng.labelKey) }}
+                </button>
+              </div>
             </div>
-          </div>
             <p class="subtitle subtitle--highlight">
               {{ t('home.header.subtitle') }}
             </p>
@@ -79,7 +85,7 @@
                   {{ year.label }}
                 </button>
               </div>
-                            <p class="year-selector-note">
+              <p class="year-selector-note">
                 {{ yearSelectorNote }}
               </p>
             </div>
@@ -91,16 +97,16 @@
           </ErrorBoundary>
 
           <Tabs
+            v-model="activeTab"
             class="calculator-tabs"
             variant="primary"
             :items="tabItems"
-            v-model="activeTab"
           >
             <template #default="{ activeTab: currentTab, getPanelProps }">
               <section
+                v-show="currentTab === 'calculator'"
                 v-bind="getPanelProps('calculator')"
                 class="calculator-section budget-simulator"
-                v-show="currentTab === 'calculator'"
               >
                 <div class="calculator-wrapper">
                   <ErrorBoundary component-name="CalculatorView">
@@ -113,9 +119,9 @@
               </section>
 
               <section
+                v-show="currentTab === 'breakdown'"
                 v-bind="getPanelProps('breakdown')"
                 class="income-section"
-                v-show="currentTab === 'breakdown'"
               >
                 <h2 class="section-title section-title--highlight">
                   {{ t('home.sections.breakdown.title') }}
@@ -129,9 +135,9 @@
               </section>
 
               <section
+                v-show="currentTab === 'categories'"
                 v-bind="getPanelProps('categories')"
                 class="budget-categories-section expenses-section"
-                v-show="currentTab === 'categories'"
               >
                 <div class="section-header">
                   <h2 class="section-title">
@@ -147,19 +153,19 @@
                 <transition name="fade">
                   <div v-if="showBudgetCategories">
                     <p class="section-description">
-                    <template v-if="yearStore.selectedTaxYear === '2023'">
-                      {{ t('home.sections.categories.description.2023') }}
-                    </template>
-                    <template v-else-if="yearStore.selectedTaxYear === '2024'">
-                      {{ t('home.sections.categories.description.2024') }}
-                    </template>
-                    <template v-else-if="yearStore.selectedTaxYear === '2025'">
-                      {{ t('home.sections.categories.description.2025') }}
-                    </template>
-                    <template v-else>
-                      {{ t('home.sections.categories.description.fallback') }}
-                    </template>
-                  </p>
+                      <template v-if="yearStore.selectedTaxYear === '2023'">
+                        {{ t('home.sections.categories.description.2023') }}
+                      </template>
+                      <template v-else-if="yearStore.selectedTaxYear === '2024'">
+                        {{ t('home.sections.categories.description.2024') }}
+                      </template>
+                      <template v-else-if="yearStore.selectedTaxYear === '2025'">
+                        {{ t('home.sections.categories.description.2025') }}
+                      </template>
+                      <template v-else>
+                        {{ t('home.sections.categories.description.fallback') }}
+                      </template>
+                    </p>
                     <ErrorBoundary component-name="BudgetCategoriesView">
                       <BudgetCategoriesView />
                     </ErrorBoundary>
@@ -168,9 +174,9 @@
               </section>
 
               <section
+                v-show="currentTab === 'faqs'"
                 v-bind="getPanelProps('faqs')"
                 class="faq-section summary-section"
-                v-show="currentTab === 'faqs'"
               >
                 <div class="section-header">
                   <h2 class="section-title">
@@ -193,9 +199,9 @@
               </section>
 
               <section
+                v-show="currentTab === 'resources'"
                 v-bind="getPanelProps('resources')"
                 class="resources-section"
-                v-show="currentTab === 'resources'"
               >
                 <h2 class="section-title">
                   {{ t('home.sections.resources.title') }}
@@ -303,7 +309,12 @@
           </div>
         </div>
         <div class="footer-bottom">
-          <p>{{ t('home.footer.bottom.contact') }} <a href="mailto:fiscal-insights@outlook.com" class="text-blue-600 hover:text-blue-800">fiscal-insights@outlook.com</a></p>
+          <p>
+            {{ t('home.footer.bottom.contact') }} <a
+              href="mailto:fiscal-insights@outlook.com"
+              class="text-blue-600 hover:text-blue-800"
+            >fiscal-insights@outlook.com</a>
+          </p>
           <p>&copy; {{ new Date().getFullYear() }} {{ t('home.footer.bottom.copy') }}</p>
         </div>
       </footer>

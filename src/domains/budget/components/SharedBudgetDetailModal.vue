@@ -1,27 +1,48 @@
 <template>
   <teleport to="body">
-    <transition name="modal" appear>
-      <div v-if="modelValue" class="shared-budget-modal" 
-           aria-modal="true" role="dialog" 
-           tabindex="-1">
+    <transition
+      name="modal"
+      appear
+    >
+      <div
+        v-if="modelValue"
+        class="shared-budget-modal" 
+        aria-modal="true"
+        role="dialog" 
+        tabindex="-1"
+      >
         <!-- Modal Backdrop -->
         <div 
           class="modal-backdrop"
           @click="$emit('update:modelValue', false)"
-        ></div>
+        />
         
         <!-- Modal Container -->
         <div class="modal-container">
           <!-- Modal Header with optional party color styling -->
-          <div class="modal-header" :style="partyHeaderStyle">
-            <h2 class="modal-title">{{ budgetData.title || t('simulator.sharedBudgetDetailModal.title') }}</h2>
+          <div
+            class="modal-header"
+            :style="partyHeaderStyle"
+          >
+            <h2 class="modal-title">
+              {{ budgetData.title || t('simulator.sharedBudgetDetailModal.title') }}
+            </h2>
             <button 
-              @click="$emit('update:modelValue', false)"
               class="close-button"
               :aria-label="t('simulator.sharedBudgetDetailModal.ariaLabels.closeModal', 'Close modal')"
+              @click="$emit('update:modelValue', false)"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                  clip-rule="evenodd"
+                />
               </svg>
             </button>
           </div>
@@ -30,131 +51,211 @@
           <div class="modal-body">
             <!-- Detailed Card Preview -->
             <BudgetSentimentBadgeCard :budget-data="budgetData" />
-                <div class="metric-card" :class="budgetData.surplus >= 0 ? 'positive' : 'negative'">
-                  <div class="metric-icon">
-                    <span class="material-icons">{{ budgetData.surplus >= 0 ? 'trending_up' : 'trending_down' }}</span>
-                  </div>
-                  <div class="metric-content">
-                    <div class="metric-label">{{ budgetData.surplus >= 0 ? t('simulator.sharedBudgetDetailModal.metrics.surplus') : t('simulator.sharedBudgetDetailModal.metrics.deficit') }}</div>
-                    <div class="metric-value">
-                      {{ budgetData.surplus >= 0 ? '+' : '' }}${{ formatCurrency(budgetData.surplus) }}B
-                    </div>
-                  </div>
+            <div
+              class="metric-card"
+              :class="budgetData.surplus >= 0 ? 'positive' : 'negative'"
+            >
+              <div class="metric-icon">
+                <span class="material-icons">{{ budgetData.surplus >= 0 ? 'trending_up' : 'trending_down' }}</span>
+              </div>
+              <div class="metric-content">
+                <div class="metric-label">
+                  {{ budgetData.surplus >= 0 ? t('simulator.sharedBudgetDetailModal.metrics.surplus') : t('simulator.sharedBudgetDetailModal.metrics.deficit') }}
                 </div>
+                <div class="metric-value">
+                  {{ budgetData.surplus >= 0 ? '+' : '' }}${{ formatCurrency(budgetData.surplus) }}B
+                </div>
+              </div>
+            </div>
                 
-                <div class="metric-card">
-                  <div class="metric-icon">
-                    <span class="material-icons">payments</span>
-                  </div>
-                  <div class="metric-content">
-                    <div class="metric-label">{{ t('simulator.sharedBudgetDetailModal.metrics.revenue') }}</div>
-                    <div class="metric-value">${{ formatCurrency(budgetData.revenue) }}B</div>
-                  </div>
+            <div class="metric-card">
+              <div class="metric-icon">
+                <span class="material-icons">payments</span>
+              </div>
+              <div class="metric-content">
+                <div class="metric-label">
+                  {{ t('simulator.sharedBudgetDetailModal.metrics.revenue') }}
                 </div>
+                <div class="metric-value">
+                  ${{ formatCurrency(budgetData.revenue) }}B
+                </div>
+              </div>
+            </div>
                 
-                <div class="metric-card">
-                  <div class="metric-icon">
-                    <span class="material-icons">account_balance</span>
-                  </div>
-                  <div class="metric-content">
-                    <div class="metric-label">{{ t('simulator.sharedBudgetDetailModal.metrics.debtToGdp') }}</div>
-                    <div class="metric-value">{{ budgetData.debt.toFixed(1) }}%</div>
-                  </div>
+            <div class="metric-card">
+              <div class="metric-icon">
+                <span class="material-icons">account_balance</span>
+              </div>
+              <div class="metric-content">
+                <div class="metric-label">
+                  {{ t('simulator.sharedBudgetDetailModal.metrics.debtToGdp') }}
+                </div>
+                <div class="metric-value">
+                  {{ budgetData.debt.toFixed(1) }}%
                 </div>
               </div>
-            </div>
-            
-            <!-- Party Budget Description & Highlights (if available) -->
-            <div v-if="budgetData.description || budgetData.highlights?.length" class="budget-highlights-section">
-              <div v-if="budgetData.description" class="budget-description">
-                <p>{{ budgetData.description }}</p>
-              </div>
-              
-              <div v-if="budgetData.highlights?.length" class="budget-highlights">
-                <h3 class="highlights-title">{{ t('simulator.sharedBudgetDetailModal.highlights.title') }}</h3>
-                <ul class="highlights-list">
-                  <li v-for="(highlight, index) in budgetData.highlights" :key="index" class="highlight-item">
-                    <span class="highlight-bullet">•</span>
-                    <span class="highlight-text">{{ highlight }}</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            
-            <!-- Sentiment Analysis Section -->
-            <div class="sentiment-section">
-              <h3 class="section-title">{{ t('simulator.sharedBudgetDetailModal.sentiment.title') }}</h3>
-              
-              <!-- Positive Segments -->
-              <div v-if="budgetData.positiveSegments.length > 0" class="sentiment-group">
-                <div class="sentiment-header positive">
-                  <span class="material-icons">trending_up</span>
-                  <h4>{{ t('simulator.sharedBudgetDetailModal.sentiment.mostPositive') }}</h4>
-                </div>
-                <div class="segments-grid">
-                  <div v-for="segment in budgetData.positiveSegments" :key="segment.name" 
-                       class="segment-card positive">
-                    <div class="segment-score">+{{ formatSegmentScore(segment.score) }}</div>
-                    <div class="segment-name">{{ segment.name }}</div>
-                  </div>
-                </div>
-              </div>
-              
-              <!-- Negative Segments -->
-              <div v-if="budgetData.negativeSegments.length > 0" class="sentiment-group">
-                <div class="sentiment-header negative">
-                  <span class="material-icons">trending_down</span>
-                  <h4>{{ t('simulator.sharedBudgetDetailModal.sentiment.mostNegative') }}</h4>
-                </div>
-                <div class="segments-grid">
-                  <div v-for="segment in budgetData.negativeSegments" :key="segment.name" 
-                       class="segment-card negative">
-                    <div class="segment-score">{{ formatSegmentScore(segment.score) }}</div>
-                    <div class="segment-name">{{ segment.name }}</div>
-                  </div>
-                </div>
-              </div>
-              
-              <div v-if="budgetData.positiveSegments.length === 0 && budgetData.negativeSegments.length === 0" 
-                   class="no-data-message">
-                {{ t('simulator.sharedBudgetDetailModal.sentiment.noData') }}
-              </div>
-            </div>
-            
-            <!-- Badges Section -->
-            <div class="badges-section">
-              <h3 class="section-title">{{ t('simulator.sharedBudgetDetailModal.badges.title') }}</h3>
-              
-              <div v-if="budgetData.badges.length > 0" class="badges-grid">
-                <div v-for="badge in budgetData.badges" :key="badge.name" 
-                     class="badge-card">
-                  <div class="badge-icon">{{ badge.icon }}</div>
-                  <div class="badge-content">
-                    <div class="badge-name">{{ badge.name }}</div>
-                    <div class="badge-description">{{ badge.explanation || t('simulator.sharedBudgetDetailModal.badges.fallbackDescription') }}</div>
-                  </div>
-                </div>
-              </div>
-              
-              <div v-if="budgetData.badges.length === 0" class="no-data-message">
-                {{ t('simulator.sharedBudgetDetailModal.badges.noBadges') }}
-              </div>
-            </div>
-            
-            <!-- Action Buttons -->
-            <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
-            <div class="action-buttons">
-              <button @click="applyBudget" class="apply-button">
-                <span class="material-icons">play_arrow</span>
-                {{ t('simulator.sharedBudgetDetailModal.buttons.apply') }}
-              </button>
-              <button @click="$emit('update:modelValue', false)" class="cancel-button">
-                {{ t('simulator.sharedBudgetDetailModal.buttons.createCustom') }}
-              </button>
             </div>
           </div>
-        </transition>
-      </teleport>
+        </div>
+            
+        <!-- Party Budget Description & Highlights (if available) -->
+        <div
+          v-if="budgetData.description || budgetData.highlights?.length"
+          class="budget-highlights-section"
+        >
+          <div
+            v-if="budgetData.description"
+            class="budget-description"
+          >
+            <p>{{ budgetData.description }}</p>
+          </div>
+              
+          <div
+            v-if="budgetData.highlights?.length"
+            class="budget-highlights"
+          >
+            <h3 class="highlights-title">
+              {{ t('simulator.sharedBudgetDetailModal.highlights.title') }}
+            </h3>
+            <ul class="highlights-list">
+              <li
+                v-for="(highlight, index) in budgetData.highlights"
+                :key="index"
+                class="highlight-item"
+              >
+                <span class="highlight-bullet">•</span>
+                <span class="highlight-text">{{ highlight }}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+            
+        <!-- Sentiment Analysis Section -->
+        <div class="sentiment-section">
+          <h3 class="section-title">
+            {{ t('simulator.sharedBudgetDetailModal.sentiment.title') }}
+          </h3>
+              
+          <!-- Positive Segments -->
+          <div
+            v-if="budgetData.positiveSegments.length > 0"
+            class="sentiment-group"
+          >
+            <div class="sentiment-header positive">
+              <span class="material-icons">trending_up</span>
+              <h4>{{ t('simulator.sharedBudgetDetailModal.sentiment.mostPositive') }}</h4>
+            </div>
+            <div class="segments-grid">
+              <div
+                v-for="segment in budgetData.positiveSegments"
+                :key="segment.name" 
+                class="segment-card positive"
+              >
+                <div class="segment-score">
+                  +{{ formatSegmentScore(segment.score) }}
+                </div>
+                <div class="segment-name">
+                  {{ segment.name }}
+                </div>
+              </div>
+            </div>
+          </div>
+              
+          <!-- Negative Segments -->
+          <div
+            v-if="budgetData.negativeSegments.length > 0"
+            class="sentiment-group"
+          >
+            <div class="sentiment-header negative">
+              <span class="material-icons">trending_down</span>
+              <h4>{{ t('simulator.sharedBudgetDetailModal.sentiment.mostNegative') }}</h4>
+            </div>
+            <div class="segments-grid">
+              <div
+                v-for="segment in budgetData.negativeSegments"
+                :key="segment.name" 
+                class="segment-card negative"
+              >
+                <div class="segment-score">
+                  {{ formatSegmentScore(segment.score) }}
+                </div>
+                <div class="segment-name">
+                  {{ segment.name }}
+                </div>
+              </div>
+            </div>
+          </div>
+              
+          <div
+            v-if="budgetData.positiveSegments.length === 0 && budgetData.negativeSegments.length === 0" 
+            class="no-data-message"
+          >
+            {{ t('simulator.sharedBudgetDetailModal.sentiment.noData') }}
+          </div>
+        </div>
+            
+        <!-- Badges Section -->
+        <div class="badges-section">
+          <h3 class="section-title">
+            {{ t('simulator.sharedBudgetDetailModal.badges.title') }}
+          </h3>
+              
+          <div
+            v-if="budgetData.badges.length > 0"
+            class="badges-grid"
+          >
+            <div
+              v-for="badge in budgetData.badges"
+              :key="badge.name" 
+              class="badge-card"
+            >
+              <div class="badge-icon">
+                {{ badge.icon }}
+              </div>
+              <div class="badge-content">
+                <div class="badge-name">
+                  {{ badge.name }}
+                </div>
+                <div class="badge-description">
+                  {{ badge.explanation || t('simulator.sharedBudgetDetailModal.badges.fallbackDescription') }}
+                </div>
+              </div>
+            </div>
+          </div>
+              
+          <div
+            v-if="budgetData.badges.length === 0"
+            class="no-data-message"
+          >
+            {{ t('simulator.sharedBudgetDetailModal.badges.noBadges') }}
+          </div>
+        </div>
+            
+        <!-- Action Buttons -->
+        <div
+          v-if="errorMessage"
+          class="error-message"
+        >
+          {{ errorMessage }}
+        </div>
+        <div class="action-buttons">
+          <button
+            class="apply-button"
+            @click="applyBudget"
+          >
+            <span class="material-icons">play_arrow</span>
+            {{ t('simulator.sharedBudgetDetailModal.buttons.apply') }}
+          </button>
+          <button
+            class="cancel-button"
+            @click="$emit('update:modelValue', false)"
+          >
+            {{ t('simulator.sharedBudgetDetailModal.buttons.createCustom') }}
+          </button>
+        </div>
+      </div>
+    </transition>
+  </teleport>
 </template>
 
 <script setup>

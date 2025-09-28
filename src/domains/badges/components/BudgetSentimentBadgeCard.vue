@@ -2,14 +2,21 @@
   <div class="budget-detail-card">
     <!-- Budget Summary -->
     <div class="budget-summary">
-      <h3 class="section-title">Budget Overview</h3>
+      <h3 class="section-title">
+        Budget Overview
+      </h3>
       <div class="metrics-grid">
-        <div class="metric-card" :class="budgetData.surplus >= 0 ? 'positive' : 'negative'">
+        <div
+          class="metric-card"
+          :class="budgetData.surplus >= 0 ? 'positive' : 'negative'"
+        >
           <div class="metric-icon">
             <span class="material-icons">{{ budgetData.surplus >= 0 ? 'trending_up' : 'trending_down' }}</span>
           </div>
           <div class="metric-content">
-            <div class="metric-label">{{ budgetData.surplus >= 0 ? 'Surplus' : 'Deficit' }}</div>
+            <div class="metric-label">
+              {{ budgetData.surplus >= 0 ? 'Surplus' : 'Deficit' }}
+            </div>
             <div class="metric-value">
               {{ budgetData.surplus >= 0 ? '+' : '' }}${{ formatCurrency(budgetData.surplus) }}B
             </div>
@@ -20,8 +27,12 @@
             <span class="material-icons">payments</span>
           </div>
           <div class="metric-content">
-            <div class="metric-label">Revenue</div>
-            <div class="metric-value">${{ formatCurrency(budgetData.revenue) }}B</div>
+            <div class="metric-label">
+              Revenue
+            </div>
+            <div class="metric-value">
+              ${{ formatCurrency(budgetData.revenue) }}B
+            </div>
           </div>
         </div>
         <div class="metric-card">
@@ -29,8 +40,12 @@
             <span class="material-icons">account_balance</span>
           </div>
           <div class="metric-content">
-            <div class="metric-label">Debt-to-GDP</div>
-            <div class="metric-value">{{ budgetData.debt.toFixed(1) }}%</div>
+            <div class="metric-label">
+              Debt-to-GDP
+            </div>
+            <div class="metric-value">
+              {{ budgetData.debt.toFixed(1) }}%
+            </div>
           </div>
         </div>
       </div>
@@ -38,51 +53,96 @@
 
     <!-- Sentiment Analysis Section -->
     <div class="sentiment-section">
-      <h3 class="section-title">Budget Impact Analysis</h3>
+      <h3 class="section-title">
+        Budget Impact Analysis
+      </h3>
       <!-- Positive Segments -->
-      <div v-if="budgetData.positiveSegments && budgetData.positiveSegments.length > 0" class="sentiment-group">
+      <div
+        v-if="budgetData.positiveSegments && budgetData.positiveSegments.length > 0"
+        class="sentiment-group"
+      >
         <div class="sentiment-header positive">
           <span class="material-icons">trending_up</span>
           <h4>Most Positive Impact</h4>
         </div>
         <div class="segments-grid">
-          <div v-for="segment in budgetData.positiveSegments" :key="segment.name" class="segment-card positive">
-            <div class="segment-score">+{{ formatSegmentScore(segment.score) }}</div>
-            <div class="segment-name">{{ segment.name }}</div>
+          <div
+            v-for="segment in budgetData.positiveSegments"
+            :key="segment.name"
+            class="segment-card positive"
+          >
+            <div class="segment-score">
+              +{{ formatSegmentScore(segment.score) }}
+            </div>
+            <div class="segment-name">
+              {{ segment.name }}
+            </div>
           </div>
         </div>
       </div>
       <!-- Negative Segments -->
-      <div v-if="budgetData.negativeSegments && budgetData.negativeSegments.length > 0" class="sentiment-group">
+      <div
+        v-if="budgetData.negativeSegments && budgetData.negativeSegments.length > 0"
+        class="sentiment-group"
+      >
         <div class="sentiment-header negative">
           <span class="material-icons">trending_down</span>
           <h4>Most Negative Impact</h4>
         </div>
         <div class="segments-grid">
-          <div v-for="segment in budgetData.negativeSegments" :key="segment.name" class="segment-card negative">
-            <div class="segment-score">{{ formatSegmentScore(segment.score) }}</div>
-            <div class="segment-name">{{ segment.name }}</div>
+          <div
+            v-for="segment in budgetData.negativeSegments"
+            :key="segment.name"
+            class="segment-card negative"
+          >
+            <div class="segment-score">
+              {{ formatSegmentScore(segment.score) }}
+            </div>
+            <div class="segment-name">
+              {{ segment.name }}
+            </div>
           </div>
         </div>
       </div>
-      <div v-if="(!budgetData.positiveSegments || budgetData.positiveSegments.length === 0) && (!budgetData.negativeSegments || budgetData.negativeSegments.length === 0)" class="no-data-message">
+      <div
+        v-if="(!budgetData.positiveSegments || budgetData.positiveSegments.length === 0) && (!budgetData.negativeSegments || budgetData.negativeSegments.length === 0)"
+        class="no-data-message"
+      >
         No sentiment data available for this budget.
       </div>
     </div>
 
     <!-- Badges Section -->
     <div class="badges-section">
-      <h3 class="section-title">Achievements Earned</h3>
-      <div v-if="budgetData.badges && budgetData.badges.length > 0" class="badges-grid">
-        <div v-for="badge in budgetData.badges" :key="badge.name" class="badge-card">
-          <div class="badge-icon">{{ badge.icon }}</div>
+      <h3 class="section-title">
+        Achievements Earned
+      </h3>
+      <div
+        v-if="budgetData.badges && budgetData.badges.length > 0"
+        class="badges-grid"
+      >
+        <div
+          v-for="badge in budgetData.badges"
+          :key="badge.name"
+          class="badge-card"
+        >
+          <div class="badge-icon">
+            {{ badge.icon }}
+          </div>
           <div class="badge-content">
-            <div class="badge-name">{{ badge.name }}</div>
-            <div class="badge-description">{{ badge.explanation || 'Achievement earned through budget choices' }}</div>
+            <div class="badge-name">
+              {{ badge.name }}
+            </div>
+            <div class="badge-description">
+              {{ badge.explanation || 'Achievement earned through budget choices' }}
+            </div>
           </div>
         </div>
       </div>
-      <div v-if="!budgetData.badges || budgetData.badges.length === 0" class="no-data-message">
+      <div
+        v-if="!budgetData.badges || budgetData.badges.length === 0"
+        class="no-data-message"
+      >
         No badges earned with this budget yet.
       </div>
     </div>

@@ -1,38 +1,86 @@
 <template>
-  <div v-if="show" class="modal-backdrop" @click="emit('close')">
-    <div class="modal" @click.stop>
+  <div
+    v-if="show"
+    class="modal-backdrop"
+    @click="emit('close')"
+  >
+    <div
+      class="modal"
+      @click.stop
+    >
       <div class="header">
         <h3>{{ t('yearSimulatorModal.title', { year }) }}</h3>
-        <button class="icon-btn" @click="emit('close')" :aria-label="i18nText('yearSimulatorModal.close', 'Close')">&times;</button>
+        <button
+          class="icon-btn"
+          :aria-label="i18nText('yearSimulatorModal.close', 'Close')"
+          @click="emit('close')"
+        >
+          &times;
+        </button>
       </div>
 
-      <div v-if="!baselineRow" class="body empty">{{ t('yearSimulatorModal.noBaselineData', { year }) }}</div>
+      <div
+        v-if="!baselineRow"
+        class="body empty"
+      >
+        {{ t('yearSimulatorModal.noBaselineData', { year }) }}
+      </div>
 
-      <div v-else class="body">
+      <div
+        v-else
+        class="body"
+      >
         <section class="metrics">
           <div class="metric">
-            <div class="label">{{ i18nText('yearSimulatorModal.metrics.gdp', 'GDP') }}</div>
-            <div class="value">{{ fmt(baselineRow.gdp) }}</div>
+            <div class="label">
+              {{ i18nText('yearSimulatorModal.metrics.gdp', 'GDP') }}
+            </div>
+            <div class="value">
+              {{ fmt(baselineRow.gdp) }}
+            </div>
           </div>
           <div class="metric">
-            <div class="label">{{ i18nText('yearSimulatorModal.metrics.revenue', 'Revenue') }}</div>
-            <div class="value">{{ fmt(adjusted.revenueTotal) }}</div>
+            <div class="label">
+              {{ i18nText('yearSimulatorModal.metrics.revenue', 'Revenue') }}
+            </div>
+            <div class="value">
+              {{ fmt(adjusted.revenueTotal) }}
+            </div>
           </div>
           <div class="metric">
-            <div class="label">{{ i18nText('yearSimulatorModal.metrics.spending', 'Spending') }}</div>
-            <div class="value">{{ fmt(adjusted.spendingTotal) }}</div>
+            <div class="label">
+              {{ i18nText('yearSimulatorModal.metrics.spending', 'Spending') }}
+            </div>
+            <div class="value">
+              {{ fmt(adjusted.spendingTotal) }}
+            </div>
           </div>
-          <div class="metric" :class="{ pos: adjusted.deficit >= 0, neg: adjusted.deficit < 0 }">
-            <div class="label">{{ i18nText('yearSimulatorModal.metrics.surplusDeficit', 'Surplus/Deficit') }}</div>
-            <div class="value">{{ fmt(adjusted.deficit) }}</div>
+          <div
+            class="metric"
+            :class="{ pos: adjusted.deficit >= 0, neg: adjusted.deficit < 0 }"
+          >
+            <div class="label">
+              {{ i18nText('yearSimulatorModal.metrics.surplusDeficit', 'Surplus/Deficit') }}
+            </div>
+            <div class="value">
+              {{ fmt(adjusted.deficit) }}
+            </div>
           </div>
           <div class="metric">
-            <div class="label">{{ i18nText('yearSimulatorModal.metrics.debt', 'Debt') }}</div>
-            <div class="value">{{ fmt(adjusted.debt) }}</div>
+            <div class="label">
+              {{ i18nText('yearSimulatorModal.metrics.debt', 'Debt') }}
+            </div>
+            <div class="value">
+              {{ fmt(adjusted.debt) }}
+            </div>
           </div>
           <div class="metric">
-            <div class="label">{{ i18nText('yearSimulatorModal.metrics.debtToGdp', 'Debt/GDP') }}</div>
-            <div class="value">{{ (adjusted.debtToGDP * 100).toFixed(1) }}%</div>
+            <div class="label">
+              {{ i18nText('yearSimulatorModal.metrics.debtToGdp', 'Debt/GDP') }}
+            </div>
+            <div class="value">
+              {{ (adjusted.debtToGDP * 100).toFixed(1) }}%
+            </div>
           </div>
         </section>
 
@@ -40,36 +88,81 @@
           <div class="col">
             <h4>{{ i18nText('yearSimulatorModal.sections.revenueAdjustments', 'Revenue Adjustments') }}</h4>
             <div class="list">
-              <div v-for="(amt, key) in baselineRow.revenueBySource" :key="key" class="row">
-                <div class="k">{{ prettyKey(key) }}</div>
-                <div class="v">{{ fmt(amt) }}</div>
-                <input type="range" min="-20" max="20" step="0.5"
-                       v-model.number="overlay.revenuePct[key]"
-                       @input="updateRevenue(key, overlay.revenuePct[key])"/>
-                <div class="pct">{{ (overlay.revenuePct[key] || 0) }}%</div>
+              <div
+                v-for="(amt, key) in baselineRow.revenueBySource"
+                :key="key"
+                class="row"
+              >
+                <div class="k">
+                  {{ prettyKey(key) }}
+                </div>
+                <div class="v">
+                  {{ fmt(amt) }}
+                </div>
+                <input
+                  v-model.number="overlay.revenuePct[key]"
+                  type="range"
+                  min="-20"
+                  max="20"
+                  step="0.5"
+                  @input="updateRevenue(key, overlay.revenuePct[key])"
+                >
+                <div class="pct">
+                  {{ (overlay.revenuePct[key] || 0) }}%
+                </div>
               </div>
             </div>
           </div>
           <div class="col">
             <h4>{{ i18nText('yearSimulatorModal.sections.spendingAdjustments', 'Spending Adjustments') }}</h4>
             <div class="list">
-              <div v-for="(amt, key) in baselineRow.spendingByCategory" :key="key" class="row">
-                <div class="k">{{ prettyKey(key) }}</div>
-                <div class="v">{{ fmt(amt) }}</div>
-                <input type="range" min="-20" max="20" step="0.5"
-                       v-model.number="overlay.spendingPct[key]"
-                       @input="updateSpending(key, overlay.spendingPct[key])"/>
-                <div class="pct">{{ (overlay.spendingPct[key] || 0) }}%</div>
+              <div
+                v-for="(amt, key) in baselineRow.spendingByCategory"
+                :key="key"
+                class="row"
+              >
+                <div class="k">
+                  {{ prettyKey(key) }}
+                </div>
+                <div class="v">
+                  {{ fmt(amt) }}
+                </div>
+                <input
+                  v-model.number="overlay.spendingPct[key]"
+                  type="range"
+                  min="-20"
+                  max="20"
+                  step="0.5"
+                  @input="updateSpending(key, overlay.spendingPct[key])"
+                >
+                <div class="pct">
+                  {{ (overlay.spendingPct[key] || 0) }}%
+                </div>
               </div>
             </div>
           </div>
         </section>
 
         <section class="actions">
-          <input class="name-input" type="text" v-model="scenarioName" :placeholder="i18nText('yearSimulatorModal.placeholders.scenarioName', 'Scenario name (optional)')"/>
-          <div class="spacer"></div>
-          <button class="btn" @click="reset">{{ i18nText('yearSimulatorModal.buttons.reset', 'Reset') }}</button>
-          <button class="btn primary" @click="save">{{ i18nText('yearSimulatorModal.buttons.saveScenario', 'Save Scenario') }}</button>
+          <input
+            v-model="scenarioName"
+            class="name-input"
+            type="text"
+            :placeholder="i18nText('yearSimulatorModal.placeholders.scenarioName', 'Scenario name (optional)')"
+          >
+          <div class="spacer" />
+          <button
+            class="btn"
+            @click="reset"
+          >
+            {{ i18nText('yearSimulatorModal.buttons.reset', 'Reset') }}
+          </button>
+          <button
+            class="btn primary"
+            @click="save"
+          >
+            {{ i18nText('yearSimulatorModal.buttons.saveScenario', 'Save Scenario') }}
+          </button>
         </section>
       </div>
     </div>

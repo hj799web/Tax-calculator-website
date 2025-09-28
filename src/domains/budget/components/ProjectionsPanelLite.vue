@@ -4,32 +4,42 @@
       <h4>{{ t('projectionsPanel.title', 'Projections') }}</h4>
     </div>
 
-    <details v-if="showControls" class="planning-controls" open>
+    <details
+      v-if="showControls"
+      class="planning-controls"
+      open
+    >
       <summary>{{ t('projectionsPanel.planningControls', 'Planning Controls') }}</summary>
       <div class="controls-grid">
         <div class="row">
           <label :title="t('projectionsPanel.programSpendingBoostTooltip', 'One-time adjustment to all program spending levels')">{{ t('projectionsPanel.programSpendingBoost', 'Program spending boost (%)') }}
-            <span class="info-icon" :title="t('projectionsPanel.programSpendingBoostTooltip', 'Applies a one-time level change to program spending in the base year (and carried through).')">info</span>
+            <span
+              class="info-icon"
+              :title="t('projectionsPanel.programSpendingBoostTooltip', 'Applies a one-time level change to program spending in the base year (and carried through).')"
+            >info</span>
           </label>
           <input
+            v-model.number="settings.spendingGlobal.levelPct"
             type="number"
             step="0.5"
             :min="-15"
             :max="15"
-            v-model.number="settings.spendingGlobal.levelPct"
             @change="clampGlobal()"
-          />
+          >
         </div>
         <div class="row">
           <label :title="t('projectionsPanel.speedUpSpendingGrowthTooltip', 'Adjusts how fast program spending grows each year. +0.5 means all categories grow 0.5 percentage points faster annually.')">{{ t('projectionsPanel.speedUpSpendingGrowth', 'Speed up spending growth (pp)') }}
-            <span class="info-icon" :title="t('projectionsPanel.speedUpSpendingGrowthTooltip', 'Adds or subtracts percentage points to the annual growth rate applied to all categories.')">info</span>
+            <span
+              class="info-icon"
+              :title="t('projectionsPanel.speedUpSpendingGrowthTooltip', 'Adds or subtracts percentage points to the annual growth rate applied to all categories.')"
+            >info</span>
           </label>
           <input
+            v-model.number="settings.spendingGlobal.growthDeltaPct"
             type="number"
             step="0.1"
-            v-model.number="settings.spendingGlobal.growthDeltaPct"
             @change="clampGlobal()"
-          />
+          >
         </div>
       </div>
       <SpendingGrowthControls />
@@ -37,23 +47,43 @@
     <!-- Interactive multi-series line chart -->
     <div class="interactive-chart">
       <div class="chart-box">
-        <Line :data="lineData" :options="lineOptions" />
+        <Line
+          :data="lineData"
+          :options="lineOptions"
+        />
       </div>
     </div>
     <div class="mini-charts">
       <!-- Deficit chart (historical + projected) using Chart.js for clarity & tooltips -->
-      <div class="chart" :aria-label="t('projectionsPanel.charts.deficitChartAria', 'Historical and projected deficit line chart')" ref="defChartEl">
-        <div class="chart-title">{{ t('projectionsPanel.charts.deficitChartTitle', 'Deficit: Historical + Projections') }}</div>
+      <div
+        ref="defChartEl"
+        class="chart"
+        :aria-label="t('projectionsPanel.charts.deficitChartAria', 'Historical and projected deficit line chart')"
+      >
+        <div class="chart-title">
+          {{ t('projectionsPanel.charts.deficitChartTitle', 'Deficit: Historical + Projections') }}
+        </div>
         <div class="chart-box-tall">
-          <Line :data="defChartData" :options="defChartOptions" />
+          <Line
+            :data="defChartData"
+            :options="defChartOptions"
+          />
         </div>
       </div>
 
       <!-- Debt/GDP chart (historical + projected) using Chart.js -->
-      <div class="chart" :aria-label="t('projectionsPanel.charts.debtGdpChartAria', 'Historical and projected debt-to-GDP line chart')">
-        <div class="chart-title">{{ t('projectionsPanel.charts.debtGdpChartTitle', 'Debt-to-GDP: Historical + Projections (%)') }}</div>
+      <div
+        class="chart"
+        :aria-label="t('projectionsPanel.charts.debtGdpChartAria', 'Historical and projected debt-to-GDP line chart')"
+      >
+        <div class="chart-title">
+          {{ t('projectionsPanel.charts.debtGdpChartTitle', 'Debt-to-GDP: Historical + Projections (%)') }}
+        </div>
         <div class="chart-box-tall">
-          <Line :data="debtGdpChartData" :options="debtGdpChartOptions" />
+          <Line
+            :data="debtGdpChartData"
+            :options="debtGdpChartOptions"
+          />
         </div>
       </div>
     </div>

@@ -6,9 +6,17 @@
     <div class="apply-bar">
       <div class="toggle">
         <label>Auto-apply</label>
-        <input type="checkbox" v-model="autoApply" />
+        <input
+          v-model="autoApply"
+          type="checkbox"
+        >
       </div>
-      <button class="btn primary" @click="applyChanges()">Apply Changes</button>
+      <button
+        class="btn primary"
+        @click="applyChanges()"
+      >
+        Apply Changes
+      </button>
     </div>
   </div>
 </template>

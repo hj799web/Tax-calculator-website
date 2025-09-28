@@ -4,13 +4,17 @@
       <h3>Demographic Impact</h3>
       <div class="age-groups">
         <h4>Age Groups</h4>
-        <div v-for="(impact, group) in demographicSentiment.ageGroups" :key="group" class="impact-item">
+        <div
+          v-for="(impact, group) in demographicSentiment.ageGroups"
+          :key="group"
+          class="impact-item"
+        >
           <span class="group-name">{{ formatGroupName(group) }}</span>
           <div class="impact-bar">
             <div 
               class="impact-fill"
               :style="{ width: `${Math.abs(impact) * 100}%`, backgroundColor: getImpactColor(impact) }"
-            ></div>
+            />
           </div>
           <span class="impact-value">{{ formatImpact(impact) }}</span>
         </div>
@@ -18,13 +22,17 @@
       
       <div class="income-levels">
         <h4>Income Levels</h4>
-        <div v-for="(impact, level) in demographicSentiment.incomeLevels" :key="level" class="impact-item">
+        <div
+          v-for="(impact, level) in demographicSentiment.incomeLevels"
+          :key="level"
+          class="impact-item"
+        >
           <span class="group-name">{{ formatGroupName(level) }}</span>
           <div class="impact-bar">
             <div 
               class="impact-fill"
               :style="{ width: `${Math.abs(impact) * 100}%`, backgroundColor: getImpactColor(impact) }"
-            ></div>
+            />
           </div>
           <span class="impact-value">{{ formatImpact(impact) }}</span>
         </div>
@@ -34,13 +42,17 @@
     <div class="sector-analysis">
       <h3>Sector Analysis</h3>
       <div class="sector-impacts">
-        <div v-for="(impact, sector) in sectorImpacts" :key="sector" class="impact-item">
+        <div
+          v-for="(impact, sector) in sectorImpacts"
+          :key="sector"
+          class="impact-item"
+        >
           <span class="sector-name">{{ formatSectorName(sector) }}</span>
           <div class="impact-bar">
             <div 
               class="impact-fill"
               :style="{ width: `${Math.abs(impact) * 100}%`, backgroundColor: getImpactColor(impact) }"
-            ></div>
+            />
           </div>
           <span class="impact-value">{{ formatImpact(impact) }}</span>
         </div>

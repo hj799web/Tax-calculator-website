@@ -1,18 +1,42 @@
 <template>
-  <div v-if="error" class="error-boundary">
+  <div
+    v-if="error"
+    class="error-boundary"
+  >
     <div class="error-content">
       <span class="material-icons error-icon">error_outline</span>
-      <h3 class="error-title">Something went wrong</h3>
-      <p class="error-message">{{ error.message || 'An unexpected error occurred' }}</p>
+      <h3 class="error-title">
+        Something went wrong
+      </h3>
+      <p class="error-message">
+        {{ error.message || 'An unexpected error occurred' }}
+      </p>
       <div class="error-actions">
-        <button class="error-button primary" @click="resetError">Try Again</button>
-        <button class="error-button secondary" @click="reportError">Report Issue</button>
+        <button
+          class="error-button primary"
+          @click="resetError"
+        >
+          Try Again
+        </button>
+        <button
+          class="error-button secondary"
+          @click="reportError"
+        >
+          Report Issue
+        </button>
       </div>
-      <details v-if="showDetails" class="error-details">
+      <details
+        v-if="showDetails"
+        class="error-details"
+      >
         <summary>Technical Details</summary>
         <pre class="error-stack">{{ error.stack }}</pre>
-        <p class="error-context">Component: {{ componentName }}</p>
-        <p class="error-context">Timestamp: {{ errorTimestamp }}</p>
+        <p class="error-context">
+          Component: {{ componentName }}
+        </p>
+        <p class="error-context">
+          Timestamp: {{ errorTimestamp }}
+        </p>
       </details>
     </div>
   </div>

@@ -67,7 +67,12 @@
         {{ translate('result.placeholder', 'Please enter your income and select your province or territory to see the tax breakdown.') }}
       </p>
     </div>
-    <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
+    <div
+      v-if="errorMessage"
+      class="error-message"
+    >
+      {{ errorMessage }}
+    </div>
   </div>
   <!-- End of result-box -->
 </template>

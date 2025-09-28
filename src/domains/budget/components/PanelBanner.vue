@@ -1,26 +1,55 @@
 <template>
-  <div class="panel-banner" :class="{ compact }" role="tablist" :aria-label="i18nText('panelBanner.sections', 'Sections')" tabindex="0" @keydown="onKeydown">
-    <div v-for="grp in visibleGroups" :key="grp.key" class="group-block" :data-panel-group="grp.key">
-      <div class="group-label" aria-hidden="true">{{ grp.title }}</div>
-      <button v-for="p in grp.items" :key="p.key"
-              class="tab"
-              role="tab"
-              :title="p.label"
-              :aria-label="p.label"
-              :aria-selected="p.key===modelValue"
-              :class="{ active: p.key===modelValue }"
-              :data-panel-key="p.key"
-              @click="emit('update:modelValue', p.key)">
-        <span class="material-icons" aria-hidden="true">{{ p.icon }}</span>
+  <div
+    class="panel-banner"
+    :class="{ compact }"
+    role="tablist"
+    :aria-label="i18nText('panelBanner.sections', 'Sections')"
+    tabindex="0"
+    @keydown="onKeydown"
+  >
+    <div
+      v-for="grp in visibleGroups"
+      :key="grp.key"
+      class="group-block"
+      :data-panel-group="grp.key"
+    >
+      <div
+        class="group-label"
+        aria-hidden="true"
+      >
+        {{ grp.title }}
+      </div>
+      <button
+        v-for="p in grp.items"
+        :key="p.key"
+        class="tab"
+        role="tab"
+        :title="p.label"
+        :aria-label="p.label"
+        :aria-selected="p.key===modelValue"
+        :class="{ active: p.key===modelValue }"
+        :data-panel-key="p.key"
+        @click="emit('update:modelValue', p.key)"
+      >
+        <span
+          class="material-icons"
+          aria-hidden="true"
+        >{{ p.icon }}</span>
         <span class="label">{{ p.label }}</span>
       </button>
     </div>
-    <button v-if="isMobile && collapsibleExists" class="more-toggle" @click="showMore = !showMore">
-      <span class="material-icons" aria-hidden="true">{{ showMore ? 'expand_less' : 'expand_more' }}</span>
+    <button
+      v-if="isMobile && collapsibleExists"
+      class="more-toggle"
+      @click="showMore = !showMore"
+    >
+      <span
+        class="material-icons"
+        aria-hidden="true"
+      >{{ showMore ? 'expand_less' : 'expand_more' }}</span>
       <span class="label">{{ showMore ? i18nText('panelBanner.less', 'Less') : i18nText('panelBanner.more', 'More') }}</span>
     </button>
   </div>
-  
 </template>
 
 <script setup>
