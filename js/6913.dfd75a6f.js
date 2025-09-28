@@ -1,2 +1,0 @@
-"use strict";(self["webpackChunkTaxCalculator"]=self["webpackChunkTaxCalculator"]||[]).push([[6913],{56913:function(e,a,n){n.r(a),n.d(a,{default:function(){return p}});var u=n(6934),t=n(52659);const r={class:"panel-container"};var c={__name:"BudgetRevenuePanel",setup(e){return(e,a)=>((0,u.uX)(),(0,u.CE)("div",r,[(0,u.bF)(t.A)]))}},s=n(66262);const l=(0,s.A)(c,[["__scopeId","data-v-2d8ba598"]]);var o=l,v={__name:"RevenuePanel",setup(e){return(e,a)=>((0,u.uX)(),(0,u.Wv)(o))}};const d=v;var p=d}}]);
-//# sourceMappingURL=6913.dfd75a6f.js.map
