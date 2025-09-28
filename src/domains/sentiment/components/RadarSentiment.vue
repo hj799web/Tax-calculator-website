@@ -557,7 +557,12 @@ function translateEntityName(tab, name) {
     
     const translationKey = provinceKeyMap[name];
     if (translationKey) {
-      return t(translationKey, name);
+      const translated = t(translationKey, name);
+      if (translated && translated !== translationKey) {
+        return translated;
+      }
+      // Fallback to the original name when translation is missing
+      return name;
     }
   }
   
@@ -570,11 +575,11 @@ function translateEntityName(tab, name) {
     
     const translationKey = `sentiment.groups.${tab}.${camelCaseName}`;
     const translated = t(translationKey, name);
-    
-    // If translation key doesn't exist, return the original name
-    if (translated !== translationKey) {
+    if (translated && translated !== translationKey) {
       return translated;
     }
+    // Fallback to original when translation missing
+    return name;
   }
   
   // Fallback: return the original name
