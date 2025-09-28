@@ -601,14 +601,15 @@ function translateEntityName(tab, name) {
     const camelCaseName = name.replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) => {
       return index === 0 ? word.toLowerCase() : word.toUpperCase();
     }).replace(/\s+/g, '');
-    
-    const translationKey = `sentiment.groups.${tab}.${camelCaseName}`;
+
+    // Use the correct i18n namespace used elsewhere in the app
+    const translationKey = `simulator.sentiment.groups.${tab}.${camelCaseName}`;
     const translated = t(translationKey, name);
     if (translated && translated !== translationKey) {
       return translated;
     }
-    // Fallback to original when translation missing
-    return name;
+    // Fallback to a human-friendly Title Case with spaces
+    return formatCategoryName(name);
   }
   
   // Fallback: return the original name
