@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkTaxCalculator"]=self["webpackChunkTaxCalculator"]||[]).push([[791],{20791:function(a,n,e){e.r(n),e.d(n,{default:function(){return o}});var t=e(6934),c=e(27121);const u={class:"panel-container"};var r={__name:"GoalsPanel",setup(a){return(a,n)=>((0,t.uX)(),(0,t.CE)("div",u,[(0,t.bF)(c.A)]))}},s=e(66262);const l=(0,s.A)(r,[["__scopeId","data-v-2c637126"]]);var o=l}}]);
+//# sourceMappingURL=791.ae005ba5.js.map
