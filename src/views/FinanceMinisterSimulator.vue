@@ -1371,8 +1371,9 @@ input:focus, select:focus, textarea:focus {
   padding-top: 10px;
   box-sizing: border-box;
   width: 100%;
-  transform: scale(0.8);
-  transform-origin: top center;
+  /* Remove scaling to prevent click hitbox issues */
+  transform: none;
+  transform-origin: initial;
 }
 
 .main-title {

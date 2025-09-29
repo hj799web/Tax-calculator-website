@@ -67,9 +67,12 @@
       <!-- Normal-sized sort button -->
       <button
         class="sort-button"
-        @click="toggleSortAmount"
+        :aria-label="translate('federalBudget.sortButton', 'Sort by Amount ({order})', { 'order': nextSortOrder })"
+        :title="translate('federalBudget.sortButton', 'Sort by Amount ({order})', { 'order': nextSortOrder })"
+        :disabled="netFederalTaxPerPeriod <= 0"
+        @click="toggleLocalSortOrder"
       >
-        {{ translate('federalBudget.sortButton', 'Sort by Amount ({order})', { 'order': sortOrder.toUpperCase() }) }}
+        {{ translate('federalBudget.sortButton', 'Sort by Amount ({order})', { 'order': nextSortOrder }) }}
       </button>
       <table class="allocation-table">
         <thead>
@@ -81,7 +84,7 @@
         </thead>
         <tbody>
           <tr
-            v-for="category in sortedBudgetCategories"
+            v-for="category in tableSortedCategories"
             :key="category.id"
           >
             <td>{{ category.name }}</td>
@@ -95,9 +98,9 @@
 </template>
 
 <script setup lang="js">
+import { computed, ref } from 'vue'
 import { formatCurrency } from '@/domains/calculator/utils/chartUtils.js'
 import { useCalculatorStore } from '@/domains/calculator/store/calculator.js'
-import { useConfigStore } from '@/domains/calculator/store/config.js'
 import { useYearStore } from '@/domains/calculator/store/year.js'
 import { storeToRefs } from 'pinia'
 import FederalBudgetPieChart from '@/domains/calculator/components/FederalBudgetPieChart.vue'
@@ -113,10 +116,25 @@ const translate = (key, fallback = '', params) => {
 }
 
 const { netFederalTaxPerPeriod, sortedBudgetCategories } = storeToRefs(useCalculatorStore())
-const configStore = useConfigStore()
 const yearStore = useYearStore()
-const { toggleSortAmount } = configStore
-const { sortOrder } = storeToRefs(configStore)
+// Local-only sort for this table
+const localSortOrder = ref((typeof window !== 'undefined' && window.localStorage.getItem('federalTableSortOrder')) || 'desc')
+const toggleLocalSortOrder = () => {
+  localSortOrder.value = localSortOrder.value === 'asc' ? 'desc' : 'asc'
+  try {
+    window.localStorage.setItem('federalTableSortOrder', localSortOrder.value)
+  } catch (e) {
+    // Benign in private mode or blocked storage environments
+    if (typeof console !== 'undefined' && typeof console.debug === 'function') {
+      console.debug('localStorage not available for federal table sort preference')
+    }
+  }
+}
+const nextSortOrder = computed(() => (localSortOrder.value === 'asc' ? 'DESC' : 'ASC'))
+const tableSortedCategories = computed(() => {
+  const rows = [...(sortedBudgetCategories?.value || [])]
+  return rows.sort((a, b) => localSortOrder.value === 'asc' ? a.allocatedAmount - b.allocatedAmount : b.allocatedAmount - a.allocatedAmount)
+})
 </script>
 
 <style scoped>

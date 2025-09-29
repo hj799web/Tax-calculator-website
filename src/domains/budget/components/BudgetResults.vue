@@ -560,15 +560,15 @@ const emit = defineEmits(['share-budget', 'reset-budget', 'save-budget', 'toggle
 
 const throttledShareBudget = throttle(() => {
   emit('share-budget');
-}, 2000);
+}, 500);
 
 const throttledResetBudget = throttle(() => {
   emit('reset-budget');
-}, 2000);
+}, 300);
 
 const throttledSaveBudget = throttle(() => {
   emit('save-budget');
-}, 2000);
+}, 500);
 
 // Format currency for display
 function formatCurrency(value) {
