@@ -255,13 +255,21 @@ export function calculateQpipContributionYearAware(income, year) {
  * @returns {number} Effective BPA amount
  */
 export function computeFederalBPAForIncome(baseEnhanced, baseFloor, income, year) {
+  // Normalize inputs and provide safe defaults to avoid NaN propagation
+  const enhanced = Number(baseEnhanced) || 0;
+  const floor = (baseFloor === undefined || baseFloor === null)
+    ? enhanced
+    : Number(baseFloor);
+  const taxableIncome = Number(income) || 0;
+
   const ranges = {
     '2024': { start: 173205, end: 246752 },
     '2025': { start: 177882, end: 253414 },
   };
   const r = ranges[String(year)] || ranges['2024'];
-  if (income <= r.start) return baseEnhanced;
-  if (income >= r.end) return baseFloor;
-  const frac = (income - r.start) / (r.end - r.start);
-  return baseEnhanced - (baseEnhanced - baseFloor) * frac;
+  if (taxableIncome <= r.start) return enhanced;
+  if (taxableIncome >= r.end) return floor;
+  if (enhanced === floor) return enhanced;
+  const frac = (taxableIncome - r.start) / (r.end - r.start);
+  return enhanced - (enhanced - floor) * frac;
 } 

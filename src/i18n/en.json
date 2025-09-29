@@ -1555,6 +1555,7 @@
       "ariaLabel": "Budget allocation pie chart"
     },
     "shortTitles": {
+      "y2022": "Budget 2022–2023",
       "y2024": "Budget 2023–2024",
       "y2024Comprehensive": "Budget 2023–2024 — Comprehensive Breakdown",
       "y2024Proposed": "Budget 2023–2024 — Proposed Allocations",

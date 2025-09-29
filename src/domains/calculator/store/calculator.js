@@ -336,12 +336,12 @@ export const useCalculatorStore = defineStore('calculator', () => {
   });
 
   const totalBudget = computed(() => {
-    const budgetCats = yearStore.budgetYear === '2024' ? budgetCategories2024 : budgetCategories2022;
+    const budgetCats = yearStore.selectedTaxYear === '2024' ? budgetCategories2024 : budgetCategories2022;
     return budgetCats.reduce((sum, cat) => sum + cat.amount, 0);
   });
 
   const federalBudgetData = computed(() => {
-    const budgetCats = yearStore.budgetYear === '2024' ? budgetCategories2024 : budgetCategories2022;
+    const budgetCats = yearStore.selectedTaxYear === '2024' ? budgetCategories2024 : budgetCategories2022;
 
     if (netFederalTaxPerPeriod.value === 0) {
       return budgetCats.map((cat) => ({
@@ -372,7 +372,7 @@ export const useCalculatorStore = defineStore('calculator', () => {
     data.sort((a, b) => {
       return sortOrder.value === 'asc' ? a.amount - b.amount : b.amount - a.amount;
     });
-    const budgetCats = yearStore.budgetYear === '2024' ? budgetCategories2024 : budgetCategories2022;
+    const budgetCats = yearStore.selectedTaxYear === '2024' ? budgetCategories2024 : budgetCategories2022;
     return data.map((item, index) => ({
       ...item,
       ...budgetCats.find((c) => c.name === item.category),
@@ -406,14 +406,14 @@ export const useCalculatorStore = defineStore('calculator', () => {
 
   // Helper function to get original category name by ID
   const getCategoryNameById = (id) => {
-    const budgetCats = yearStore.budgetYear === '2024' ? budgetCategories2024 : budgetCategories2022;
+    const budgetCats = yearStore.selectedTaxYear === '2024' ? budgetCategories2024 : budgetCategories2022;
     const category = budgetCats.find(cat => cat.id === id);
     return category ? category.name : 'Unknown Category';
   };
 
   const sortedBudgetCategories = computed(() => {
-    const budgetCats = yearStore.budgetYear === '2024' ? budgetCategories2024 : budgetCategories2022;
-    const year = yearStore.budgetYear === '2024' ? '2024' : '2022';
+    const budgetCats = yearStore.selectedTaxYear === '2024' ? budgetCategories2024 : budgetCategories2022;
+    const year = yearStore.selectedTaxYear === '2024' ? '2024' : '2022';
     const categoriesCopy = budgetCats.map(cat => ({ ...cat }));
     
     categoriesCopy.forEach(cat => {
