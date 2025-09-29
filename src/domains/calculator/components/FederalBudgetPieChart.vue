@@ -88,7 +88,7 @@ const chartData = computed(() => ({
           ? t('federalBudget.shortTitles.y2025')
           : (yearStore.selectedTaxYear === '2024'
             ? t('federalBudget.shortTitles.y2024')
-            : t('federalBudget.shortTitles.y2022')),
+            : t('federalBudget.chartTitles.y2022', '2022–2023 Canada\'s Federal Budget Allocation Chart')),
         font: { size: 14 }
       },
       tooltip: {

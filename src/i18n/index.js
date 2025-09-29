@@ -7,6 +7,20 @@ import fr from './fr.json'
 const overrides = 
 {
   'en': {
+    'projectionsPanel': {
+      'title': 'Multi-Year Fiscal Projections',
+      'planningControls': 'Planning Controls',
+      'programSpendingBoost': 'Program spending boost (%)',
+      'programSpendingBoostTooltip': 'Applies a one-time level change to program spending in the base year (and carried forward).',
+      'speedUpSpendingGrowth': 'Speed up spending growth (pp)',
+      'speedUpSpendingGrowthTooltip': 'Adds or subtracts percentage points to the annual growth rate applied to all categories.',
+      'charts': {
+        'deficitChartTitle': 'Deficit: Historical + Projections',
+        'deficitChartAria': 'Historical and projected deficit line chart',
+        'debtGdpChartTitle': 'Debt-to-GDP: Historical + Projections (%)',
+        'debtGdpChartAria': 'Historical and projected debt-to-GDP line chart'
+      }
+    },
     'how': {
       'footer': {
         'updated': 'This documentation was last updated: May 2025',
@@ -321,6 +335,20 @@ const overrides =
     }
   },
   'fr': {
+    'projectionsPanel': {
+      'title': 'Projections financières pluriannuelles',
+      'planningControls': 'Contrôles de planification',
+      'programSpendingBoost': 'Hausse des dépenses de programmes (%)',
+      'programSpendingBoostTooltip': "Applique un ajustement ponctuel du niveau des dépenses de programmes pour l'année de base (et reporté).",
+      'speedUpSpendingGrowth': "Accélérer la croissance des dépenses (pp)",
+      'speedUpSpendingGrowthTooltip': "Ajoute ou soustrait des points de pourcentage au taux de croissance annuel appliqué à toutes les catégories.",
+      'charts': {
+        'deficitChartTitle': 'Déficit : historique + projections',
+        'deficitChartAria': 'Graphique des déficits historiques et projetés',
+        'debtGdpChartTitle': 'Dette/PIB : historique + projections (%)',
+        'debtGdpChartAria': 'Graphique de la dette par rapport au PIB (historique et projections)'
+      }
+    },
     'simulator': {
       'yearSelector': {
         'aria': 'SÃ©lecteur dâ€™exercice fiscal',

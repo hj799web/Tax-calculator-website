@@ -15,6 +15,7 @@ import {
   calculateQppContributions,
   calculateQpipContributionYearAware,
   computeFederalBPAForIncome,
+  computeMedicalExpensesThreshold,
 } from '../utils/taxCalculations.js';
 import {
   federalBasicPersonalAmount2022,
@@ -84,6 +85,7 @@ export const useCalculatorStore = defineStore('calculator', () => {
   const ineligibleDividends = ref(undefined)
   const otherIncome = ref(undefined)
   const rrspDeduction = ref(undefined)
+  const medicalExpenses = ref(undefined)
   const maritalStatus = ref('')
   const numberOfDependents = ref(undefined)
   const numberOfChildrenUnder18 = ref(undefined)
@@ -214,7 +216,10 @@ export const useCalculatorStore = defineStore('calculator', () => {
 
   // Basic federal tax after credits
   const basicFederalTaxAfterCreditsAnnual = computed(() => {
-    const credits = federalBpaCreditAnnual.value + ceaCreditAnnual.value + federalDividendTaxCreditAnnual.value;
+    const credits = federalBpaCreditAnnual.value
+      + ceaCreditAnnual.value
+      + federalDividendTaxCreditAnnual.value
+      + medicalExpensesCreditAnnual.value;
     return Math.max(basicFederalTaxBeforeCreditsAnnual.value - credits, 0);
   });
 
@@ -270,6 +275,17 @@ export const useCalculatorStore = defineStore('calculator', () => {
     }
     return 0;
   });
+
+  // Medical expenses credit (non-refundable)
+  const medicalExpensesCreditAnnual = computed(() => {
+    const fixed = currentTaxCredits.value.medicalExpensesThreshold || 0;
+    const threshold = computeMedicalExpensesThreshold(totalFederalTaxableIncome.value, fixed);
+    const claimed = Math.max(((medicalExpenses.value || 0) * periodMultiplier.value) - threshold, 0);
+    return claimed * 0.15;
+  });
+
+  // UI gating for Digital News Subscription Credit (allowed only up to 2024)
+  const digitalNewsAllowed = computed(() => Number(yearStore.selectedTaxYear) <= 2024);
 
   // Net Income
   const netIncomeAfterCreditsAnnual = computed(() => {
@@ -471,6 +487,10 @@ export const useCalculatorStore = defineStore('calculator', () => {
       rrspDeduction.value = value;
     }),
 
+    setMedicalExpenses: createValidatedAction('calculator', 'medicalExpenses', function(value) {
+      medicalExpenses.value = value;
+    }),
+
     setMaritalStatus: createValidatedAction('calculator', 'maritalStatus', function(status) {
       maritalStatus.value = status;
     }),
@@ -543,6 +563,8 @@ export const useCalculatorStore = defineStore('calculator', () => {
     federalBudgetData,
     sortedBudgetData,
     sortedBudgetCategories,
+    medicalExpensesCreditAnnual,
+    digitalNewsAllowed,
     
     // Actions
     ...actions

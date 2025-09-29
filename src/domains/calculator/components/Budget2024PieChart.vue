@@ -41,7 +41,7 @@ import { storeToRefs } from 'pinia'
 import { useCalculatorStore } from '@/domains/calculator/store/calculator.js'
 import { generateColors } from '@/domains/calculator/utils/chartUtils.js'
 import { htmlLegendPlugin } from '@/domains/calculator/utils/htmlLegendPlugin.js'
-import { budgetCategories2024 } from '@/domains/calculator/constants/taxData.js'
+import { federalBudget2024Data } from '@/domains/calculator/constants/taxData.js'
 import { useCalculator } from '@/domains/calculator/composables/calculator.js'
 // import { useYearStore } from '@/domains/calculator/store/year.js'
 import { useI18n } from '@/i18n'
@@ -58,25 +58,21 @@ const { canCalculate } = useCalculator()
 // const yearStore = useYearStore()
 const { t } = useI18n()
 
-// Helper function to get translated category name
-const getCategoryTranslation = (categoryKey) => {
-  return t(`federalBudget.categories.y2024.${categoryKey}`) || categoryKey
-}
+// Helper: return label as-is for proposed allocations (policy buckets)
+const getCategoryLabel = (name) => name
 
-// Compute Budget 2024 data based on base data and net federal tax
+// Compute "proposed" Budget 2024 data from policy allocation buckets
 const budget2024DataComputed = computed(() => {
-  const total = budgetCategories2024.reduce((acc, cat) => acc + cat.amount, 0)
+  const total = federalBudget2024Data.reduce((acc, item) => acc + item.amount, 0)
   if (total === 0) {
-    return budgetCategories2024.map(c => ({
-      category: getCategoryTranslation(c.key || c.name),
-      categoryKey: c.key,
+    return federalBudget2024Data.map(item => ({
+      category: getCategoryLabel(item.category),
       amount: 0,
     }))
   }
-  return budgetCategories2024.map(c => ({
-    category: getCategoryTranslation(c.key || c.name),
-    categoryKey: c.key,
-    amount: (c.amount / total) * netFederalTaxPerPeriod.value,
+  return federalBudget2024Data.map(item => ({
+    category: getCategoryLabel(item.category),
+    amount: (item.amount / total) * netFederalTaxPerPeriod.value,
   }))
 })
 
@@ -111,7 +107,7 @@ const chartOptions = computed(() => ({
     },
     title: {
       display: true,
-      text: t('federalBudget.shortTitles.y2024Proposed'),
+      text: t('federalBudget.chartTitles.y2024Proposed', 'Budget 2023–2024'),
       font: { size: 14 }
     },
     tooltip: {

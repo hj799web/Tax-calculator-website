@@ -922,12 +922,17 @@
     },
     "title": "Répartition du budget fédéral",
     "descriptions": {
-      "budget2024": "Le diagramme de répartition du budget 2023-2024 présente les allocations de dépenses proposées par le gouvernement du Canada pour l’exercice 2023-2024.",
-      "estimates2025": "Le graphique des prévisions fédérales 2025-2026 illustre la répartition prévue des principales allocations pour l’exercice 2025-2026, selon les projections économiques actuelles.",
-      "historic": "Le diagramme de la répartition budgétaire fédérale 2022-2023 offre un aperçu détaillé et simplifié des dépenses fédérales, à partir des Comptes publics du Canada."
+      "budget2024": "Ces graphiques résument le budget fédéral 2023–2024 : l’un montre la répartition complète, l’autre les allocations proposées du Budget 2023–2024.",
+      "estimates2025": "Le graphique 2025–2026 présente une répartition projetée basée sur les prévisions actuelles.",
+      "historic": "Le graphique 2022–2023 montre la répartition des fonds selon les Comptes publics du Canada."
+    },
+    "chartTitles": {
+      "y2022": "Graphique de la répartition du budget fédéral 2022–2023 du Canada",
+      "y2024Comprehensive": "Répartition du budget fédéral 2023–2024 du Canada",
+      "y2024Proposed": "Budget 2023–2024"
     },
     "explanations": {
-      "budget2024": "Le graphique fédéral 2023-2024 présente la répartition complète des principales allocations du budget, tandis que le graphique circulaire du budget 2023-2024 illustre les dépenses proposées par le gouvernement."
+      "budget2024": "Deux vues : « Répartition du budget fédéral 2023–2024 du Canada » (complète) et « Budget 2023–2024 » (proposé)."
     },
     "chartsTitle": "Visualisations budgétaires",
     "noData": "Aucun impôt fédéral à illustrer",

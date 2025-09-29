@@ -8,13 +8,14 @@
       v-if="yearStore.budgetYear === '2023-2024'"
       class="allocation-description"
     >
-      {{ translate('federalBudget.descriptions.budget2024', 'The Budget 2023-2024 Allocation Chart represents the proposed spending allocations presented by the Canadian federal government for the 2023-2024 fiscal year.') }}
+      {{ translate('federalBudget.descriptions.budget2024', 'These charts summarize the 2023–2024 federal budget: one shows the comprehensive allocation; the other shows the proposed Budget 2023–2024 allocations.') }}
+      {{ translate('federalBudget.explanations.budget2024', 'Two views: ‘2023–2024 Canada Federal Budget Allocation Chart’ (comprehensive) and ‘Budget 2023–2024’ (proposed).') }}
     </p>
     <p
       v-else-if="yearStore.selectedTaxYear === '2025'"
       class="allocation-description"
     >
-      {{ translate('federalBudget.descriptions.estimates2025', 'The 2025-2026 Federal Estimates Allocation Chart shows the projected breakdown of major allocations for the 2025-2026 fiscal year, based on current economic forecasts and government projections.') }}
+      {{ translate('federalBudget.descriptions.estimates2025', 'The 2025–26 Federal Main Estimates chart presents the government’s planned spending allocations for the fiscal year, as set out in the Treasury Board’s current expenditure forecasts.') }}
     </p>
     <p
       v-else
@@ -22,18 +23,7 @@
     >
       {{ translate('federalBudget.descriptions.historic', 'The 2022–2023 Canada\'s Federal Budget Allocation Chart offers a detailed yet simplified breakdown of how the Canadian federal government spent its money during the 2022–2023 fiscal year—data sourced from the Public Accounts of Canada financial report.') }}
     </p>
-    <p
-      v-if="yearStore.budgetYear === '2023-2024'"
-      class="budget-explanation"
-    >
-      {{ translate('federalBudget.explanations.budget2024', 'The 2023-2024 Canada Federal Budget Allocation Chart shows the comprehensive breakdown of major allocations in the 2023-2024 federal budget. In contrast, the Budget 2023-2024 Pie Chart represents the proposed spending allocations presented by the Canadian federal government for 2023-2024.') }}
-    </p>
-    <p
-      v-else-if="yearStore.selectedTaxYear === '2025'"
-      class="budget-explanation"
-    >
-      <!-- Removed duplicate description -->
-    </p>
+    
 
     <!-- Charts Section -->
     <section class="charts-section">
@@ -44,10 +34,16 @@
         v-if="netFederalTaxPerPeriod > 0"
         class="charts-wrapper"
       >
-        <!-- Render the appropriate chart based on selected year -->
-        <FederalBudgetPieChart v-if="yearStore.budgetYear === '2022-2023'" />
-        <FederalBudget2024PieChart v-if="yearStore.budgetYear === '2023-2024'" />
-        <Budget2024PieChart v-if="yearStore.budgetYear === '2023-2024'" />
+        <!-- Render the appropriate chart(s) based on selected year -->
+        <template v-if="yearStore.budgetYear === '2022-2023'">
+          <!-- Historic single chart -->
+          <FederalBudgetPieChart />
+        </template>
+        <template v-else-if="yearStore.budgetYear === '2023-2024'">
+          <!-- Two 2023–2024 charts: Comprehensive + Proposed -->
+          <FederalBudget2024PieChart />
+          <Budget2024PieChart />
+        </template>
       </div>
       <div
         v-else

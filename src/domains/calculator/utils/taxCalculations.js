@@ -273,3 +273,19 @@ export function computeFederalBPAForIncome(baseEnhanced, baseFloor, income, year
   const frac = (taxableIncome - r.start) / (r.end - r.start);
   return enhanced - (enhanced - floor) * frac;
 } 
+
+/**
+ * Compute the medical expenses threshold per CRA rule: min(indexed fixed amount, 3% of net income)
+ *
+ * This helper intentionally takes the fixed threshold as a parameter so callers can
+ * supply the year-indexed amount from configuration/constants.
+ *
+ * @param {number} netIncome - Net income for the year
+ * @param {number} fixedThreshold - Year-indexed fixed threshold amount
+ * @returns {number} Threshold to compare against eligible medical expenses
+ */
+export function computeMedicalExpensesThreshold(netIncome, fixedThreshold) {
+  const income = Number(netIncome) || 0;
+  const fixed = Number(fixedThreshold) || 0;
+  return Math.min(fixed, income * 0.03);
+}

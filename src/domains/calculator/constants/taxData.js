@@ -12,16 +12,16 @@ export const salaryOptions = [
 export const taxCredits2024 = {
   basicPersonalAmount: 15705,
   spouseAmount: 15705,
-  ageAmount: 8396,
-  disabilityAmount: 9428,
+  ageAmount: 8790,
+  disabilityAmount: 9872,
   caregiverAmount: 7999,
   pensionIncomeAmount: 2000,
   employmentAmount: 1433,
-  homeBuyersAmount: 5000,
+  homeBuyersAmount: 10000,
   digitalNewsSubscriptionMax: 500,
-  volunteerFirefightersAmount: 3000,
+  volunteerFirefightersAmount: 6000,
   adoptionExpensesMax: 17131,
-  medicalExpensesThreshold: 2479,
+  medicalExpensesThreshold: 2759,
   charitableDonationsThreshold: 200,
   charitableDonationsHighIncomeThreshold: 253214
 };
@@ -30,16 +30,16 @@ export const taxCredits2024 = {
 export const taxCredits2025 = {
   basicPersonalAmount: 16129,
   spouseAmount: 16129,
-  ageAmount: 8396,
-  disabilityAmount: 9428,
+  ageAmount: 9027,
+  disabilityAmount: 10139,
   caregiverAmount: 7999,
   pensionIncomeAmount: 2000,
-  employmentAmount: 1368,
-  homeBuyersAmount: 5000,
-  digitalNewsSubscriptionMax: 500,
-  volunteerFirefightersAmount: 3000,
+  employmentAmount: 1433,
+  homeBuyersAmount: 10000,
+  digitalNewsSubscriptionMax: 0,
+  volunteerFirefightersAmount: 6000,
   adoptionExpensesMax: 17131,
-  medicalExpensesThreshold: 2479,
+  medicalExpensesThreshold: 2834,
   charitableDonationsThreshold: 200,
   charitableDonationsHighIncomeThreshold: 253214
 };
@@ -101,7 +101,7 @@ export const federalBasicPersonalAmount2024 = 15705;
 export const federalBasicPersonalAmount2025 = 16129;
 
 // For backward compatibility
-export const federalBasicPersonalAmount = federalBasicPersonalAmount2023;
+ 
 
 // Provincial Basic Personal Amounts
 export const provincialBasicPersonalAmounts2022 = {
@@ -153,23 +153,23 @@ export const provincialBasicPersonalAmounts2024 = {
 };
 
 export const provincialBasicPersonalAmounts2025 = {
-  'AB': 21885,
-  'BC': 11302,
-  'MB': 15000,
-  'NB': 12458,
-  'NL': 10382,
-  'NS': 8481,
-  'NT': 16593,
-  'NU': 16862,
+  'AB': 22323,
+  'BC': 12932,
+  'MB': 15780,
+  'NB': 13396,
+  'NL': 11067,
+  'NS': 11744,
+  'NT': 17842,
+  'NU': 19274,
   'ON': 12747,
-  'PE': 14250,
+  'PE': 14650,
   'QC': 18571,
-  'SK': 17661,
+  'SK': 19491,
   'YT': 16129
 };
 
 // For backward compatibility
-export const provincialBasicPersonalAmounts = provincialBasicPersonalAmounts2023;
+ 
 
 // Quebec-specific contribution rates and limits (2024)
 export const quebecContributionRates2024 = {
@@ -294,7 +294,7 @@ export const federalTaxBrackets2024 = [
 ];
 
 export const federalTaxBrackets2025 = [
-  { rate: 0.15, upTo: 57375 },
+  { rate: 0.145, upTo: 57375 },
   { rate: 0.205, upTo: 114750 },
   { rate: 0.26, upTo: 177882 },
   { rate: 0.29, upTo: 253414 },
@@ -302,7 +302,7 @@ export const federalTaxBrackets2025 = [
 ];
 
 // For backward compatibility
-export const federalTaxBrackets = federalTaxBrackets2023;
+ 
 
 // Provincial Tax Brackets
 export const provincialTaxBrackets2022 = {
@@ -572,6 +572,7 @@ export const provincialTaxBrackets2024 = {
 
 export const provincialTaxBrackets2025 = {
   'AB': [
+    { rate: 0.08, upTo: 60000 },
     { rate: 0.10, upTo: 151234 },
     { rate: 0.12, upTo: 181481 },
     { rate: 0.13, upTo: 241974 },
@@ -662,7 +663,7 @@ export const provincialTaxBrackets2025 = {
 };
 
 // For backward compatibility
-export const provincialTaxBrackets = provincialTaxBrackets2023;
+ 
 
 // Budget Categories
 export const budgetCategories2022 = [

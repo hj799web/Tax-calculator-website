@@ -99,7 +99,7 @@
       },
       title: {
         display: true,
-        text: t('federalBudget.shortTitles.y2024Comprehensive'),
+        text: t('federalBudget.chartTitles.y2024Comprehensive', '2023–2024 Canada Federal Budget Allocation Chart'),
         font: {
           size: 14
         }
