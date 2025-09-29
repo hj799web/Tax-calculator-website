@@ -14,30 +14,38 @@
       :step="step" 
       class="slider"
       :disabled="disabled"
-      @input="updateValue($event.target.value)"
+      @input="onSliderInput($event.target.value)"
     >
     <div class="input-controls">
       <div class="input-group">
         <input 
           type="number" 
-          :value="modelValue"
+          v-model="pct"
           :min="min"
           :max="max"
           :step="step"
           class="percentage-input"
           :disabled="disabled"
-          @input="updateValue($event.target.value)"
+          inputmode="decimal"
+          @focus="focused = 'pct'"
+          @blur="commitPct"
+          @keyup.enter="commitPct"
+          @wheel.prevent
         >
         <span class="input-suffix">%</span>
       </div>
       <div class="input-group">
         <input 
           type="number" 
-          :value="amountValue"
+          v-model="amount"
           class="amount-input"
           :step="0.1"
           :disabled="disabled"
-          @input="updateAmountValue($event.target.value)"
+          inputmode="decimal"
+          @focus="focused = 'amount'"
+          @blur="commitAmount"
+          @keyup.enter="commitAmount"
+          @wheel.prevent
         >
         <span class="input-suffix">B</span>
       </div>
@@ -46,8 +54,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
-import { createDebouncedFunction } from '@/utils/debounceUtils';
+import { ref, watch } from 'vue';
 
 const props = defineProps({
   modelValue: {
@@ -82,32 +89,41 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue']);
 
-// Use the new debouncing utility
-const debouncedEmitUpdate = createDebouncedFunction((numValue) => {
-  emit('update:modelValue', numValue);
-}, 200);
+// Local input state to avoid prop-overwrites while typing
+const pct = ref(String(typeof props.modelValue === 'number' ? props.modelValue : 0));
+const amount = ref(props.baseAmount ? String((props.baseAmount * (props.modelValue || 0)) / 100) : '');
+const focused = ref(null); // 'pct' | 'amount' | null
 
-function updateValue(value) {
-  const numValue = Number(value);
-  if (numValue >= props.min && numValue <= props.max) {
-    debouncedEmitUpdate(numValue);
+// Keep local state in sync with prop when not focused
+watch(() => props.modelValue, (v) => {
+  if (focused.value !== 'pct') pct.value = String(v);
+  if (focused.value !== 'amount') {
+    amount.value = props.baseAmount ? String((props.baseAmount * (v || 0)) / 100) : '';
   }
-}
-
-// Calculate the amount based on the percentage
-const amountValue = computed(() => {
-  return (props.baseAmount * props.modelValue / 100).toFixed(1);
 });
 
-// Use the same debounced function for amount input updates
-function updateAmountValue(value) {
+function onSliderInput(value) {
   const numValue = Number(value);
-  if (props.baseAmount > 0) {
-    const newPercentage = (numValue / props.baseAmount) * 100;
-    if (newPercentage >= props.min && newPercentage <= props.max) {
-      debouncedEmitUpdate(newPercentage);
-    }
-  }
+  if (!Number.isFinite(numValue)) return;
+  const clamped = Math.min(props.max, Math.max(props.min, numValue));
+  emit('update:modelValue', clamped);
+}
+
+function commitPct() {
+  const n = Number(pct.value);
+  if (!Number.isFinite(n)) { focused.value = null; return; }
+  const clamped = Math.min(props.max, Math.max(props.min, n));
+  emit('update:modelValue', clamped);
+  focused.value = null;
+}
+
+function commitAmount() {
+  const n = Number(amount.value);
+  if (!Number.isFinite(n) || props.baseAmount <= 0) { focused.value = null; return; }
+  const pctFromAmt = (n / props.baseAmount) * 100;
+  const clamped = Math.min(props.max, Math.max(props.min, pctFromAmt));
+  emit('update:modelValue', clamped);
+  focused.value = null;
 }
 </script>
 

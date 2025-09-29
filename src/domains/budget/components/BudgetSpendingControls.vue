@@ -573,7 +573,7 @@ const debouncedUpdateCategory = createDebouncedFunction((categoryId, value) => {
   } finally {
     isUpdating.value = false;
   }
-}, 200);
+}, 150);
 
 // Ensure we have valid spending factors for all categories
 const validSpendingFactors = computed(() => {
