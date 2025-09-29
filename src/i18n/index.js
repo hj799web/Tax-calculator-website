@@ -474,13 +474,16 @@ export function useI18n() {
 export function getCategoryName(categoryId, categoryType = 'spending') {
   const resolvedId = CATEGORY_KEY_ALIASES[categoryType]?.[categoryId] || categoryId
   const key = `simulator.categories.${categoryType}.${resolvedId}`
-  return translate(key) || categoryId
+  const translated = translate(key)
+  // If not found, translate returns the original key. Treat that as missing.
+  return translated === key ? '' : translated
 }
 
 export function getCategoryDescription(categoryId, categoryType = 'spending') {
   const resolvedId = CATEGORY_KEY_ALIASES[categoryType]?.[categoryId] || categoryId
   const key = `simulator.categoryDescriptions.${categoryType}.${resolvedId}`
-  return translate(key) || ''
+  const translated = translate(key)
+  return translated === key ? '' : translated
 }
 
 export default {

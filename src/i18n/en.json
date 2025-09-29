@@ -790,6 +790,12 @@
         "defensePublicSafety": "Defense & Public Safety",
         "loansInvestments": "Loans, Investments & Advances"
       },
+      "taxExpenditures": {
+        "personalIncomeTaxCredits": "Personal Income Tax Credits",
+        "corporateTaxExpenditures": "Corporate Tax Expenditures",
+        "gstHstExpenditures": "GST/HST Expenditures",
+        "deferralsRrspRppTfsa": "Registered Plans (RRSP/RPP/TFSA)"
+      },
       "tax": {
         "expenditures": {
           "gst": {
