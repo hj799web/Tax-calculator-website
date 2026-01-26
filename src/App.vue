@@ -437,13 +437,14 @@ export default {
     }
 
     const yearSelectorNote = computed(() => {
-      if (yearStore.selectedTaxYear === '2024') {
-        return t('home.year.note.2024')
-      }
-      if (yearStore.selectedTaxYear === '2025') {
-        return t('home.year.note.2025')
-      }
-      return t('home.year.note.default', { year: yearStore.selectedTaxYear })
+      const selectedYear = Number(yearStore.selectedTaxYear)
+      const filedYear = Number.isFinite(selectedYear) ? selectedYear + 1 : ''
+      const rateYear = yearStore.selectedTaxYear === '2023' ? '2022' : yearStore.selectedTaxYear
+      return t('home.year.note.uniform', {
+        taxYear: yearStore.selectedTaxYear,
+        filedYear,
+        rateYear
+      })
     })
 
     watch(activeTab, (value) => {

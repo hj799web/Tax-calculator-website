@@ -43,7 +43,7 @@
       
     <!-- Year-specific budget overview FAQs -->
     <div
-      v-if="budgetYear === '2024'"
+      v-if="budgetYear === '2023-2024'"
       class="faq-item"
     >
       <h3 class="faq-question">
@@ -69,7 +69,7 @@
       
     <!-- Year-specific revenue source FAQs -->
     <div
-      v-if="budgetYear === '2024'"
+      v-if="budgetYear === '2023-2024'"
       class="faq-item"
     >
       <h3 class="faq-question">
@@ -90,7 +90,7 @@
       
     <!-- Year-specific expenditure FAQs -->
     <div
-      v-if="budgetYear === '2024'"
+      v-if="budgetYear === '2023-2024'"
       class="faq-item"
     >
       <h3 class="faq-question">

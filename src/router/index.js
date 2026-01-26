@@ -1,8 +1,9 @@
 // src/router/index.js
 import { createRouter, createWebHashHistory } from 'vue-router'
 import { createSafeImport } from '@/utils/chunkLoader.js'
-
+import { FEATURES } from '@/features.js'
 // Route-level lazy loading with loading states for better mobile performance
+
 const routes = [
   {
     path: '/',
@@ -13,6 +14,11 @@ const routes = [
     path: '/welcome',
     name: 'welcome',
     component: createSafeImport(() => import('../views/WelcomeView.vue'), 'welcome')
+  },
+  {
+    path: '/simulator-onboarding',
+    name: 'budget-onboarding',
+    component: createSafeImport(() => import('../views/BudgetOnboarding.vue'), 'budget-onboarding')
   },
   {
     path: '/how-it-works',
@@ -115,5 +121,39 @@ if (typeof document !== 'undefined' && !document.querySelector('#route-loading-s
   styleElement.innerHTML = routeLoadingStyles.replace(/<style>|<\/style>/g, '')
   document.head.appendChild(styleElement)
 }
+
+
+router.beforeEach((to, from, next) => {
+  if (!FEATURES.QUIZ_ONBOARDING) {
+    next();
+    return;
+  }
+
+  if (to.meta?.isSharedBudget) {
+    next();
+    return;
+  }
+
+  if (typeof to.query?.skipOnboarding !== 'undefined') {
+    next();
+    return;
+  }
+
+  if (to.name === 'budget-onboarding') {
+    next();
+    return;
+  }
+
+  const isSimulatorRoute = to.name === 'finance-minister-simulator';
+  const shouldRedirectToQuiz = isSimulatorRoute && typeof to.query?.skipOnboarding === 'undefined';
+
+  if (shouldRedirectToQuiz) {
+    const encodedReturn = encodeURIComponent(to.fullPath || '/simulator');
+    next({ name: 'budget-onboarding', query: { return: encodedReturn } });
+    return;
+  }
+
+  next();
+});
 
 export default router

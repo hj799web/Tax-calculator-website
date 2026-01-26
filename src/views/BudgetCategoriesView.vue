@@ -504,7 +504,11 @@ const selectedCategory = ref(0)
 
 // Computed property to get the current budget categories based on the selected year
 const currentBudgetCategories = computed(() => {
-  return yearStore.budgetYear === '2023-2024' ? budgetCategories2024.value : budgetCategories20222023.value
+  if (yearStore.budgetYear === '2022-2023') {
+    return budgetCategories20222023.value
+  }
+  // Default to latest projections for 2023-2024 and beyond
+  return budgetCategories2024.value
 })
 
 // Computed property to filter categories based on selection

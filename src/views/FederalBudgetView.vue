@@ -44,6 +44,10 @@
           <FederalBudget2024PieChart />
           <Budget2024PieChart />
         </template>
+        <template v-else>
+          <!-- Fallback: use current/default spending data -->
+          <FederalBudgetPieChart />
+        </template>
       </div>
       <div
         v-else

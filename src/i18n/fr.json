@@ -1,4 +1,68 @@
 {
+  "quiz": {
+    "title": "Définissez vos priorités budgétaires",
+    "subtitle": "Dites-nous ce qui compte le plus et nous vous proposerons un budget de départ à personnaliser.",
+    "progress": "Question {current} sur {total}",
+    "actions": {
+      "next": "Suivant",
+      "back": "Précédent",
+      "skip": "Passer pour l'instant",
+      "submit": "Voir mon budget de départ",
+      "edit": "Modifier les priorités",
+      "reset": "Réinitialiser les priorités"
+    },
+    "scale": {
+      "hint": "Quelle importance accordez-vous à cette priorité?",
+      "1": "1 · Pas important",
+      "2": "2 · Peu important",
+      "3": "3 · Neutre",
+      "4": "4 · Important",
+      "5": "5 · Très important"
+    },
+    "q": {
+      "healthcare": "Financement des transferts en santé aux provinces et territoires",
+      "education": "Financement de l'éducation, de la formation et des subventions à la recherche",
+      "seniors": "Sécurité du revenu et soutien aux aînés",
+      "balancedBudget": "Équilibrer le budget fédéral (sans déficit)",
+      "taxLevel": "Maintenir les niveaux d'imposition bas",
+      "childrenFamilies": "Prestations et programmes pour les enfants et les familles",
+      "indigenousServices": "Services et infrastructures pour les communautés autochtones",
+      "employmentInsurance": "Assurance-emploi et soutien aux travailleurs",
+      "defensePublicSafety": "Défense nationale, sécurité publique et protection",
+      "environmentalPrograms": "Programmes environnementaux et climatiques",
+      "transportationInfrastructure": "Investissements dans les transports et les infrastructures",
+      "researchInnovation": "Recherche, innovation et technologies",
+      "publicSafetyEmergency": "Sécurité publique et préparation aux urgences",
+      "internationalDevelopment": "Développement international et partenariats mondiaux"
+    },
+    "skipConfirm": {
+      "title": "Passer le questionnaire de priorités?",
+      "body": "Vous pouvez explorer le simulateur sans le questionnaire et y revenir à tout moment depuis l'en-tête du simulateur.",
+      "confirm": "Passer pour l'instant",
+      "cancel": "Retour"
+    },
+    "preview": {
+      "title": "Aperçu de vos priorités",
+      "subtitle": "Visualisez l’effet de vos réponses sur le budget de départ.",
+      "topRaises": "Hausse probable",
+      "topCuts": "Baisse probable",
+      "noChanges": "Ajustez les curseurs pour voir les changements projetés.",
+      "projected": "≈ {value}",
+      "filters": {
+        "focus": "Cette question",
+        "raises": "Uniquement les hausses",
+        "cuts": "Uniquement les baisses",
+        "all": "Tout afficher"
+      },
+      "percentLabel": "Variation (%)",
+      "dollarsLabel": "Effet budgétaire",
+      "tags": {
+        "increase": "Hausse",
+        "decrease": "Baisse",
+        "neutral": "Stable"
+      }
+    }
+  },
   "home": {
     "language": {
       "switchLabel": "Changer de langue",
@@ -25,9 +89,7 @@
     "year": {
       "title": "Choisissez l’année d’imposition",
       "note": {
-        "2024": "Utilise les taux d’imposition 2024 et les projections budgétaires associées",
-        "2025": "Utilise les taux d’imposition 2025 avec les projections de dépenses 2025-2026",
-        "default": "Utilise les taux d’imposition {year} avec les données budgétaires 2022-2023"
+        "uniform": "Calcul d’impôt : année {taxYear} (déclaration en {filedYear}). Taux {rateYear}."
       }
     },
     "tabs": {

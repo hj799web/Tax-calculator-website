@@ -1,4 +1,68 @@
 {
+  "quiz": {
+    "title": "Set Your Budget Priorities",
+    "subtitle": "Tell us what matters most and we'll recommend a starting budget you can fine tune.",
+    "progress": "Question {current} of {total}",
+    "actions": {
+      "next": "Next",
+      "back": "Back",
+      "skip": "Skip for now",
+      "submit": "See my starting budget",
+      "edit": "Edit priorities",
+      "reset": "Reset priorities"
+    },
+    "scale": {
+      "hint": "How important is this priority to you?",
+      "1": "1 · Not important",
+      "2": "2 · Slightly important",
+      "3": "3 · Neutral",
+      "4": "4 · Important",
+      "5": "5 · Very important"
+    },
+    "q": {
+      "healthcare": "Funding for healthcare transfers to provinces and territories",
+      "education": "Funding for education, training, and research grants",
+      "seniors": "Income security and supports for seniors",
+      "balancedBudget": "Balancing the federal budget (no deficit)",
+      "taxLevel": "Keeping overall tax levels low",
+      "childrenFamilies": "Benefits and programs for children and families",
+      "indigenousServices": "Services and infrastructure for Indigenous communities",
+      "employmentInsurance": "Employment Insurance and worker supports",
+      "defensePublicSafety": "National defence, public safety, and security",
+      "environmentalPrograms": "Environmental protection and climate programs",
+      "transportationInfrastructure": "Transportation and infrastructure investments",
+      "researchInnovation": "Research, innovation, and technology",
+      "publicSafetyEmergency": "Public safety and emergency preparedness",
+      "internationalDevelopment": "International development and global partnerships"
+    },
+    "skipConfirm": {
+      "title": "Skip the priorities quiz?",
+      "body": "You can explore the simulator without the quiz. You can reopen it anytime from the simulator header.",
+      "confirm": "Skip for now",
+      "cancel": "Go back"
+    },
+    "preview": {
+      "title": "Your priorities preview",
+      "subtitle": "See how your answers will tilt the starting budget.",
+      "topRaises": "Likely increases",
+      "topCuts": "Likely decreases",
+      "noChanges": "Adjust the sliders above to see projected changes.",
+      "projected": "≈ {value}",
+      "filters": {
+        "focus": "Focus on this question",
+        "raises": "Only increases",
+        "cuts": "Only decreases",
+        "all": "Show all"
+      },
+      "percentLabel": "Percent shift",
+      "dollarsLabel": "Approx. change",
+      "tags": {
+        "increase": "Increase",
+        "decrease": "Decrease",
+        "neutral": "Stable"
+      }
+    }
+  },
   "home": {
     "language": {
       "switchLabel": "Change language",
@@ -25,9 +89,7 @@
     "year": {
       "title": "Select Tax Year",
       "note": {
-        "2024": "Using 2024 tax rates and budget projections",
-        "2025": "Using 2025 tax rates with 2025-2026 spending projections",
-        "default": "Using {year} tax rates with 2022-2023 budget data"
+        "uniform": "Tax calculation: Tax Year {taxYear} (filed in {filedYear}). Using {rateYear} rates."
       }
     },
     "tabs": {

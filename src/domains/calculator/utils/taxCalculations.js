@@ -187,17 +187,95 @@ const QPIP_TABLE = {
   '2025': { rate: 0.00494, mie: 98000, max: 484.12 },
 };
 
-/**
- * Calculate EI premium with year-aware rates
- * @param {number} income - Employment income
- * @param {string} provinceCode - Province code (for Quebec-specific rate)
- * @param {string} year - Tax year
- * @returns {number} EI premium amount
- */
-export function calculateEiPremiumYearAware(income, provinceCode, year) {
+const isContributionObject = (val) => val && typeof val === 'object';
+
+const resolveEiParams = (provinceOrContrib, year) => {
+  if (isContributionObject(provinceOrContrib) && 'rate' in provinceOrContrib && 'max' in provinceOrContrib) {
+    return provinceOrContrib;
+  }
+  const provinceCode = typeof provinceOrContrib === 'string' ? provinceOrContrib : null;
   const y = EI_TABLE[String(year)] || EI_TABLE['2024'];
   const isQC = provinceCode === 'QC';
-  const { rate, max } = isQC ? y.QC : y.nonQC;
+  return isQC ? y.QC : y.nonQC;
+};
+
+const resolveCppParams = (paramsOrYear) => {
+  if (isContributionObject(paramsOrYear)) {
+    const p = paramsOrYear.pensionPlan || paramsOrYear;
+    const base = p.base || {};
+    const add = p.add || {};
+    return {
+      ybe: base.ybe ?? base.basicExemption ?? 0,
+      ceiling: base.ympe ?? base.mpe ?? 0,
+      baseRate: base.rate ?? 0,
+      baseMax: base.max ?? Infinity,
+      addRate: add.rate ?? 0,
+      addMin: add.min ?? add.minPensionableEarnings ?? add.minPensionable ?? base.ympe ?? base.mpe ?? 0,
+      addCeiling: add.maxPensionableEarnings ?? add.max ?? add.maxCeiling ?? base.ympe ?? base.mpe ?? 0,
+      addMax: add.max ?? add.maxContribution ?? Infinity,
+    };
+  }
+  const y = CPP_TABLE[String(paramsOrYear)] || CPP_TABLE['2024'];
+  return {
+    ybe: y.ybe,
+    ceiling: y.ympe,
+    baseRate: y.baseRate,
+    baseMax: y.baseMax,
+    addRate: y.addRate,
+    addMin: y.ympe,
+    addCeiling: y.yampe,
+    addMax: y.addMax,
+  };
+};
+
+const resolveQppParams = (paramsOrYear) => {
+  if (isContributionObject(paramsOrYear)) {
+    const p = paramsOrYear.pensionPlan || paramsOrYear;
+    const base = p.base || {};
+    const add = p.add || {};
+    return {
+      ybe: base.ybe ?? base.basicExemption ?? 0,
+      ceiling: base.mpe ?? base.ympe ?? 0,
+      baseRate: base.rate ?? 0,
+      baseMax: base.max ?? Infinity,
+      addRate: add.rate ?? 0,
+      addMin: add.min ?? add.minPensionableEarnings ?? add.minPensionable ?? base.mpe ?? 0,
+      addCeiling: add.maxPensionableEarnings ?? add.max ?? add.maxCeiling ?? base.mpe ?? 0,
+      addMax: add.max ?? add.maxContribution ?? Infinity,
+    };
+  }
+  const y = QPP_TABLE[String(paramsOrYear)] || QPP_TABLE['2024'];
+  return {
+    ybe: y.ybe,
+    ceiling: y.mpe,
+    baseRate: y.baseRate,
+    baseMax: y.baseMax,
+    addRate: y.addRate,
+    addMin: y.mpe,
+    addCeiling: y.ampe,
+    addMax: Infinity,
+  };
+};
+
+const resolveQpipParams = (paramsOrYear) => {
+  if (isContributionObject(paramsOrYear) && paramsOrYear.qpip) {
+    return paramsOrYear.qpip;
+  }
+  if (isContributionObject(paramsOrYear) && 'rate' in paramsOrYear && 'max' in paramsOrYear) {
+    return paramsOrYear;
+  }
+  return QPIP_TABLE[String(paramsOrYear)] || QPIP_TABLE['2024'];
+};
+
+/**
+ * Calculate EI premium using provided contributions (preferred) or legacy year fallback.
+ * @param {number} income - Employment income
+ * @param {object|string} provinceOrContrib - Either province code (legacy) or EI contribution params {rate,max}
+ * @param {string} year - Tax year (legacy fallback)
+ * @returns {number} EI premium amount
+ */
+export function calculateEiPremiumYearAware(income, provinceOrContrib, year) {
+  const { rate, max } = resolveEiParams(provinceOrContrib, year);
   return Math.min(income * rate, max);
 }
 
@@ -205,15 +283,15 @@ export function calculateEiPremiumYearAware(income, provinceCode, year) {
  * Calculate CPP contributions (base + additional) with year-aware rates
  * @param {number} income - Employment income
  * @param {boolean} isSelfEmployed - Whether the income is from self-employment
- * @param {string} year - Tax year
+ * @param {object|string} paramsOrYear - Contribution params {pensionPlan:{base,add}} or legacy tax year
  * @returns {number} CPP contribution amount
  */
-export function calculateCppContributions(income, isSelfEmployed, year) {
-  const y = CPP_TABLE[String(year)] || CPP_TABLE['2024'];
-  const basePensionable = Math.max(0, Math.min(income, y.ympe) - y.ybe);
-  const base = Math.min(basePensionable * y.baseRate, y.baseMax);
-  const addBase = Math.max(0, Math.min(income, y.yampe) - y.ympe);
-  const add = Math.min(addBase * y.addRate, y.addMax);
+export function calculateCppContributions(income, isSelfEmployed, paramsOrYear) {
+  const p = resolveCppParams(paramsOrYear);
+  const basePensionable = Math.max(0, Math.min(income, p.ceiling) - p.ybe);
+  const base = Math.min(basePensionable * p.baseRate, p.baseMax);
+  const addBase = Math.max(0, Math.min(income, p.addCeiling) - p.addMin);
+  const add = Math.min(addBase * p.addRate, p.addMax);
   const employee = base + add;
   return isSelfEmployed ? employee * 2 : employee;
 }
@@ -222,15 +300,15 @@ export function calculateCppContributions(income, isSelfEmployed, year) {
  * Calculate QPP contributions (base + additional) with year-aware rates
  * @param {number} income - Employment income
  * @param {boolean} isSelfEmployed - Whether the income is from self-employment
- * @param {string} year - Tax year
+ * @param {object|string} paramsOrYear - Contribution params {pensionPlan:{base,add}} or legacy tax year
  * @returns {number} QPP contribution amount
  */
-export function calculateQppContributions(income, isSelfEmployed, year) {
-  const y = QPP_TABLE[String(year)] || QPP_TABLE['2024'];
-  const basePensionable = Math.max(0, Math.min(income, y.mpe) - y.ybe);
-  const base = Math.min(basePensionable * y.baseRate, y.baseMax);
-  const addBase = Math.max(0, Math.min(income, y.ampe) - y.mpe);
-  const add = addBase * y.addRate;
+export function calculateQppContributions(income, isSelfEmployed, paramsOrYear) {
+  const p = resolveQppParams(paramsOrYear);
+  const basePensionable = Math.max(0, Math.min(income, p.ceiling) - p.ybe);
+  const base = Math.min(basePensionable * p.baseRate, p.baseMax);
+  const addBase = Math.max(0, Math.min(income, p.addCeiling) - p.addMin);
+  const add = Math.min(addBase * p.addRate, p.addMax);
   const employee = base + add;
   return isSelfEmployed ? employee * 2 : employee;
 }
@@ -238,41 +316,51 @@ export function calculateQppContributions(income, isSelfEmployed, year) {
 /**
  * Calculate QPIP contribution with year-aware rates
  * @param {number} income - Employment income
- * @param {string} year - Tax year
+ * @param {object|string} paramsOrYear - QPIP params {rate,max} or legacy tax year
  * @returns {number} QPIP contribution amount
  */
-export function calculateQpipContributionYearAware(income, year) {
-  const y = QPIP_TABLE[String(year)] || QPIP_TABLE['2024'];
+export function calculateQpipContributionYearAware(income, paramsOrYear) {
+  const y = resolveQpipParams(paramsOrYear);
   return Math.min(income * y.rate, y.max);
 }
 
 /**
- * Calculate federal BPA with phase-out for high income
+ * Calculate federal BPA with phase-out for high income (CRA worksheet)
  * @param {number} baseEnhanced - Base BPA amount
- * @param {number} baseFloor - Minimum BPA after phase-out
+ * @param {{start:number, end:number, floor:number}} phaseOut - Phase-out parameters
  * @param {number} income - Income for phase-out calculation
- * @param {string} year - Tax year
  * @returns {number} Effective BPA amount
  */
-export function computeFederalBPAForIncome(baseEnhanced, baseFloor, income, year) {
-  // Normalize inputs and provide safe defaults to avoid NaN propagation
+export function computeFederalBPAForIncome(baseEnhanced, phaseOut, income) {
   const enhanced = Number(baseEnhanced) || 0;
-  const floor = (baseFloor === undefined || baseFloor === null)
-    ? enhanced
-    : Number(baseFloor);
   const taxableIncome = Number(income) || 0;
 
-  const ranges = {
-    '2024': { start: 173205, end: 246752 },
-    '2025': { start: 177882, end: 253414 },
-  };
-  const r = ranges[String(year)] || ranges['2024'];
-  if (taxableIncome <= r.start) return enhanced;
-  if (taxableIncome >= r.end) return floor;
-  if (enhanced === floor) return enhanced;
-  const frac = (taxableIncome - r.start) / (r.end - r.start);
-  return enhanced - (enhanced - floor) * frac;
-} 
+  if (!phaseOut || typeof phaseOut !== 'object') {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('Missing BPA phase-out parameters; using base amount.');
+    }
+    return enhanced;
+  }
+
+  const start = Number(phaseOut.start);
+  const end = Number(phaseOut.end);
+  const floor = Number(phaseOut.floor);
+
+  if (!Number.isFinite(start) || !Number.isFinite(end) || !Number.isFinite(floor) || end <= start) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('Invalid BPA phase-out parameters; using base amount.', phaseOut);
+    }
+    return enhanced;
+  }
+
+  if (taxableIncome <= start) return enhanced;
+  if (taxableIncome >= end) return floor;
+
+  const reduction = ((taxableIncome - start) * (enhanced - floor)) / (end - start);
+  const phased = enhanced - reduction;
+  if (!Number.isFinite(phased)) return enhanced;
+  return Math.max(floor, Math.min(enhanced, phased));
+}
 
 /**
  * Compute the medical expenses threshold per CRA rule: min(indexed fixed amount, 3% of net income)

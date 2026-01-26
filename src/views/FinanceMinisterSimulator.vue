@@ -4,7 +4,18 @@
     class="finance-minister-simulator"
     :class="{ 'panel-collapsed': !badgePanelExpanded }"
   >
-    <OnboardingTour />
+    <OnboardingTour v-if="showOnboardingTour" />
+    <transition name="quiz-toast">
+      <div
+        v-if="showQuizToast"
+        class="quiz-toast"
+        role="status"
+        aria-live="polite"
+      >
+        <span class="material-icons">insights</span>
+        <span class="quiz-toast-message">{{ quizToastMessage }}</span>
+      </div>
+    </transition>
     <!-- Public Sentiment Banner (includes fiscal chaos warning when needed) -->
     <CollapsibleSentimentBanner
       :emoji="groupSentimentEmoji"
@@ -72,32 +83,42 @@
           class="site-logo"
         >
       </div>
-      <div class="flex justify-between items-center mb-0">
+      <div class="flex justify-between items-center mb-0 simulator-header">
         <h1 class="main-title">
           {{ t('simulator.header.title') }}
         </h1>
-        <div class="language-switch">
-          <label
-            class="language-label"
-            for="simulator-language-switch"
+        <div class="header-controls">
+          <button
+            v-if="showEditPriorities"
+            type="button"
+            class="edit-priorities-btn"
+            @click="handleEditPriorities"
           >
-            {{ t('home.language.label') }}
-          </label>
-          <select
-            id="simulator-language-switch"
-            class="language-select"
-            :value="locale"
-            :aria-label="t('home.language.switchLabel')"
-            @change="handleLocaleChange"
-          >
-            <option
-              v-for="option in locales"
-              :key="option.code"
-              :value="option.code"
+            {{ t('quiz.actions.edit') }}
+          </button>
+          <div class="language-switch">
+            <label
+              class="language-label"
+              for="simulator-language-switch"
             >
-              {{ t(option.labelKey) }}
-            </option>
-          </select>
+              {{ t('home.language.label') }}
+            </label>
+            <select
+              id="simulator-language-switch"
+              class="language-select"
+              :value="locale"
+              :aria-label="t('home.language.switchLabel')"
+              @change="handleLocaleChange"
+            >
+              <option
+                v-for="option in locales"
+                :key="option.code"
+                :value="option.code"
+              >
+                {{ t(option.labelKey) }}
+              </option>
+            </select>
+          </div>
         </div>
       </div>
 
@@ -454,9 +475,13 @@
 </template>
 
 <script setup>
-import { computed, ref, onMounted, watch, nextTick, defineAsyncComponent } from 'vue'
+import { computed, ref, onMounted, watch, nextTick, defineAsyncComponent, onBeforeUnmount } from 'vue'
 import { useI18n } from '@/i18n'
 import { useBudgetSimulatorStore } from '@/domains/budget'
+import { useUserPreferences } from '@/stores/userPreferences.js'
+import { applyUserPrioritiesToBudget, responsesToWeights } from '@/domains/budget/utils/userPriorities.js'
+import { useRoute, useRouter } from 'vue-router'
+
 import { computeSentimentScores, getSentimentLabel, getSentimentEmoji } from '@/domains/sentiment/utils/computeSentimentScores'
 import MainNavigation from '@/components/MainNavigation.vue'
 import logoImage from '@/assets/fiscal-insights-logo.webp'
@@ -529,6 +554,8 @@ import { setPreset } from '@/presets'
 import { parseSharedBudgetParams, applySharedBudgetToStore } from '@/domains/budget/utils/sharedBudget.js'
 import { handleError } from '@/utils/errorHandler.js'
 
+const route = useRoute();
+const router = useRouter();
 const budgetStore = useBudgetSimulatorStore();
 const currentYear = ref(budgetStore.currentYear);
 const expandedGroups = ref({
@@ -537,6 +564,48 @@ const expandedGroups = ref({
   governmentOperations: false
 });
 const spendingFactors = ref({});
+const preferences = useUserPreferences();
+const priorityWeights = computed(() => preferences.priorityWeights.value || {});
+const hasPriorityWeights = computed(() => preferences.hasPriorityWeights.value);
+const showOnboardingTour = computed(() => !route.meta?.isSharedBudget);
+const showEditPriorities = computed(() => FEATURES.QUIZ_ONBOARDING && preferences.completedOnboarding.value);
+const usePriorityOrdering = computed(() => FEATURES.QUIZ_ONBOARDING && preferences.completedOnboarding.value && hasPriorityWeights.value);
+// Fall back to local weight presence if store flag is missing/undefined
+const shouldApplyPrefill = computed(() => {
+  const hasWeights = Object.keys(priorityWeights.value || {}).length > 0;
+  const storeFlag = preferences.shouldApplyPrefill?.value;
+  // If storeFlag is undefined/null, rely on weights + completion
+  const applyFlag = typeof storeFlag === 'boolean' ? storeFlag : (preferences.completedOnboarding?.value && hasWeights);
+  return FEATURES.QUIZ_ONBOARDING && applyFlag;
+});
+const hasAppliedPrefill = ref(false);
+const showQuizToast = ref(false);
+const quizToastMessage = ref('');
+let quizToastTimer = null;
+
+const clearQuizToast = () => {
+  if (quizToastTimer) {
+    clearTimeout(quizToastTimer);
+    quizToastTimer = null;
+  }
+  showQuizToast.value = false;
+};
+
+const showQuizSummaryToast = (message) => {
+  if (!message) {
+    return;
+  }
+  quizToastMessage.value = message;
+  showQuizToast.value = true;
+  if (quizToastTimer) {
+    clearTimeout(quizToastTimer);
+  }
+  quizToastTimer = setTimeout(() => {
+    showQuizToast.value = false;
+    quizToastTimer = null;
+  }, 6000);
+};
+
 const autoBalanceActive = computed(() => budgetStore.autoBalanceActive);
 const showBadgeGallery = ref(false); // Controls the badge gallery modal
 const badgePanelExpanded = ref(true); // Controls whether the badge panel is expanded or collapsed
@@ -599,45 +668,106 @@ const groupSentimentScore = computed(() => {
 const groupSentimentLabel = computed(() => getSentimentLabel(groupSentimentScore.value));
 const groupSentimentEmoji = computed(() => getSentimentEmoji(groupSentimentScore.value));
 
+const skipOnboardingQuery = computed(() => typeof route.query?.skipOnboarding !== 'undefined');
+const getPriorityWeight = (categoryId) => {
+  const value = priorityWeights.value?.[categoryId];
+  return typeof value === 'number' ? value : null;
+};
+const getAggregateWeight = (category) => {
+  if (!usePriorityOrdering.value) {
+    return null;
+  }
+  const direct = getPriorityWeight(category.id);
+  if (direct !== null) {
+    return direct;
+  }
+  if (category.children) {
+    const weights = Object.values(category.children)
+      .map((child) => getPriorityWeight(child.id))
+      .filter((value) => value !== null);
+    if (weights.length) {
+      return weights.reduce((sum, value) => sum + value, 0) / weights.length;
+    }
+  }
+  return null;
+};
+const compareByPriority = (a, b) => {
+  if (!usePriorityOrdering.value) {
+    return 0;
+  }
+  const weightA = getAggregateWeight(a);
+  const weightB = getAggregateWeight(b);
+  if (weightA === null && weightB === null) {
+    return 0;
+  }
+  if (weightA === null) {
+    return 1;
+  }
+  if (weightB === null) {
+    return -1;
+  }
+  if (Math.abs(weightB - weightA) > 1e-6) {
+    return weightB - weightA;
+  }
+  const labelA = a.name || String(a.id || '');
+  const labelB = b.name || String(b.id || '');
+  return labelA.localeCompare(labelB, undefined, { sensitivity: 'base' });
+};
+const fallbackGovOpsSorter = (a, b) => {
+  const aParts = a.id.toString().split('.');
+  const bParts = b.id.toString().split('.');
+  const aInt = parseInt(aParts[0], 10);
+  const bInt = parseInt(bParts[0], 10);
+  if (!Number.isNaN(aInt) && !Number.isNaN(bInt) && aInt !== bInt) {
+    return aInt - bInt;
+  }
+  const aDecimal = aParts.length > 1 ? parseInt(aParts[1], 10) : 0;
+  const bDecimal = bParts.length > 1 ? parseInt(bParts[1], 10) : 0;
+  return aDecimal - bDecimal;
+};
+
 function selectYear(year) {
   currentYear.value = year;
   budgetStore.setCurrentYear(year);
   initializeLocalValues();
 }
 
+const handleEditPriorities = () => {
+  if (!FEATURES.QUIZ_ONBOARDING) {
+    return;
+  }
+  const target = encodeURIComponent(route.fullPath || '/simulator');
+  router.push({ name: 'budget-onboarding', query: { return: target, edit: '1' } });
+};
+
 const mainCategories = computed(() => {
-  return Object.values(budgetStore.spendingCategories)
-    .filter(category => !category.isGroup)
-    .sort((a, b) => a.id - b.id);
+  const categories = Object.values(budgetStore.spendingCategories)
+    .filter(category => !category.isGroup);
+  if (!usePriorityOrdering.value) {
+    return categories;
+  }
+  return [...categories].sort(compareByPriority);
 });
 
 const otherCategoriesGroups = computed(() => {
-  return Object.values(budgetStore.spendingCategories)
-    .filter(category => category.isGroup && category.id !== 9)
-    .sort((a, b) => a.id - b.id);
+  const groups = Object.values(budgetStore.spendingCategories)
+    .filter(category => category.isGroup && category.id !== 9);
+  if (!usePriorityOrdering.value) {
+    return groups;
+  }
+  return [...groups].sort(compareByPriority);
 });
 
 const sortedGovOpsChildren = computed(() => {
   const govOps = budgetStore.spendingCategories.governmentOperations;
-  if (govOps && govOps.children) {
-    // Use a more reliable sorting method for decimal IDs
-    return Object.values(govOps.children).sort((a, b) => {
-      // First convert to string and split by decimal point
-      const aParts = a.id.toString().split('.');
-      const bParts = b.id.toString().split('.');
-      
-      // Compare the integer part first
-      const aInt = parseInt(aParts[0]);
-      const bInt = parseInt(bParts[0]);
-      if (aInt !== bInt) return aInt - bInt;
-      
-      // If integer parts are the same, compare decimal parts
-      const aDecimal = aParts.length > 1 ? parseInt(aParts[1]) : 0;
-      const bDecimal = bParts.length > 1 ? parseInt(bParts[1]) : 0;
-      return aDecimal - bDecimal;
-    });
+  if (!govOps || !govOps.children) {
+    return [];
   }
-  return [];
+  const children = Object.values(govOps.children);
+  if (!usePriorityOrdering.value) {
+    return [...children].sort(fallbackGovOpsSorter);
+  }
+  return [...children].sort(compareByPriority);
 });
 
 function initializeLocalValues() {
@@ -792,10 +922,6 @@ const sharedBudgetData = ref({}); // will hold the parsed shared budget data
 const isSharedBudget = ref(false);
 const financeMinisterErrorMessage = ref('');
 
-import { useRoute } from 'vue-router';
-
-// Get the current route
-const route = useRoute();
 
 // ...
 
@@ -821,10 +947,147 @@ const parseAndApplySharedBudget = async () => {
   }
 };
 
+const DEBUG_QUIZ_APPLY = true;
+
+const applyPreferencesIfNeeded = async () => {
+  if (DEBUG_QUIZ_APPLY) {
+    console.debug('[QuizApply] enter', {
+      hasAppliedPrefill: hasAppliedPrefill.value,
+      shouldApplyPrefill: shouldApplyPrefill.value,
+      isSharedRoute: !!route.meta?.isSharedBudget,
+      isSharedBudget: isSharedBudget.value,
+      skipOnboardingQuery: 'skipOnboarding' in route.query,
+    });
+  }
+  // Recompute weights from raw responses if missing, and mark completed if responses exist
+  const weightCount = Object.keys(priorityWeights.value || {}).length;
+  const rawCount = Object.keys(preferences.rawResponses?.value || {}).length;
+  if (weightCount === 0 && rawCount > 0) {
+    try {
+      const recomputed = responsesToWeights(preferences.rawResponses.value);
+      preferences.setPriorityWeights(recomputed);
+      // If user had responses, consider onboarding completed
+      preferences.markCompleted?.();
+      if (DEBUG_QUIZ_APPLY) {
+        console.debug('[QuizApply] recomputed weights from raw responses', {
+          rawCount,
+          recomputedCount: Object.keys(recomputed || {}).length,
+        });
+      }
+    } catch (err) {
+      console.warn('[QuizApply] failed to recompute weights from raw responses', err);
+    }
+  }
+  if (hasAppliedPrefill.value) {
+    if (DEBUG_QUIZ_APPLY) console.debug('[QuizApply] skip: already applied this session');
+    return;
+  }
+  if (!shouldApplyPrefill.value) {
+    if (DEBUG_QUIZ_APPLY) {
+      console.debug('[QuizApply] skip: shouldApplyPrefill is false', {
+        completed: preferences.completedOnboarding.value,
+        weightCount: Object.keys(priorityWeights.value || {}).length,
+        rawResponsesCount: Object.keys(preferences.rawResponses?.value || {}).length,
+      });
+    }
+    return;
+  }
+  if (route.meta?.isSharedBudget || isSharedBudget.value) {
+    if (DEBUG_QUIZ_APPLY) console.debug('[QuizApply] skip: shared budget route');
+    return;
+  }
+  try {
+    const presetKey = preferences.recommendedPresetKey.value;
+    if (DEBUG_QUIZ_APPLY) {
+      console.debug('[QuizApply] applying', {
+        presetKey,
+        activePreset: budgetStore.activePreset,
+        weightCount: Object.keys(priorityWeights.value || {}).length,
+        changeHistoryLength: Array.isArray(budgetStore.changeHistory) ? budgetStore.changeHistory.length : null,
+      });
+    }
+    if (presetKey && budgetStore.activePreset !== presetKey) {
+      setPreset(presetKey, budgetStore);
+    }
+
+    let prioritySummary = null;
+    if (hasPriorityWeights.value) {
+      const healthcareBefore = budgetStore.spendingCategories?.healthcare?.adjustmentFactor ?? null;
+      const educationBefore = budgetStore.spendingCategories?.education?.adjustmentFactor ?? null;
+      console.log('[FinanceMinisterSimulator][prefill] Before applyUserPrioritiesToBudget', {
+        presetKey,
+        activePreset: budgetStore.activePreset,
+        healthcareBefore,
+        educationBefore,
+        priorityWeights: priorityWeights.value,
+      });
+
+      prioritySummary = applyUserPrioritiesToBudget(budgetStore, priorityWeights.value, { maxShift: 0.25 });
+
+      const healthcareAfter = budgetStore.spendingCategories?.healthcare?.adjustmentFactor ?? null;
+      const educationAfter = budgetStore.spendingCategories?.education?.adjustmentFactor ?? null;
+      if (DEBUG_QUIZ_APPLY) {
+        console.debug('[QuizApply] after applyUserPrioritiesToBudget', {
+          description: prioritySummary?.description,
+          increases: prioritySummary?.increases?.map((i) => i.id) || [],
+          decreases: prioritySummary?.decreases?.map((i) => i.id) || [],
+          revenueChanges: prioritySummary?.revenueChanges?.map((i) => i.id) || [],
+          healthcareAfter,
+          educationAfter,
+          changeHistoryLength: budgetStore.changeHistory?.length ?? 0,
+        });
+      }
+    }
+
+    if (prioritySummary?.description) {
+      const { increases, decreases, revenueChanges } = prioritySummary;
+      
+      let message = '✓ Applied your priorities:\n\n';
+      
+      if (increases?.length || decreases?.length) {
+        message += 'Spending:\n';
+        if (increases?.length) {
+          message += `  ↑ ${increases.map(a => a.name).join(', ')}\n`;
+        }
+        if (decreases?.length) {
+          message += `  ↓ ${decreases.map(a => a.name).join(', ')}\n`;
+        }
+      }
+      
+      if (revenueChanges?.length) {
+        message += '\nRevenue:\n';
+        revenueChanges.forEach(a => {
+          const delta = ((a.newRate - a.oldRate) / a.oldRate) * 100;
+          const sign = delta > 0 ? '↑' : '↓';
+          message += `  ${sign} ${a.name} ${Math.abs(delta).toFixed(1)}%\n`;
+        });
+      }
+      
+      showQuizSummaryToast(message);
+    } else if (prioritySummary) {
+      clearQuizToast();
+    }
+
+    if (DEBUG_QUIZ_APPLY) console.debug('[QuizApply] mark prefill applied');
+    preferences.markPrefillApplied();
+
+    budgetStore.recalculateTotals();
+    budgetStore.updateBadges();
+    budgetStore.triggerSentimentUpdate();
+
+    if ('skipOnboarding' in route.query) {
+      const newQuery = { ...route.query };
+      delete newQuery.skipOnboarding;
+      router.replace({ query: newQuery });
+    }
+  } catch (error) {
+    console.error('[FinanceMinisterSimulator] Failed to apply onboarding preferences', error);
+  } finally {
+    hasAppliedPrefill.value = true;
+  }
+};
+
 // Call this on mount if on a shared budget route
-onMounted(() => {
-  parseAndApplySharedBudget();
-});
 
 // These functions are no longer needed with the new shared budget utility
 // but we'll keep them commented in case they're needed in the future
@@ -910,13 +1173,37 @@ async function openSocialShareModal() {
   }
 }
 
+watch(shouldApplyPrefill, async (next) => {
+  if (next) {
+    hasAppliedPrefill.value = false;
+    await applyPreferencesIfNeeded();
+    initializeLocalValues();
+  }
+});
+
+onMounted(async () => {
+  await parseAndApplySharedBudget();
+  await applyPreferencesIfNeeded();
+  initializeLocalValues();
+});
+
+watch(() => route.query.skipOnboarding, async () => {
+  if (!skipOnboardingQuery.value && shouldApplyPrefill.value) {
+    hasAppliedPrefill.value = false;
+    await applyPreferencesIfNeeded();
+    initializeLocalValues();
+  }
+});
+
+onBeforeUnmount(() => {
+  clearQuizToast();
+  preferences.markIncomplete();
+});
+
 watch(() => budgetStore.spendingCategories, () => {
   initializeLocalValues();
 }, { deep: true });
 
-onMounted(() => {
-  initializeLocalValues();
-});
 
 const logoUrl = logoImage
 
@@ -973,6 +1260,73 @@ const handleLocaleChange = (event) => {
 
 <style scoped>
 /* 1. Modern Typography */
+/* Quiz Toast */
+  .quiz-toast {
+    position: fixed;
+    top: 96px;
+    right: clamp(16px, 3vw, 40px);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.75rem 1.1rem;
+    border-radius: 999px;
+    background: rgba(37, 99, 235, 0.95);
+    color: #fff;
+    box-shadow: 0 12px 24px rgba(37, 99, 235, 0.25);
+    z-index: 70;
+  }
+
+  .quiz-toast .material-icons {
+    font-size: 1.25rem;
+  }
+
+  .quiz-toast-message {
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  .quiz-toast-enter-active,
+  .quiz-toast-leave-active {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .quiz-toast-enter-from,
+  .quiz-toast-leave-to {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  .simulator-header {
+    gap: 1.25rem;
+    flex-wrap: wrap;
+  }
+
+  .header-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .edit-priorities-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(37, 99, 235, 0.12);
+    border: 1px solid rgba(37, 99, 235, 0.35);
+    color: #1d4ed8;
+    border-radius: 999px;
+    padding: 0.45rem 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  }
+
+  .edit-priorities-btn:hover,
+  .edit-priorities-btn:focus-visible {
+    background: rgba(37, 99, 235, 0.2);
+    border-color: rgba(37, 99, 235, 0.55);
+  }
+
   .language-switch {
     margin-left: auto;
     display: flex;
@@ -1819,6 +2173,26 @@ input:focus, select:focus, textarea:focus {
 }
 
 @media (max-width: 768px) {
+  .quiz-toast {
+    top: 72px;
+    right: 16px;
+    left: 16px;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .header-controls {
+    width: 100%;
+    flex-direction: column-reverse;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .edit-priorities-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
   .language-switch {
     margin-left: 0;
     margin-top: 0.75rem;
@@ -1942,4 +2316,11 @@ input:focus, select:focus, textarea:focus {
   }
 }
 </style>
+
+
+
+
+
+
+
 

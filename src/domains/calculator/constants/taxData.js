@@ -8,6 +8,12 @@ export const salaryOptions = [
   { label: 'Hourly', value: 'Hourly', periodMultiplier: 2080 },
 ]
 
+// 2023 Tax Credits (used fields only)
+export const taxCredits2023 = {
+  employmentAmount: 1368,
+  medicalExpensesThreshold: 2635,
+};
+
 // 2024 Tax Credits and Deductions
 export const taxCredits2024 = {
   basicPersonalAmount: 15705,
@@ -45,7 +51,7 @@ export const taxCredits2025 = {
 };
 
 export const taxDeductions2025 = {
-  rrspMaxContribution: 31560,
+  rrspMaxContribution: 32490,
   fhsaAnnualLimit: 8000,
   fhsaLifetimeLimit: 40000,
   movingExpensesMinDistance: 40, // kilometers
@@ -589,8 +595,8 @@ export const provincialTaxBrackets2025 = {
     { rate: 0.205, upTo: Infinity },
   ],
   'MB': [
-    { rate: 0.108, upTo: 47564 },
-    { rate: 0.1275, upTo: 101200 },
+    { rate: 0.108, upTo: 47000 },
+    { rate: 0.1275, upTo: 100000 },
     { rate: 0.174, upTo: Infinity },
   ],
   'NB': [
@@ -631,9 +637,9 @@ export const provincialTaxBrackets2025 = {
     { rate: 0.19, upTo: Infinity },
   ],
   'QC': [
-    { rate: 0.14, upTo: 53295 },
-    { rate: 0.19, upTo: 106585 },
-    { rate: 0.24, upTo: 129275 },
+    { rate: 0.14, upTo: 53255 },
+    { rate: 0.19, upTo: 106495 },
+    { rate: 0.24, upTo: 129590 },
     { rate: 0.2575, upTo: Infinity },
   ],
   'SK': [
@@ -839,3 +845,189 @@ export const federalBudget2024Data = [
   { category: 'Public Debt and Fiscal Stability', amount: 58.3 },
   { category: 'Strategic Investments in Innovation', amount: 0.138 }
 ];
+
+// ---------------------------------------------------------------------------
+// Unified tax params, fiscal year defaults, and helpers
+// ---------------------------------------------------------------------------
+
+export const DEFAULT_FISCAL_YEAR = '2025-26';
+
+// CRA indexed amounts (source: CRA indexation table)
+const bpaPhaseOutByYear = {
+  '2023': { start: 165430, end: 235675, floor: 13520 },
+  '2024': { start: 173205, end: 246752, floor: 14156 },
+  '2025': { start: 177882, end: 253414, floor: 14538 },
+};
+
+const buildRocContributions = (federalContributionRates) => ({
+  pensionPlan: {
+    base: {
+      rate: federalContributionRates.cpp.rate,
+      ympe: federalContributionRates.cpp.maxPensionableEarnings,
+      ybe: federalContributionRates.cpp.basicExemption,
+      max: federalContributionRates.cpp.maxContribution,
+    },
+    add: {
+      rate: federalContributionRates.cpp2.rate,
+      min: federalContributionRates.cpp2.minPensionableEarnings,
+      maxPensionableEarnings: federalContributionRates.cpp2.maxPensionableEarnings,
+      max: federalContributionRates.cpp2.maxContribution,
+    },
+  },
+  ei: {
+    rate: federalContributionRates.ei.rate,
+    maxInsurableEarnings: federalContributionRates.ei.maxInsurableEarnings,
+    max: federalContributionRates.ei.maxContribution,
+  },
+});
+
+const buildQcContributions = (quebecContributionRates) => ({
+  pensionPlan: {
+    base: {
+      rate: quebecContributionRates.qpp.rate,
+      mpe: quebecContributionRates.qpp.maxPensionableEarnings,
+      ybe: quebecContributionRates.qpp.basicExemption,
+      max: quebecContributionRates.qpp.maxContribution,
+    },
+    add: {
+      rate: quebecContributionRates.qpp2.rate,
+      min: quebecContributionRates.qpp2.minPensionableEarnings,
+      maxPensionableEarnings: quebecContributionRates.qpp2.maxPensionableEarnings,
+      max: quebecContributionRates.qpp2.maxContribution,
+    },
+  },
+  ei: {
+    rate: quebecContributionRates.ei.rate,
+    maxInsurableEarnings: quebecContributionRates.ei.maxInsurableEarnings,
+    max: quebecContributionRates.ei.maxContribution,
+  },
+  qpip: {
+    rate: quebecContributionRates.qpip.rate,
+    maxInsurableEarnings: quebecContributionRates.qpip.maxInsurableEarnings,
+    max: quebecContributionRates.qpip.maxContribution,
+  },
+});
+
+export const TAX_PARAMS_BY_YEAR = {
+  '2023': {
+    // 2023 uses 2022 rates/budget projections
+    federalBrackets: federalTaxBrackets2022,
+    provincialBrackets: provincialTaxBrackets2022,
+    federalBasicPersonalAmount: federalBasicPersonalAmount2022,
+    provincialBasicPersonalAmounts: provincialBasicPersonalAmounts2022,
+    credits: taxCredits2023,
+    deductions: null,
+    contributions: {
+      roc: buildRocContributions(federalContributionRates2024),
+      qc: buildQcContributions(quebecContributionRates2024),
+    },
+    bpaPhaseOut: bpaPhaseOutByYear['2023'],
+  },
+  '2024': {
+    federalBrackets: federalTaxBrackets2024,
+    provincialBrackets: provincialTaxBrackets2024,
+    federalBasicPersonalAmount: federalBasicPersonalAmount2024,
+    provincialBasicPersonalAmounts: provincialBasicPersonalAmounts2024,
+    credits: taxCredits2024,
+    deductions: null,
+    contributions: {
+      roc: buildRocContributions(federalContributionRates2024),
+      qc: buildQcContributions(quebecContributionRates2024),
+    },
+    bpaPhaseOut: bpaPhaseOutByYear['2024'],
+  },
+  '2025': {
+    federalBrackets: federalTaxBrackets2025,
+    provincialBrackets: provincialTaxBrackets2025,
+    federalBasicPersonalAmount: federalBasicPersonalAmount2025,
+    provincialBasicPersonalAmounts: provincialBasicPersonalAmounts2025,
+    credits: taxCredits2025,
+    deductions: taxDeductions2025,
+    contributions: {
+      roc: buildRocContributions(federalContributionRates2025),
+      qc: buildQcContributions(quebecContributionRates2025),
+    },
+    bpaPhaseOut: bpaPhaseOutByYear['2025'],
+  },
+};
+
+export function getTaxParams(taxYear) {
+  return TAX_PARAMS_BY_YEAR[String(taxYear)] || TAX_PARAMS_BY_YEAR['2025'];
+}
+
+export function getProvincialBrackets(taxYear, provinceCode) {
+  const params = getTaxParams(taxYear);
+  const provs = params?.provincialBrackets || {};
+  return provs[provinceCode] || null;
+}
+
+export function getContributionsForProvince(taxYear, provinceCode) {
+  const params = getTaxParams(taxYear);
+  const isQc = provinceCode === 'QC';
+  return isQc ? params.contributions.qc : params.contributions.roc;
+}
+
+export function deriveSharesFromBudgetCategories(categories = []) {
+  const total = categories.reduce((sum, cat) => sum + (cat?.amount || 0), 0);
+  if (!total) return {};
+  return categories.reduce((acc, cat) => {
+    if (!cat || !cat.key) return acc;
+    acc[cat.key] = (cat.amount || 0) / total;
+    return acc;
+  }, {});
+}
+
+export const SPENDING_SOURCES_BY_FY = {
+  '2022-2023': { categories: budgetCategories, approx: false },
+  '2023-2024': { categories: budgetCategories2024, approx: true },
+  '2025-26': { categories: budgetCategories2024, approx: true },
+};
+
+export function getSpendingSource(fiscalYear = DEFAULT_FISCAL_YEAR) {
+  return SPENDING_SOURCES_BY_FY[fiscalYear] || SPENDING_SOURCES_BY_FY[DEFAULT_FISCAL_YEAR];
+}
+
+export function assertSharesSumToOne(shares, tolerance = 1e-3) {
+  const values = Object.values(shares || {});
+  const total = values.reduce((a, b) => a + (Number(b) || 0), 0);
+  if (Math.abs(total - 1) > tolerance) {
+    throw new Error(`Spending shares must sum to 1.0, got ${total}`);
+  }
+}
+
+export function assertBracketsMonotonic(brackets, label) {
+  if (!Array.isArray(brackets) || brackets.length === 0) {
+    throw new Error(`Missing brackets for ${label}`);
+  }
+  let lastUpTo = -Infinity;
+  let lastRate = -Infinity;
+  for (let i = 0; i < brackets.length; i++) {
+    const b = brackets[i];
+    if (typeof b.upTo !== 'number' || typeof b.rate !== 'number') {
+      throw new Error(`Invalid bracket entry for ${label}`);
+    }
+    if (b.upTo <= lastUpTo) {
+      throw new Error(`Bracket thresholds must increase for ${label}`);
+    }
+    if (b.rate < lastRate) {
+      throw new Error(`Bracket rates must be non-decreasing for ${label}`);
+    }
+    if (i === brackets.length - 1 && b.upTo !== Infinity) {
+      throw new Error(`Last bracket must have upTo Infinity for ${label}`);
+    }
+    if (b.upTo !== Infinity && (!Number.isInteger(b.upTo) || b.upTo <= 0)) {
+      throw new Error(`Bracket thresholds must be positive integers for ${label}`);
+    }
+    lastUpTo = b.upTo;
+    lastRate = b.rate;
+  }
+}
+
+export function assertTaxParams(yearKey, params) {
+  if (!params) throw new Error(`Missing tax params for year ${yearKey}`);
+  assertBracketsMonotonic(params.federalBrackets, `federal ${yearKey}`);
+  const provs = params.provincialBrackets || {};
+  Object.keys(provs).forEach((code) => {
+    assertBracketsMonotonic(provs[code], `provincial ${code} ${yearKey}`);
+  });
+}

@@ -5,18 +5,22 @@ import { createValidatedAction } from '@/utils/storeActionWrapper.js';
 export const useYearStore = defineStore('year', () => {
   // Available tax years
   const taxYears = [
-    { id: '2023', label: '2022-2023' },
-    { id: '2024', label: '2023-2024' },
-    { id: '2025', label: '2024-2025' }
+    { id: '2023', label: '2023 (2022 rates)' },
+    { id: '2024', label: '2024' },
+    { id: '2025', label: '2025' }
   ];
   
   // Default to 2025 (2024-2025 tax year)
   const selectedTaxYear = ref('2025');
   
   // Computed property to determine which budget data to use
+  // 2023 tax year -> show 2022-2023 actuals
+  // 2024 tax year -> show 2023-2024 projections
+  // 2025+        -> show 2025-26 (current default dataset)
   const budgetYear = computed(() => {
-    // 2022 and 2023 use the same 2022-2023 budget data
-    return selectedTaxYear.value === '2024' ? '2023-2024' : '2022-2023';
+    if (selectedTaxYear.value === '2023') return '2022-2023';
+    if (selectedTaxYear.value === '2024') return '2023-2024';
+    return '2025-26';
   });
   
   // Function to change the selected year

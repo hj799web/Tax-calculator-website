@@ -18,27 +18,27 @@ import {
   computeMedicalExpensesThreshold,
 } from '../utils/taxCalculations.js';
 import {
-  federalBasicPersonalAmount2022,
-  federalBasicPersonalAmount2023,
-  federalBasicPersonalAmount2024,
-  federalBasicPersonalAmount2025,
-  provincialBasicPersonalAmounts2022,
-  provincialBasicPersonalAmounts2023,
-  provincialBasicPersonalAmounts2024,
-  provincialBasicPersonalAmounts2025,
-  federalTaxBrackets2022,
-  federalTaxBrackets2023,
-  federalTaxBrackets2024,
-  federalTaxBrackets2025,
-  provincialTaxBrackets2022,
-  provincialTaxBrackets2023,
-  provincialTaxBrackets2024,
-  provincialTaxBrackets2025,
-  budgetCategories2022,
-  budgetCategories2024,
-  taxCredits2024,
-  taxCredits2025
+  TAX_PARAMS_BY_YEAR,
+  getTaxParams,
+  getProvincialBrackets,
+  getContributionsForProvince,
+  getSpendingSource,
+  deriveSharesFromBudgetCategories,
 } from "../constants/taxData.js";
+
+let didBpaSanityCheck = false;
+
+const warnOnce = (() => {
+  const seen = new Set();
+  return (key, message, meta) => {
+    if (process.env.NODE_ENV !== 'production' && !seen.has(key)) {
+      seen.add(key);
+      console.warn(message, meta || '');
+    }
+  };
+})();
+
+const safeNumber = (value) => (Number.isFinite(value) ? value : 0);
 
 // Province name to code mapping
 const provinceCodeMap = {
@@ -121,46 +121,32 @@ export const useCalculatorStore = defineStore('calculator', () => {
   const annualTaxableCapitalGains = computed(() => taxableCapitalGains.value * periodMultiplier.value);
   const annualRrspDeduction = computed(() => (rrspDeduction.value || 0) * periodMultiplier.value);
 
-  // Get the appropriate tax brackets and basic personal amount based on selected year
-  const currentFederalTaxBrackets = computed(() => {
-    switch(yearStore.selectedTaxYear) {
-      case '2022': return federalTaxBrackets2022;
-      case '2023': return federalTaxBrackets2023;
-      case '2024': return federalTaxBrackets2024;
-      case '2025': return federalTaxBrackets2025;
-      default: return federalTaxBrackets2023;
-    }
-  });
+  const currentTaxParams = computed(() => getTaxParams(yearStore.selectedTaxYear));
+  if (process.env.NODE_ENV !== 'production' && !didBpaSanityCheck) {
+    didBpaSanityCheck = true;
+    ['2023', '2024', '2025'].forEach((yearKey) => {
+      const params = TAX_PARAMS_BY_YEAR[yearKey];
+      if (!params || !params.bpaPhaseOut) {
+        warnOnce(`bpa-missing-${yearKey}`, `Missing BPA phase-out params for ${yearKey}`);
+        return;
+      }
+      const base = params.federalBasicPersonalAmount;
+      const { start, end } = params.bpaPhaseOut;
+      const samples = [0, start, (start + end) / 2, end + 1000].filter(Number.isFinite);
+      samples.forEach((income) => {
+        const val = computeFederalBPAForIncome(base, params.bpaPhaseOut, income);
+        if (!Number.isFinite(val)) {
+          warnOnce(`bpa-nan-${yearKey}`, `BPA calculation produced NaN for ${yearKey}`, { income, val });
+        }
+      });
+    });
+  }
 
-  const currentFederalBasicPersonalAmount = computed(() => {
-    switch(yearStore.selectedTaxYear) {
-      case '2022': return federalBasicPersonalAmount2022;
-      case '2023': return federalBasicPersonalAmount2023;
-      case '2024': return federalBasicPersonalAmount2024;
-      case '2025': return federalBasicPersonalAmount2025;
-      default: return federalBasicPersonalAmount2023;
-    }
-  });
+  const currentFederalTaxBrackets = computed(() => currentTaxParams.value.federalBrackets);
 
-  const currentProvincialBasicPersonalAmounts = computed(() => {
-    switch(yearStore.selectedTaxYear) {
-      case '2022': return provincialBasicPersonalAmounts2022;
-      case '2023': return provincialBasicPersonalAmounts2023;
-      case '2024': return provincialBasicPersonalAmounts2024;
-      case '2025': return provincialBasicPersonalAmounts2025;
-      default: return provincialBasicPersonalAmounts2023;
-    }
-  });
+  const currentFederalBasicPersonalAmount = computed(() => currentTaxParams.value.federalBasicPersonalAmount);
 
-  const currentProvincialTaxBrackets = computed(() => {
-    switch(yearStore.selectedTaxYear) {
-      case '2022': return provincialTaxBrackets2022;
-      case '2023': return provincialTaxBrackets2023;
-      case '2024': return provincialTaxBrackets2024;
-      case '2025': return provincialTaxBrackets2025;
-      default: return provincialTaxBrackets2023;
-    }
-  });
+  const currentProvincialBasicPersonalAmounts = computed(() => currentTaxParams.value.provincialBasicPersonalAmounts);
 
   // Provincial BPA (no marital status adjustment)
   const effectiveProvincialBPA = computed(() => {
@@ -182,21 +168,18 @@ export const useCalculatorStore = defineStore('calculator', () => {
   });
 
   // Get current year tax credits
-  const currentTaxCredits = computed(() => {
-    switch(yearStore.selectedTaxYear) {
-      case '2024': return taxCredits2024;
-      case '2025': return taxCredits2025;
-      default: return taxCredits2024;
-    }
-  });
+  const currentTaxCredits = computed(() => currentTaxParams.value.credits || {});
 
   // Federal BPA with phase-out for high income
   const federalBpaCreditAnnual = computed(() => {
-    const year = yearStore.selectedTaxYear;
     const baseEnhanced = currentFederalBasicPersonalAmount.value;
-    const floorByYear = { '2024': 14156, '2025': 14539 };
+    const phaseOut = currentTaxParams.value?.bpaPhaseOut;
     const incomeForPhase = totalFederalTaxableIncome.value; // proxy; ideally net income
-    const bpa = computeFederalBPAForIncome(baseEnhanced, floorByYear[year], incomeForPhase, year);
+    const bpa = computeFederalBPAForIncome(baseEnhanced, phaseOut, incomeForPhase);
+    if (!Number.isFinite(bpa)) {
+      warnOnce('bpa-credit-nan', 'BPA credit computed NaN; defaulting to 0', { bpa, phaseOut });
+      return 0;
+    }
     return bpa * 0.15; // Apply at lowest federal rate
   });
 
@@ -216,10 +199,10 @@ export const useCalculatorStore = defineStore('calculator', () => {
 
   // Basic federal tax after credits
   const basicFederalTaxAfterCreditsAnnual = computed(() => {
-    const credits = federalBpaCreditAnnual.value
-      + ceaCreditAnnual.value
-      + federalDividendTaxCreditAnnual.value
-      + medicalExpensesCreditAnnual.value;
+    const credits = safeNumber(federalBpaCreditAnnual.value)
+      + safeNumber(ceaCreditAnnual.value)
+      + safeNumber(federalDividendTaxCreditAnnual.value)
+      + safeNumber(medicalExpensesCreditAnnual.value);
     return Math.max(basicFederalTaxBeforeCreditsAnnual.value - credits, 0);
   });
 
@@ -237,7 +220,7 @@ export const useCalculatorStore = defineStore('calculator', () => {
     if (!selectedRegion.value || totalFederalTaxableIncome.value <= 0) return 0;
     const provinceCode = provinceCodeMap[selectedRegion.value];
     if (!provinceCode) return 0;
-    const brackets = currentProvincialTaxBrackets.value[provinceCode];
+    const brackets = getProvincialBrackets(yearStore.selectedTaxYear, provinceCode);
     if (!brackets) return 0;
     let provTaxable = totalFederalTaxableIncome.value - effectiveProvincialBPA.value;
     provTaxable = Math.max(provTaxable, 0);
@@ -249,29 +232,27 @@ export const useCalculatorStore = defineStore('calculator', () => {
   const pensionPlanContributionAnnual = computed(() => {
     const baseIncome = annualRegularIncome.value;
     const isSelfEmployed = (selfEmploymentIncome.value || 0) > 0;
-    const year = yearStore.selectedTaxYear;
-    
-    // Use Quebec-specific QPP calculation if Quebec is selected
-    if (selectedRegion.value === 'Quebec') {
-      return calculateQppContributions(baseIncome, isSelfEmployed, year);
-    }
-    
-    // Use federal CPP calculation for other provinces
-    return calculateCppContributions(baseIncome, isSelfEmployed, year);
+    const provinceCode = provinceCodeMap[selectedRegion.value];
+    const contrib = getContributionsForProvince(yearStore.selectedTaxYear, provinceCode);
+    const isQc = provinceCode === 'QC';
+    return isQc
+      ? calculateQppContributions(baseIncome, isSelfEmployed, contrib)
+      : calculateCppContributions(baseIncome, isSelfEmployed, contrib);
   });
 
   // EI (year-aware)
   const eiPremiumAnnual = computed(() => {
     const provinceCode = selectedRegion.value === 'Quebec' ? 'QC' : null;
-    const year = yearStore.selectedTaxYear;
-    return calculateEiPremiumYearAware(annualRegularIncome.value, provinceCode, year);
+    const contrib = getContributionsForProvince(yearStore.selectedTaxYear, provinceCode);
+    // Prefer explicit EI params; fallback to province code
+    return calculateEiPremiumYearAware(annualRegularIncome.value, contrib.ei || provinceCode, yearStore.selectedTaxYear);
   });
 
   // QPIP (Quebec only, year-aware)
   const qpipContributionAnnual = computed(() => {
     if (selectedRegion.value === 'Quebec') {
-      const year = yearStore.selectedTaxYear;
-      return calculateQpipContributionYearAware(annualRegularIncome.value, year);
+      const contrib = getContributionsForProvince(yearStore.selectedTaxYear, 'QC');
+      return calculateQpipContributionYearAware(annualRegularIncome.value, contrib.qpip || yearStore.selectedTaxYear);
     }
     return 0;
   });
@@ -351,25 +332,25 @@ export const useCalculatorStore = defineStore('calculator', () => {
     return ((qpipContributionAnnual.value / baseForPercent.value) * 100).toFixed(1);
   });
 
-  const totalBudget = computed(() => {
-    const budgetCats = yearStore.selectedTaxYear === '2024' ? budgetCategories2024 : budgetCategories2022;
-    return budgetCats.reduce((sum, cat) => sum + cat.amount, 0);
-  });
+  // Spending source & derived shares (federal-only allocation)
+  const spendingSource = computed(() => getSpendingSource(yearStore.budgetYear));
+  const spendingShares = computed(() => deriveSharesFromBudgetCategories(spendingSource.value.categories));
 
+  // Compute federal allocation using derived shares (net federal tax only)
   const federalBudgetData = computed(() => {
-    const budgetCats = yearStore.selectedTaxYear === '2024' ? budgetCategories2024 : budgetCategories2022;
-
-    if (netFederalTaxPerPeriod.value === 0) {
-      return budgetCats.map((cat) => ({
+    const shares = spendingShares.value;
+    const categories = spendingSource.value.categories || [];
+    if (!Object.keys(shares).length || netFederalTaxPerPeriod.value === 0) {
+      return categories.map((cat) => ({
         category: cat.name,
         categoryKey: cat.key,
         amount: 0,
       }));
     }
-    return budgetCats.map((cat) => ({
+    return categories.map((cat) => ({
       category: cat.name,
       categoryKey: cat.key,
-      amount: (netFederalTaxPerPeriod.value * cat.amount) / totalBudget.value,
+      amount: netFederalTaxPerPeriod.value * (shares[cat.key] || 0),
     }));
   });
 
@@ -388,15 +369,15 @@ export const useCalculatorStore = defineStore('calculator', () => {
     data.sort((a, b) => {
       return sortOrder.value === 'asc' ? a.amount - b.amount : b.amount - a.amount;
     });
-    const budgetCats = yearStore.selectedTaxYear === '2024' ? budgetCategories2024 : budgetCategories2022;
+    const categories = spendingSource.value.categories || [];
     return data.map((item, index) => ({
       ...item,
-      ...budgetCats.find((c) => c.name === item.category),
-      uniqueId: `${item.category}-${index}`,
+      ...categories.find((c) => c.key === item.categoryKey),
+      uniqueId: `${item.categoryKey || item.category}-${index}`,
     }));
   });
 
-  // Function to get translated category name
+  // Helper function to get translated category name
   const getTranslatedCategoryName = (categoryId, year) => {
     const categoryKey = `budgetCategories.y${year}.${getCategoryKeyById(categoryId)}.name`;
     return translate(categoryKey, getCategoryNameById(categoryId));
@@ -404,36 +385,25 @@ export const useCalculatorStore = defineStore('calculator', () => {
 
   // Helper function to get category key by ID
   const getCategoryKeyById = (id) => {
-    const keyMap = {
-      1: 'healthcare',
-      2: 'childrenAndFamilies', 
-      3: 'indigenousServices',
-      4: 'employmentInsuranceAndBenefits',
-      5: 'supportForSeniors',
-      6: 'defense',
-      7: 'publicSafetyAndEmergencyPreparedness',
-      8: 'internationalAffairsAndDevelopment',
-      9: 'publicDebtCharges',
-      10: 'loansInvestmentsAndAdvances',
-      11: 'otherGovernmentOperations'
-    };
-    return keyMap[id] || 'unknown';
+    const categories = spendingSource.value.categories || [];
+    const found = categories.find((c) => c.id === id);
+    return found ? found.key : 'unknown';
   };
 
   // Helper function to get original category name by ID
   const getCategoryNameById = (id) => {
-    const budgetCats = yearStore.selectedTaxYear === '2024' ? budgetCategories2024 : budgetCategories2022;
-    const category = budgetCats.find(cat => cat.id === id);
+    const categories = spendingSource.value.categories || [];
+    const category = categories.find(cat => cat.id === id);
     return category ? category.name : 'Unknown Category';
   };
 
   const sortedBudgetCategories = computed(() => {
-    const budgetCats = yearStore.selectedTaxYear === '2024' ? budgetCategories2024 : budgetCategories2022;
-    const year = yearStore.selectedTaxYear === '2024' ? '2024' : '2022';
-    const categoriesCopy = budgetCats.map(cat => ({ ...cat }));
+    const categories = (spendingSource.value.categories || []).map(cat => ({ ...cat }));
+    const year = '2025'; // display mapping; fiscal is fixed
     
-    categoriesCopy.forEach(cat => {
-      const allocated = (netFederalTaxPerPeriod.value * cat.amount) / totalBudget.value;
+    categories.forEach(cat => {
+      const share = spendingShares.value[cat.key] || 0;
+      const allocated = netFederalTaxPerPeriod.value * share;
       cat.allocatedAmount = allocated || 0;
       cat.percentage = netFederalTaxPerPeriod.value
         ? (allocated / netFederalTaxPerPeriod.value) * 100
@@ -442,7 +412,7 @@ export const useCalculatorStore = defineStore('calculator', () => {
       cat.name = getTranslatedCategoryName(cat.id, year);
     });
     
-    return categoriesCopy.sort((a, b) =>
+    return categories.sort((a, b) =>
       sortOrder.value === 'asc'
         ? a.allocatedAmount - b.allocatedAmount
         : b.allocatedAmount - a.allocatedAmount
@@ -559,7 +529,6 @@ export const useCalculatorStore = defineStore('calculator', () => {
     qpipTaxPercentage,
     totalTaxPerPeriod,
     netIncomeAfterCreditsPerPeriod,
-    totalBudget,
     federalBudgetData,
     sortedBudgetData,
     sortedBudgetCategories,

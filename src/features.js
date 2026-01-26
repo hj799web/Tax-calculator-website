@@ -6,4 +6,7 @@ export const FEATURES = {
   PANEL_NAV: true,
   // Temporarily hide the Items planning tab
   ITEMS_TAB: false,
+  // Gate the priorities onboarding quiz
+  QUIZ_ONBOARDING: false,
 };
+

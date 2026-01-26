@@ -224,7 +224,11 @@ export default {
         list = list.filter(c => c.category === selected);
       }
 
-      const limited = list.slice(0, props.maxRecentChanges);
+      const pinned = list.filter(change => change.itemId?.startsWith('priorities_quiz_'));
+      const regular = list.filter(change => !change.itemId?.startsWith('priorities_quiz_'));
+      const ordered = [...pinned, ...regular];
+
+      const limited = ordered.slice(0, props.maxRecentChanges);
 
       console.log('%c[BANNER DEBUG] Recent changes computed (filtered):', 'background: #1abc9c; color: white; padding: 2px 5px;', {
         activeCategory: selected,
