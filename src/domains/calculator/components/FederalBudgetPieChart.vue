@@ -48,8 +48,11 @@ const yearStore = useYearStore()
 const { t } = useI18n()
 
 // Helper function to get translated category name
-const getCategoryTranslation = (categoryKey, year) => {
-  const yearKey = year === '2024' ? 'y2024' : 'y2022'
+const getCategoryTranslation = (categoryKey, budgetYear) => {
+  const yearKey = budgetYear === '2022-2023' ? 'y2022' : 'y2024'
+  // #region agent log
+  fetch('http://127.0.0.1:7242/ingest/1d73881a-9f48-4af5-97ad-c0b517162459',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:'debug-session',runId:'prefix',hypothesisId:'H1',location:'FederalBudgetPieChart.vue:getCategoryTranslation',message:'category translation mapping',data:{categoryKey,budgetYear,yearKey},timestamp:Date.now()})}).catch(()=>{});
+  // #endregion
   return t(`federalBudget.categories.${yearKey}.${categoryKey}`) || categoryKey
 }
   
@@ -60,7 +63,7 @@ const getCategoryTranslation = (categoryKey, year) => {
   
 // Prepare chart data
 const chartData = computed(() => ({
-  labels: federalBudgetData.value.map(x => getCategoryTranslation(x.categoryKey || x.category, yearStore.selectedTaxYear)),
+  labels: federalBudgetData.value.map(x => getCategoryTranslation(x.categoryKey || x.category, yearStore.budgetYear)),
   datasets: [
     {
       label: t('federalBudget.title'),
@@ -70,6 +73,9 @@ const chartData = computed(() => ({
     },
   ],
 }))
+// #region agent log
+fetch('http://127.0.0.1:7242/ingest/1d73881a-9f48-4af5-97ad-c0b517162459',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:'debug-session',runId:'prefix',hypothesisId:'H2',location:'FederalBudgetPieChart.vue:chartData',message:'chart data snapshot',data:{year:yearStore.selectedTaxYear,labels:chartData?.value?.labels,values:chartData?.value?.datasets?.[0]?.data?.slice?.(0,5)},timestamp:Date.now()})}).catch(()=>{});
+// #endregion
   
   // Chart options (pass the legend ref to the plugin)
   const chartOptions = computed(() => ({

@@ -334,6 +334,9 @@ export const useCalculatorStore = defineStore('calculator', () => {
 
   // Spending source & derived shares (federal-only allocation)
   const spendingSource = computed(() => getSpendingSource(yearStore.budgetYear));
+  // #region agent log
+  fetch('http://127.0.0.1:7242/ingest/1d73881a-9f48-4af5-97ad-c0b517162459',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:'debug-session',runId:'prefix',hypothesisId:'H3',location:'calculator.js:spendingSource',message:'spending source selected',data:{budgetYear:yearStore.budgetYear,categoryKeys:(spendingSource?.value?.categories||[]).map(c=>c.key).slice(0,5)},timestamp:Date.now()})}).catch(()=>{});
+  // #endregion
   const spendingShares = computed(() => deriveSharesFromBudgetCategories(spendingSource.value.categories));
 
   // Compute federal allocation using derived shares (net federal tax only)
