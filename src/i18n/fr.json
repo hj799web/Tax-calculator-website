@@ -984,14 +984,15 @@
     },
     "title": "Répartition du budget fédéral",
     "descriptions": {
-      "budget2024": "Ces graphiques résument le budget fédéral 2023–2024 : l’un montre la répartition complète, l’autre les allocations proposées du Budget 2023–2024.",
-      "estimates2025": "Le graphique 2025–2026 présente une répartition projetée basée sur les prévisions actuelles.",
+      "budget2024": "Ce graphique résume la répartition complète du budget fédéral 2023–2024.",
+      "estimates2025": "Le graphique du budget 2025–26 montre où vont vos impôts fédéraux selon les priorités du Budget 2025. Dépenses fédérales totales : ~586 milliards $. Environ 45 % sont fixes (aînés, transferts santé, dette, AE), tandis que 40 % sont dans Autres Opérations où les gouvernements font des choix discrétionnaires.",
       "historic": "Le graphique 2022–2023 montre la répartition des fonds selon les Comptes publics du Canada."
     },
     "chartTitles": {
       "y2022": "Graphique de la répartition du budget fédéral 2022–2023 du Canada",
       "y2024Comprehensive": "Répartition du budget fédéral 2023–2024 du Canada",
-      "y2024Proposed": "Budget 2023–2024"
+      "y2024Proposed": "Budget 2023–2024",
+      "y2025": "Budget 2025–2026"
     },
     "explanations": {
       "budget2024": "Deux vues : « Répartition du budget fédéral 2023–2024 du Canada » (complète) et « Budget 2023–2024 » (proposé)."
@@ -1031,6 +1032,18 @@
         "defenseAndPublicSafety": "Défense et sécurité publique",
         "debtServicingPublicDebtCharges": "Service de la dette (charges de la dette publique)",
         "loansInvestmentsAndAdvances": "Prêts, investissements et avances",
+        "otherGovernmentOperations": "Autres opérations gouvernementales"
+      },
+      "y2025": {
+        "healthcare": "Santé",
+        "supportForSeniors": "Soutien aux aînés (SV + SRG)",
+        "childrenAndFamilies": "Enfants et familles",
+        "indigenousServicesAndReconciliation": "Services aux Autochtones et réconciliation",
+        "employmentInsuranceAndBenefits": "Assurance-emploi et prestations liées au revenu",
+        "defenseAndPublicSafety": "Défense et sécurité publique",
+        "publicDebtCharges": "Charges de la dette publique",
+        "internationalCommitments": "Engagements internationaux et aide étrangère",
+        "loansInvestmentsAdvances": "Prêts, investissements et avances",
         "otherGovernmentOperations": "Autres opérations gouvernementales"
       }
     }

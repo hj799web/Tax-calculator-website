@@ -40,9 +40,12 @@
           <FederalBudgetPieChart />
         </template>
         <template v-else-if="yearStore.budgetYear === '2023-2024'">
-          <!-- Two 2023–2024 charts: Comprehensive + Proposed -->
+          <!-- 2023–2024 Comprehensive Budget Chart -->
           <FederalBudget2024PieChart />
-          <Budget2024PieChart />
+        </template>
+        <template v-else-if="yearStore.budgetYear === '2025-26'">
+          <!-- 2025–2026 Budget Chart -->
+          <Budget2025PieChart />
         </template>
         <template v-else>
           <!-- Fallback: use current/default spending data -->
@@ -108,8 +111,8 @@ import { useCalculatorStore } from '@/domains/calculator/store/calculator.js'
 import { useYearStore } from '@/domains/calculator/store/year.js'
 import { storeToRefs } from 'pinia'
 import FederalBudgetPieChart from '@/domains/calculator/components/FederalBudgetPieChart.vue'
-import Budget2024PieChart from '@/domains/calculator/components/Budget2024PieChart.vue'
 import FederalBudget2024PieChart from '@/domains/calculator/components/FederalBudget2024PieChart.vue'
+import Budget2025PieChart from '@/domains/calculator/components/Budget2025PieChart.vue'
 import { useI18n } from '@/i18n'
 
 

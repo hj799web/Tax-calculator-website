@@ -12,12 +12,12 @@
       "reset": "Reset priorities"
     },
     "scale": {
-      "hint": "How important is this priority to you?",
       "1": "1 · Not important",
       "2": "2 · Slightly important",
       "3": "3 · Neutral",
       "4": "4 · Important",
-      "5": "5 · Very important"
+      "5": "5 · Very important",
+      "hint": "How important is this priority to you?"
     },
     "q": {
       "healthcare": "Funding for healthcare transfers to provinces and territories",
@@ -1626,14 +1626,15 @@
     },
     "title": "Federal Budget Allocation",
     "descriptions": {
-      "budget2024": "These charts summarize the 2023–2024 federal budget: one shows the comprehensive allocation; the other shows the proposed Budget 2023–2024 allocations.",
-      "estimates2025": "The 2025–26 Federal Main Estimates chart presents the government’s planned spending allocations for the fiscal year, as set out in the Treasury Board’s current expenditure forecasts.",
+      "budget2024": "This chart summarizes the 2023–2024 comprehensive federal budget allocation.",
+      "estimates2025": "The 2025–26 Budget chart shows where your federal tax dollars go based on Budget 2025 priorities. Total federal spending: ~$586 billion. About 45% is locked in (seniors, health transfers, debt, EI), while 40% sits in Other Operations where governments make discretionary choices.",
       "historic": "The 2022–2023 chart shows how funds were allocated in the Public Accounts of Canada."
     },
     "chartTitles": {
       "y2022": "2022–2023 Canada's Federal Budget Allocation Chart",
       "y2024Comprehensive": "2023–2024 Canada Federal Budget Allocation Chart",
-      "y2024Proposed": "Budget 2023–2024"
+      "y2024Proposed": "Budget 2023–2024",
+      "y2025": "2025–2026 Budget"
     },
     "explanations": {
       "budget2024": "Two views: ‘2023–2024 Canada Federal Budget Allocation Chart’ (comprehensive) and ‘Budget 2023–2024’ (proposed)."
@@ -1673,6 +1674,18 @@
         "defenseAndPublicSafety": "Defense and Public Safety",
         "debtServicingPublicDebtCharges": "Debt Servicing (Public Debt Charges)",
         "loansInvestmentsAndAdvances": "Loans, Investments, and Advances",
+        "otherGovernmentOperations": "Other Government Operations"
+      },
+      "y2025": {
+        "healthcare": "Healthcare",
+        "supportForSeniors": "Support for Seniors (OAS + GIS)",
+        "childrenAndFamilies": "Children & Families",
+        "indigenousServicesAndReconciliation": "Indigenous Services & Reconciliation",
+        "employmentInsuranceAndBenefits": "Employment Insurance & Income-Related Benefits",
+        "defenseAndPublicSafety": "Defence & Public Safety",
+        "publicDebtCharges": "Public Debt Charges",
+        "internationalCommitments": "International Commitments & Foreign Aid",
+        "loansInvestmentsAdvances": "Loans, Investments & Advances",
         "otherGovernmentOperations": "Other Government Operations"
       }
     }

@@ -846,6 +846,81 @@ export const federalBudget2024Data = [
   { category: 'Strategic Investments in Innovation', amount: 0.138 }
 ];
 
+// Budget Categories for 2025-2026 (Total spending: ~$586B)
+// Per $1,000 breakdown reflecting Budget 2025 priorities
+export const budgetCategories2025 = [
+  {
+    id: 1,
+    key: 'healthcare',
+    name: 'Healthcare',
+    amount: 55670000000, // ~95/$1,000
+    description: 'Mainly Canada Health Transfer plus smaller health-tagged accords. Federal role is mostly financing, not delivery.'
+  },
+  {
+    id: 2,
+    key: 'supportForSeniors',
+    name: 'Support for Seniors (OAS + GIS)',
+    amount: 84970000000, // ~145/$1,000
+    description: 'One of the largest single policy priorities. Fully automatic, demographically driven spending. Old Age Security and Guaranteed Income Supplement.'
+  },
+  {
+    id: 3,
+    key: 'childrenAndFamilies',
+    name: 'Children & Families',
+    amount: 32230000000, // ~55/$1,000
+    description: 'Canada Child Benefit, school food program, and targeted affordability measures. Smaller than seniors, but more discretionary.'
+  },
+  {
+    id: 4,
+    key: 'indigenousServicesAndReconciliation',
+    name: 'Indigenous Services & Reconciliation',
+    amount: 29300000000, // ~50/$1,000
+    description: 'Indigenous Services Canada, Crown-Indigenous Relations, water, housing, health, reconciliation commitments. One of the fastest-growing envelopes over the past decade.'
+  },
+  {
+    id: 5,
+    key: 'employmentInsuranceAndBenefits',
+    name: 'Employment Insurance & Income-Related Benefits',
+    amount: 35160000000, // ~60/$1,000
+    description: 'EI benefits, labour-market supports, and disability benefit (newer, but still modest in size).'
+  },
+  {
+    id: 6,
+    key: 'defenseAndPublicSafety',
+    name: 'Defence & Public Safety',
+    amount: 46880000000, // ~80/$1,000
+    description: 'National Defence, border services, RCMP, public safety. Rising sharply due to NATO commitments and geopolitics.'
+  },
+  {
+    id: 7,
+    key: 'publicDebtCharges',
+    name: 'Public Debt Charges',
+    amount: 55600000000, // ~95/$1,000 (~$55.6B in 2025–26)
+    description: 'Interest on national debt. Not a "priority" in intent, but a hard constraint. Roughly on par with healthcare in fiscal weight.'
+  },
+  {
+    id: 8,
+    key: 'internationalCommitments',
+    name: 'International Commitments & Foreign Aid',
+    amount: 5860000000, // ~10/$1,000
+    description: 'Foreign aid, international institutions, Ukraine-related support (partly elsewhere too).'
+  },
+  {
+    id: 9,
+    key: 'loansInvestmentsAdvances',
+    name: 'Loans, Investments & Advances',
+    amount: 11720000000, // ~20/$1,000
+    description: 'Crown corporations, infrastructure financing, strategic industrial investments. Capital-heavy, politically framed as "investment".'
+  },
+  {
+    id: 10,
+    key: 'otherGovernmentOperations',
+    name: 'Other Government Operations',
+    amount: 228540000000, // ~390/$1,000
+    description: 'Federal public service operations, infrastructure, housing (Maisons Canada), economic development, climate, transport, innovation. This is where real discretion and ideology live. ~40% of total spending.'
+  }
+];
+
 // ---------------------------------------------------------------------------
 // Unified tax params, fiscal year defaults, and helpers
 // ---------------------------------------------------------------------------
@@ -980,7 +1055,7 @@ export function deriveSharesFromBudgetCategories(categories = []) {
 export const SPENDING_SOURCES_BY_FY = {
   '2022-2023': { categories: budgetCategories, approx: false },
   '2023-2024': { categories: budgetCategories2024, approx: true },
-  '2025-26': { categories: budgetCategories2024, approx: true },
+  '2025-26': { categories: budgetCategories2025, approx: true },
 };
 
 export function getSpendingSource(fiscalYear = DEFAULT_FISCAL_YEAR) {

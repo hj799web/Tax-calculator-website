@@ -6,6 +6,7 @@ export { default as AdditionalIncomeInputs } from './components/AdditionalIncome
 export { default as DeductionsAndCreditsInputs } from './components/DeductionsAndCreditsInputs.vue'
 export { default as TaxPieChart } from './components/TaxPieChart.vue'
 export { default as Budget2024PieChart } from './components/Budget2024PieChart.vue'
+export { default as Budget2025PieChart } from './components/Budget2025PieChart.vue'
 export { default as FederalBudgetPieChart } from './components/FederalBudgetPieChart.vue'
 export { default as FederalBudget2024PieChart } from './components/FederalBudget2024PieChart.vue'
 export { default as PercentageInput } from './components/PercentageInput.vue'
