@@ -87,9 +87,9 @@
       "subtitle": "Get an accurate breakdown of your taxes and see where your money goes with our free calculator."
     },
     "year": {
-      "title": "Select Tax Year",
+      "title": "Select Filing Year",
       "note": {
-        "uniform": "Tax calculation: Tax Year {taxYear} (filed in {filedYear}). Using {rateYear} rates."
+        "uniform": "Uses {rateYear} federal and provincial tax rates (income earned in {rateYear})"
       }
     },
     "tabs": {
@@ -538,7 +538,7 @@
         "deficitChart": "Historical and projected deficit line chart"
       }
     },
-    "common": {
+    "sharedModal": {
       "apply": "Apply",
       "close": "Close"
     },
@@ -852,12 +852,6 @@
         "defensePublicSafety": "Defense & Public Safety",
         "loansInvestments": "Loans, Investments & Advances"
       },
-      "taxExpenditures": {
-        "personalIncomeTaxCredits": "Personal Income Tax Credits",
-        "corporateTaxExpenditures": "Corporate Tax Expenditures",
-        "gstHstExpenditures": "GST/HST Expenditures",
-        "deferralsRrspRppTfsa": "Registered Plans (RRSP/RPP/TFSA)"
-      },
       "tax": {
         "expenditures": {
           "gst": {
@@ -879,11 +873,12 @@
         "noDescriptionAvailable": "No description available."
       },
       "taxExpenditures": {
-        "gstHstExpenditures": "GST/HST Expenditures",
-        "deferralsRrspRppTfsa": "Registered Plans (RRSP/RPP/TFSA)",
+        "personalIncomeTaxCredits": "Personal Income Tax Credits",
         "personalTaxCredits": "Personal Income Tax Credits",
         "corporateTaxExpenditures": "Corporate Tax Expenditures",
+        "gstHstExpenditures": "GST/HST Expenditures",
         "gstExpenditures": "GST/HST Expenditures",
+        "deferralsRrspRppTfsa": "Registered Plans (RRSP/RPP/TFSA)",
         "taxDeferrals": "Tax Deferrals (RRSP/RPP/TFSA)"
       }
     },

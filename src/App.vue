@@ -437,13 +437,8 @@ export default {
     }
 
     const yearSelectorNote = computed(() => {
-      const selectedYear = Number(yearStore.selectedTaxYear)
-      const filedYear = Number.isFinite(selectedYear) ? selectedYear + 1 : ''
-      const rateYear = yearStore.selectedTaxYear === '2023' ? '2022' : yearStore.selectedTaxYear
       return t('home.year.note.uniform', {
-        taxYear: yearStore.selectedTaxYear,
-        filedYear,
-        rateYear
+        rateYear: yearStore.rateYear
       })
     })
 

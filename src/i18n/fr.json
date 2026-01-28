@@ -12,12 +12,12 @@
       "reset": "Réinitialiser les priorités"
     },
     "scale": {
-      "hint": "Quelle importance accordez-vous à cette priorité?",
       "1": "1 · Pas important",
       "2": "2 · Peu important",
       "3": "3 · Neutre",
       "4": "4 · Important",
-      "5": "5 · Très important"
+      "5": "5 · Très important",
+      "hint": "Quelle importance accordez-vous à cette priorité?"
     },
     "q": {
       "healthcare": "Financement des transferts en santé aux provinces et territoires",
@@ -87,9 +87,9 @@
       "subtitle": "Obtenez un portrait précis de vos impôts et découvrez où vont vos dollars grâce à notre calculateur gratuit."
     },
     "year": {
-      "title": "Choisissez l’année d’imposition",
+      "title": "Choisissez l'année de déclaration",
       "note": {
-        "uniform": "Calcul d’impôt : année {taxYear} (déclaration en {filedYear}). Taux {rateYear}."
+        "uniform": "Utilise les taux d'imposition fédéraux et provinciaux de {rateYear} (revenus gagnés en {rateYear})"
       }
     },
     "tabs": {
