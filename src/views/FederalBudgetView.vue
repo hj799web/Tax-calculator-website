@@ -12,7 +12,7 @@
       {{ translate('federalBudget.explanations.budget2024', 'Two views: ‘2023–2024 Canada Federal Budget Allocation Chart’ (comprehensive) and ‘Budget 2023–2024’ (proposed).') }}
     </p>
     <p
-      v-else-if="yearStore.selectedTaxYear === '2025'"
+      v-else-if="yearStore.budgetYear === '2025-26'"
       class="allocation-description"
     >
       {{ translate('federalBudget.descriptions.estimates2025', 'The 2025–26 Federal Main Estimates chart presents the government’s planned spending allocations for the fiscal year, as set out in the Treasury Board’s current expenditure forecasts.') }}

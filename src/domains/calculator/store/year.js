@@ -38,8 +38,8 @@ export const useYearStore = defineStore('year', () => {
   // Computed property to determine which budget data to use
   // Maps tax year to budget fiscal year
   const budgetYear = computed(() => {
-    if (selectedTaxYear.value === '2023') return '2022-2023';
-    if (selectedTaxYear.value === '2024') return '2023-2024';
+    if (selectedTaxYear.value === '2023') return '2023-2024';
+    if (selectedTaxYear.value === '2024') return '2025-26';
     return '2025-26';
   });
   
